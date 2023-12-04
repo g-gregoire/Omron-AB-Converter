@@ -1,0 +1,7707 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      LD RECIRC_1AND2
+      OUT RECIRC1AND2ON
+      ^^^
+      '  Pump Monitor
+      LD TRANSFER_1AND2
+      OUT TRANSFER1AND2ON
+      ^^^
+      LD RECIRC_3AND4
+      OUT RECIRC3AND4ON
+      ^^^
+      LD TRANSFER_3AND4
+      OUT TRANSFER3AND4ON
+      ^^^
+      LD SHOVEL_OUT
+      OUT SHOVELOUTON
+      ^^^
+      LD CONDENSATE
+      OUT CONDENSATEON
+      ^^^
+      LD FIRST_SCAN
+      XFER(070) &2 SignalCnd0 MachineHASH0DM1
+      ^^^
+      '  UFHT #1 Level From EVAP PLC via SCADA
+      LD ON
+      CMP(020) D82 &94
+      AND P_GE
+      TIM 0046 #50
+      AND T0046
+      OUT 232.02
+      ^^^
+      LD ON
+      CMP(020) D82 &90
+      AND P_LE
+      TIM 0048 #50
+      AND T0048
+      OUT 234.00
+      ^^^
+      '  UFHT#1 OK to Fill in PLC
+      LD 234.00
+      OR 234.01
+      ANDNOT 232.02
+      ANDNOT 232.04
+      OUT 234.01
+      ^^^
+      '  UFHT #2 Level From EVAP PLC via SCADA
+      LD ON
+      CMP(020) D83 &94
+      AND P_GE
+      TIM 0047 #50
+      AND T0047
+      OUT 232.03
+      ^^^
+      LD ON
+      CMP(020) D83 &90
+      AND P_LE
+      TIM 0049 #50
+      AND T0049
+      OUT 234.02
+      ^^^
+      '  UFHT#2 OK to Fill in PLC
+      LD 234.02
+      OR 234.03
+      ANDNOT 232.03
+      AND 232.04
+      OUT 234.03
+      ^^^
+      '  PU30-121 OK to Pump to UFHT #1 - Level < 90%
+      LD 325.11
+      OR TRANSFER_1AND2
+      ANDNOT 232.04
+      ANDNOT 232.02
+      OUT 232.05
+      ^^^
+      '  PU30-121 OK to Pump to UFHT #2 - Level < 90%
+      LD 325.11
+      OR TRANSFER_1AND2
+      AND 232.04
+      ANDNOT 232.03
+      OUT 232.06
+      ^^^
+      '  RESET the START Bit Once the Level Reaches the HIGH Limit. This Prevents the pump from AUTO RESTART.
+      LD 232.05
+      OR 232.06
+      AND 325.11
+      DIFD(014) 232.07
+      ^^^
+      LD 232.07
+      RSET 325.11
+      ^^^
+      '  PU30-341 OK to Pump to UFHT #1 - Level < 90%
+      LD 325.13
+      OR TRANSFER_3AND4
+      ANDNOT 232.04
+      ANDNOT 232.02
+      OUT 232.10
+      ^^^
+      '  PU30-341 OK to Pump to UFHT #2 - Level < 90%
+      LD 325.13
+      OR TRANSFER_3AND4
+      AND 232.04
+      ANDNOT 232.03
+      OUT 232.11
+      ^^^
+      '  RESET the START Bit Once the Level Reaches the HIGH Limit. This Prevents the pump from AUTO RESTART.
+      LD 232.10
+      OR 232.11
+      AND 325.13
+      DIFD(014) 232.12
+      ^^^
+      LD 232.12
+      RSET 325.13
+      ^^^
+      '  Extractor Bottom Fill Valves Via Heat Exchangers
+      LD W28.00
+      AND W28.01
+      LDNOT W28.00
+      LD H16.00
+      LD 484.01
+      AND _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ORLD
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      ANDLD
+      LD H17.00
+      LD 484.03
+      AND _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      ORLD
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      ORLD
+      OUT EXT1_2_Fill_valve_via_HE
+      ^^^
+      LD W28.02
+      AND W28.03
+      LDNOT W28.02
+      LD H19.00
+      LD 484.08
+      AND _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      ORLD
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      ANDLD
+      LD H18.00
+      LD 484.09
+      AND _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      ORLD
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      ORLD
+      OUT EXT3_4_Fill_valve_via_HE
+      ^^^
+      '  RTD Data
+      LD FIRST_SCAN
+      XFER(070) &24 ScaleLow01 MachineHASH0DM4
+      ^^^
+      LD FIRST_SCAN
+      XFER(070) &2 SignalCnd1 MachineHASH1DM1
+      ^^^
+      LD FIRST_SCAN
+      XFER(070) &24 ScaleLow11 MachineHASH1DM4
+      ^^^
+      LD 321.11
+      AND 325.11
+      ANDNOT ST2DISCHARGE
+      AND ST1DISCHARGE
+      OUT TR0
+      AND>=(325) D76 #1
+      AND<=(315) D76 #3
+      AND<=(315) STK1AND2_level_SP #15
+      MOV(021) #15 STK1AND2_level_SP
+      LD TR0
+      AND=(300) D76 #4
+      AND<=(315) STK1AND2_level_SP #15
+      MOV(021) #15 STK1AND2_level_SP
+      ^^^
+      LD 321.11
+      AND 325.11
+      AND ST2DISCHARGE
+      ANDNOT ST1DISCHARGE
+      OUT TR0
+      AND>=(325) D77 #1
+      AND<=(315) D77 #3
+      AND<=(315) STK1AND2_level_SP #15
+      MOV(021) #15 STK1AND2_level_SP
+      LD TR0
+      AND=(300) D77 #4
+      AND<=(315) STK1AND2_level_SP #15
+      MOV(021) #15 STK1AND2_level_SP
+      ^^^
+      LD 321.13
+      AND 325.13
+      ANDNOT ST4DISCHARGE
+      AND ST3DISCHARGE
+      OUT TR0
+      AND>=(325) D78 #1
+      AND<=(315) D78 #3
+      AND<=(315) STK3AND4_level_SP #15
+      MOV(021) #15 STK3AND4_level_SP
+      LD TR0
+      AND=(300) D78 #4
+      AND<=(315) STK3AND4_level_SP #15
+      MOV(021) #15 STK3AND4_level_SP
+      ^^^
+      LD 321.13
+      AND 325.13
+      AND ST4DISCHARGE
+      ANDNOT ST3DISCHARGE
+      OUT TR0
+      AND>=(325) D79 #1
+      AND<=(315) D79 #3
+      AND<=(315) STK3AND4_level_SP #15
+      MOV(021) #15 STK3AND4_level_SP
+      LD TR0
+      AND=(300) D79 #4
+      AND<=(315) STK3AND4_level_SP #15
+      MOV(021) #15 STK3AND4_level_SP
+      ^^^
+      LD _1TRNSFR1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      LD _1TRNSFR2STRT
+      ANDNOT _1TRNSFR2CMPLT
+      ORLD
+      LD _2TRANSFR1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      ORLD
+      LD _2TRNSFR2STRT
+      ANDNOT _2TRANSFR2CMPLT
+      ORLD
+      LD _1TRNSFR3STRT
+      ANDNOT _1TRNSFR3CMPLT
+      ORLD
+      LD _2TRNSFR3STRT
+      ANDNOT _2TRNSFR3CMPLT
+      ORLD
+      CMP(020) STK1AND2_level_SP #15
+      AND LESS_THAN
+      MOV(021) #15 STK1AND2_level_SP
+      ^^^
+      LD _1TRNSFR4STRT
+      ANDNOT _1TRNSFR4CMPT
+      LD _2TRNSFR4STRT
+      ANDNOT _2TRNSFR4CMPT
+      ORLD
+      CMP(020) STK1AND2_level_SP #15
+      AND LESS_THAN
+      MOV(021) #15 STK1AND2_level_SP
+      ^^^
+      LD _3TRNSFR1STRT
+      ANDNOT _3TRNSFR1CMPLT
+      LD _3TRNSFR2STRT
+      ANDNOT _3TRNSFR2CMPLT
+      ORLD
+      LD _4TRNSFR1STRT
+      ANDNOT _4TRNSFR1CMPLT
+      ORLD
+      LD _4TRNSFR2STRT
+      ANDNOT _4TRNSFR2CMPLT
+      ORLD
+      LD _3TRNSFR3STRT
+      ANDNOT _3TRNSFR3CMPLT
+      ORLD
+      LD _4TRNSFR3STRT
+      ANDNOT _4TRNSFR3CMPLT
+      ORLD
+      CMP(020) STK3AND4_level_SP #15
+      AND LESS_THAN
+      MOV(021) #15 STK3AND4_level_SP
+      ^^^
+      LD _3TRNSFR4STRT
+      ANDNOT _3TRNSFR4CMPLT
+      LD _4TRNSFR4STRT
+      ANDNOT _4TRNSFR4CMPLT
+      ORLD
+      CMP(020) STK3AND4_level_SP #15
+      AND LESS_THAN
+      MOV(021) #15 STK3AND4_level_SP
+      ^^^
+      LD RECIRC_1AND2
+      -B(414) 2003 HE1TEMPIN D604
+      ^^^
+      LDNOT RECIRC_1AND2
+      MOV(021) #0 D604
+      ^^^
+      LD RECIRC_3AND4
+      -B(414) HE4INLETTEMP HE3INLETTEMP D605
+      ^^^
+      LDNOT RECIRC_3AND4
+      MOV(021) #0 D605
+      ^^^
+      LD ON
+      OUT TR0
+      AND>=(325) GelMINUSFlowToMINUSUFHT #10
+      MOV(021) GelMINUSFlowToMINUSUFHT UFHT_GelyFlow
+      LD TR0
+      AND<(310) GelMINUSFlowToMINUSUFHT #10
+      MOV(021) #0 UFHT_GelyFlow
+      ^^^
+      '  RESET UFHT RECLAIM ADDED KG\nFOR SCADA ESTIMATOR\n(MOVE 0 to KG ADDED)
+      @LD _1FILL1STRT
+      OR FIRST_SCAN
+      !MOV(021) #0 D98
+      ^^^
+      '  SCADA EXT #1
+      LDNOT H16.00
+      OUT TR0
+      AND=(300) EXT1COOK #1
+      MOV(021) _1STCOOKTEMP _1CURTEMPSP
+      LD TR0
+      AND=(300) EXT1COOK #2
+      MOV(021) _2NDCOOKTEMP _1CURTEMPSP
+      LD TR0
+      AND=(300) EXT1COOK #3
+      MOV(021) _3RDCOOKTEMP _1CURTEMPSP
+      LD TR0
+      AND=(300) EXT1COOK #4
+      MOV(021) _4THCOOKTEMP _1CURTEMPSP
+      ^^^
+      '  SCADA EXT #2
+      LDNOT H17.00
+      OUT TR0
+      AND=(300) EXT2COOK #1
+      MOV(021) _1STCOOKTEMP _2CURTEMPSP
+      LD TR0
+      AND=(300) EXT2COOK #2
+      MOV(021) _2NDCOOKTEMP _2CURTEMPSP
+      LD TR0
+      AND=(300) EXT2COOK #3
+      MOV(021) _3RDCOOKTEMP _2CURTEMPSP
+      LD TR0
+      AND=(300) EXT2COOK #4
+      MOV(021) _4THCOOKTEMP _2CURTEMPSP
+      ^^^
+      '  SCADA EXT #3
+      LDNOT H18.00
+      OUT TR0
+      AND=(300) EXT3COOK #1
+      MOV(021) _1STCOOKTEMP _3CURTEMPSP
+      LD TR0
+      AND=(300) EXT3COOK #2
+      MOV(021) _2NDCOOKTEMP _3CURTEMPSP
+      LD TR0
+      AND=(300) EXT3COOK #3
+      MOV(021) _3RDCOOKTEMP _3CURTEMPSP
+      LD TR0
+      AND=(300) EXT3COOK #4
+      MOV(021) _4THCOOKTEMP _3CURTEMPSP
+      ^^^
+      '  SCADA EXT #4
+      LDNOT H19.00
+      OUT TR0
+      AND=(300) EXT4COOK #1
+      MOV(021) _1STCOOKTEMP _4CURTEMPSP
+      LD TR0
+      AND=(300) EXT4COOK #2
+      MOV(021) _2NDCOOKTEMP _4CURTEMPSP
+      LD TR0
+      AND=(300) EXT4COOK #3
+      MOV(021) _3RDCOOKTEMP _4CURTEMPSP
+      LD TR0
+      AND=(300) EXT4COOK #4
+      MOV(021) _4THCOOKTEMP _4CURTEMPSP
+      ^^^
+      LD H16.00
+      OUT TR0
+      AND=(300) EXT1COOK #1
+      MOV(021) D425 _1CURTEMPSP
+      LD TR0
+      AND=(300) EXT1COOK #2
+      MOV(021) D426 _1CURTEMPSP
+      LD TR0
+      AND=(300) EXT1COOK #3
+      MOV(021) D427 _1CURTEMPSP
+      LD TR0
+      AND=(300) EXT1COOK #4
+      MOV(021) D428 _1CURTEMPSP
+      ^^^
+      LD H17.00
+      OUT TR0
+      AND=(300) EXT2COOK #1
+      MOV(021) D425 _2CURTEMPSP
+      LD TR0
+      AND=(300) EXT2COOK #2
+      MOV(021) D426 _2CURTEMPSP
+      LD TR0
+      AND=(300) EXT2COOK #3
+      MOV(021) D427 _2CURTEMPSP
+      LD TR0
+      AND=(300) EXT2COOK #4
+      MOV(021) D428 _2CURTEMPSP
+      ^^^
+      LD H18.00
+      OUT TR0
+      AND=(300) EXT3COOK #1
+      MOV(021) D425 _3CURTEMPSP
+      LD TR0
+      AND=(300) EXT3COOK #2
+      MOV(021) D426 _3CURTEMPSP
+      LD TR0
+      AND=(300) EXT3COOK #3
+      MOV(021) D427 _3CURTEMPSP
+      LD TR0
+      AND=(300) EXT3COOK #4
+      MOV(021) D428 _3CURTEMPSP
+      ^^^
+      '  Modified Extractor #4 Temperature Setpoint for HBLV Trial 02/03/2020
+      LD H19.00
+      OUT TR0
+      AND=(300) EXT4COOK #1
+      MOV(021) D425 _4CURTEMPSP
+      LD TR0
+      AND=(300) EXT4COOK #2
+      MOV(021) D426 _4CURTEMPSP
+      LD TR0
+      AND=(300) EXT4COOK #3
+      MOV(021) D427 _4CURTEMPSP
+      LD TR0
+      AND=(300) EXT4COOK #4
+      MOV(021) D428 _4CURTEMPSP
+      ^^^
+      LD _1FILL1STRT
+      @++B(594) _1CURBATCH
+      ^^^
+      LD _2FILL1STRT
+      @++B(594) _2CURBATCH
+      ^^^
+      LD _3FILL1STRT
+      @++B(594) _3CURBATCH
+      ^^^
+      LD _4FILL1STRT
+      @++B(594) _4CURBATCH
+      ^^^
+      LD RECIRC1AND2ON
+      TIM 0000 #300
+      ^^^
+      '  Jog Ignore\nRecirc Pump Jog Ignore
+      LD RECIRC1AND2ON
+      AND T0000
+      OUT 233.04
+      ^^^
+      LD RECIRC3AND4ON
+      TIM 0001 #300
+      ^^^
+      '  Ext 1\nExtractor #1 Cook Sequence
+      LD RECIRC3AND4ON
+      AND _1COOK1TMR_Status
+      OUT 233.05
+      ^^^
+      LD ON
+      OUT TR0
+      AND>=(325) PRT1_STEP #229
+      AND<=(315) PRT1_STEP #230
+      AND PRT1_DROP_EXT_STOP
+      AND SV30MINUS10D
+      ANDNOT _1FILL1STRT
+      SET W20.00
+      LD TR0
+      AND W20.00
+      AND P_1min
+      AND SV30MINUS10D
+      LD _1FILL1CMPLT
+      CNT 0160 #45
+      ^^^
+      '  Ext 1 - Cook 1
+      LDNOT 3353.00
+      OUT TR0
+      AND SCADA1FILL1
+      AND C0160
+      OUT TR1
+      AND>=(325) D31384 #6500
+      ANDNOT _1FILL1CMPLT
+      ANDNOT WATERSUPPLY
+      OUT W20.04
+      LD TR1
+      ANDNOT W8.00
+      ANDNOT _1HGHLVL
+      LD TR0
+      AND 465.00
+      ORLD
+      SET _1FILL1STRT
+      ^^^
+      LD _1FILL1STRT
+      ANDNOT _1FILL1CMPLT
+      AND W8.00
+      TIM 0218 #250
+      ^^^
+      LD _1FILL1STRT
+      LD W8.00
+      AND T0218
+      OR _1HGHLVL
+      LDNOT H16.00
+      AND 485.01
+      ORLD
+      LD H16.00
+      AND 485.12
+      ORLD
+      OR 465.01
+      ANDLD
+      SET _1FILL1CMPLT
+      ^^^
+      LD _1FILL1STRT
+      ANDNOT _1FILL1CMPLT
+      @MOV(021) #1 EXT1COOK
+      RSET W20.00
+      ^^^
+      LD _1FILL1STRT
+      ANDNOT _1FILL1CMPLT
+      ANDNOT 3353.00
+      LD _1FILL2STRT
+      ANDNOT _1FILL2CMPLT
+      ORLD
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      LD _1WF3START
+      ANDNOT _1WF3ADDCMPLT
+      ORLD
+      LD _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      ANDNOT H16.00
+      ORLD
+      ANDNOT _1WTRFEEDAM
+      LD _1WTRFEEDAM
+      AND _1WTRFEEDM
+      ORLD
+      OUT _1WTRFEED
+      ^^^
+      LDNOT 3353.00
+      AND _1FILL1CMPLT
+      LD T0080
+      LD _1SCADASTRT1HU
+      AND H14.00
+      LDNOT _2GELFEED
+      ANDNOT H14.00
+      ORLD
+      ANDLD
+      OR 465.02
+      ANDLD
+      SET _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      DIFU(013) W19.11
+      ^^^
+      LD _1FILL1STRT
+      ANDNOT _1FILL1CMPLT
+      LD _1FILL2STRT
+      ANDNOT _1FILL2CMPLT
+      ORLD
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ORLD
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      OR 465.02
+      RSET HTCMPFLAG
+      ^^^
+      LD _1HEAT1START
+      LD HTCMPFLAG
+      AND T0141
+      LD P_Off
+      AND C0011
+      OR C0301
+      ANDLD
+      OR 465.03
+      ANDLD
+      SET _1HEAT1CMPLT
+      ^^^
+      LD _2HESHUTOFFAM
+      AND _2HESHUTOFFM
+      OUT STMCNTRLVLV2
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      ANDNOT H93.01
+      ANDNOT T0008
+      TIM 0145 #300
+      ^^^
+      '  AIR SHOOTS AUG-20-2004
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      ORLD
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      OUT TR0
+      ANDNOT T0195
+      TIM 0191 #300
+      LD TR0
+      AND T0191
+      TIM 0195 #3000
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      ORLD
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      ORLD
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      CMP(020) HE1TEMPIN _1CURTEMPSP
+      LD GREATER_THAN
+      OR EQUALS
+      ANDLD
+      TIM 0151 #900
+      ^^^
+      '  june/15/04 PCR#193
+      LD T0151
+      OUT TR0
+      LDNOT _1HEAT1START
+      LD T0171
+      ANDNOT _1HEAT1CMPLT
+      LD P_Off
+      AND C0011
+      OR C0301
+      ANDLD
+      ORLD
+      OR _1HEAT1CMPLT
+      ANDLD
+      SET HTCMPFLAG
+      LD TR0
+      AND _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      LD T0171
+      KEEP(011) H30.01
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      ORLD
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      ORLD
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      ANDNOT _1AIRSHOTLENGTH_Status
+      OUT _1AIRSHOTCMD
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      ORLD
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      ORLD
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      AND _1AIRSHOTCNT_Status
+      TIM 0005 #100
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      LDNOT T0145
+      OR T0245
+      ANDLD
+      LD P_Off
+      AND H30.01
+      ANDNOT T0171
+      ORLD
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      ANDNOT T0191
+      ORLD
+      ANDNOT _1AIRSHOTAM
+      LD _1AIRSHOTAM
+      AND _1AIRSHOTM
+      ORLD
+      OUT TR0
+      ANDNOT T0165
+      OUT 610.00
+      LD TR0
+      TIM 0165 #9000
+      ^^^
+      LD _1FILL1STRT
+      ANDNOT _1FILL1CMPLT
+      LD _1FILL2STRT
+      ANDNOT _1FILL2CMPLT
+      ORLD
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ANDNOT H16.00
+      ORLD
+      ANDNOT _1AIRSHOTAM
+      OUT 610.01
+      ^^^
+      LD _1FILL1CMPLT
+      ANDNOT _1HEAT1START
+      LD _1FILL2CMPLT
+      ANDNOT _1HEAT2STRT
+      ORLD
+      LD _1FILL3CMPLT
+      ANDNOT _1HEAT3STRT
+      LD _1FILL4CMPLT
+      ANDNOT _1HEAT4STRT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      OUT TR0
+      ANDNOT _1AIRSHOTAM
+      ANDNOT T0080
+      OUT 610.02
+      LD TR0
+      TIM 0080 #50
+      ^^^
+      LD _1FILL3CMPLT
+      ANDNOT _1HEAT3STRT
+      LD _1FILL4CMPLT
+      ANDNOT _1HEAT4STRT
+      ORLD
+      AND H16.00
+      TIM 0275 #50
+      ^^^
+      LD 610.00
+      OR 610.01
+      OR 610.02
+      OUT _1AIRSHOT
+      ^^^
+      '  AIR SHOT EXT#1\nCHANGE 253.13 NC TO HR02.03 NC\nAIR SHOT AT 4COOK WAS NOT WORKING NOW OK..
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      ANDNOT T0251
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      ORLD
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      ANDNOT T0252
+      ORLD
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      ORLD
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      ANDNOT 321.12
+      LD 321.12
+      AND 325.12
+      ANDNOT _12RECIRCLOCAL
+      ORLD
+      LD _1GELFEED
+      AND _1RECIRCFD
+      LD _2GELFEED
+      AND _2RECIRCFEED
+      ORLD
+      LD _1GELFEED
+      OR _2GELFEED
+      AND _1RECIRCRINSE
+      ORLD
+      LD SV30_25B
+      AND AutoJet_EXT_Isolation
+      LD _1RECIRCFD
+      ANDNOT _1GELFEED
+      ANDNOT _2RECIRCFEED
+      ANDNOT _2GELFEED
+      LD _2RECIRCFEED
+      ANDNOT _2GELFEED
+      ANDNOT _1RECIRCFD
+      ANDNOT _1GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      TIM 0155 #150
+      AND T0155
+      OUT EXT12RECIRCPMP
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      ORLD
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      ANDNOT _1GELFEEDAM
+      LD H16.00
+      LD 484.01
+      AND _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ORLD
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      ANDLD
+      AND EXT1_2_Fill_valve_via_HE
+      ORLD
+      LD _1GELFEEDAM
+      AND _1GELFEEDM
+      ORLD
+      ANDNOT _2GELFEED
+      OUT _1GELFEED
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      ORLD
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      ANDNOT _1RECIRCFEEDAM
+      LD _1RECIRCFEEDAM
+      AND _1RECIRCFEEDM
+      ORLD
+      OUT _1RECIRCFD
+      ^^^
+      LD A10_MAZ_SCADA
+      AND MAZ_VLV_ON
+      AND P_Off
+      OUT Feed_A10_MAZ
+      ^^^
+      LD HE1FEEDAM
+      AND HE1FEEDM
+      LDNOT HE1FEEDAM
+      AND 410.01
+      ORLD
+      TIM 0161 #6000
+      ANDNOT T0161
+      OUT HE1FEED
+      ^^^
+      LD HE2FEEDAM
+      AND HE2FEEDM
+      LDNOT HE2FEEDAM
+      AND 411.01
+      ORLD
+      TIM 0162 #6000
+      ANDNOT T0162
+      OUT HE2FEED
+      ^^^
+      LD _1RECIRCRINSEAM
+      AND _1RECIRCRINSEM
+      OUT _1RECIRCRINSE
+      ^^^
+      LD _1HEAT1CMPLT
+      ANDNOT _1COOKTIMFLAG
+      ANDNOT _1COOK1CMPLT
+      TIM 0007 _10MININCR
+      ^^^
+      LD _1HEAT1CMPLT
+      AND T0007
+      OUT _1COOKTIMFLAG
+      ^^^
+      LD _1HEAT1CMPLT
+      AND T0007
+      LD _1COOK1CMPLT
+      CNT 0002 #6
+      ^^^
+      LD _1HEAT1CMPLT
+      LD _11COOKCNTR_Status
+      OR 465.04
+      ANDLD
+      SET _1COOK1CMPLT
+      ^^^
+      LD _1COOK1CMPLT
+      LD _1SCADADRP
+      OR 465.05
+      ANDLD
+      SET _1DROP1STRT
+      ^^^
+      '  Interlock for Settling Tank #2\nExtractor 1 First Cook
+      LD _1DROP1STRT
+      ANDNOT W21.02
+      OUT TR0
+      AND<=(315) SETTNK2LVL #10
+      SET W21.00
+      LD TR0
+      AND W21.00
+      AND>=(325) SETTNK2LVL #40
+      SET W21.01
+      LD TR0
+      AND W21.00
+      AND W21.01
+      ANDNOT ST1DISCHARGE
+      TIM 4051 #9000
+      AND T4051
+      SET W21.02
+      ^^^
+      LD _1COOK1CMPLT
+      AND _1SCADADRP
+      ANDNOT _1DROP1CMPLT
+      OUT W19.09
+      ^^^
+      LD _1DROP1STRT
+      ANDNOT _1DROP1CMPLT
+      LD _1DROP2STRT
+      ANDNOT _1DROP2CMPLT
+      ORLD
+      LD _1DROP3STRT
+      ANDNOT _1DROP3CMPLT
+      ORLD
+      LD _1DROP4STRT
+      ANDNOT _1DROP4CMPLT
+      ORLD
+      ANDNOT _1DRPVLVAM
+      LD _1DRPVLVAM
+      AND _1DRPVLVM
+      LDNOT _1DROP1CMPLT
+      LD _1DROP2STRT
+      ANDNOT _1DROP2CMPLT
+      ORLD
+      LD _1DROP3STRT
+      ANDNOT _1DROP3CMPLT
+      ORLD
+      LD _1DROP4STRT
+      ANDNOT _1DROP4CMPLT
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT ST1HL
+      ANDNOT 328.05
+      OUT _1DRPVLV
+      ^^^
+      LD _1DROP1STRT
+      LDNOT _1LOWLVL
+      AND P_Off
+      OR 476.00
+      OR 465.06
+      ANDLD
+      SET _1DROP1CMPLT
+      ^^^
+      LD _1DROP1CMPLT
+      ANDNOT _11SETCNRFLG
+      TIM 0006 _15MININCR
+      ^^^
+      LD _1DROP1CMPLT
+      AND T0006
+      OUT _11SETCNRFLG
+      ^^^
+      LD _1DROP1CMPLT
+      AND T0006
+      LD _1SETL1CMPLT
+      CNT 0017 #1
+      ^^^
+      LD _1DROP1CMPLT
+      LD C0017
+      OR 465.07
+      ANDLD
+      SET _1SETL1CMPLT
+      ^^^
+      LD _1SETL1CMPLT
+      LD _1SCADATRNSFER
+      OR 465.08
+      ANDLD
+      SET _1TRNSFR1STRT
+      ^^^
+      LD _1TRNSFR1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      LD _1TRNSFR2STRT
+      ANDNOT _1TRNSFR2CMPLT
+      ORLD
+      LD _1TRNSFR3STRT
+      ANDNOT _1TRNSFR3CMPLT
+      ORLD
+      LD _1TRNSFR4STRT
+      ANDNOT _1TRNSFR4CMPT
+      ORLD
+      LD SETTNK12CLN
+      ANDNOT SETTNK12CLNCMPL
+      ORLD
+      ANDNOT ST1DISCHARGEAM
+      LD ST1DISCHARGEAM
+      AND ST1DISCHARGEM
+      ORLD
+      OUT ST1DISCHARGE
+      ^^^
+      LD SV30MINUS29_AM
+      AND SV30MINUS29_ON
+      LDNOT SV30MINUS29_AM
+      AND 410.00
+      ANDNOT 410.02
+      ORLD
+      OUT STK1_Feed_A10Pump
+      ^^^
+      LD _2TRANSFR1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      LD _2TRNSFR2STRT
+      ANDNOT _2TRANSFR2CMPLT
+      ORLD
+      LD _2TRNSFR3STRT
+      ANDNOT _2TRNSFR3CMPLT
+      ORLD
+      LD _2TRNSFR4STRT
+      ANDNOT _2TRNSFR4CMPT
+      ORLD
+      LD SETTNK12CLN
+      ANDNOT SETTNK12CLNCMPL
+      ORLD
+      ANDNOT ST2DISCHARGEAM
+      LD ST2DISCHARGEAM
+      AND ST2DISCHARGEM
+      ORLD
+      OUT ST2DISCHARGE
+      ^^^
+      LD _1TRNSFR1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      LD _1TRNSFR2STRT
+      ANDNOT _1TRNSFR2CMPLT
+      ORLD
+      LD _1TRNSFR3STRT
+      ANDNOT _1TRNSFR3CMPLT
+      ORLD
+      LD _1TRNSFR4STRT
+      ANDNOT _1TRNSFR4CMPT
+      ORLD
+      LD _2TRANSFR1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      ORLD
+      LD _2TRNSFR2STRT
+      ANDNOT _2TRANSFR2CMPLT
+      ORLD
+      LD _2TRNSFR3STRT
+      ANDNOT _2TRNSFR3CMPLT
+      ORLD
+      LD _2TRNSFR4STRT
+      ANDNOT _2TRNSFR4CMPT
+      ORLD
+      LD 234.01
+      OR 234.03
+      ANDLD
+      ANDNOT 321.11
+      LD 321.11
+      AND 325.11
+      ANDNOT SET12TRNSFRPMPM
+      ORLD
+      LDNOT STMINUS1TRNSFR_SP
+      AND ST1DISCHARGE
+      ANDNOT ST2DISCHARGE
+      LD _2DROP1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      AND W21.06
+      OR _2TRNSFR1CMPLT
+      OR ON
+      ANDLD
+      LDNOT STMINUS2TRNSFR_SP
+      AND ST2DISCHARGE
+      ANDNOT ST1DISCHARGE
+      LD _1DROP1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      AND W21.02
+      OR _1TRNSFR1CMPLT
+      OR ON
+      ANDLD
+      ORLD
+      ANDLD
+      ANDNOT 505.13
+      AND SV30MINUS50
+      LD 232.05
+      OR 232.06
+      ANDLD
+      OUT EXT12TRNSFRPMP
+      ^^^
+      LDNOT 321.11
+      LD 234.01
+      OR 234.03
+      ANDLD
+      LD 321.11
+      AND 325.11
+      ANDNOT SET12TRNSFRPMPM
+      ORLD
+      LDNOT STMINUS1TRNSFR_SP
+      AND ST1DISCHARGE
+      ANDNOT ST2DISCHARGE
+      LD _2DROP1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      AND W21.06
+      LD _1TRNSFR1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      ORLD
+      LD _1TRNSFR2STRT
+      ANDNOT _1TRNSFR2CMPLT
+      ORLD
+      LD _1TRNSFR3STRT
+      ANDNOT _1TRNSFR3CMPLT
+      ORLD
+      LD _1TRNSFR4STRT
+      ANDNOT _1TRNSFR4CMPT
+      ORLD
+      ANDLD
+      LDNOT STMINUS2TRNSFR_SP
+      AND ST2DISCHARGE
+      ANDNOT ST1DISCHARGE
+      LD _1DROP1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      AND W21.02
+      LD _2TRANSFR1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      ORLD
+      LD _2TRNSFR2STRT
+      ANDNOT _2TRANSFR2CMPLT
+      ORLD
+      LD _2TRNSFR3STRT
+      ANDNOT _2TRNSFR3CMPLT
+      ORLD
+      LD _2TRNSFR4STRT
+      ANDNOT _2TRNSFR4CMPT
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      AND SV30MINUS50
+      LD 232.05
+      OR 232.06
+      ANDLD
+      OUT W21.07
+      ^^^
+      LD _1TRNSFR1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      LD _1TRNSFR2STRT
+      ANDNOT _1TRNSFR2CMPLT
+      ORLD
+      LD _1TRNSFR3STRT
+      ANDNOT _1TRNSFR3CMPLT
+      ORLD
+      LD _1TRNSFR4STRT
+      ANDNOT _1TRNSFR4CMPT
+      ORLD
+      LD _2TRANSFR1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      ORLD
+      LD _2TRNSFR2STRT
+      ANDNOT _2TRANSFR2CMPLT
+      ORLD
+      LD _2TRNSFR3STRT
+      ANDNOT _2TRNSFR3CMPLT
+      ORLD
+      LD _2TRNSFR4STRT
+      ANDNOT _2TRNSFR4CMPT
+      ORLD
+      ANDNOT TRNSFER12DELAM
+      LD TRNSFER12DELAM
+      AND TRNSFER12M
+      ORLD
+      OUT SV30MINUS50
+      ^^^
+      '  Settling #1 Tank Level Setpoints
+      LD _1TRNSFR1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      ANDNOT _1DROP2STRT
+      LD _1TRNSFR2STRT
+      ANDNOT _1TRNSFR2CMPLT
+      ANDNOT _1DROP3STRT
+      ORLD
+      MOV(021) #17 D84
+      ^^^
+      LD _1TRNSFR3STRT
+      ANDNOT _1TRNSFR3CMPLT
+      ANDNOT _1DROP4STRT
+      MOV(021) #19 D84
+      ^^^
+      LD _1TRNSFR4STRT
+      ANDNOT _1TRNSFR4CMPT
+      MOV(021) #25 D84
+      ^^^
+      '  Ext #1\nCook 1 - 4
+      LD 321.11
+      AND 325.11
+      ANDNOT SET12TRNSFRPMPM
+      ANDNOT ST2DISCHARGE
+      LD _1TRNSFR1STRT
+      ANDNOT _1TRNSFR1CMPLT
+      ANDNOT _1DROP2STRT
+      ORLD
+      LD _1TRNSFR2STRT
+      ANDNOT _1TRNSFR2CMPLT
+      ANDNOT _1DROP3STRT
+      ORLD
+      LD _1TRNSFR3STRT
+      ANDNOT _1TRNSFR3CMPLT
+      ANDNOT _1DROP4STRT
+      ORLD
+      LD _1TRNSFR4STRT
+      ANDNOT _1TRNSFR4CMPT
+      ORLD
+      OUT TR0
+      AND ST1DISCHARGE
+      CMP(020) SETTNK1LVL STK1AND2_level_SP
+      LD TR0
+      LD EQUALS
+      OR LESS_THAN
+      ANDLD
+      TIM 0042 #30
+      LD TR0
+      AND T0042
+      OUT STMINUS1TRNSFR_SP
+      ^^^
+      '  TEST LOGIC TO INTERLOCK TRANSFER OF 4th COOK IF STK LEVEL GOES BELOW 30% ONE TIME\nUSE W21.10 @ RUNG 91\nRESET W21.09 and W21.10 @ RUNG 179
+      LD ON
+      LD 321.11
+      AND 325.11
+      LD _1TRNSFR4STRT
+      ANDNOT _1TRNSFR4CMPT
+      ORLD
+      ANDLD
+      AND _1DROP4CMPLT
+      ANDNOT ST2DISCHARGE
+      AND ST1DISCHARGE
+      OUT TR0
+      AND>=(325) SETTNK1LVL #31
+      @AND EXT12TRNSFRPMP
+      SET W21.09
+      LD TR0
+      AND W21.09
+      AND<=(315) SETTNK1LVL #30
+      %LD EXT12TRNSFRPMP
+      %OR 325.11
+      ANDLD
+      SET W21.10
+      ^^^
+      '  Settling #2 Tank Level Setpoints
+      LD _2TRANSFR1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      ANDNOT _2DROP2STRT
+      LD _2TRNSFR2STRT
+      ANDNOT _2TRANSFR2CMPLT
+      ANDNOT _2DROP3STRT
+      ORLD
+      MOV(021) #17 D85
+      ^^^
+      LD _2TRNSFR3STRT
+      ANDNOT _2TRNSFR3CMPLT
+      ANDNOT _2DROP4STRT
+      MOV(021) #19 D85
+      ^^^
+      LD _2TRNSFR4STRT
+      ANDNOT _2TRNSFR4CMPT
+      MOV(021) #25 D85
+      ^^^
+      '  Extr #2\nCook 1 - 4
+      LD 321.11
+      AND 325.11
+      ANDNOT SET12TRNSFRPMPM
+      ANDNOT ST1DISCHARGE
+      LD _2TRANSFR1STRT
+      ANDNOT _2TRNSFR1CMPLT
+      ANDNOT _2DROP2STRT
+      ORLD
+      LD _2TRNSFR2STRT
+      ANDNOT _2TRANSFR2CMPLT
+      ANDNOT _2DROP3STRT
+      ORLD
+      LD _2TRNSFR3STRT
+      ANDNOT _2TRNSFR3CMPLT
+      ANDNOT _2DROP4STRT
+      ORLD
+      LD _2TRNSFR4STRT
+      ANDNOT _2TRNSFR4CMPT
+      ORLD
+      OUT TR0
+      AND ST2DISCHARGE
+      CMP(020) SETTNK2LVL STK1AND2_level_SP
+      LD TR0
+      LD LESS_THAN
+      OR EQUALS
+      ANDLD
+      TIM 0043 #30
+      LD TR0
+      AND T0043
+      OUT STMINUS2TRNSFR_SP
+      ^^^
+      LD _1TRNSFR1STRT
+      LD _11SCADATRNSTOP
+      OR 465.09
+      ANDLD
+      SET _1TRNSFR1CMPLT
+      ^^^
+      LD _1TRNSFR1CMPLT
+      RSET W21.00
+      RSET W21.01
+      RSET W21.02
+      ^^^
+      LDNOT _1FILL1STRT
+      LD _1DROP1CMPLT
+      ANDNOT _1FILL2STRT
+      ORLD
+      LD _1DROP2CMPLT
+      ANDNOT _1FILL3STRT
+      ORLD
+      LD _1DROP3CMPLT
+      ANDNOT _1FILL4STRT
+      ORLD
+      @BSET(071) #0 D900 D901
+      @BSET(071) #0 D960 D961
+      @BSET(071) #0 D305 D306
+      ^^^
+      LD ON
+      MOV(021) 2015 D960
+      MOV(021) 2015 D962
+      MOV(021) 2015 D964
+      MOV(021) 2015 D966
+      MOV(021) 2015 D3204
+      ^^^
+      LD _1WTRFEED
+      OR _2WTRFEED
+      OR _3WTRFEED
+      OR _4WTRFEEDVLV
+      LD EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      ANDNOT _4WTRFEEDVLV
+      AND _4GELFEED
+      LD H18.00
+      ANDNOT _3WTRFEED
+      AND _3GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      LD EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      ANDNOT _2WTRFEED
+      AND _2GELFEED
+      LD H16.00
+      ANDNOT _1WTRFEED
+      AND _1GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      AND WATERSUPPLY
+      AND _1_SEC_PULSE
+      @+BCL(407) D3200 D3204 D3200
+      ^^^
+      LD _1WTRFEED
+      OR _2WTRFEED
+      OR _3WTRFEED
+      OR _4WTRFEEDVLV
+      LD EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      ANDNOT _4WTRFEEDVLV
+      AND _4GELFEED
+      LD H18.00
+      ANDNOT _3WTRFEED
+      AND _3GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      LD EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      ANDNOT _2WTRFEED
+      AND _2GELFEED
+      LD H16.00
+      ANDNOT _1WTRFEED
+      AND _1GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      AND WFSUPPLY_SV30_02
+      AND _1_SEC_PULSE
+      @+BCL(407) D3202 D3206 D3202
+      ^^^
+      LD ON
+      MOV(021) #10 D3190
+      MOV(021) #0 D3191
+      /BL(435) D3200 D3190 D3170
+      /BL(435) D3202 D3190 D3180
+      ^^^
+      LD _1DROP1CMPLT
+      LD SCADASTRT1
+      ANDNOT _1HGHLVL
+      ANDNOT W8.00
+      OR 465.10
+      ANDLD
+      SET _1FILL2STRT
+      ^^^
+      LD _1FILL2STRT
+      ANDNOT _1FILL2CMPLT
+      @MOV(021) #2 EXT1COOK
+      ^^^
+      LD _1FILL1STRT
+      ANDNOT _1FILL1CMPLT
+      LD _1FILL2STRT
+      ANDNOT _1FILL2CMPLT
+      ORLD
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ORLD
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      AND _1_SEC_PULSE
+      @+BCL(407) D900 D960 D900
+      @+(400) D305 D960 D305
+      ^^^
+      LD _1FILL2STRT
+      CMPL(060) D900 D92
+      LD P_GE
+      OR _1HGHLVL
+      OR W9.06
+      ANDLD
+      OUT _1VOLUMEFLAG
+      ^^^
+      LD _1FILL2STRT
+      LD _1VOLUMEFLAG
+      OR 465.11
+      ANDLD
+      SET _1FILL2CMPLT
+      ^^^
+      LD _1FILL2CMPLT
+      LD T0080
+      LD _1SCADASTRT1HU
+      AND H14.00
+      LDNOT _2GELFEED
+      ANDNOT H14.00
+      ORLD
+      ANDLD
+      OR 465.12
+      ANDLD
+      SET _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      DIFU(013) W19.12
+      ^^^
+      '  2nd Cook 30 minutes minimum Heat Up
+      LD _1HEAT2STRT
+      OUT TR0
+      LD HTCMPFLAG
+      AND T0141
+      AND T0214
+      OR 465.13
+      OR T0225
+      ANDLD
+      SET _1HEAT2CMPLT
+      LD TR0
+      TIM 0084 #10
+      AND T0084
+      TIM 0094 #10
+      LD TR0
+      AND T0094
+      TIM 0214 #7200
+      LD TR0
+      TIM 0223 #9000
+      AND T0223
+      TIM 0224 #9000
+      LD TR0
+      AND T0224
+      TIM 0225 #9000
+      ^^^
+      LD _1HEAT2CMPLT
+      ANDNOT _12COOKTIMFLAG
+      ANDNOT _1COOK2CMPLT
+      TIM 0020 _10MININCR
+      ^^^
+      LD _1HEAT2CMPLT
+      AND _12NDCOOK_Status
+      OUT _12COOKTIMFLAG
+      ^^^
+      LD _1HEAT2CMPLT
+      AND _12NDCOOK_Status
+      LD _1COOK2CMPLT
+      CNT 0021 #18
+      ^^^
+      LD _1HEAT2CMPLT
+      LD _12COOKCNTR_Status
+      OR 465.14
+      ANDLD
+      SET _1COOK2CMPLT
+      ^^^
+      LD _1COOK2CMPLT
+      LD _1SCADADRP
+      OR 465.15
+      ANDLD
+      SET _1DROP2STRT
+      ^^^
+      LD _1DROP2STRT
+      LDNOT _1LOWLVL
+      AND P_Off
+      OR 476.00
+      OR 466.00
+      ANDLD
+      SET _1DROP2CMPLT
+      ^^^
+      LD _1DROP2CMPLT
+      ANDNOT _12SETLFLAG
+      ANDNOT _1SETL2CMPLT
+      TIM 0022 _15MININCR
+      ^^^
+      LD _1DROP2CMPLT
+      AND _12SETTIME_Status
+      OUT _12SETLFLAG
+      ^^^
+      LD _1DROP2CMPLT
+      AND _12SETTIME_Status
+      LD _1SETL2CMPLT
+      CNT 0023 #1
+      ^^^
+      LD _1DROP2CMPLT
+      LD C0023
+      OR 466.01
+      ANDLD
+      SET _1SETL2CMPLT
+      ^^^
+      LD _1SETL2CMPLT
+      LD _1SCADATRNSFER
+      OR 466.02
+      ANDLD
+      SET _1TRNSFR2STRT
+      ^^^
+      LD _1TRNSFR2STRT
+      LD _11SCADATRNSTOP
+      OR 466.03
+      ANDLD
+      SET _1TRNSFR2CMPLT
+      ^^^
+      LD _1DROP2CMPLT
+      LD SCADASTRT1
+      ANDNOT _1HGHLVL
+      ANDNOT W8.00
+      OR 466.04
+      ANDLD
+      SET _1FILL3STRT
+      ^^^
+      '  Ext 1 - Cook 3
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      @MOV(021) #3 EXT1COOK
+      ^^^
+      LD _1FILL3STRT
+      CMPL(060) D900 D94
+      LD P_GE
+      OR _1HGHLVL
+      OR W9.06
+      ANDLD
+      OUT _1VOLUMEFLAG3
+      ^^^
+      LD _1FILL3STRT
+      LD _1VOLUMEFLAG3
+      OR 466.05
+      ANDLD
+      SET _1FILL3CMPLT
+      ^^^
+      '  EXT1 3rd Cook WF EN/DIS -able
+      LD 484.00
+      SET 484.00
+      ^^^
+      LD _1FILL3CMPLT
+      ANDNOT _1WF3START
+      !@MOV(021) #0 D995
+      ^^^
+      LD _1FILL3CMPLT
+      LD T0080
+      OR T0275
+      ANDLD
+      LD 484.00
+      LD SCADASTRT1
+      AND H14.00
+      LDNOT WFSUPPLY_SV30_02
+      ANDNOT H14.00
+      ORLD
+      ANDLD
+      ORNOT 484.00
+      ANDLD
+      SET _1WF3START
+      ^^^
+      LD _1WF3START
+      ANDNOT _1HEAT3STRT
+      LD 480.00
+      OR STOP_WF
+      ORNOT 484.00
+      OR _1HGHLVL
+      ANDLD
+      SET _1WF3ADDCMPLT
+      ^^^
+      LD _1WF3ADDCMPLT
+      LD _1SCADASTRT1HU
+      AND H14.00
+      LDNOT _2GELFEED
+      ANDNOT _1HEAT3CMPLT
+      ANDNOT H14.00
+      ORLD
+      OR 466.06
+      ANDLD
+      SET _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      DIFU(013) W19.13
+      ^^^
+      LD _1WF3ADDCMPLT
+      OR P_First_Cycle
+      RSET 484.00
+      ^^^
+      LD _1HEAT3STRT
+      LD HTCMPFLAG
+      AND T0141
+      OR C0374
+      OR 466.07
+      ANDLD
+      SET _1HEAT3CMPLT
+      ^^^
+      LD _1HEAT3CMPLT
+      ANDNOT _13COOKTIMFLAG
+      ANDNOT _1COOK3CMPLT
+      TIM 0024 _10MININCR
+      ^^^
+      LD _1HEAT3CMPLT
+      AND _13COOK_Status
+      OUT _13COOKTIMFLAG
+      ^^^
+      LD _1HEAT3CMPLT
+      AND _13COOK_Status
+      LD _1COOK3CMPLT
+      CNT 0025 #18
+      ^^^
+      LD _1HEAT3CMPLT
+      LD _13COOKCNTR_Status
+      OR 466.08
+      ANDLD
+      SET _1COOK3CMPLT
+      ^^^
+      LD _1COOK3CMPLT
+      LD _1SCADADRP
+      OR 466.09
+      ANDLD
+      SET _1DROP3STRT
+      ^^^
+      LD _1DROP3STRT
+      LDNOT _1LOWLVL
+      AND P_Off
+      OR 476.00
+      OR 466.10
+      ANDLD
+      SET _1DROP3CMPLT
+      ^^^
+      LD _1DROP3CMPLT
+      ANDNOT _1SETL3FLAG
+      ANDNOT _1SETL3CMPLT
+      TIM 0026 _15MININCR
+      ^^^
+      LD _1DROP3CMPLT
+      AND _13SETTIME_Status
+      OUT _1SETL3FLAG
+      ^^^
+      LD _1DROP3CMPLT
+      AND _13SETTIME_Status
+      LD _1SETL3CMPLT
+      CNT 0030 #1
+      ^^^
+      LD _1DROP3CMPLT
+      LD C0030
+      OR 466.11
+      ANDLD
+      SET _1SETL3CMPLT
+      ^^^
+      LD _1SETL3CMPLT
+      LD _1SCADATRNSFER
+      OR 466.12
+      ANDLD
+      SET _1TRNSFR3STRT
+      ^^^
+      LD _1TRNSFR3STRT
+      LD _11SCADATRNSTOP
+      OR 466.13
+      ANDLD
+      SET _1TRNSFR3CMPLT
+      ^^^
+      LD _1DROP3CMPLT
+      LD SCADASTRT1
+      ANDNOT _1HGHLVL
+      ANDNOT W8.00
+      OR 467.00
+      ANDLD
+      SET _1FILL4STRT
+      ^^^
+      '  Ext 1 - Cook 4
+      LD _1FILL4STRT
+      CMPL(060) D900 D96
+      LD P_GE
+      OR _1HGHLVL
+      OR W9.06
+      ANDLD
+      OUT _14VOLUMEFLAG
+      ^^^
+      LD _1FILL4STRT
+      LD _14VOLUMEFLAG
+      OR 467.01
+      ANDLD
+      SET _1FILL4CMPLT
+      ^^^
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      @MOV(021) #4 EXT1COOK
+      ^^^
+      '  Ext 1 - Cook 4 Water Fraction Enable/Disable
+      LD 484.01
+      @OR _1FILL1STRT
+      OR P_First_Cycle
+      SET 484.01
+      ^^^
+      LD _1FILL4CMPLT
+      ANDNOT _1WF4STRT
+      !@MOV(021) #0 D995
+      ^^^
+      LD _1FILL4CMPLT
+      LD T0080
+      OR T0275
+      ANDLD
+      LD 484.01
+      LD SCADASTRT1
+      AND H14.00
+      LDNOT WFSUPPLY_SV30_02
+      ANDNOT H14.00
+      ORLD
+      ANDLD
+      ORNOT 484.01
+      ANDLD
+      ANDNOT H14.01
+      SET _1WF4STRT
+      ^^^
+      LD _1WF4STRT
+      ANDNOT _1HEAT4STRT
+      LD 480.00
+      OR STOP_WF
+      ORNOT 484.01
+      ANDLD
+      SET _1WFADDCMPLT
+      SET H14.01
+      ^^^
+      LD _1WFADDCMPLT
+      LD _1SCADASTRT1HU
+      AND H14.00
+      LDNOT _2GELFEED
+      ANDNOT _1HEAT4CMPLT
+      ANDNOT H14.00
+      ORLD
+      OR 467.02
+      ANDLD
+      SET _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      DIFU(013) W19.14
+      ^^^
+      LD _1HEAT4STRT
+      LD HTCMPFLAG
+      AND T0141
+      OR C0378
+      OR 467.03
+      ANDLD
+      SET _1HEAT4CMPLT
+      ^^^
+      LD _1HEAT4CMPLT
+      ANDNOT _1COOK4TMRFLAG
+      TIM 0027 _10MININCR
+      ^^^
+      LD _1HEAT4CMPLT
+      AND T0027
+      OUT _1COOK4TMRFLAG
+      ^^^
+      LD _1HEAT4CMPLT
+      AND T0027
+      LD _1COOK4CMPLT
+      CNT 0028 #12
+      ^^^
+      LD _1HEAT4CMPLT
+      LD _1COOK4CNTR_Status
+      OR 467.04
+      ANDLD
+      SET _1COOK4CMPLT
+      ^^^
+      LD _1COOK4CMPLT
+      LD _1SCADADRP
+      OR 467.05
+      ANDLD
+      SET _1DROP4STRT
+      ^^^
+      LD _1DROP4STRT
+      TIM 0074 #9600
+      ^^^
+      LD _1DROP4STRT
+      LDNOT _1LOWLVL
+      AND _1DRPVLV
+      AND P_Off
+      OR 476.00
+      OR 467.06
+      ANDLD
+      SET _1DROP4CMPLT
+      ^^^
+      LD _1DROP4CMPLT
+      ANDNOT _1SETL4FLAG
+      ANDNOT _1DRPVLV
+      TIM 0031 _15MININCR
+      ^^^
+      LD _1DROP4CMPLT
+      AND _1COOK4SETTMR_Status
+      OUT _1SETL4FLAG
+      ^^^
+      LD _1DROP4CMPLT
+      AND _1COOK4SETTMR_Status
+      LD _1SETL4CMPLT
+      CNT 0029 #1
+      ^^^
+      LD _1DROP4CMPLT
+      LD _1SET4CNTR_Status
+      OR 467.07
+      ANDLD
+      SET _1SETL4CMPLT
+      ^^^
+      LD _1SETL4CMPLT
+      LD _1SCADATRNSFER
+      OR 467.08
+      ANDLD
+      SET _1TRNSFR4STRT
+      ^^^
+      LD _1TRNSFR4STRT
+      LD _11SCADATRNSTOP
+      OR 467.09
+      ANDLD
+      SET _1TRNSFR4CMPT
+      ^^^
+      LD _1TRNSFR4CMPT
+      OUT _1BATCHCMPLT
+      ^^^
+      LD _1DROP4CMPLT
+      TIM 0200 #300
+      ^^^
+      LD _1DROP4CMPLT
+      AND T0200
+      @BSET(071) #0 H0 H1
+      RSET _1WF3START
+      RSET _1WF3ADDCMPLT
+      RSET _1FILL3CMPLT
+      ^^^
+      LD 475.08
+      @BSET(071) #0 H0 H1
+      RSET _1WF3START
+      RSET _1WF3ADDCMPLT
+      RSET _1FILL3CMPLT
+      ^^^
+      LD _1BATCHCMPLT
+      TIM 0201 #900
+      ^^^
+      LD _1BATCHCMPLT
+      AND T0201
+      OUT TR0
+      @BSET(071) #0 H2 H2
+      RSET H14.01
+      AND P_Off
+      RSET W21.09
+      LD TR0
+      AND P_Off
+      RSET W21.10
+      ^^^
+      LD 475.08
+      @BSET(071) #0 H2 H2
+      ^^^
+      LD ON
+      OUT TR0
+      AND>=(325) PRT2_STEP #229
+      AND<=(315) PRT2_STEP #230
+      AND PRT2_DROP_EXT_STOP
+      AND SV30MINUS20D
+      ANDNOT _2FILL1STRT
+      SET W20.01
+      LD TR0
+      AND W20.01
+      AND P_1min
+      AND SV30MINUS20D
+      LD _2FILL1CMPLT
+      CNT 0161 #45
+      ^^^
+      LDNOT 3353.00
+      OUT TR0
+      AND 475.13
+      AND C0161
+      OUT TR1
+      AND>=(325) D31311 #6500
+      ANDNOT _2FILL1CMPLT
+      ANDNOT WATERSUPPLY
+      OUT W20.05
+      LD TR1
+      ANDNOT _2HGHLVL
+      ANDNOT W8.01
+      LD TR0
+      AND 467.10
+      ORLD
+      SET _2FILL1STRT
+      ^^^
+      LD _2FILL1STRT
+      ANDNOT _2FILL1CMPLT
+      @MOV(021) #1 EXT2COOK
+      RSET W20.01
+      ^^^
+      LD _2FILL1STRT
+      ANDNOT _2FILL1CMPLT
+      AND W8.01
+      TIM 0219 #250
+      ^^^
+      LD _2FILL1STRT
+      LD W8.01
+      AND T0219
+      OR _2HGHLVL
+      LDNOT H17.00
+      AND 485.02
+      ORLD
+      LD H17.00
+      AND 485.13
+      ORLD
+      OR 467.11
+      ANDLD
+      SET _2FILL1CMPLT
+      ^^^
+      LD _2FILL1STRT
+      ANDNOT _2FILL1CMPLT
+      ANDNOT 3353.00
+      LD _2FILL2STRT
+      ANDNOT _2FILL2CMPLT
+      ORLD
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      LD _2WF3START
+      ANDNOT _2WF3ADDCMPLT
+      ORLD
+      LD _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      ANDNOT H17.00
+      ORLD
+      ANDNOT _2WTRFEEDAM
+      LD _2WTRFEEDAM
+      AND _2WTRFEEDM
+      ORLD
+      OUT _2WTRFEED
+      ^^^
+      LDNOT 3353.00
+      AND _2FILL1CMPLT
+      LD T0081
+      LD _2SCADASTRT1HU
+      AND H14.00
+      LDNOT _1GELFEED
+      ANDNOT H14.00
+      ORLD
+      ANDLD
+      OR 467.12
+      ANDLD
+      SET _2HEAT1STRT
+      ^^^
+      LD _2FILL1STRT
+      ANDNOT _2FILL1CMPLT
+      LD _2FILL2STRT
+      ANDNOT _2FILL2CMPLT
+      ORLD
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      ORLD
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      OR 467.12
+      RSET _2HTCMPFLAG
+      ^^^
+      '  EXT 2
+      LD _2HEAT1STRT
+      LD _2HTCMPFLAG
+      AND T0142
+      LD P_Off
+      AND C0012
+      OR C0302
+      ANDLD
+      OR 467.13
+      ANDLD
+      SET _2HEAT1CMPLT
+      ^^^
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      ANDNOT H93.02
+      ANDNOT T0009
+      TIM 0146 #300
+      ^^^
+      '  AIR SHOOT EXT-2 AUG-20-2004
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      ORLD
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      OUT TR0
+      ANDNOT T0196
+      TIM 0192 #300
+      LD TR0
+      AND T0192
+      TIM 0196 #3000
+      ^^^
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      ORLD
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      ORLD
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      CMP(020) HE1TEMPIN _2CURTEMPSP
+      LD GREATER_THAN
+      OR EQUALS
+      ANDLD
+      TIM 0152 #900
+      ^^^
+      LD T0152
+      OUT TR0
+      LDNOT _2HEAT1STRT
+      LD T0172
+      ANDNOT _2HEAT1CMPLT
+      LD P_Off
+      AND C0012
+      OR C0302
+      ANDLD
+      ORLD
+      OR _2HEAT1CMPLT
+      ANDLD
+      SET _2HTCMPFLAG
+      LD TR0
+      AND _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      LD T0172
+      KEEP(011) H30.02
+      ^^^
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      ORLD
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      ORLD
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      ANDNOT _2AIRSHOTLENGTH_Status
+      OUT _2AIRSHOTCMD
+      ^^^
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      ORLD
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      ORLD
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      AND _2AIRSHOTCNT_Status
+      TIM 0051 #100
+      ^^^
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      LDNOT T0146
+      OR T0246
+      ANDLD
+      LD P_Off
+      AND H30.02
+      ANDNOT T0172
+      ORLD
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      ANDNOT T0192
+      ORLD
+      ANDNOT _2AIRSHOTAM
+      LD _2AIRSHOTAM
+      AND _2AIRSHOTM
+      ORLD
+      OUT TR0
+      ANDNOT T0166
+      OUT 611.00
+      LD TR0
+      TIM 0166 #9000
+      ^^^
+      LD _2FILL1STRT
+      ANDNOT _2FILL1CMPLT
+      LD _2FILL2STRT
+      ANDNOT _2FILL2CMPLT
+      ORLD
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      ANDNOT H17.00
+      ORLD
+      ANDNOT _2AIRSHOTAM
+      OUT 611.01
+      ^^^
+      LD _2FILL1CMPLT
+      ANDNOT _2HEAT1STRT
+      LD _2FILL2CMPLT
+      ANDNOT _2HEAT2STRT
+      ORLD
+      LD _2FILL3CMPLT
+      ANDNOT _2HEAT3START
+      LD _2FILL4CMPLT
+      ANDNOT _2HEAT4STRT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      OUT TR0
+      ANDNOT _2AIRSHOTAM
+      ANDNOT T0081
+      OUT 611.02
+      LD TR0
+      TIM 0081 #50
+      ^^^
+      LD _2FILL3CMPLT
+      ANDNOT _2HEAT3START
+      LD _2FILL4CMPLT
+      ANDNOT _2HEAT4STRT
+      ORLD
+      AND H17.00
+      TIM 0274 #50
+      ^^^
+      LD 611.00
+      OR 611.01
+      OR 611.02
+      OUT _2AIRSHOT
+      ^^^
+      '  AIR SHOT EXT#2\nAT 4COOK AIR SHOTWASNOT WORKING ....\nCHANGE 253.13 NC TO HR05.03 HEATUP COMPLETED\nOCT,30 01    KHALEFA...
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      ORLD
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      ANDNOT _2GELFEEDAM
+      LD H17.00
+      LD 484.03
+      AND _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      ORLD
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      ANDLD
+      AND EXT1_2_Fill_valve_via_HE
+      ORLD
+      LD _2GELFEEDAM
+      AND _2GELFEEDM
+      ORLD
+      ANDNOT _1GELFEED
+      OUT _2GELFEED
+      ^^^
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      ORLD
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      ANDNOT _2RECIRCFEEDAM
+      LD _2RECIRCFEEDAM
+      AND _2RECIRCFEEDM
+      ORLD
+      OUT _2RECIRCFEED
+      ^^^
+      LD 332.04
+      AND 332.05
+      LDNOT 332.04
+      AND 411.00
+      ANDNOT 411.02
+      ORLD
+      OUT STK2_Feed_A10Pump
+      ^^^
+      LD _2HEAT1CMPLT
+      ANDNOT _2COOKTIMFLAG
+      ANDNOT _2COOK1CMPLT
+      TIM 0054 _10MININCR
+      ^^^
+      LD _2HEAT1CMPLT
+      AND T0054
+      OUT _2COOKTIMFLAG
+      ^^^
+      LD _2HEAT1CMPLT
+      AND T0054
+      LD _2COOK1CMPLT
+      CNT 0055 #6
+      ^^^
+      LD _2HEAT1CMPLT
+      LD C0055
+      OR 467.14
+      ANDLD
+      SET _2COOK1CMPLT
+      ^^^
+      LD _2COOK1CMPLT
+      LD _2SCADADRP
+      OR 467.15
+      ANDLD
+      SET _2DROP1STRT
+      ^^^
+      '  Interlock for Settling Tank #1\nExtractor 2 First Cook
+      LD _2DROP1STRT
+      ANDNOT W21.06
+      OUT TR0
+      AND<=(315) SETTNK1LVL #10
+      SET W21.04
+      LD TR0
+      AND W21.04
+      AND>=(325) SETTNK1LVL #39
+      SET W21.05
+      LD TR0
+      AND W21.04
+      AND W21.05
+      ANDNOT ST2DISCHARGE
+      TIM 4052 #9000
+      AND T4052
+      SET W21.06
+      ^^^
+      LD _2DROP1STRT
+      ANDNOT _2DROP1CMPLT
+      LD _2DROP2STRT
+      ANDNOT _2DROP2CMPLT
+      ORLD
+      LD _2DROP3STRT
+      ANDNOT _2DROP3CMPLT
+      ORLD
+      LD _2DROP4STRT
+      ANDNOT _2DROP4CMPLT
+      ORLD
+      ANDNOT _2DRPVLVAM
+      LD _2DRPVLVAM
+      AND _2DRPVLVM
+      LDNOT _2DROP1CMPLT
+      LD _2DROP2STRT
+      ANDNOT _2DROP2CMPLT
+      ORLD
+      LD _2DROP3STRT
+      ANDNOT _2DROP3CMPLT
+      ORLD
+      LD _2DROP4STRT
+      ANDNOT _2DROP4CMPLT
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT ST2HL
+      ANDNOT 328.06
+      OUT _2DRPVLV
+      ^^^
+      LD _2DROP1STRT
+      LDNOT _2LOWLVL
+      AND P_Off
+      OR 476.01
+      OR 468.00
+      ANDLD
+      SET _2DROP1CMPLT
+      ^^^
+      LD _2DROP1CMPLT
+      ANDNOT _2SET1CNRFLG
+      TIM 0070 _15MININCR
+      ^^^
+      LD _2DROP1CMPLT
+      AND T0070
+      OUT _2SET1CNRFLG
+      ^^^
+      LD _2DROP1CMPLT
+      AND T0070
+      ANDNOT _2STL1CMPLT
+      LD _2STL1CMPLT
+      CNT 0073 #1
+      ^^^
+      LD _2DROP1CMPLT
+      LD _2COOK1CNTR_Status
+      OR 468.01
+      ANDLD
+      SET _2STL1CMPLT
+      ^^^
+      LD _2STL1CMPLT
+      LD _2SCADATRNSFER
+      OR 468.02
+      ANDLD
+      SET _2TRANSFR1STRT
+      ^^^
+      LD _2TRANSFR1STRT
+      LD _2SCADA1TRNSSTOP
+      OR 468.03
+      ANDLD
+      SET _2TRNSFR1CMPLT
+      ^^^
+      LD _2TRNSFR1CMPLT
+      RSET W21.04
+      RSET W21.05
+      RSET W21.06
+      ^^^
+      LDNOT _2FILL1STRT
+      LD _2DROP1CMPLT
+      ANDNOT _2FILL2STRT
+      ORLD
+      LD _2DROP2CMPLT
+      ANDNOT _2FILL3STRT
+      ORLD
+      LD _2DROP3CMPLT
+      ANDNOT _2FILL4STRT
+      ORLD
+      @BSET(071) #0 D914 D915
+      @BSET(071) #0 D962 D963
+      ^^^
+      LD _2DROP1CMPLT
+      LD SCADASTRT2
+      ANDNOT _2HGHLVL
+      ANDNOT W8.01
+      OR 468.04
+      ANDLD
+      SET _2FILL2STRT
+      ^^^
+      LD _2FILL2STRT
+      ANDNOT _2FILL2CMPLT
+      @MOV(021) #2 EXT2COOK
+      ^^^
+      LD _2FILL1STRT
+      ANDNOT _2FILL1CMPLT
+      LD _2FILL2STRT
+      ANDNOT _2FILL2CMPLT
+      ORLD
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      ORLD
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      AND _1_SEC_PULSE
+      @+BCL(407) D914 D962 D914
+      ^^^
+      LD _2FILL2STRT
+      CMPL(060) D914 D92
+      LD P_GE
+      OR _2HGHLVL
+      OR W9.07
+      ANDLD
+      OUT _2VOLUMEFLAG
+      ^^^
+      LD _2FILL2STRT
+      LD _2VOLUMEFLAG
+      OR 468.05
+      ANDLD
+      SET _2FILL2CMPLT
+      ^^^
+      LD _2FILL2CMPLT
+      LD T0081
+      LD _2SCADASTRT1HU
+      AND H14.00
+      LDNOT _1GELFEED
+      ANDNOT H14.00
+      ORLD
+      ANDLD
+      OR 468.06
+      ANDLD
+      SET _2HEAT2STRT
+      ^^^
+      LD _2HEAT2STRT
+      OUT TR0
+      LD _2HTCMPFLAG
+      AND T0142
+      AND T0215
+      OR 468.07
+      OR T0228
+      ANDLD
+      SET _2HEAT2CMPLT
+      LD TR0
+      TIM 0085 #10
+      AND T0085
+      TIM 0095 #10
+      LD TR0
+      AND T0095
+      TIM 0215 #7200
+      LD TR0
+      TIM 0226 #9000
+      AND T0226
+      TIM 0227 #9000
+      LD TR0
+      AND T0227
+      TIM 0228 #9000
+      ^^^
+      LD _2HEAT2CMPLT
+      ANDNOT _1COOK2TIMFLAG
+      ANDNOT _2COOK2CMPLT
+      TIM 0056 _10MININCR
+      ^^^
+      LD _2HEAT2CMPLT
+      AND _2COOK2_Status
+      OUT _1COOK2TIMFLAG
+      ^^^
+      LD _2HEAT2CMPLT
+      AND _2COOK2_Status
+      LD _2COOK2CMPLT
+      CNT 0057 #18
+      ^^^
+      LD _2HEAT2CMPLT
+      LD _2COOK2CNTR_Status
+      OR 468.08
+      ANDLD
+      SET _2COOK2CMPLT
+      ^^^
+      LD _2COOK2CMPLT
+      LD _2SCADADRP
+      OR 468.09
+      ANDLD
+      SET _2DROP2STRT
+      ^^^
+      LD _2DROP2STRT
+      LDNOT _2LOWLVL
+      AND P_Off
+      OR 476.01
+      OR 468.10
+      ANDLD
+      SET _2DROP2CMPLT
+      ^^^
+      LD _2DROP2CMPLT
+      ANDNOT _2SETL2FLAG
+      ANDNOT _2SET2COMP
+      TIM 0058 _15MININCR
+      ^^^
+      LD _2DROP2CMPLT
+      AND _2SETL2TMR_Status
+      OUT _2SETL2FLAG
+      ^^^
+      LD _2DROP2CMPLT
+      AND _2SETL2TMR_Status
+      LD _2SET2COMP
+      CNT 0059 #1
+      ^^^
+      LD _2DROP2CMPLT
+      LD C0059
+      OR 468.11
+      ANDLD
+      SET _2SET2COMP
+      ^^^
+      LD _2SET2COMP
+      LD _2SCADATRNSFER
+      OR 468.12
+      ANDLD
+      SET _2TRNSFR2STRT
+      ^^^
+      LD _2TRNSFR2STRT
+      LD _2SCADA1TRNSSTOP
+      OR 468.13
+      ANDLD
+      SET _2TRANSFR2CMPLT
+      ^^^
+      LD _2DROP2CMPLT
+      LD SCADASTRT2
+      ANDNOT _2HGHLVL
+      ANDNOT W8.01
+      OR 468.14
+      ANDLD
+      SET _2FILL3STRT
+      ^^^
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      @MOV(021) #3 EXT2COOK
+      ^^^
+      LD _2FILL3STRT
+      CMPL(060) D914 D94
+      LD P_GE
+      OR _2HGHLVL
+      OR W9.07
+      ANDLD
+      OUT 477.00
+      ^^^
+      LD _2FILL3STRT
+      LD 477.00
+      OR 468.15
+      ANDLD
+      SET _2FILL3CMPLT
+      ^^^
+      '  EXT2 3rd Cook WF EN/DIS -able
+      LD 484.02
+      SET 484.02
+      ^^^
+      LD _2FILL3CMPLT
+      ANDNOT _2WF3START
+      !@MOV(021) #0 D995
+      ^^^
+      LD _2FILL3CMPLT
+      LD T0081
+      OR T0274
+      ANDLD
+      LD 484.02
+      LD SCADASTRT2
+      AND H14.00
+      LDNOT WFSUPPLY_SV30_02
+      ANDNOT H14.00
+      ORLD
+      ANDLD
+      ORNOT 484.02
+      ANDLD
+      SET _2WF3START
+      ^^^
+      LD _2WF3START
+      ANDNOT _2HEAT3START
+      LD _2WF3CMPLT
+      OR STOP_WF
+      ORNOT 484.02
+      OR _2HGHLVL
+      ANDLD
+      SET _2WF3ADDCMPLT
+      ^^^
+      LD _2WF3ADDCMPLT
+      LD _2SCADASTRT1HU
+      AND H14.00
+      LDNOT _1GELFEED
+      ANDNOT _2HEAT3CMPLT
+      ANDNOT H14.00
+      ORLD
+      OR 469.00
+      ANDLD
+      SET _2HEAT3START
+      ^^^
+      LD _2WF3ADDCMPLT
+      OR P_First_Cycle
+      RSET 484.02
+      ^^^
+      LD _2HEAT3START
+      LD _2HTCMPFLAG
+      AND T0142
+      OR C0375
+      OR 469.01
+      ANDLD
+      SET _2HEAT3CMPLT
+      ^^^
+      LD _2HEAT3CMPLT
+      ANDNOT _2COOK3TIMFLAG
+      ANDNOT _2COOK3CMPLT
+      TIM 0071 _10MININCR
+      ^^^
+      LD _2HEAT3CMPLT
+      AND _2COOK3TMR_Status
+      OUT _2COOK3TIMFLAG
+      ^^^
+      LD _2HEAT3CMPLT
+      AND _2COOK3TMR_Status
+      LD _2COOK3CMPLT
+      CNT 0060 #18
+      ^^^
+      LD _2HEAT3CMPLT
+      LD C0060
+      OR 469.02
+      ANDLD
+      SET _2COOK3CMPLT
+      ^^^
+      LD _2COOK3CMPLT
+      LD _2SCADADRP
+      OR 469.03
+      ANDLD
+      SET _2DROP3STRT
+      ^^^
+      LD _2DROP3STRT
+      LDNOT _2LOWLVL
+      AND P_Off
+      OR 476.01
+      OR 469.04
+      ANDLD
+      SET _2DROP3CMPLT
+      ^^^
+      LD _2DROP3CMPLT
+      ANDNOT _2SETL3FLAG
+      ANDNOT _2SETL3CMPLT
+      TIM 0061 _15MININCR
+      ^^^
+      LD _2DROP3CMPLT
+      AND _2SETL3TMR_Status
+      OUT _2SETL3FLAG
+      ^^^
+      LD _2DROP3CMPLT
+      AND _2SETL3TMR_Status
+      LD _2SETL3CMPLT
+      CNT 0062 #1
+      ^^^
+      LD _2DROP3CMPLT
+      LD C0062
+      OR 469.05
+      ANDLD
+      SET _2SETL3CMPLT
+      ^^^
+      LD _2DROP3CMPLT
+      LD _2SCADATRNSFER
+      OR 469.06
+      ANDLD
+      SET _2TRNSFR3STRT
+      ^^^
+      LD _2TRNSFR3STRT
+      LD _2SCADA1TRNSSTOP
+      OR 469.07
+      ANDLD
+      SET _2TRNSFR3CMPLT
+      ^^^
+      LD _2DROP3CMPLT
+      LD SCADASTRT2
+      ANDNOT _2HGHLVL
+      ANDNOT W8.01
+      OR 469.10
+      ANDLD
+      SET _2FILL4STRT
+      ^^^
+      LD _2FILL4STRT
+      CMPL(060) D914 D96
+      LD P_GE
+      OR _2HGHLVL
+      OR W9.07
+      ANDLD
+      OUT 477.01
+      ^^^
+      LD 477.01
+      OR 469.11
+      SET _2FILL4CMPLT
+      ^^^
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      @MOV(021) #4 EXT2COOK
+      ^^^
+      '  EXT2 4th Cook WF EN/DIS -able
+      LD 484.03
+      @OR _2FILL1STRT
+      OR P_First_Cycle
+      SET 484.03
+      ^^^
+      LD _2FILL4CMPLT
+      ANDNOT _2WF4STRT
+      !@MOV(021) #0 D995
+      ^^^
+      LD _2FILL4CMPLT
+      LD T0081
+      OR T0274
+      ANDLD
+      LD 484.03
+      LD SCADASTRT2
+      AND H14.00
+      LDNOT WFSUPPLY_SV30_02
+      ANDNOT H14.00
+      ORLD
+      ANDLD
+      ORNOT 484.03
+      ANDLD
+      ANDNOT H14.02
+      SET _2WF4STRT
+      ^^^
+      LD _2WF4STRT
+      ANDNOT _2HEAT4STRT
+      LD _2WF3CMPLT
+      OR STOP_WF
+      ORNOT 484.03
+      ANDLD
+      SET _2WFADDCMPLT
+      SET H14.02
+      ^^^
+      LD _2WFADDCMPLT
+      LD _2SCADASTRT1HU
+      AND H14.00
+      LDNOT _1GELFEED
+      ANDNOT _2HEAT4CMPLT
+      ANDNOT H14.00
+      ORLD
+      OR 469.12
+      ANDLD
+      SET _2HEAT4STRT
+      ^^^
+      LD _2HEAT4STRT
+      LD _2HTCMPFLAG
+      AND T0142
+      OR C0379
+      OR 469.13
+      ANDLD
+      SET _2HEAT4CMPLT
+      ^^^
+      LD _2HEAT4CMPLT
+      ANDNOT _2COOK4TMRFLAG
+      TIM 0072 _10MININCR
+      ^^^
+      LD _2HEAT4CMPLT
+      AND T0072
+      OUT _2COOK4TMRFLAG
+      ^^^
+      LD _2HEAT4CMPLT
+      AND T0072
+      LD _2COOK4CMPLT
+      CNT 0063 #12
+      ^^^
+      LD _2HEAT4CMPLT
+      LD _2COOK4CNTR_Status
+      OR 469.14
+      ANDLD
+      SET _2COOK4CMPLT
+      ^^^
+      LD _2COOK4CMPLT
+      LD _2SCADADRP
+      OR 469.15
+      ANDLD
+      SET _2DROP4STRT
+      ^^^
+      LD _2DROP4STRT
+      TIM 0075 #9600
+      ^^^
+      LD _2DROP4STRT
+      LDNOT _2LOWLVL
+      AND _2DRPVLV
+      AND P_Off
+      OR 476.01
+      OR 470.00
+      ANDLD
+      SET _2DROP4CMPLT
+      ^^^
+      LD _2DROP4CMPLT
+      ANDNOT _2SET4FLAG
+      ANDNOT _2DRPVLV
+      TIM 0064 _15MININCR
+      ^^^
+      LD _2DROP4CMPLT
+      AND _2COOK4SETTMR_Status
+      OUT _2SET4FLAG
+      ^^^
+      LD _2DROP4CMPLT
+      AND _2COOK4SETTMR_Status
+      LD _2SETL4CMPLT
+      CNT 0065 #1
+      ^^^
+      LD _2DROP4CMPLT
+      LD C0065
+      OR 470.01
+      ANDLD
+      SET _2SETL4CMPLT
+      ^^^
+      LD _2SETL4CMPLT
+      LD _2SCADATRNSFER
+      OR 470.02
+      ANDLD
+      SET _2TRNSFR4STRT
+      ^^^
+      LD _2TRNSFR4STRT
+      LD _2SCADA1TRNSSTOP
+      OR 470.03
+      ANDLD
+      SET _2TRNSFR4CMPT
+      ^^^
+      LD _2TRNSFR4CMPT
+      OUT _2BATCHCMPLT
+      ^^^
+      LD _2DROP4CMPLT
+      TIM 0202 #300
+      ^^^
+      LD _2DROP4CMPLT
+      AND T0202
+      @BSET(071) #0 H3 H4
+      RSET _2WF3START
+      RSET _2WF3ADDCMPLT
+      ^^^
+      LD 475.09
+      @BSET(071) #0 H3 H4
+      RSET _2WF3START
+      RSET _2WF3ADDCMPLT
+      ^^^
+      LD _2BATCHCMPLT
+      TIM 0203 #300
+      ^^^
+      LD _2BATCHCMPLT
+      AND T0203
+      @BSET(071) #0 H5 H5
+      RSET H14.02
+      ^^^
+      LD 475.09
+      @BSET(071) #0 H5 H5
+      ^^^
+      LD ST12VLVAM
+      AND ST12VLVM
+      LDNOT ST12VLVAM
+      AND 410.02
+      ORLD
+      ANDNOT _1DROP1STRT
+      ANDNOT _1DROP4STRT
+      OUT SV30MINUS19
+      ^^^
+      LD 332.06
+      AND 332.07
+      LDNOT 332.06
+      AND 411.02
+      ORLD
+      ANDNOT _2DROP1STRT
+      ANDNOT _2DROP4STRT
+      OUT SV30MINUS29
+      ^^^
+      LD ON
+      OUT TR0
+      AND>=(325) PRT3_STEP #229
+      AND<=(315) PRT3_STEP #230
+      AND PRT3_DROP_EXT_STOP
+      AND SV30_30D
+      ANDNOT _3FILL1STRT
+      SET W20.02
+      LD TR0
+      AND W20.02
+      AND P_1min
+      AND SV30_30D
+      LD _3FILL1CMPLT
+      CNT 0162 #45
+      ^^^
+      LDNOT 3353.00
+      OUT TR0
+      AND 475.14
+      AND C0162
+      OUT TR1
+      AND>=(325) LIT_3012 #6500
+      ANDNOT _3FILL1CMPLT
+      ANDNOT WATERSUPPLY
+      OUT W20.06
+      LD TR1
+      ANDNOT _3HGHLVL
+      ANDNOT W8.02
+      LD TR0
+      AND 470.04
+      ORLD
+      SET _3FILL1STRT
+      ^^^
+      LD _3FILL1STRT
+      ANDNOT _3FILL1CMPLT
+      @MOV(021) #1 EXT3COOK
+      RSET W20.02
+      ^^^
+      LD _3FILL1STRT
+      ANDNOT _3FILL1CMPLT
+      AND W8.02
+      TIM 0220 #250
+      ^^^
+      LD _3FILL1STRT
+      LD W8.02
+      AND T0220
+      OR _3HGHLVL
+      LDNOT H18.00
+      AND 485.03
+      ORLD
+      LD H18.00
+      AND 485.11
+      ORLD
+      OR 470.05
+      ANDLD
+      SET _3FILL1CMPLT
+      ^^^
+      LD _3FILL1STRT
+      ANDNOT _3FILL1CMPLT
+      ANDNOT 3353.00
+      LD _3FILL2STRT
+      ANDNOT _3FILL2CMPLT
+      ORLD
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      LD _3WF3START
+      ANDNOT _3WF3ADDCMPLT
+      ORLD
+      LD _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      ANDNOT H18.00
+      ORLD
+      ANDNOT _3WTRFEEDAM
+      LD _3WTRFEEDAM
+      AND _3WTRFEEDM
+      ORLD
+      OUT _3WTRFEED
+      ^^^
+      LDNOT 3353.00
+      AND _3FILL1CMPLT
+      LD T0082
+      LD _3SCADASTRTHU
+      AND H14.03
+      LDNOT _4GELFEED
+      ANDNOT H14.03
+      ORLD
+      ANDLD
+      OR 470.06
+      ANDLD
+      SET _3HEAT1STRT
+      ^^^
+      LD _3FILL1STRT
+      ANDNOT _3FILL1CMPLT
+      LD _3FILL2STRT
+      ANDNOT _3FILL2CMPLT
+      ORLD
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      ORLD
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      OR 470.06
+      RSET _34HECMLFLAG
+      ^^^
+      LD _3HEAT1STRT
+      LD _34HECMLFLAG
+      AND T0143
+      LD P_Off
+      AND C0013
+      OR C0303
+      ANDLD
+      OR 470.07
+      ANDLD
+      SET _3HEAT1CMPLT
+      ^^^
+      LD _3HESHUTOFFAM
+      AND _3HESHUTOFFM
+      OUT _3HECNTRLVLV
+      ^^^
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      ANDNOT H93.03
+      ANDNOT T0010
+      TIM 0147 #300
+      ^^^
+      '  AIR SHOOT EXT-3 AUG-20-2004
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      ORLD
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      OUT TR0
+      ANDNOT T0197
+      TIM 0193 #300
+      LD TR0
+      AND T0193
+      TIM 0197 #3000
+      ^^^
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      +B(404) HE3INLETTEMP #4 D409
+      ^^^
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      ORLD
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      ORLD
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      CMP(020) HE3INLETTEMP _3CURTEMPSP
+      LD GREATER_THAN
+      OR EQUALS
+      ANDLD
+      TIM 0153 #900
+      ^^^
+      LD T0153
+      OR T0157
+      OUT TR0
+      LDNOT _3HEAT1STRT
+      LD T0173
+      ANDNOT _3HEAT1CMPLT
+      LD P_Off
+      AND C0013
+      OR C0303
+      ANDLD
+      ORLD
+      OR _3HEAT1CMPLT
+      ANDLD
+      SET _34HECMLFLAG
+      LD TR0
+      AND _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      LD T0173
+      KEEP(011) H30.03
+      ^^^
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      ORLD
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      ORLD
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      ANDNOT _3AIRSHOTLENGTH_Status
+      OUT _3AIRSHOTCMD
+      ^^^
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      ORLD
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      ORLD
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      AND _3AIRSHOTCNT_Status
+      TIM 0100 #100
+      ^^^
+      '  AIR SHOT EXT#3\nCHANGE 253.13 NC TO HR08.03\nFOR AIR SHOT AT 4 COOK WASNOT WORKING NOW OK.
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      LDNOT T0147
+      OR T0247
+      ANDLD
+      LD P_Off
+      AND H30.03
+      ANDNOT T0173
+      ORLD
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      ANDNOT T0193
+      ORLD
+      ANDNOT _3AIRSHOTAM
+      LD _3AIRSHOTAM
+      AND _3AIRSHOTM
+      ORLD
+      OUT TR0
+      ANDNOT T0167
+      OUT 612.00
+      LD TR0
+      TIM 0167 #9000
+      ^^^
+      LD _3FILL1STRT
+      ANDNOT _3FILL1CMPLT
+      LD _3FILL2STRT
+      ANDNOT _3FILL2CMPLT
+      ORLD
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      ANDNOT H18.00
+      ORLD
+      ANDNOT _3AIRSHOTAM
+      OUT 612.01
+      ^^^
+      LD _3FILL1CMPLT
+      ANDNOT _3HEAT1STRT
+      LD _3FILL2CMPLT
+      ANDNOT _3HEAT2STRT
+      ORLD
+      LD _3FILL3CMPLT
+      ANDNOT _3HEAT3STRT
+      LD _3FILL4CMPLT
+      ANDNOT _3HEAT4STRT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      OUT TR0
+      ANDNOT _3AIRSHOTAM
+      ANDNOT T0082
+      OUT 612.02
+      LD TR0
+      TIM 0082 #50
+      ^^^
+      LD _3FILL3CMPLT
+      ANDNOT _3HEAT3STRT
+      LD _3FILL4CMPLT
+      ANDNOT _3HEAT4STRT
+      ORLD
+      AND H18.00
+      TIM 0273 #50
+      ^^^
+      LD 612.00
+      OR 612.01
+      OR 612.02
+      OUT _3AIRSHOT
+      ^^^
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      ANDNOT T0253
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      ORLD
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      ANDNOT T0254
+      ORLD
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      ORLD
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      ANDNOT 321.14
+      LD 321.14
+      AND 325.14
+      ANDNOT _34RECIRCLOCAL
+      ORLD
+      LD _3RECIRCFEED
+      AND _3GELFEED
+      LD _4RCIRCFD
+      AND _4GELFEED
+      ORLD
+      LD _3GELFEED
+      OR _4GELFEED
+      AND _3RECIRCRINSE
+      ORLD
+      LD SV30_45B
+      AND AutoJet_EXT_Isolation
+      LD _3RECIRCFEED
+      ANDNOT _3GELFEED
+      ANDNOT _4RCIRCFD
+      ANDNOT _4GELFEED
+      LD _4RCIRCFD
+      ANDNOT _4GELFEED
+      ANDNOT _3RECIRCFEED
+      ANDNOT _3GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      TIM 0156 #150
+      AND T0156
+      OUT EXT34RECIRCPMP
+      ^^^
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      ORLD
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      ANDNOT _3GELFEEDAM
+      LD H18.00
+      LD 484.09
+      AND _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      ORLD
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      ANDLD
+      AND EXT3_4_Fill_valve_via_HE
+      ORLD
+      LD _3GELFEEDAM
+      AND _3GELFEEDM
+      ORLD
+      ANDNOT _4GELFEED
+      OUT _3GELFEED
+      ^^^
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      ORLD
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      ANDNOT HE3FEEDAM
+      LD HE3FEEDAM
+      AND HE3FEEDM
+      ORLD
+      OUT _3RECIRCFEED
+      ^^^
+      LD _3RECIRCFEEDAM
+      AND _3RECIRCFEEDM
+      LDNOT _3RECIRCFEEDAM
+      AND 412.01
+      ORLD
+      TIM 0163 #6000
+      ANDNOT T0163
+      OUT _3HEFEED
+      ^^^
+      LD HE4FEEDAM
+      AND HE4FEEDM
+      LDNOT HE4FEEDAM
+      AND 413.01
+      ORLD
+      TIM 0164 #6000
+      ANDNOT T0164
+      OUT HE4FEED
+      ^^^
+      LD _3RECIRCRINSEAM
+      AND _3RECIRCRINSEM
+      OUT _3RECIRCRINSE
+      ^^^
+      LD _3HEAT1CMPLT
+      ANDNOT _3COOKTIMFLAG
+      ANDNOT _3COOK1CMPLT
+      TIM 0103 _10MININCR
+      ^^^
+      LD _3HEAT1CMPLT
+      AND T0103
+      OUT _3COOKTIMFLAG
+      ^^^
+      LD _3HEAT1CMPLT
+      AND T0103
+      LD _3COOK1CMPLT
+      CNT 0104 #6
+      ^^^
+      LD _3HEAT1CMPLT
+      LD _3COOK1CNTR_Status
+      OR 470.08
+      ANDLD
+      SET _3COOK1CMPLT
+      ^^^
+      LD _3COOK1CMPLT
+      LD _3SCADADRP
+      OR 470.09
+      ANDLD
+      SET _3DROP1STRT
+      ^^^
+      LD _3DROP1STRT
+      ANDNOT _3DROP1CMPLT
+      LD _3DROP2STRT
+      ANDNOT _3DROP2CMPLT
+      ORLD
+      LD _3DROP3STRT
+      ANDNOT _3DROP3CMPLT
+      ORLD
+      LD _3DROP4STRT
+      ANDNOT _3DROP4CMPLT
+      ORLD
+      ANDNOT _3DRPVLVAM
+      LD _3DRPVLVAM
+      AND _3DRPVLVM
+      LDNOT _3DROP1CMPLT
+      LD _3DROP2STRT
+      ANDNOT _3DROP2CMPLT
+      ORLD
+      LD _3DROP3STRT
+      ANDNOT _3DROP3CMPLT
+      ORLD
+      LD _3DROP4STRT
+      ANDNOT _3DROP4CMPLT
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT ST3HL
+      ANDNOT ON_OFF3
+      OUT _3DRPVLV
+      ^^^
+      LD _3DROP1STRT
+      LDNOT _3LOWLVL
+      AND P_Off
+      OR 476.02
+      OR 470.10
+      ANDLD
+      SET _3DROP1CMPLT
+      ^^^
+      LD _3DROP1CMPLT
+      ANDNOT _3SET1CNRFLG
+      TIM 0105 _15MININCR
+      ^^^
+      LD _3DROP1CMPLT
+      AND T0105
+      OUT _3SET1CNRFLG
+      ^^^
+      LD _3DROP1CMPLT
+      AND T0105
+      ANDNOT _3SETL1CMPLT
+      LD _3SETL1CMPLT
+      CNT 0106 #1
+      ^^^
+      LD _3DROP1CMPLT
+      LD C0106
+      OR 470.11
+      ANDLD
+      SET _3SETL1CMPLT
+      ^^^
+      LD _3SETL1CMPLT
+      LD _3SCADATRNSFER
+      OR 470.12
+      ANDLD
+      SET _3TRNSFR1STRT
+      ^^^
+      LD _3TRNSFR1STRT
+      ANDNOT _3TRNSFR1CMPLT
+      LD _3TRNSFR2STRT
+      ANDNOT _3TRNSFR2CMPLT
+      ORLD
+      LD _3TRNSFR3STRT
+      ANDNOT _3TRNSFR3CMPLT
+      ORLD
+      LD _3TRNSFR4STRT
+      ANDNOT _3TRNSFR4CMPLT
+      ORLD
+      ANDNOT ST3DISCHARGEAM
+      LD ST3DISCHARGEAM
+      AND ST3DISCHARGEM
+      ORLD
+      OUT ST3DISCHARGE
+      ^^^
+      LD _3TRNSFR1STRT
+      ANDNOT _3TRNSFR1CMPLT
+      LD _3TRNSFR2STRT
+      ANDNOT _3TRNSFR2CMPLT
+      ORLD
+      LD _3TRNSFR3STRT
+      ANDNOT _3TRNSFR3CMPLT
+      ORLD
+      LD _3TRNSFR4STRT
+      ANDNOT _3TRNSFR4CMPLT
+      ORLD
+      LD _4TRNSFR1STRT
+      ANDNOT _4TRNSFR1CMPLT
+      ORLD
+      LD _4TRNSFR2STRT
+      ANDNOT _4TRNSFR2CMPLT
+      ORLD
+      LD _4TRNSFR3STRT
+      ANDNOT _4TRNSFR3CMPLT
+      ORLD
+      LD _4TRNSFR4STRT
+      ANDNOT _4TRNSFR4CMPLT
+      ORLD
+      ANDNOT _34TRNSFRDISAM
+      LD _34TRNSFRDISAM
+      AND _34TRNSFRDISM
+      ORLD
+      OUT _34TRNSFRDIS
+      ^^^
+      LD _4TRNSFR1STRT
+      ANDNOT _4TRNSFR1CMPLT
+      LD _4TRNSFR2STRT
+      ANDNOT _4TRNSFR2CMPLT
+      ORLD
+      LD _4TRNSFR3STRT
+      ANDNOT _4TRNSFR3CMPLT
+      ORLD
+      LD _4TRNSFR4STRT
+      ANDNOT _4TRNSFR4CMPLT
+      ORLD
+      LD SETTNK34CLN
+      ANDNOT SETTNK34CLNCMPT
+      ORLD
+      ANDNOT ST4DISCHARGEAM
+      LD ST4DISCHARGEAM
+      AND ST4DISCHARGEM
+      ORLD
+      OUT ST4DISCHARGE
+      ^^^
+      LD _3TRNSFR1STRT
+      ANDNOT _3TRNSFR1CMPLT
+      LD _3TRNSFR2STRT
+      ANDNOT _3TRNSFR2CMPLT
+      ORLD
+      LD _3TRNSFR3STRT
+      ANDNOT _3TRNSFR3CMPLT
+      ORLD
+      LD _3TRNSFR4STRT
+      ANDNOT _3TRNSFR4CMPLT
+      ORLD
+      LD _4TRNSFR1STRT
+      ANDNOT _4TRNSFR1CMPLT
+      ORLD
+      LD _4TRNSFR2STRT
+      ANDNOT _4TRNSFR2CMPLT
+      ORLD
+      LD _4TRNSFR3STRT
+      ANDNOT _4TRNSFR3CMPLT
+      ORLD
+      LD _4TRNSFR4STRT
+      ANDNOT _4TRNSFR4CMPLT
+      ORLD
+      LD 234.01
+      OR 234.03
+      ANDLD
+      ANDNOT 321.13
+      LD 321.13
+      AND 325.13
+      ANDNOT SET34TRNSFRPMPM
+      ORLD
+      LDNOT 406.14
+      AND ST3DISCHARGE
+      ANDNOT ST4DISCHARGE
+      LDNOT LLTRNSFRALRM34
+      AND ST4DISCHARGE
+      ANDNOT ST3DISCHARGE
+      ORLD
+      ANDLD
+      ANDNOT 406.13
+      AND _34TRNSFRDIS
+      LD 232.10
+      OR 232.11
+      ANDLD
+      OUT EXT34TRNSFRPMP
+      ^^^
+      '  Settling #3 Tank Level Setpoints
+      LD _3TRNSFR1STRT
+      ANDNOT _3TRNSFR1CMPLT
+      ANDNOT _3DROP2STRT
+      LD _3TRNSFR2STRT
+      ANDNOT _3TRNSFR2CMPLT
+      ANDNOT _3DROP3STRT
+      ORLD
+      MOV(021) #17 D86
+      ^^^
+      LD _3TRNSFR3STRT
+      ANDNOT _3TRNSFR3CMPLT
+      ANDNOT _3DROP4STRT
+      MOV(021) #19 D86
+      ^^^
+      LD _3TRNSFR4STRT
+      ANDNOT _3TRNSFR4CMPLT
+      MOV(021) #25 D86
+      ^^^
+      '  Ext #3\nCook 1 - 4
+      LD 321.13
+      AND 325.13
+      ANDNOT SET34TRNSFRPMPM
+      ANDNOT ST4DISCHARGE
+      LD _3TRNSFR1STRT
+      ANDNOT _3TRNSFR1CMPLT
+      ANDNOT _3DROP2STRT
+      ORLD
+      LD _3TRNSFR2STRT
+      ANDNOT _3TRNSFR2CMPLT
+      ANDNOT _3DROP3STRT
+      ORLD
+      LD _3TRNSFR3STRT
+      ANDNOT _3TRNSFR3CMPLT
+      ANDNOT _3DROP4STRT
+      ORLD
+      LD _3TRNSFR4STRT
+      ANDNOT _3TRNSFR4CMPLT
+      ORLD
+      OUT TR0
+      AND ST3DISCHARGE
+      CMP(020) SETTNK3LVL STK3AND4_level_SP
+      LD TR0
+      LD EQUALS
+      OR LESS_THAN
+      ANDLD
+      TIM 0040 #30
+      LD TR0
+      AND T0040
+      OUT 406.14
+      ^^^
+      '  Settling #4 Tank Level Setpoints
+      LD _4TRNSFR1STRT
+      ANDNOT _4TRNSFR1CMPLT
+      ANDNOT _4DROP2STRT
+      LD _4TRNSFR2STRT
+      ANDNOT _4TRNSFR2CMPLT
+      ANDNOT _4DROP3STRT
+      ORLD
+      MOV(021) #17 D87
+      ^^^
+      LD _4TRNSFR3STRT
+      ANDNOT _4TRNSFR3CMPLT
+      ANDNOT _4DROP4STRT
+      MOV(021) #19 D87
+      ^^^
+      LD _4TRNSFR4STRT
+      ANDNOT _4TRNSFR4CMPLT
+      MOV(021) #25 D87
+      ^^^
+      '  Ext #4\nCook 1 - 4
+      LD 321.13
+      AND 325.13
+      ANDNOT SET34TRNSFRPMPM
+      ANDNOT ST3DISCHARGE
+      LD _4TRNSFR1STRT
+      ANDNOT _4TRNSFR1CMPLT
+      ANDNOT _4DROP2STRT
+      ORLD
+      LD _4TRNSFR2STRT
+      ANDNOT _4TRNSFR2CMPLT
+      ANDNOT _4DROP3STRT
+      ORLD
+      LD _4TRNSFR3STRT
+      ANDNOT _4TRNSFR3CMPLT
+      ANDNOT _4DROP4STRT
+      ORLD
+      LD _4TRNSFR4STRT
+      ANDNOT _4TRNSFR4CMPLT
+      ORLD
+      OUT TR0
+      AND ST4DISCHARGE
+      CMP(020) SETTNK4LVL STK3AND4_level_SP
+      LD TR0
+      LD EQUALS
+      OR LESS_THAN
+      ANDLD
+      TIM 0041 #30
+      LD TR0
+      AND T0041
+      OUT LLTRNSFRALRM34
+      ^^^
+      LD _3TRNSFR1STRT
+      LD _3SCADATRNSSTOP
+      OR 470.13
+      ANDLD
+      SET _3TRNSFR1CMPLT
+      ^^^
+      LDNOT _3FILL1STRT
+      LD _3DROP1CMPLT
+      ANDNOT _3FILL2STRT
+      ORLD
+      LD _3DROP2CMPLT
+      ANDNOT _3FILL3STRT
+      ORLD
+      LD _3DROP3CMPLT
+      ANDNOT _3FILL4STRT
+      ORLD
+      @BSET(071) #0 D928 D929
+      @BSET(071) #0 D964 D965
+      ^^^
+      LD _3DROP1CMPLT
+      LD SCADASTRT3
+      ANDNOT _3HGHLVL
+      ANDNOT W8.02
+      OR 470.14
+      ANDLD
+      SET _3FILL2STRT
+      ^^^
+      LD _3FILL1STRT
+      ANDNOT _3FILL1CMPLT
+      LD _3FILL2STRT
+      ANDNOT _3FILL2CMPLT
+      ORLD
+      LD _3FILL3STRT
+      ANDNOT _3HEAT3STRT
+      ORLD
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      AND _1_SEC_PULSE
+      @+BCL(407) D928 D964 D928
+      ^^^
+      LD _3FILL2STRT
+      ANDNOT _3FILL2CMPLT
+      @MOV(021) #2 EXT3COOK
+      ^^^
+      LD _3FILL2STRT
+      CMPL(060) D928 D92
+      LD P_GE
+      OR _3HGHLVL
+      OR W9.08
+      ANDLD
+      OUT _3VOLUMEFLAG
+      ^^^
+      LD _3FILL2STRT
+      LD _3VOLUMEFLAG
+      OR 470.15
+      ANDLD
+      SET _3FILL2CMPLT
+      ^^^
+      LD _3FILL2CMPLT
+      LD T0082
+      LD _3SCADASTRTHU
+      AND H14.03
+      LDNOT _4GELFEED
+      ANDNOT H14.03
+      ORLD
+      ANDLD
+      OR 471.00
+      ANDLD
+      SET _3HEAT2STRT
+      ^^^
+      LD _3HEAT2STRT
+      OUT TR0
+      LD _34HECMLFLAG
+      AND T0143
+      AND T0216
+      OR 471.01
+      OR T0231
+      ANDLD
+      SET _3HEAT2CMPLT
+      LD TR0
+      TIM 0086 #10
+      AND T0086
+      TIM 0096 #10
+      LD TR0
+      AND T0096
+      TIM 0216 #7200
+      LD TR0
+      TIM 0229 #9000
+      AND T0229
+      TIM 0230 #9000
+      LD TR0
+      AND T0230
+      TIM 0231 #9000
+      ^^^
+      LD _3HEAT2CMPLT
+      ANDNOT _3COOK2TIMFLAG
+      ANDNOT _3COOK2CMPLT
+      TIM 0107 _10MININCR
+      ^^^
+      LD _3HEAT2CMPLT
+      AND T0107
+      OUT _3COOK2TIMFLAG
+      ^^^
+      LD _3HEAT2CMPLT
+      AND T0107
+      LD _3COOK2CMPLT
+      CNT 0108 #18
+      ^^^
+      LD _3HEAT2CMPLT
+      LD _3COOK2CNTR_Status
+      OR 471.02
+      ANDLD
+      SET _3COOK2CMPLT
+      ^^^
+      LD _3COOK2CMPLT
+      LD _3SCADADRP
+      OR 471.03
+      ANDLD
+      SET _3DROP2STRT
+      ^^^
+      LD _3DROP2STRT
+      LDNOT _3LOWLVL
+      AND P_Off
+      OR 476.02
+      OR 471.04
+      ANDLD
+      SET _3DROP2CMPLT
+      ^^^
+      LD _3DROP2CMPLT
+      ANDNOT _3SETL2FLAG
+      ANDNOT _3SETL2CMPLT
+      TIM 0109 _15MININCR
+      ^^^
+      LD _3DROP2CMPLT
+      AND _3SET2TIME_Status
+      OUT _3SETL2FLAG
+      ^^^
+      LD _3DROP2CMPLT
+      AND _3SET2TIME_Status
+      LD _3SETL2CMPLT
+      CNT 0110 #1
+      ^^^
+      LD _3DROP2CMPLT
+      LD C0110
+      OR 471.05
+      ANDLD
+      SET _3SETL2CMPLT
+      ^^^
+      LD _3SETL2CMPLT
+      LD _3SCADATRNSFER
+      OR 471.06
+      ANDLD
+      SET _3TRNSFR2STRT
+      ^^^
+      LD _3TRNSFR2STRT
+      LD _3SCADATRNSSTOP
+      OR 471.07
+      ANDLD
+      SET _3TRNSFR2CMPLT
+      ^^^
+      LD _3DROP2CMPLT
+      LD SCADASTRT3
+      ANDNOT _3HGHLVL
+      ANDNOT W8.02
+      OR 471.08
+      ANDLD
+      SET _3FILL3STRT
+      ^^^
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      @MOV(021) #3 EXT3COOK
+      ^^^
+      LD _3FILL3STRT
+      CMPL(060) D928 D94
+      LD P_GE
+      OR _3HGHLVL
+      OR W9.08
+      ANDLD
+      OUT _3VOLUMEFLAG3
+      ^^^
+      LD _3FILL3STRT
+      LD _3VOLUMEFLAG3
+      OR 471.09
+      ANDLD
+      SET _3FILL3CMPLT
+      ^^^
+      '  EXT3 3rd Cook WF EN/DIS -able
+      LD 484.04
+      SET 484.04
+      ^^^
+      LD _3FILL3CMPLT
+      ANDNOT _3WF3START
+      !@MOV(021) #0 D995
+      ^^^
+      LD _3FILL3CMPLT
+      LD T0082
+      OR T0273
+      ANDLD
+      LD 484.04
+      LD SCADASTRT3
+      AND H14.03
+      LDNOT WFSUPPLY_SV30_02
+      ANDNOT H14.03
+      ORLD
+      ANDLD
+      ORNOT 484.04
+      ANDLD
+      SET _3WF3START
+      ^^^
+      LD _3WF3START
+      ANDNOT _3HEAT3STRT
+      LD _3WF
+      OR STOP_WF
+      ORNOT 484.04
+      OR 480.09
+      ANDLD
+      SET _3WF3ADDCMPLT
+      ^^^
+      LD _3WF3ADDCMPLT
+      LD _3SCADASTRTHU
+      AND H14.03
+      LDNOT _4GELFEED
+      ANDNOT _3HEAT3CMPLT
+      ANDNOT H14.03
+      ORLD
+      OR 471.10
+      ANDLD
+      SET _3HEAT3STRT
+      ^^^
+      LD _3WF3ADDCMPLT
+      OR P_First_Cycle
+      RSET 484.04
+      ^^^
+      LD _3HEAT3STRT
+      LD _34HECMLFLAG
+      AND T0143
+      OR C0376
+      OR 471.11
+      ANDLD
+      SET _3HEAT3CMPLT
+      ^^^
+      LD _3HEAT3CMPLT
+      ANDNOT _3COOK3TIMFLAG
+      ANDNOT _3COOK3CMPLT
+      TIM 0111 _10MININCR
+      ^^^
+      LD _3HEAT3CMPLT
+      AND _3COOK3_Status
+      OUT _3COOK3TIMFLAG
+      ^^^
+      LD _3HEAT3CMPLT
+      AND _3COOK3_Status
+      LD _3COOK3CMPLT
+      CNT 0112 #18
+      ^^^
+      LD _3HEAT3CMPLT
+      LD _3COOK3CNTR_Status
+      OR 471.12
+      ANDLD
+      SET _3COOK3CMPLT
+      ^^^
+      LD _3COOK3CMPLT
+      LD _3SCADADRP
+      OR 471.13
+      ANDLD
+      SET _3DROP3STRT
+      ^^^
+      LD _3DROP3STRT
+      LDNOT _3LOWLVL
+      AND P_Off
+      OR 476.02
+      OR 471.14
+      ANDLD
+      SET _3DROP3CMPLT
+      ^^^
+      LD _3DROP3CMPLT
+      ANDNOT _3SETL3FLAG
+      ANDNOT _3SETL3CMPLT
+      TIM 0113 _15MININCR
+      ^^^
+      LD _3DROP3CMPLT
+      AND _3SET3TIME_Status
+      OUT _3SETL3FLAG
+      ^^^
+      LD _3DROP3CMPLT
+      AND _3SET3TIME_Status
+      LD _3SETL3CMPLT
+      CNT 0114 #1
+      ^^^
+      LD _3DROP3CMPLT
+      LD C0114
+      OR 471.15
+      ANDLD
+      SET _3SETL3CMPLT
+      ^^^
+      LD _3SETL3CMPLT
+      LD _3SCADATRNSFER
+      OR 472.00
+      ANDLD
+      SET _3TRNSFR3STRT
+      ^^^
+      LD _3TRNSFR3STRT
+      LD _3SCADATRNSSTOP
+      OR 472.01
+      ANDLD
+      SET _3TRNSFR3CMPLT
+      ^^^
+      '  Ext 3 - Cook 4 Water Fraction Enable/Disable
+      LD 484.09
+      @OR _3FILL1STRT
+      OR P_First_Cycle
+      SET 484.09
+      ^^^
+      LD _3FILL4CMPLT
+      ANDNOT _3WFFILL4STRT
+      !@MOV(021) #0 D995
+      ^^^
+      LD _3FILL4CMPLT
+      LD T0082
+      OR T0273
+      ANDLD
+      LD 484.09
+      LD SCADASTRT3
+      AND H14.03
+      LDNOT WFSUPPLY_SV30_02
+      ANDNOT H14.03
+      ORLD
+      ANDLD
+      ORNOT 484.09
+      ANDLD
+      ANDNOT H14.04
+      SET _3WFFILL4STRT
+      ^^^
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      @MOV(021) #4 EXT3COOK
+      ^^^
+      LD _3WFFILL4STRT
+      LD _3WF
+      OR STOP_WF
+      OR 472.03
+      ORNOT 484.09
+      ANDLD
+      SET _3WFADDCMPLT
+      SET H14.04
+      ^^^
+      LD _3DROP3CMPLT
+      LD SCADASTRT3
+      OR 472.04
+      ANDLD
+      ANDNOT _3HGHLVL
+      ANDNOT W8.02
+      SET _3FILL4STRT
+      ^^^
+      LD _3FILL4STRT
+      CMPL(060) D928 D96
+      LD P_GE
+      OR _3HGHLVL
+      OR W9.08
+      ANDLD
+      OUT _3VOLUMEFLAG4
+      ^^^
+      LD _3FILL4STRT
+      LD _3VOLUMEFLAG4
+      OR 472.05
+      ANDLD
+      SET _3FILL4CMPLT
+      ^^^
+      LD _3WFADDCMPLT
+      LD _3SCADASTRTHU
+      AND H14.03
+      LDNOT _4GELFEED
+      ANDNOT _3HEAT4CMPLT
+      ANDNOT H14.03
+      ORLD
+      OR 472.06
+      ANDLD
+      SET _3HEAT4STRT
+      ^^^
+      LD _3HEAT4STRT
+      LD _34HECMLFLAG
+      AND T0143
+      OR C0380
+      OR 472.07
+      ANDLD
+      SET _3HEAT4CMPLT
+      ^^^
+      LD _3HEAT4CMPLT
+      ANDNOT _3COOK4TMRFLAG
+      TIM 0115 _10MININCR
+      ^^^
+      LD _3HEAT4CMPLT
+      AND T0115
+      OUT _3COOK4TMRFLAG
+      ^^^
+      LD _3HEAT4CMPLT
+      AND T0115
+      LD _3COOK4CMPLT
+      CNT 0116 #12
+      ^^^
+      LD _3HEAT4CMPLT
+      LD C0116
+      OR 472.08
+      ANDLD
+      SET _3COOK4CMPLT
+      ^^^
+      LD _3COOK4CMPLT
+      LD _3SCADADRP
+      OR 472.09
+      ANDLD
+      SET _3DROP4STRT
+      ^^^
+      LD _3DROP4STRT
+      TIM 0117 #9600
+      ^^^
+      LD _3DROP4STRT
+      LDNOT _3LOWLVL
+      AND _3DRPVLV
+      AND P_Off
+      OR 476.02
+      OR 472.10
+      ANDLD
+      SET _3DROP4CMPLT
+      ^^^
+      LD _3DROP4CMPLT
+      ANDNOT _4SETL4FLAG
+      ANDNOT _3DRPVLV
+      TIM 0118 _15MININCR
+      ^^^
+      LD _3DROP4CMPLT
+      AND T0118
+      OUT _4SETL4FLAG
+      ^^^
+      LD _3DROP4CMPLT
+      AND T0118
+      LD _3SETL4CMPLT
+      CNT 0119 #1
+      ^^^
+      LD _3DROP4CMPLT
+      LD C0119
+      OR 472.11
+      ANDLD
+      SET _3SETL4CMPLT
+      ^^^
+      LD _3SETL4CMPLT
+      LD _3SCADATRNSFER
+      OR 472.12
+      ANDLD
+      SET _3TRNSFR4STRT
+      ^^^
+      LD _3TRNSFR4STRT
+      LD _3SCADATRNSSTOP
+      OR 472.13
+      ANDLD
+      SET _3TRNSFR4CMPLT
+      ^^^
+      LD _3TRNSFR4CMPLT
+      OUT _3BATCHCMPLT
+      ^^^
+      LD _3DROP4CMPLT
+      TIM 0204 #300
+      ^^^
+      LD _3DROP4CMPLT
+      AND T0204
+      @BSET(071) #0 H6 H7
+      RSET _3WF3START
+      RSET _3WF3ADDCMPLT
+      RSET _3FILL3CMPLT
+      ^^^
+      LD 475.10
+      @BSET(071) #0 H6 H7
+      RSET _3WF3START
+      RSET _3WF3ADDCMPLT
+      RSET _3FILL3CMPLT
+      ^^^
+      LD _3BATCHCMPLT
+      TIM 0205 #300
+      ^^^
+      LD _3BATCHCMPLT
+      AND T0205
+      @BSET(071) #0 H8 H8
+      RSET H14.04
+      ^^^
+      LD 475.10
+      @BSET(071) #0 H8 H8
+      ^^^
+      LD ON
+      OUT TR0
+      AND>=(325) PRT4_STEP #229
+      AND<=(315) PRT4_STEP #230
+      AND PRT4_DROP_EXT_STOP
+      AND SV30_40D
+      ANDNOT _4FILL1STRT
+      SET W20.03
+      LD TR0
+      AND W20.03
+      AND P_1min
+      AND SV30_40D
+      LD _4FILL1CMPLT
+      CNT 0163 #45
+      ^^^
+      LDNOT 3353.00
+      OUT TR0
+      AND 475.15
+      AND C0163
+      OUT TR1
+      AND>=(325) D31295 #6500
+      ANDNOT _4FILL1CMPLT
+      ANDNOT WATERSUPPLY
+      OUT W20.07
+      LD TR1
+      ANDNOT _4HGHLVL
+      ANDNOT W8.03
+      LD TR0
+      AND 472.14
+      ORLD
+      SET _4FILL1STRT
+      ^^^
+      LD _4FILL1STRT
+      ANDNOT _4FILL1CMPLT
+      @MOV(021) #1 EXT4COOK
+      RSET W20.03
+      ^^^
+      LD _4FILL1STRT
+      ANDNOT _4FILL1CMPLT
+      AND W8.03
+      TIM 0221 #250
+      ^^^
+      LD _4FILL1STRT
+      LD W8.03
+      AND T0221
+      OR _4HGHLVL
+      LDNOT H19.00
+      AND 485.04
+      ORLD
+      LD H19.00
+      AND 485.15
+      ORLD
+      OR 472.15
+      ANDLD
+      SET _4FILL1CMPLT
+      ^^^
+      LD _4FILL1STRT
+      ANDNOT _4FILL1CMPLT
+      ANDNOT 3353.00
+      LD _4FILL2STRT
+      ANDNOT _4FILL2CMPLT
+      ORLD
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      LD _4WF3START
+      ANDNOT _4WF3ADDCMPLT
+      ORLD
+      LD _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      ANDNOT H19.00
+      ORLD
+      ANDNOT _4WTRFEEDVLVAM
+      LD _4WTRFEEDVLVAM
+      AND _4WTRFEEDVLVM
+      ORLD
+      OUT _4WTRFEEDVLV
+      ^^^
+      LDNOT 3353.00
+      AND _4FILL1CMPLT
+      LD T0083
+      LD _4SCADASTRTHU
+      AND H14.03
+      LDNOT _3GELFEED
+      ANDNOT H14.03
+      ORLD
+      ANDLD
+      OR 473.00
+      ANDLD
+      SET _4HEAT1STRT
+      ^^^
+      LD _4FILL1STRT
+      ANDNOT _4FILL1CMPLT
+      LD _4FILL2STRT
+      ANDNOT _4FILL2CMPLT
+      ORLD
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      ORLD
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      OR 473.00
+      RSET _4HTCMPLTFLAG
+      ^^^
+      LD _4HEAT1STRT
+      LD _4HTCMPLTFLAG
+      AND T0144
+      LD P_Off
+      AND C0014
+      OR C0304
+      ANDLD
+      OR 473.01
+      ANDLD
+      SET _4HEAT1CMPLT
+      ^^^
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      ANDNOT H93.04
+      ANDNOT T0011
+      TIM 0148 #300
+      ^^^
+      '  AIR SHOOT EXT-4 AUG-20-2004
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      ORLD
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      OUT TR0
+      ANDNOT T0198
+      TIM 0194 #300
+      LD TR0
+      AND T0194
+      TIM 0198 #3000
+      ^^^
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      +B(404) HE3INLETTEMP #4 D410
+      ^^^
+      '  HBLV 3rd and 4th Water/Water Fraction Fill\nvia EXT H/E High Setpoint
+      LD EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      AND _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      LD H16.00
+      AND _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ORLD
+      ANDLD
+      MOV(021) #196 D411
+      ^^^
+      LD EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      LD 484.03
+      AND _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      ORLD
+      ANDLD
+      LD H16.00
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      LD 484.01
+      AND _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      MOV(021) #196 D411
+      ^^^
+      LD EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      AND _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      LD H18.00
+      AND _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      ORLD
+      ANDLD
+      MOV(021) #196 D412
+      ^^^
+      LD EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      LD 484.08
+      AND _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      ORLD
+      ANDLD
+      LD H18.00
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      LD 484.09
+      AND _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      MOV(021) #196 D412
+      ^^^
+      '  Water Fill and Water Fraction Fill Heatup Setpoint Bits
+      LD EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      LD 484.08
+      AND _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      ORLD
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _4GELFEED
+      LD H18.00
+      LD 484.09
+      AND _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      ORLD
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _3GELFEED
+      ORLD
+      ANDLD
+      OUT TR0
+      CMP(020) HE4INLETTEMP D412
+      AND GREATER_THAN
+      TIM 0280 #50
+      LD TR0
+      AND T0280
+      OUT W29.01
+      LD TR0
+      CMP(020) HE4INLETTEMP #190
+      AND LESS_THAN
+      OUT W29.00
+      ^^^
+      LD EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      LD 484.03
+      AND _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      ORLD
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _2GELFEED
+      LD H16.00
+      LD 484.01
+      AND _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ORLD
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _1GELFEED
+      ORLD
+      ANDLD
+      OUT TR0
+      CMP(020) 2003 D411
+      AND GREATER_THAN
+      TIM 0281 #50
+      LD TR0
+      AND T0281
+      OUT W29.03
+      LD TR0
+      CMP(020) 2003 #190
+      AND LESS_THAN
+      OUT W29.02
+      ^^^
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      ORLD
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      ORLD
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      CMP(020) HE3INLETTEMP _4CURTEMPSP
+      LD GREATER_THAN
+      OR EQUALS
+      ANDLD
+      TIM 0154 #900
+      ^^^
+      LD T0154
+      OR T0158
+      OUT TR0
+      LDNOT _4HEAT1STRT
+      LD T0174
+      ANDNOT _4HEAT1CMPLT
+      LD P_Off
+      AND C0014
+      OR C0304
+      ANDLD
+      ORLD
+      OR _4HEAT1CMPLT
+      ANDLD
+      SET _4HTCMPLTFLAG
+      LD TR0
+      AND _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      LD T0174
+      KEEP(011) H30.04
+      ^^^
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      ORLD
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      ORLD
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      ANDNOT T0120
+      OUT _4AIRSHOTCMD
+      ^^^
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      ORLD
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      ORLD
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      AND _4AIRSHOTCNT_Status
+      TIM 0120 #100
+      ^^^
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      LDNOT T0148
+      OR T0248
+      ANDLD
+      LD P_Off
+      AND H30.04
+      ANDNOT T0174
+      ORLD
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      ANDNOT T0194
+      ORLD
+      ANDNOT _4AIRSHOTAM
+      LD _4AIRSHOTAM
+      AND _4AIRSHOTM
+      ORLD
+      OUT TR0
+      ANDNOT T0168
+      OUT 613.00
+      LD TR0
+      TIM 0168 #9000
+      ^^^
+      LD _4FILL1STRT
+      ANDNOT _4FILL1CMPLT
+      LD _4FILL2STRT
+      ANDNOT _4FILL2CMPLT
+      ORLD
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      ANDNOT H19.00
+      ORLD
+      ANDNOT _4AIRSHOTAM
+      OUT 613.01
+      ^^^
+      LD _4FILL1CMPLT
+      ANDNOT _4HEAT1STRT
+      LD _4FILL2CMPLT
+      ANDNOT _4HEAT2STRT
+      ORLD
+      LD _4FILL3CMPLT
+      ANDNOT _4HEAT3STRT
+      LD _4FILL4CMPLT
+      ANDNOT _4HEAT4STRT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      OUT TR0
+      ANDNOT _4AIRSHOTAM
+      ANDNOT T0083
+      OUT 613.02
+      LD TR0
+      TIM 0083 #50
+      ^^^
+      LD _4FILL3CMPLT
+      ANDNOT _4HEAT3STRT
+      LD _4FILL4CMPLT
+      ANDNOT _4HEAT4STRT
+      ORLD
+      AND H19.00
+      TIM 0272 #50
+      ^^^
+      LD 613.00
+      OR 613.01
+      OR 613.02
+      OUT _4AIRSHOT
+      ^^^
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      ORLD
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      ANDNOT _4GELFEEDAM
+      LD H19.00
+      LD 484.08
+      AND _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      ORLD
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      ANDLD
+      AND EXT3_4_Fill_valve_via_HE
+      ORLD
+      LD _4GELFEEDAM
+      AND _4GELFEEDM
+      ORLD
+      ANDNOT _3GELFEED
+      OUT _4GELFEED
+      ^^^
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      ORLD
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      ANDNOT _4RECIRCFEEDAM
+      LD _4RECIRCFEEDAM
+      AND _4RECIRCFEEDM
+      ORLD
+      OUT _4RCIRCFD
+      ^^^
+      LD _4RECIRCRINSEAM
+      AND _4RECIRCRINSEM
+      LDNOT _4RECIRCRINSEAM
+      AND 413.00
+      ANDNOT 413.02
+      ORLD
+      OUT STK4_Feed_A10Pump
+      ^^^
+      LD _4HEAT1CMPLT
+      ANDNOT _4COOKTIMFLAG
+      ANDNOT _4COOK1CMPLT
+      TIM 0123 _10MININCR
+      ^^^
+      LD _4HEAT1CMPLT
+      AND T0123
+      OUT _4COOKTIMFLAG
+      ^^^
+      LD _4HEAT1CMPLT
+      AND T0123
+      LD _4COOK1CMPLT
+      CNT 0124 #6
+      ^^^
+      LD _4HEAT1CMPLT
+      LD C0124
+      OR 473.02
+      ANDLD
+      SET _4COOK1CMPLT
+      ^^^
+      LD _4COOK1CMPLT
+      LD _4SCADADRP
+      OR 473.03
+      ANDLD
+      SET _4DROP1STRT
+      ^^^
+      LD _4DROP1STRT
+      ANDNOT _4DROP1CMPLT
+      LD _4DROP2STRT
+      ANDNOT _4DROP2CMPLT
+      ORLD
+      LD _4DROP3STRT
+      ANDNOT _4DROP3CMPLT
+      ORLD
+      LD _4DROP4STRT
+      ANDNOT _4DROP4CMPLT
+      ORLD
+      ANDNOT _4DRPVLVAM
+      LD _4DRPVLVAM
+      AND _4DRPVLVM
+      LDNOT _4DROP1CMPLT
+      LD _4DROP2STRT
+      ANDNOT _4DROP2CMPLT
+      ORLD
+      LD _4DROP3STRT
+      ANDNOT _4DROP3CMPLT
+      ORLD
+      LD _4DROP4STRT
+      ANDNOT _4DROP4CMPLT
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT 47.13
+      ANDNOT 328.08
+      OUT _4DRPVLV
+      ^^^
+      LD _4DROP1STRT
+      LDNOT _4LOWLVL
+      AND P_Off
+      OR 476.03
+      OR 473.04
+      ANDLD
+      SET _4DROP1CMPLT
+      ^^^
+      LD _4DROP1CMPLT
+      ANDNOT _4SET1CNRFLAG
+      TIM 0125 _15MININCR
+      ^^^
+      LD _4DROP1CMPLT
+      AND T0125
+      OUT _4SET1CNRFLAG
+      ^^^
+      LD _4DROP1CMPLT
+      AND T0125
+      ANDNOT _4STLCMPLT
+      LD _4STLCMPLT
+      CNT 0126 #1
+      ^^^
+      LD _4DROP1CMPLT
+      LD C0126
+      OR 473.05
+      ANDLD
+      SET _4STLCMPLT
+      ^^^
+      LD _4STLCMPLT
+      LD _4SCADATRNSFER
+      OR 473.06
+      ANDLD
+      SET _4TRNSFR1STRT
+      ^^^
+      LD _4TRNSFR1STRT
+      LD _4SCADATRNSSTOP
+      OR 473.07
+      ANDLD
+      SET _4TRNSFR1CMPLT
+      ^^^
+      LDNOT _4FILL1STRT
+      LD _4DROP1CMPLT
+      ANDNOT _4FILL2STRT
+      ORLD
+      LD _4DROP2CMPLT
+      ANDNOT _4FILL3STRT
+      ORLD
+      LD _4DROP3CMPLT
+      ANDNOT _4FILL4STRT
+      ORLD
+      @BSET(071) #0 D942 D943
+      @MOV(021) #0 D237
+      @BSET(071) #0 D966 D967
+      ^^^
+      LD _4DROP1CMPLT
+      LD SCADADSTRT4
+      ANDNOT _4HGHLVL
+      ANDNOT W8.03
+      OR 473.08
+      ANDLD
+      SET _4FILL2STRT
+      ^^^
+      LD _4FILL2STRT
+      ANDNOT _4FILL2CMPLT
+      @MOV(021) #2 EXT4COOK
+      ^^^
+      LD _4FILL1STRT
+      ANDNOT _4FILL1CMPLT
+      LD _4FILL2STRT
+      ANDNOT _4FILL2CMPLT
+      ORLD
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      ORLD
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      AND _1_SEC_PULSE
+      @+BCL(407) D942 D966 D942
+      ^^^
+      LD _4FILL2STRT
+      CMPL(060) D942 D92
+      LD P_GE
+      OR _4HGHLVL
+      OR W9.09
+      ANDLD
+      OUT _4VOLUMEFLAG
+      ^^^
+      LD _4FILL2STRT
+      LD _4VOLUMEFLAG
+      OR 473.09
+      ANDLD
+      SET _4FILL2CMPLT
+      ^^^
+      LD _4FILL2CMPLT
+      LD T0083
+      LD _4SCADASTRTHU
+      AND H14.03
+      LDNOT _3GELFEED
+      ANDNOT H14.03
+      ORLD
+      ANDLD
+      OR 473.10
+      ANDLD
+      SET _4HEAT2STRT
+      ^^^
+      '  2nd Cook 30 minutes minimum Heat Up
+      LD _4HEAT2STRT
+      OUT TR0
+      LD _4HTCMPLTFLAG
+      AND T0144
+      AND T0217
+      OR 473.11
+      OR T0234
+      ANDLD
+      SET _4HEAT2CMPLT
+      LD TR0
+      TIM 0087 #10
+      AND T0087
+      TIM 0097 #10
+      LD TR0
+      AND T0097
+      TIM 0217 #7200
+      LD TR0
+      TIM 0232 #9000
+      AND T0232
+      TIM 0233 #9000
+      LD TR0
+      AND T0233
+      TIM 0234 #9000
+      ^^^
+      LD _4HEAT2CMPLT
+      ANDNOT _4COOK2TIMFLAG
+      ANDNOT _4COOK2CMPLT
+      TIM 0127 _10MININCR
+      ^^^
+      LD _4HEAT2CMPLT
+      AND _4COOK2_Status
+      OUT _4COOK2TIMFLAG
+      ^^^
+      LD _4HEAT2CMPLT
+      AND _4COOK2_Status
+      LD _4COOK2CMPLT
+      CNT 0128 #18
+      ^^^
+      LD _4HEAT2CMPLT
+      LD C0128
+      OR 473.12
+      ANDLD
+      SET _4COOK2CMPLT
+      ^^^
+      LD _4COOK2CMPLT
+      LD _4SCADADRP
+      OR 473.13
+      ANDLD
+      SET _4DROP2STRT
+      ^^^
+      LD _4DROP2STRT
+      LDNOT _4LOWLVL
+      AND P_Off
+      OR 476.03
+      OR 473.14
+      ANDLD
+      SET _4DROP2CMPLT
+      ^^^
+      LD _4DROP2CMPLT
+      ANDNOT _4SETL2FLAG
+      ANDNOT _4SETL2CMPLT
+      TIM 0129 _15MININCR
+      ^^^
+      LD _4DROP2CMPLT
+      AND T0129
+      OUT _4SETL2FLAG
+      ^^^
+      LD _4DROP2CMPLT
+      AND T0129
+      LD _4SETL2CMPLT
+      CNT 0130 #1
+      ^^^
+      LD _4DROP2CMPLT
+      LD C0130
+      OR 473.15
+      ANDLD
+      SET _4SETL2CMPLT
+      ^^^
+      LD _4SETL2CMPLT
+      LD _4SCADATRNSFER
+      OR 474.00
+      ANDLD
+      SET _4TRNSFR2STRT
+      ^^^
+      LD _4TRNSFR2STRT
+      LD _4SCADATRNSSTOP
+      OR 474.01
+      ANDLD
+      SET _4TRNSFR2CMPLT
+      ^^^
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      @MOV(021) #3 EXT4COOK
+      ^^^
+      LD _4DROP2CMPLT
+      LD SCADADSTRT4
+      ANDNOT _4HGHLVL
+      ANDNOT W8.03
+      OR 474.02
+      ANDLD
+      SET _4FILL3STRT
+      ^^^
+      LD _4FILL3STRT
+      CMPL(060) D942 D94
+      LD P_GE
+      OR _4HGHLVL
+      OR W9.09
+      ANDLD
+      OUT 477.02
+      ^^^
+      LD _4FILL3STRT
+      LD 477.02
+      OR 474.03
+      ANDLD
+      SET _4FILL3CMPLT
+      ^^^
+      '  Ext 4 - Cook 3 Water Fraction Enable/Disable
+      LD 484.06
+      SET 484.06
+      ^^^
+      LD _4FILL3CMPLT
+      ANDNOT _4WF3START
+      !@MOV(021) #0 D995
+      ^^^
+      LD _4FILL3CMPLT
+      LD T0083
+      OR T0272
+      ANDLD
+      LD 484.06
+      LD SCADADSTRT4
+      AND H14.03
+      LDNOT WFSUPPLY_SV30_02
+      ANDNOT H14.03
+      ORLD
+      ANDLD
+      ORNOT 484.06
+      ANDLD
+      SET _4WF3START
+      ^^^
+      LD _4WF3START
+      LD _4WF
+      OR STOP_WF
+      ORNOT 484.06
+      OR 480.11
+      ANDLD
+      SET _4WF3ADDCMPLT
+      ^^^
+      LD _4WF3ADDCMPLT
+      LD _4SCADASTRTHU
+      AND H14.03
+      LDNOT _3GELFEED
+      ANDNOT _4HEAT3CMPLT
+      ANDNOT H14.03
+      ORLD
+      OR 474.04
+      ANDLD
+      SET _4HEAT3STRT
+      ^^^
+      LD _4WF3ADDCMPLT
+      OR P_First_Cycle
+      RSET 484.06
+      ^^^
+      LD _4HEAT3STRT
+      LD _4HTCMPLTFLAG
+      AND T0144
+      OR C0377
+      OR 474.05
+      ANDLD
+      SET _4HEAT3CMPLT
+      ^^^
+      LD _4HEAT3CMPLT
+      ANDNOT _4COOK3TIMFLAG
+      ANDNOT _4COOK3CMPLT
+      TIM 0131 _10MININCR
+      ^^^
+      LD _4HEAT3CMPLT
+      AND T0131
+      OUT _4COOK3TIMFLAG
+      ^^^
+      LD _4HEAT3CMPLT
+      AND T0131
+      LD _4COOK3CMPLT
+      CNT 0149 #18
+      ^^^
+      LD _4HEAT3CMPLT
+      LD C0149
+      OR 474.06
+      ANDLD
+      SET _4COOK3CMPLT
+      ^^^
+      LD _4COOK3CMPLT
+      LD _4SCADADRP
+      OR 474.07
+      ANDLD
+      SET _4DROP3STRT
+      ^^^
+      LD _4DROP3STRT
+      LDNOT _4LOWLVL
+      AND P_Off
+      OR 476.03
+      OR 474.08
+      ANDLD
+      SET _4DROP3CMPLT
+      ^^^
+      LD _4DROP3CMPLT
+      ANDNOT _4SETL3FLAG
+      ANDNOT _4SETL3CMPLT
+      TIM 0133 _15MININCR
+      ^^^
+      LD _4DROP3CMPLT
+      AND T0133
+      OUT _4SETL3FLAG
+      ^^^
+      LD _4DROP3CMPLT
+      AND T0133
+      LD _4SETL3CMPLT
+      CNT 0134 #1
+      ^^^
+      LD _4DROP3CMPLT
+      LD C0134
+      OR 474.09
+      ANDLD
+      SET _4SETL3CMPLT
+      ^^^
+      LD _4SETL3CMPLT
+      LD _4SCADATRNSFER
+      OR 474.10
+      ANDLD
+      SET _4TRNSFR3STRT
+      ^^^
+      LD _4TRNSFR3STRT
+      LD _4SCADATRNSSTOP
+      OR 474.11
+      ANDLD
+      SET _4TRNSFR3CMPLT
+      ^^^
+      '  Ext 4 - Cook 4 Water Fraction Enable/Disable
+      LD 484.08
+      @OR _4FILL1STRT
+      OR P_First_Cycle
+      SET 484.08
+      ^^^
+      LD _4FILL4CMPLT
+      ANDNOT _4WFFILL4STRT
+      !@MOV(021) #0 D995
+      ^^^
+      LD _4FILL4CMPLT
+      LD T0083
+      OR T0272
+      ANDLD
+      LD 484.08
+      LD SCADADSTRT4
+      AND H14.03
+      LDNOT WFSUPPLY_SV30_02
+      ANDNOT H14.03
+      ORLD
+      ANDLD
+      ORNOT 484.08
+      ANDLD
+      ANDNOT H14.05
+      SET _4WFFILL4STRT
+      ^^^
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      @MOV(021) #4 EXT4COOK
+      ^^^
+      LD _4WFFILL4STRT
+      ANDNOT _4HEAT4STRT
+      LD _4WF
+      OR STOP_WF
+      OR 474.13
+      ORNOT 484.08
+      ANDLD
+      SET _4WFADDCMPLT
+      SET H14.05
+      ^^^
+      LD _4DROP3CMPLT
+      LD SCADADSTRT4
+      ANDNOT _4HGHLVL
+      ANDNOT W8.03
+      OR 474.14
+      ANDLD
+      SET _4FILL4STRT
+      ^^^
+      LD _4FILL4STRT
+      CMPL(060) D942 D96
+      LD P_GE
+      OR _4HGHLVL
+      OR W9.09
+      ANDLD
+      OUT 477.03
+      ^^^
+      LD 477.03
+      OR 474.15
+      SET _4FILL4CMPLT
+      ^^^
+      LD _4WFADDCMPLT
+      LD _4SCADASTRTHU
+      AND H14.03
+      LDNOT _3GELFEED
+      ANDNOT _4HEAT4CMPLT
+      ANDNOT H14.03
+      ORLD
+      OR 475.00
+      ANDLD
+      SET _4HEAT4STRT
+      ^^^
+      LD _4HEAT4STRT
+      LD _4HTCMPLTFLAG
+      AND T0144
+      OR C0381
+      OR 475.01
+      ANDLD
+      SET _4HEAT4CMPLT
+      ^^^
+      LD _4HEAT4CMPLT
+      ANDNOT _4COOK4TMRFLAG
+      TIM 0135 _10MININCR
+      ^^^
+      LD _4HEAT4CMPLT
+      AND T0135
+      OUT _4COOK4TMRFLAG
+      ^^^
+      LD _4HEAT4CMPLT
+      AND T0135
+      LD _4COOK4RDY
+      CNT 0136 #12
+      ^^^
+      LD _4HEAT4CMPLT
+      LD C0136
+      OR 475.02
+      ANDLD
+      SET _4COOK4RDY
+      ^^^
+      LD _4COOK4RDY
+      LD _4SCADADRP
+      OR 475.03
+      ANDLD
+      SET _4DROP4STRT
+      ^^^
+      LD _4DROP4STRT
+      TIM 0137 #9600
+      ^^^
+      LD _4DROP4STRT
+      LDNOT _4LOWLVL
+      AND _4DRPVLV
+      AND P_Off
+      OR 476.03
+      OR 475.04
+      ANDLD
+      SET _4DROP4CMPLT
+      ^^^
+      LD _4DROP4CMPLT
+      ANDNOT _4SET4FLAG
+      TIM 0138 _15MININCR
+      ^^^
+      LD _4DROP4CMPLT
+      AND _4COOK4SETTMR_Status
+      OUT _4SET4FLAG
+      ^^^
+      LD _4DROP4CMPLT
+      AND _4COOK4SETTMR_Status
+      LD _4SETL4CMPLT
+      CNT 0150 #1
+      ^^^
+      LD _4DROP4CMPLT
+      LD C0150
+      OR 475.05
+      ANDLD
+      SET _4SETL4CMPLT
+      ^^^
+      LD _4SETL4CMPLT
+      LD _4SCADATRNSFER
+      OR 475.06
+      ANDLD
+      SET _4TRNSFR4STRT
+      ^^^
+      LD _4TRNSFR4STRT
+      LD _4SCADATRNSSTOP
+      OR 475.07
+      ANDLD
+      SET _4TRNSFR4CMPLT
+      SET W22.02
+      ^^^
+      LD _4TRNSFR4CMPLT
+      OUT _4BATCHCMPLT
+      ^^^
+      LD _4BATCHCMPLT
+      TIM 0207 #300
+      AND T0207
+      RSET W22.02
+      ^^^
+      LD _4BATCHCMPLT
+      AND T0207
+      @BSET(071) #0 H11 H11
+      RSET H14.05
+      ^^^
+      LD 475.11
+      @BSET(071) #0 H11 H11
+      ^^^
+      LD _4DROP4CMPLT
+      TIM 0206 #300
+      ^^^
+      LD _4DROP4CMPLT
+      AND T0206
+      @BSET(071) #0 H9 H10
+      RSET _4WF3START
+      RSET _4WF3ADDCMPLT
+      ^^^
+      LD 475.11
+      @BSET(071) #0 H9 H10
+      RSET _4WF3START
+      RSET _4WF3ADDCMPLT
+      ^^^
+      LD ON
+      OUT LARDTRNSFRPMP
+      ^^^
+      LDNOT 321.15
+      LD _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      LD _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      ORLD
+      LD _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      ORLD
+      LD _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      ORLD
+      LD _1WF3START
+      ANDNOT _1WF3ADDCMPLT
+      ORLD
+      LD _2WF3START
+      ANDNOT _2WF3ADDCMPLT
+      ORLD
+      LD _3WF3START
+      ANDNOT _3WF3ADDCMPLT
+      ORLD
+      LD _4WF3START
+      ANDNOT _4WF3ADDCMPLT
+      ORLD
+      ANDLD
+      LD 321.15
+      AND 325.15
+      ANDNOT CONDPMPLOCAL
+      ORLD
+      AND WFSUPPLY_SV30_02
+      ANDNOT WATERSUPPLY
+      TIM 0089 #6000
+      ANDNOT T0089
+      OUT WFADDPMP_PU30_01
+      ^^^
+      '  STK#1 LEVEL\nSETTLING TANK #1 LEVEL SIGNAL "121"\nSETTILING LEVEL READING TO SCADA "314"
+      LD ON
+      OUT TR0
+      SCL(194) STTNK1420 WFVOLUMESET 313
+      CMP(020) 313 #105
+      AND LESS_THAN
+      MOV(021) 313 SETTNK1LVL
+      LD TR0
+      AND GREATER_THAN
+      MOV(021) #0 SETTNK1LVL
+      ^^^
+      '  STK #1 Level Interlock with EXT Drop Valves
+      LD ON
+      CMP(020) SETTNK1LVL #90
+      AND GREATER_THAN
+      TIM 0370 #50
+      AND T0370
+      OUT 414.00
+      ^^^
+      '  AD003 SCALE\nMachine Number 2\nSETTLING TANK #2 LEVEL SIGNAL "122"\nSETTILING LEVEL READING TO SCADA "315"
+      LD ON
+      OUT TR0
+      SCL(194) STTNK2420 D164 312
+      CMP(020) 312 #105
+      AND LESS_THAN
+      MOV(021) 312 SETTNK2LVL
+      LD TR0
+      AND GREATER_THAN
+      MOV(021) #0 SETTNK2LVL
+      ^^^
+      '  STK #2 Level Interlock with EXT Drop Valves
+      LD ON
+      CMP(020) SETTNK2LVL #90
+      AND GREATER_THAN
+      TIM 0371 #50
+      AND T0371
+      OUT 414.01
+      ^^^
+      '  STK# 3 LEVEL\nSETTLING TANK #3 LEVEL SIGNAL "123"\nSETTILING LEVEL READING TO SCADA "316"
+      LD ON
+      OUT TR0
+      SCL(194) STTNK3420 D168 311
+      CMP(020) 311 #105
+      AND LESS_THAN
+      MOV(021) 311 SETTNK3LVL
+      LD TR0
+      AND GREATER_THAN
+      MOV(021) #0 SETTNK3LVL
+      ^^^
+      '  STK #3 Level Interlock with EXT Drop Valves
+      LD ON
+      CMP(020) SETTNK3LVL #90
+      AND GREATER_THAN
+      TIM 0372 #50
+      AND T0372
+      OUT 414.02
+      ^^^
+      '  STK#4 LEVEL\nSETTLING TANK #4 LEVEL SIGNAL "124"\nSETTILING LEVEL READING TO SCADA "317"
+      LD ON
+      OUT TR0
+      SCL(194) STTNK420 D172 310
+      CMP(020) 310 #105
+      AND LESS_THAN
+      MOV(021) 310 SETTNK4LVL
+      LD TR0
+      AND GREATER_THAN
+      MOV(021) #0 SETTNK4LVL
+      ^^^
+      '  STK #4 Level Interlock with EXT Drop Valves
+      LD ON
+      CMP(020) SETTNK4LVL #90
+      AND GREATER_THAN
+      TIM 0373 #50
+      AND T0373
+      OUT 414.03
+      ^^^
+      '  A 129 motor\nchopper motor# 1 "A 129"
+      LD ON
+      OUT TR0
+      SCL(194) power_pack_M1 D176 D970
+      CMP(020) D970 #980
+      AND GREATER_THAN
+      MOV(021) #0 PowerPack_M1
+      LD TR0
+      AND LESS_THAN
+      MOV(021) D970 PowerPack_M1
+      ^^^
+      '  A 128 motor\nchopper motor#2 "A 128"
+      LD ON
+      OUT TR0
+      SCL(194) power_pack_M2 D180 D971
+      CMP(020) D971 #980
+      AND GREATER_THAN
+      MOV(021) #0 PowerPack_M2
+      LD TR0
+      AND LESS_THAN
+      MOV(021) D971 PowerPack_M2
+      ^^^
+      '  Sapre input"127\nthe input connected to motor#3 "A 127" which isn't in use
+      LD ON
+      SCL(194) SPARE D184 Spare_to_scada
+      LD 350.03
+      OR 350.01
+      OR 350.00
+      OR 351.03
+      ANDLD
+      OUT TR0
+      CMP(020) Spare_to_scada #650
+      AND P_GE
+      TIM 0088 #100
+      AND T0088
+      OUT 350.02
+      LD TR0
+      CMP(020) Spare_to_scada #900
+      AND GREATER_THAN
+      TIM 0079 #100
+      AND T0079
+      OUT 350.15
+      ^^^
+      LD ON
+      LD 350.03
+      OR 350.01
+      OR 350.00
+      ANDLD
+      OUT TR0
+      CMP(020) Spare_to_scada #650
+      AND LESS_THAN
+      OUT 351.00
+      LD TR0
+      CMP(020) Spare_to_scada #880
+      AND GREATER_THAN
+      OUT 351.01
+      ^^^
+      LD 350.03
+      CMP(020) Spare_to_scada #790
+      AND P_LE
+      TIM 0092 #150
+      AND T0092
+      OUT 350.04
+      ^^^
+      LD 350.03
+      CMP(020) Spare_to_scada #830
+      AND P_GE
+      TIM 0098 #50
+      AND T0098
+      OUT 350.05
+      ^^^
+      LD 350.01
+      CMP(020) Spare_to_scada #700
+      AND P_LE
+      TIM 0150 #100
+      AND T0150
+      OUT 350.09
+      ^^^
+      LD 350.01
+      CMP(020) Spare_to_scada #750
+      AND P_GE
+      TIM 0149 #50
+      AND T0149
+      OUT 350.10
+      ^^^
+      LD 350.00
+      CMP(020) Spare_to_scada #790
+      AND P_LE
+      TIM 0271 #150
+      AND T0271
+      OUT 350.12
+      ^^^
+      LD 350.00
+      OR 351.03
+      CMP(020) Spare_to_scada #810
+      AND P_GE
+      TIM 0270 #50
+      AND T0270
+      OUT 350.13
+      ^^^
+      LD 350.03
+      LD 350.04
+      OR 350.06
+      ANDLD
+      ANDNOT 350.05
+      OUT 350.06
+      ^^^
+      LD 350.01
+      LD 350.09
+      OR 350.11
+      ANDLD
+      ANDNOT 350.10
+      OUT 350.11
+      ^^^
+      LD 350.00
+      LD 350.12
+      OR 350.14
+      ANDLD
+      ANDNOT 350.13
+      OUT 350.14
+      ^^^
+      '  Higher 3rd/4th Cook Temp for HBLV
+      LD 351.03
+      LDNOT 350.13
+      OR 351.02
+      ANDLD
+      ANDNOT 350.15
+      OUT 351.02
+      ^^^
+      LD _1FILL1STRT
+      ANDNOT _1FILL1CMPLT
+      LD _2FILL1STRT
+      ANDNOT _2FILL1CMPLT
+      ORLD
+      LD _3FILL1STRT
+      ANDNOT _3FILL1CMPLT
+      ORLD
+      LD _4FILL1STRT
+      ANDNOT _4FILL1CMPLT
+      ORLD
+      OUT 350.03
+      ^^^
+      LD _1FILL2STRT
+      ANDNOT _1FILL2CMPLT
+      LD _2FILL2STRT
+      ANDNOT _2FILL2CMPLT
+      ORLD
+      LD _3FILL2STRT
+      ANDNOT _3FILL2CMPLT
+      ORLD
+      LD _4FILL2STRT
+      ANDNOT _4FILL2CMPLT
+      ORLD
+      OUT 350.01
+      ^^^
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      ANDNOT H16.00
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      OUT 350.00
+      ^^^
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      AND H16.00
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      AND H17.00
+      ORLD
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      AND H18.00
+      ORLD
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      AND H19.00
+      ORLD
+      OUT 351.03
+      ^^^
+      LD 325.10
+      AND 321.10
+      OR 350.03
+      OR 350.01
+      OR 350.00
+      OR 351.03
+      ANDNOT WFSUPPLY_SV30_02
+      OUT WATERSUPPLY
+      ^^^
+      LD ST34VLVAM
+      AND ST34VLVM
+      LDNOT ST34VLVAM
+      AND 412.02
+      ORLD
+      ANDNOT _3DROP1STRT
+      ANDNOT _3DROP4STRT
+      OUT ST34Drain_VLV
+      ^^^
+      LD 326.11
+      AND 322.11
+      LDNOT 326.11
+      AND 412.00
+      ANDNOT 412.02
+      ORLD
+      OUT STK3_Feed_A10Pump
+      ^^^
+      LD 327.10
+      AND 323.10
+      LDNOT 327.10
+      LD _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      LDNOT _4FILL1STRT
+      OR _4FILL3CMPLT
+      ANDLD
+      ANDNOT _1WTRFEED
+      ANDNOT _2WTRFEED
+      ANDNOT _3WTRFEED
+      ANDNOT _4HGHLVL
+      LD _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      LDNOT _3FILL1STRT
+      OR _3FILL3CMPLT
+      ANDLD
+      ANDNOT _1WTRFEED
+      ANDNOT _2WTRFEED
+      ANDNOT _4WTRFEEDVLV
+      ANDNOT _3HGHLVL
+      ORLD
+      LD _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      LDNOT _2FILL1STRT
+      OR _2FILL3CMPLT
+      ANDLD
+      ANDNOT _1WTRFEED
+      ANDNOT _3WTRFEED
+      ANDNOT _4WTRFEEDVLV
+      ANDNOT _2HGHLVL
+      ORLD
+      LD _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      LDNOT _1FILL1STRT
+      OR _1FILL3CMPLT
+      ANDLD
+      ANDNOT _2WTRFEED
+      ANDNOT _3WTRFEED
+      ANDNOT _4WTRFEEDVLV
+      ANDNOT _1HGHLVL
+      ORLD
+      LD _1WF3START
+      ANDNOT _1WF3ADDCMPLT
+      ANDNOT _1HGHLVL
+      ORLD
+      LD _2WF3START
+      ANDNOT _2WF3ADDCMPLT
+      ANDNOT _2HGHLVL
+      ORLD
+      LD _3WF3START
+      ANDNOT _3WF3ADDCMPLT
+      ANDNOT _3HGHLVL
+      ORLD
+      LD _4WF3START
+      ANDNOT _4WF3ADDCMPLT
+      ANDNOT _4HGHLVL
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT WATERSUPPLY
+      ANDNOT T0089
+      OUT WFSUPPLY_SV30_02
+      ^^^
+      LD 327.15
+      OUT CONDPMPLOCAL
+      ^^^
+      LD 327.14
+      OUT _34RECIRCLOCAL
+      ^^^
+      LD 327.12
+      OUT _12RECIRCLOCAL
+      ^^^
+      LD 327.11
+      AND P_Off
+      OUT SET12TRNSFRPMPM
+      ^^^
+      LD 327.13
+      AND P_Off
+      OUT SET34TRNSFRPMPM
+      ^^^
+      '  Plant Steam Pressure Monitor\nShut Off H/E's if Low Steam Pressure
+      LD ON
+      OUT TR0
+      CMP(020) D984 #65
+      AND P_GE
+      TIM 0102 #300
+      AND T0102
+      OUT 350.07
+      LD TR0
+      CMP(020) D984 #5F
+      AND P_LE
+      TIM 0099 #50
+      AND T0099
+      LD 350.07
+      KEEP(011) 350.08
+      ^^^
+      LD 320.11
+      AND 324.11
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      ANDNOT T0245
+      OUT TR0
+      ANDNOT _1HEAT1CMPLT
+      ANDNOT C0360
+      LD TR0
+      ANDNOT H30.01
+      LDNOT 320.11
+      OUT TR0
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT HE1_TEMP
+      ORLD
+      LD TR0
+      AND _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      ANDNOT T0246
+      OUT TR1
+      ANDNOT _2HEAT1CMPLT
+      ANDNOT C0361
+      ORLD
+      LD TR1
+      ANDNOT H30.02
+      LD TR0
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT HE2_TEMP
+      ORLD
+      AND EXT1HUTIMER_Status
+      ANDNOT 320.11
+      ORLD
+      AND RECIRC_1AND2
+      ANDNOT PU120_NOFLO_ALM
+      LD T0044
+      OR 320.11
+      ANDLD
+      LD TR0
+      AND EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      LD 484.03
+      AND _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      ORLD
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _2GELFEED
+      LD H16.00
+      LD 484.01
+      AND _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ORLD
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _1GELFEED
+      ORLD
+      ANDLD
+      LD W29.02
+      OR HE1_STM_ON_OFF
+      ANDLD
+      ANDNOT W29.03
+      ORLD
+      ANDNOT 350.08
+      OUT HE1_STM_ON_OFF
+      ^^^
+      LD 320.12
+      AND 324.12
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      ANDNOT T0245
+      OUT TR0
+      ANDNOT _1HEAT1CMPLT
+      ANDNOT C0360
+      LD TR0
+      ANDNOT H30.01
+      LDNOT 320.12
+      OUT TR0
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      ANDNOT HTCMPFLAG
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT HE1_TEMP
+      ORLD
+      LD TR0
+      AND _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      ANDNOT T0246
+      OUT TR1
+      ANDNOT _2HEAT1CMPLT
+      ANDNOT C0361
+      ORLD
+      LD TR1
+      ANDNOT H30.02
+      LD TR0
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      ANDNOT _2HTCMPFLAG
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      ANDNOT H17.00
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT HE2_TEMP
+      ORLD
+      AND EXT1HUTIMER_Status
+      ANDNOT 320.12
+      ORLD
+      AND RECIRC_1AND2
+      ANDNOT PU120_NOFLO_ALM
+      LD TR0
+      AND EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      LD 484.03
+      AND _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      LD _2FILL3STRT
+      ANDNOT _2FILL3CMPLT
+      ORLD
+      LD _2FILL4STRT
+      ANDNOT _2FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _2GELFEED
+      LD H16.00
+      LD 484.01
+      AND _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      ORLD
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _1GELFEED
+      ORLD
+      ANDLD
+      LD W29.02
+      OR HE2_STM_ON_OFF
+      ANDLD
+      ANDNOT W29.03
+      ORLD
+      ANDNOT 350.08
+      TIM 0044 #1800
+      OUT HE2_STM_ON_OFF
+      ^^^
+      LD 320.13
+      AND 324.13
+      LDNOT 320.13
+      OUT TR0
+      AND _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      ANDNOT T0247
+      OUT TR1
+      ANDNOT _3HEAT1CMPLT
+      ANDNOT C0362
+      LD TR1
+      ANDNOT H30.03
+      LD TR0
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT HE3_TEMP
+      ORLD
+      LD TR0
+      AND _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      ANDNOT T0248
+      OUT TR1
+      ANDNOT _4HEAT1CMPLT
+      ANDNOT C0363
+      ORLD
+      LD TR1
+      ANDNOT H30.04
+      LD TR0
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT HE4_TEMP
+      ORLD
+      AND EXT2HUTIMER_Status
+      ORLD
+      AND RECIRC_3AND4
+      ANDNOT PU340_NOFLO_ALM
+      LD T0045
+      OR 320.13
+      ANDLD
+      LD TR0
+      AND EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      LD 484.08
+      AND _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      ORLD
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _4GELFEED
+      LD H18.00
+      LD 484.09
+      AND _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      ORLD
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _3GELFEED
+      ORLD
+      ANDLD
+      LD W29.00
+      OR HE3_STM_ON_OFF
+      ANDLD
+      ANDNOT W29.01
+      ORLD
+      ANDNOT 350.08
+      OUT HE3_STM_ON_OFF
+      ^^^
+      LD 320.14
+      AND 324.14
+      LDNOT 320.14
+      OUT TR0
+      AND _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      ANDNOT T0247
+      OUT TR1
+      ANDNOT _3HEAT1CMPLT
+      ANDNOT C0362
+      LD TR1
+      ANDNOT H30.03
+      LD TR0
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      ANDNOT _34HECMLFLAG
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      ANDNOT H18.00
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT HE3_TEMP
+      ORLD
+      LD TR0
+      AND _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      ANDNOT T0248
+      OUT TR1
+      ANDNOT _4HEAT1CMPLT
+      ANDNOT C0363
+      ORLD
+      LD TR1
+      ANDNOT H30.04
+      LD TR0
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      ANDNOT _4HTCMPLTFLAG
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      ANDNOT H19.00
+      ORLD
+      ANDLD
+      ORLD
+      ANDNOT HE4_TEMP
+      ORLD
+      AND EXT2HUTIMER_Status
+      ORLD
+      AND RECIRC_3AND4
+      ANDNOT PU340_NOFLO_ALM
+      LD TR0
+      AND EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      LD 484.08
+      AND _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      LD _4FILL3STRT
+      ANDNOT _4FILL3CMPLT
+      ORLD
+      LD _4FILL4STRT
+      ANDNOT _4FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _4GELFEED
+      LD H18.00
+      LD 484.09
+      AND _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      LD _3FILL3STRT
+      ANDNOT _3FILL3CMPLT
+      ORLD
+      LD _3FILL4STRT
+      ANDNOT _3FILL4CMPLT
+      ORLD
+      ANDLD
+      AND _3GELFEED
+      ORLD
+      ANDLD
+      LD W29.00
+      OR HE4_STM_ON_OFF
+      ANDLD
+      ANDNOT W29.01
+      ORLD
+      ANDNOT 350.08
+      OUT HE4_STM_ON_OFF
+      TIM 0045 #1800
+      ^^^
+      '  TEST LOGIC FOR CONE CLOSED TIMER
+      @LD EXT1_CONE
+      OUT TR0
+      !SET 331.12
+      AND 331.12
+      TIM 0357 #300
+      LD TR0
+      AND T0357
+      AND>=(325) PRT1_STEP #232
+      ORNOT EXT1_CONE
+      RSET 331.12
+      ^^^
+      '  Ext. Cone Closed Timers\nCone must be closed for 5 minutes before PRT Drop Valve can Open
+      LD ON
+      OUT TR0
+      AND EXT1_CONE
+      OUT TR1
+      @SET 331.05
+      AND 331.05
+      TIM 0351 #3000
+      LD TR1
+      AND T0351
+      AND>=(325) PRT1_STEP #231
+      AND<(310) PRT1_STEP #300
+      LD TR0
+      ANDNOT EXT1_CONE
+      ORLD
+      RSET 331.05
+      ^^^
+      LD ON
+      OUT TR0
+      AND EXT2_CONE
+      OUT TR1
+      @SET 331.07
+      AND 331.07
+      TIM 0352 #3000
+      LD TR1
+      AND T0352
+      AND>=(325) PRT2_STEP #231
+      AND<(310) PRT2_STEP #300
+      LD TR0
+      ANDNOT EXT2_CONE
+      ORLD
+      RSET 331.07
+      ^^^
+      LD ON
+      OUT TR0
+      AND EXT3_CONE
+      OUT TR1
+      @SET 331.09
+      AND 331.09
+      TIM 0353 #3000
+      LD TR1
+      AND T0353
+      AND>=(325) PRT3_STEP #231
+      AND<(310) PRT3_STEP #300
+      LD TR0
+      ANDNOT EXT3_CONE
+      ORLD
+      RSET 331.09
+      ^^^
+      LD ON
+      OUT TR0
+      AND EXT4_CONE
+      OUT TR1
+      @SET 331.11
+      AND 331.11
+      TIM 0354 #3000
+      LD TR1
+      AND T0354
+      AND>=(325) PRT4_STEP #231
+      AND<(310) PRT4_STEP #300
+      LD TR0
+      ANDNOT EXT4_CONE
+      ORLD
+      RSET 331.11
+      ^^^
+      LD>=(325) PRT1_STEP #220
+      AND<=(315) PRT1_STEP #230
+      AND EXT1_CONE
+      AND T0351
+      OUT W22.05
+      ^^^
+      LD>=(325) PRT2_STEP #220
+      AND<=(315) PRT2_STEP #230
+      AND EXT2_CONE
+      AND T0352
+      OUT W22.06
+      ^^^
+      LD>=(325) PRT3_STEP #220
+      AND<=(315) PRT3_STEP #230
+      AND EXT3_CONE
+      AND T0353
+      OUT W22.07
+      ^^^
+      LD>=(325) PRT4_STEP #220
+      AND<=(315) PRT4_STEP #230
+      AND EXT4_CONE
+      AND T0354
+      OUT W22.08
+      ^^^
+      '  Shovel Out Valves
+      LD 329.05
+      AND 328.05
+      ANDNOT EXT1_CONE
+      OUT SV30MINUS10S
+      ^^^
+      '  Heat Up confermation timer for EXT-1 1st cook (2nd, 3rd, 4th) are next
+      LD 329.06
+      AND 328.06
+      ANDNOT EXT2_CONE
+      OUT SV30MINUS20S
+      ^^^
+      LD scada_mode_3
+      AND ON_OFF3
+      ANDNOT EXT3_CONE
+      OUT SV30_30S
+      ^^^
+      LD 329.08
+      AND 328.08
+      ANDNOT EXT4_CONE
+      OUT SV30_40S
+      ^^^
+      LD 334.04
+      AND 334.05
+      LDNOT 334.04
+      AND 413.02
+      ORLD
+      ANDNOT _4DROP1STRT
+      ANDNOT _4DROP4STRT
+      OUT STKMINUS4_DRAIN_VLV
+      ^^^
+      LD 331.00
+      AND 331.01
+      OUT SV30MINUS61
+      ^^^
+      LD 332.00
+      AND 332.01
+      OUT 12.02
+      ^^^
+      LD 333.00
+      AND 333.01
+      OUT 12.03
+      ^^^
+      LD 334.00
+      AND 334.01
+      OUT 12.04
+      ^^^
+      LD 331.02
+      AND 331.03
+      OUT 12.11
+      ^^^
+      LD 332.02
+      AND 332.03
+      AND P_Off
+      OUT 12.12
+      ^^^
+      LD 333.02
+      AND 333.03
+      AND P_Off
+      OUT 12.13
+      ^^^
+      LD 334.02
+      AND 334.03
+      AND P_Off
+      OUT 12.14
+      ^^^
+      '  steam should stay on 1:45 h durring the heatup, then it will allow heatup complete PCR-264----changed to 75 min as per Randy Apr-8-09 Add 2.5hr to stop heatup\n\nDec-15-09 as per Randy Nov-4-2014 change the MIN total heat-up to 130 min as per C.K \n\nNOV 13 2014. Change CNT360 to 10 minutes of Steam ON Minimum before looking at Setpoint
+      LD ON
+      OUT TR0
+      ANDNOT T0181
+      AND H30.01
+      TIM 0171 #1200
+      LD TR0
+      AND T0171
+      AND T0151
+      TIM 0181 #30
+      ^^^
+      LD ON
+      OUT TR0
+      ANDNOT T0182
+      AND H30.02
+      TIM 0172 #1200
+      LD TR0
+      AND T0172
+      AND T0152
+      TIM 0182 #30
+      ^^^
+      LD ON
+      OUT TR0
+      ANDNOT T0183
+      AND H30.03
+      TIM 0173 #1200
+      LD TR0
+      AND T0173
+      LD T0153
+      OR T0157
+      ANDLD
+      TIM 0183 #30
+      ^^^
+      LD ON
+      OUT TR0
+      ANDNOT T0184
+      AND H30.04
+      TIM 0174 #1200
+      LD TR0
+      AND T0174
+      LD T0154
+      OR T0158
+      ANDLD
+      TIM 0184 #30
+      ^^^
+      '  Kentaro - Reset each H/E Steam ON time after heatup is complete
+      LD ON
+      OUT TR0
+      AND _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      AND HE1_STM_ON_OFF
+      AND HE2_STM_ON_OFF
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _1HEAT1CMPLT
+      CNT 0011 #7800
+      LD TR0
+      AND _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _1HEAT1CMPLT
+      CNT 0301 #7800
+      LD TR0
+      AND _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _1HEAT1CMPLT
+      CNT 0360 #600
+      LD TR0
+      AND _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      LD _1HEAT3CMPLT
+      OR H93.06
+      OR H29.01
+      ANDLD
+      CNT 0374 H21
+      LD TR0
+      AND _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      LD _1HEAT4CMPLT
+      OR H93.07
+      OR H29.01
+      ANDLD
+      CNT 0378 H22
+      ^^^
+      '  Move EXT#1 1st Cook Fill Volume to SCADA for Calculation
+      LD _1FILL2STRT
+      @BSET(071) #0 H31 H34
+      @MOV(021) #0 H36
+      @RSET H35.00
+      ^^^
+      '  Kentaro - Time each H/E (minutes) when ON\n(for use in heatup time calculation)
+      LD _1FILL1CMPLT
+      AND _1HEAT1START
+      @MOV(021) D3002 H36
+      ^^^
+      '  Kentaro - Calculation:\nWhen the sum of both H/E on times (Y) is >= Cook fill volume calculation (X) set the corresponding bits\nY = (0.546*(H/E2 ON Time) + 0.858*(H/E1 ON Time)\nX = 277.2 - (13.284*(Cook Fill Volume)\nX (H34) and Y (H33) calculations performed in SCADA
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      AND P_1min
+      OUT TR0
+      AND HE1_STM_ON_OFF
+      @+B(404) H31 #1 H31
+      LD TR0
+      AND HE2_STM_ON_OFF
+      @+B(404) H32 #1 H32
+      ^^^
+      '  EXTRACTOR #2
+      LD _1FILL1CMPLT
+      AND _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      AND<(310) C301 #7740
+      AND>=(325) H33 H34
+      SET H35.00
+      ^^^
+      '  EXTRACTOR #3
+      LD ON
+      OUT TR0
+      AND _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      AND HE1_STM_ON_OFF
+      AND HE2_STM_ON_OFF
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _2HEAT1CMPLT
+      CNT 0012 #7800
+      LD TR0
+      AND _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _2HEAT1CMPLT
+      CNT 0302 #7800
+      LD TR0
+      AND _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _2HEAT1CMPLT
+      CNT 0361 #600
+      LD TR0
+      AND _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      LD _2HEAT3CMPLT
+      OR H93.09
+      OR H29.02
+      ANDLD
+      CNT 0375 H23
+      LD TR0
+      AND _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      LD _2HEAT4CMPLT
+      OR H93.10
+      OR H29.02
+      ANDLD
+      CNT 0379 H24
+      ^^^
+      '  EXTRACTOR #4
+      LD ON
+      OUT TR0
+      AND _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      AND HE3_STM_ON_OFF
+      AND HE4_STM_ON_OFF
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _3HEAT1CMPLT
+      CNT 0013 #7800
+      LD TR0
+      AND _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _3HEAT1CMPLT
+      CNT 0303 #7800
+      LD TR0
+      AND _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _3HEAT1CMPLT
+      CNT 0362 #600
+      LD TR0
+      AND _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      LD _3HEAT3CMPLT
+      OR H93.12
+      OR H29.03
+      ANDLD
+      CNT 0376 H25
+      LD TR0
+      AND _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      LD _3HEAT4CMPLT
+      OR H93.13
+      OR H29.03
+      ANDLD
+      CNT 0380 H26
+      ^^^
+      '  Indication of starting the 1st cook transfer for reporting purposes
+      LD ON
+      OUT TR0
+      AND _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      AND HE3_STM_ON_OFF
+      AND HE4_STM_ON_OFF
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _4HEAT1CMPLT
+      CNT 0014 #7800
+      LD TR0
+      AND _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _4HEAT1CMPLT
+      CNT 0304 #7800
+      LD TR0
+      AND _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      AND _4HEAT1CMPLT
+      CNT 0363 #600
+      LD TR0
+      AND _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      LD _4HEAT3CMPLT
+      OR H93.15
+      OR H29.04
+      ANDLD
+      CNT 0377 H27
+      LD TR0
+      AND _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      AND _1_SEC_PULSE
+      LD TR0
+      LD _4HEAT4CMPLT
+      OR H93.00
+      OR H29.04
+      ANDLD
+      CNT 0381 H28
+      ^^^
+      LD H29.01
+      OR H29.02
+      OR H29.03
+      OR H29.04
+      TIM 0019 #20
+      AND T0019
+      RSET H29.01
+      RSET H29.02
+      RSET H29.03
+      RSET H29.04
+      ^^^
+      LD _1FILL1STRT
+      ANDNOT _1HEAT1START
+      @MOV(021) #0 D360
+      AND P_1min
+      @++B(594) D360
+      ^^^
+      LD>(320) D360 D340
+      @SET 340.00
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1DROP1STRT
+      @MOV(021) #0 D361
+      AND P_1min
+      @++B(594) D361
+      ^^^
+      LD>(320) D361 D341
+      @SET 340.01
+      ^^^
+      LD _1DROP1STRT
+      ANDNOT H13.00
+      @MOV(021) #0 D362
+      AND P_1min
+      @++B(594) D362
+      ^^^
+      LD>(320) D362 D342
+      @SET 340.02
+      ^^^
+      LD _1COOK1CMPLT
+      @AND TRANSFER_1AND2
+      SET H13.00
+      ^^^
+      LD H13.00
+      ANDNOT H13.01
+      @MOV(021) #0 D363
+      AND P_1min
+      @++B(594) D363
+      ^^^
+      LD>(320) D363 D343
+      @SET 340.03
+      ^^^
+      @LD H12.04
+      AND _1SETL1CMPLT
+      SET H13.01
+      ^^^
+      LD H13.01
+      ANDNOT H13.02
+      @MOV(021) #0 D364
+      AND P_1min
+      @++B(594) D364
+      ^^^
+      LD>(320) D364 D344
+      @SET 340.04
+      ^^^
+      LD H13.01
+      @RSET H13.02
+      ^^^
+      LD H12.00
+      SET H13.02
+      ^^^
+      LD H13.02
+      ANDNOT H13.03
+      @MOV(021) #0 D365
+      AND P_1min
+      @++B(594) D365
+      ^^^
+      LD H13.02
+      OUT TR0
+      ANDNOT H12.05
+      @MOV(021) D350 D345
+      LD TR0
+      AND H12.05
+      @MOV(021) D352 D345
+      ^^^
+      LD>(320) D365 D345
+      @SET 340.05
+      ^^^
+      LD H13.02
+      OR H13.01
+      @RSET H13.03
+      ^^^
+      @LD H12.01
+      SET H13.03
+      ^^^
+      LD H13.03
+      ANDNOT H13.04
+      @MOV(021) #0 D366
+      AND P_1min
+      @++B(594) D366
+      ^^^
+      LD>(320) D366 D346
+      @SET 340.06
+      ^^^
+      LD H13.03
+      @RSET H13.04
+      ^^^
+      @LD H12.02
+      SET H13.04
+      ^^^
+      LD H13.04
+      ANDNOT H13.05
+      @MOV(021) #0 D367
+      AND P_1min
+      @++B(594) D367
+      ^^^
+      LD>(320) D367 D347
+      @SET 340.07
+      ^^^
+      LD H13.04
+      @RSET H13.05
+      ^^^
+      LD H12.03
+      SET H13.05
+      ^^^
+      LD H13.05
+      ANDNOT H13.06
+      @MOV(021) #0 D368
+      AND P_1min
+      @++B(594) D368
+      ^^^
+      LD>(320) D368 D348
+      @SET 340.08
+      ^^^
+      LD _1DROP4STRT
+      OUT H13.06
+      ^^^
+      LD H13.06
+      ANDNOT _1FILL1STRT
+      @MOV(021) #0 D369
+      AND P_1min
+      @++B(594) D369
+      ^^^
+      LD>(320) D369 D349
+      @SET 340.09
+      ^^^
+      LD _1FILL1STRT
+      @RSET H13.00
+      @RSET H13.01
+      ^^^
+      LD 340.00
+      OR 340.01
+      OR 340.02
+      OR 340.03
+      OR 340.04
+      OR 340.05
+      OR 340.06
+      OR 340.07
+      OR 340.08
+      OR 340.09
+      TIM 0236 #3000
+      ^^^
+      LD T0236
+      @BSET(071) #0 340 341
+      ^^^
+      LD 322.12
+      OUT 410.00
+      ^^^
+      LD 410.00
+      CMP(020) SETTNK1LVL #3
+      AND LESS_THAN
+      SET 410.01
+      ^^^
+      LD 410.00
+      AND 410.01
+      TIM 0032 #300
+      ^^^
+      LD T0032
+      OUT 410.02
+      ^^^
+      LD 410.00
+      AND T0161
+      TIM 0033 #300
+      ^^^
+      LD T0033
+      OUT 410.03
+      RSET 322.12
+      ^^^
+      LDNOT 322.12
+      RSET 410.01
+      ^^^
+      LD 322.13
+      OUT 411.00
+      ^^^
+      LD 411.00
+      CMP(020) SETTNK2LVL #3
+      AND LESS_THAN
+      SET 411.01
+      ^^^
+      LD 411.00
+      AND 411.01
+      TIM 0034 #300
+      ^^^
+      LD T0034
+      OUT 411.02
+      ^^^
+      LD 411.00
+      AND T0162
+      TIM 0035 #300
+      ^^^
+      LD T0035
+      OUT 411.03
+      RSET 322.13
+      ^^^
+      LDNOT 322.13
+      RSET 411.01
+      ^^^
+      LD 322.14
+      OUT 412.00
+      ^^^
+      LD 412.00
+      CMP(020) SETTNK3LVL #3
+      AND LESS_THAN
+      SET 412.01
+      ^^^
+      LD 412.00
+      AND 412.01
+      TIM 0036 #300
+      ^^^
+      LD T0036
+      OUT 412.02
+      ^^^
+      LD 412.00
+      AND T0163
+      TIM 0037 #300
+      ^^^
+      LD T0037
+      OUT 412.03
+      RSET 322.14
+      ^^^
+      LDNOT 322.14
+      RSET 412.01
+      ^^^
+      LD 322.15
+      OUT 413.00
+      ^^^
+      LD 413.00
+      CMP(020) SETTNK4LVL #3
+      AND LESS_THAN
+      SET 413.01
+      ^^^
+      LD 413.00
+      AND 413.01
+      TIM 0038 #300
+      ^^^
+      LD T0038
+      OUT 413.02
+      ^^^
+      LD 413.00
+      AND T0164
+      TIM 0039 #300
+      ^^^
+      LD T0039
+      OUT 413.03
+      RSET 322.15
+      ^^^
+      LDNOT 322.15
+      RSET 413.01
+      ^^^
+      '  10 Second Counter
+      LD _1HEAT1START
+      AND TRANSFER_1AND2
+      OR 410.04
+      ANDNOT _4DROP4STRT
+      OUT 410.04
+      ^^^
+      LD ON
+      OUT TR0
+      AND SV30MINUS10S
+      OUT 12.00
+      LD TR0
+      AND RPDRNPMP
+      OUT 12.01
+      LD TR0
+      AND WFSUPPLY_SV30_02
+      OUT 12.02
+      LD TR0
+      AND RPKGBYPASSEXT1
+      OUT 12.03
+      LD TR0
+      AND SV30MINUS10D
+      OUT 12.04
+      LD TR0
+      AND _1WTRFEED
+      OUT 12.05
+      LD TR0
+      AND _1AIRSHOT
+      OUT 12.06
+      LD TR0
+      AND _1GELFEED
+      OUT 12.07
+      ^^^
+      LD ON
+      OUT TR0
+      AND SV30MINUS61
+      OUT 12.08
+      LD TR0
+      AND _1RECIRCRINSE
+      OUT 12.09
+      LD TR0
+      AND _1DRPVLV
+      OUT 12.10
+      LD TR0
+      AND _1RECIRCFD
+      OUT 12.11
+      LD TR0
+      AND ST1DISCHARGE
+      OUT 12.12
+      LD TR0
+      AND HE1FEED
+      OUT 12.13
+      LD TR0
+      AND STK1_Feed_A10Pump
+      OUT 12.14
+      LD TR0
+      AND Feed_A10_MAZ
+      OUT 12.15
+      ^^^
+      '  Move Extractor Cook Temperatures (C)\nto DM's for Conversion
+      LD _1_SEC_PULSE
+      LD C0402
+      CNT 0402 #11
+      ^^^
+      '  Convert Extractor Cook Temperatures\nfrom degC to degF
+      LD ON
+      OUT TR0
+      AND=(300) C402 #10
+      MOV(021) D1460 D1465
+      LD TR0
+      AND=(300) C402 #8
+      MOV(021) D1461 D1465
+      LD TR0
+      AND=(300) C402 #6
+      MOV(021) D1462 D1465
+      LD TR0
+      AND=(300) C402 #4
+      MOV(021) D1463 D1465
+      ^^^
+      '  Move Extractor cook Temperatures (F)\nto Setpoints
+      LD ON
+      BIN(023) D1465 D1466
+      *(420) D1466 #9 D1467
+      /(430) D1467 #5 D1468
+      +(400) D1468 #20 D1469
+      ^^^
+      '  Setup Control Words and Constants for XFRB's to follow
+      LD ON
+      OUT TR0
+      AND=(300) C402 #9
+      BCD(024) D1469 _1STCOOKTEMP
+      LD TR0
+      AND=(300) C402 #7
+      BCD(024) D1469 _2NDCOOKTEMP
+      LD TR0
+      AND=(300) C402 #5
+      BCD(024) D1469 _3RDCOOKTEMP
+      LD TR0
+      AND=(300) C402 #3
+      BCD(024) D1469 _4THCOOKTEMP
+      ^^^
+      '  First Cook Start Estimator\n\nAdd 5Hr 30min to 4th Cook Heatup Start and 1st Cook Heatup Start for time to start 1st and 2nd Cooks Respectively - EXT #1
+      LD ON
+      MOV(021) #888 D265
+      MOV(021) #7 D266
+      MOV(021) #800 D267
+      ^^^
+      @LD W19.10
+      @MOV(021) #707 D261
+      @XFRB(062) D267 D266 D262
+      @XFRB(062) D265 A352 D262
+      @MOV(021) A353 D263
+      @MOV(021) A354 D264
+      DATE(735) D261
+      RSET W19.10
+      ^^^
+      '  First Cook Start Estimator\n\nAdd 4Hr 45min to 2nd  Cook Heatup Start for time to start 3rd Cook - EXT #1
+      LD ON
+      MOV(021) #3000 D279
+      MOV(021) #5 D280
+      ^^^
+      '  First Cook Start Estimator\n\nAdd 4Hr 00min to 3rd  Cook Heatup Start for time to start 4th Cook - EXT #1
+      LD ON
+      MOV(021) #4500 D281
+      MOV(021) #4 D282
+      ^^^
+      '  First Cook Start Estimator\n\nMove\nYear : Month : Day : Hour : Minute : Second\nto DM's
+      LD ON
+      MOV(021) #0 D283
+      MOV(021) #4 D284
+      ^^^
+      LD W19.14
+      !RSET W19.03
+      !SET W19.00
+      !RSET W19.13
+      ^^^
+      LD W19.11
+      !RSET W19.00
+      !SET W19.01
+      !RSET W19.14
+      ^^^
+      LD W19.12
+      !RSET W19.01
+      !SET W19.02
+      !RSET W19.11
+      ^^^
+      LD W19.13
+      !RSET W19.02
+      !SET W19.03
+      !RSET W19.12
+      ^^^
+      '  USED TO FORCE TIME (HOURS/MINUTES) IF NEEDED
+      LD ON
+      LD W19.14
+      OR W19.11
+      OR W19.12
+      OR W19.13
+      ANDLD
+      MOV(021) A351 D276
+      MOV(021) A352 D277
+      MOV(021) A353 D278
+      ^^^
+      LD W19.14
+      CADD(730) D276 D279 D285
+      XFER(070) &2 D285 D297
+      ^^^
+      LD W19.11
+      CADD(730) D276 D279 D288
+      XFER(070) &2 D288 D297
+      ^^^
+      LD W19.12
+      CADD(730) D276 D281 D291
+      XFER(070) &2 D291 D297
+      ^^^
+      LD W19.13
+      CADD(730) D276 D283 D294
+      XFER(070) &2 D294 D297
+      ^^^
+      LD ON
+      LD W19.14
+      OR W19.11
+      OR W19.12
+      OR W19.13
+      ANDLD
+      XFRB(062) #808 D297 D300
+      XFRB(062) #800 D298 D301
+      XFRB(062) #808 D298 D302
+      ^^^
+      '  USED TO FORCE TIME (HOURS/MINUTES) IF NEEDED
+      LD W19.15
+      MOV(021) #14 D301
+      MOV(021) #34 D300
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+      RECIRC_1AND2	BOOL	1.00	PU30-120 Running 		0	
+      RECIRC1AND2ON	BOOL	232.00	Ext 1 and 2 Recirculation Pump On - Flag		0	
+      TRANSFER_1AND2	BOOL	1.01	Product Pump 1 and 2 Starter On		0	
+      TRANSFER1AND2ON	BOOL	232.01	Ext 1 and 2 Transfer Pump On - Flag		0	
+      RECIRC_3AND4	BOOL	1.08	PU30-340 Running		0	
+      RECIRC3AND4ON	BOOL	232.08	Ext 3 and 4 Recirc Pump On - Flag		0	
+      TRANSFER_3AND4	BOOL	1.09	Product Pump 3 and 4 Starter ON		0	
+      TRANSFER3AND4ON	BOOL	232.09	Ext 3 and 4 Transfer Pump On - Flag		0	
+      SHOVEL_OUT	BOOL	1.14	 		0	
+      SHOVELOUTON	BOOL	232.14	Shovel Out Pump On - Flag		0	
+      CONDENSATE	BOOL	1.15	 		0	
+      CONDENSATEON	BOOL	232.15	Condensate Pump On - Flag		0	
+      FIRST_SCAN	BOOL	A200.15	System First Scan Flag		0	
+      SignalCnd0	CHANNEL	D0	Machine #0 Signal Conditioning		0	
+      MachineHASH0DM1	CHANNEL	D20001	 		0	
+      ON	BOOL	CF113	System Normally On Flag		0	
+      	CHANNEL	D82	UFHT#1 LVL from SCADA		0	
+      	BOOL	232.02	UFHT#1 > 94%		0	
+      	BOOL	234.00	UFHT#1 < 90%		0	
+      	BOOL	234.01	UFHT#1 LVL OK for AUTO		0	
+      	BOOL	232.04	V102 to UFHT		0	
+      	CHANNEL	D83	UFHT#2 LVL from SCADA		0	
+      	BOOL	232.03	UFHT#2 > 94%		0	
+      	BOOL	234.02	UFHT#2 < 90%		0	
+      	BOOL	234.03	UFHT#2 LVL OK for AUTO		0	
+      	BOOL	325.11	SCADA Start PU30-121		0	
+      	BOOL	232.05	PU30-121 OK to UFHT#1		0	
+      	BOOL	232.06	PU30-121 OK to UFHT#2		0	
+      	BOOL	325.13	SCADA Start PU30-341		0	
+      	BOOL	232.10	PU30-341 OK to UFHT #1		0	
+      	BOOL	232.11	PU30-341 OK to UFHT #2		0	
+      	BOOL	W28.00	SV30-67 PLC/SCADA		0	
+      	BOOL	W28.01	SV30-67 SCADA ON		0	
+      	BOOL	H16.00	PRT#1 HBLV ON/OFF P.B.		0	
+      	BOOL	484.01	EXT1 4th Cook WF ON/OFF		0	
+      _1WF4STRT	BOOL	H1.14	 		0	
+      _1WFADDCMPLT	BOOL	H1.15	Extractor 1 Water Fraction Add Complete		0	
+      _1FILL3STRT	BOOL	H1.05	Extractor 1 3rd Cook Fill Start		0	
+      _1FILL3CMPLT	BOOL	H2.10	 		0	
+      _1FILL4STRT	BOOL	H2.00	 		0	
+      _1FILL4CMPLT	BOOL	H2.01	 		0	
+      	BOOL	H17.00	PRT#2 HBLV ON/OFF P.B.		0	
+      	BOOL	484.03	EXT2 4th Cook WF ON/OFF		0	
+      _2WF4STRT	BOOL	H4.14	 		0	
+      _2WFADDCMPLT	BOOL	H4.15	 		0	
+      _2FILL3STRT	BOOL	H4.05	 		0	
+      _2FILL3CMPLT	BOOL	H3.00	 		0	
+      _2FILL4STRT	BOOL	H5.00	 		0	
+      _2FILL4CMPLT	BOOL	H5.10	 		0	
+      EXT1_2_Fill_valve_via_HE	BOOL	45.02	SV30-67		0	
+      	BOOL	W28.02	SV30-68 PLC/SCADA		0	
+      	BOOL	W28.03	SV30-68 SCADA ON		0	
+      	BOOL	H19.00	PRT#4 HBLV ON/OFF P.B.		0	
+      	BOOL	484.08	EXT4 4th Cook WF ON/OFF		0	
+      _4WFFILL4STRT	BOOL	H10.14	 		0	
+      _4WFADDCMPLT	BOOL	H10.15	 		0	
+      _4FILL3STRT	BOOL	H10.05	 		0	
+      _4FILL3CMPLT	BOOL	H10.11	 		0	
+      _4FILL4STRT	BOOL	H11.00	 		0	
+      _4FILL4CMPLT	BOOL	H11.10	 		0	
+      	BOOL	H18.00	PRT#3 HBLV ON/OFF P.B.		0	
+      	BOOL	484.09	EXT3 4th Cook WF ON/OFF		0	
+      _3WFFILL4STRT	BOOL	H7.14	 		0	
+      _3WFADDCMPLT	BOOL	H7.15	 		0	
+      _3FILL3STRT	BOOL	H7.05	 		0	
+      _3FILL3CMPLT	BOOL	H8.10	 		0	
+      _3FILL4STRT	BOOL	H8.00	 		0	
+      _3FILL4CMPLT	BOOL	H8.01	 		0	
+      EXT3_4_Fill_valve_via_HE	BOOL	45.07	SV30-68		0	
+      ScaleLow01	CHANNEL	D2	Low Scale Machine 0 Input 1		0	
+      MachineHASH0DM4	CHANNEL	D20004	 		0	
+      SignalCnd1	CHANNEL	D50	Machine #1 Signal Conditioning		0	
+      MachineHASH1DM1	CHANNEL	D20101	 		0	
+      ScaleLow11	CHANNEL	D52	Low Scale Machine 1 Input 1		0	
+      MachineHASH1DM4	CHANNEL	D20104	 		0	
+      	BOOL	321.11	PU30-121 PLC/SCADA		0	
+      ST2DISCHARGE	BOOL	41.11	Settling Tank 2 Discharge Valve		0	
+      ST1DISCHARGE	BOOL	40.12	Settling Tank 1 Discharge Valve		0	
+      STK1AND2_level_SP	CHANNEL	D80	EXT 1&2 Settling Tank low level Transfare setpoint		0	
+      ST4DISCHARGE	BOOL	45.11	 		0	
+      ST3DISCHARGE	BOOL	44.11	 		0	
+      STK3AND4_level_SP	CHANNEL	D81	EXT 3&4 Settling Tank low level Transfare setpoint		0	
+      _1TRNSFR1STRT	BOOL	H0.09	Extractor 1 1st Cook Transfer Flag		0	
+      _1TRNSFR1CMPLT	BOOL	H0.10	Extractor 1 Transfer Complete		0	
+      _1TRNSFR2STRT	BOOL	H1.03	Extractor 1 2nd Cook Transfer		0	
+      _1TRNSFR2CMPLT	BOOL	H1.04	Extractor 1 Transfer Complete		0	
+      _2TRANSFR1STRT	BOOL	H3.09	 		0	
+      _2TRNSFR1CMPLT	BOOL	H3.10	 		0	
+      _2TRNSFR2STRT	BOOL	H4.03	 		0	
+      _2TRANSFR2CMPLT	BOOL	H4.04	 		0	
+      _1TRNSFR3STRT	BOOL	H1.12	 		0	
+      _1TRNSFR3CMPLT	BOOL	H1.13	 		0	
+      _2TRNSFR3STRT	BOOL	H4.12	 		0	
+      _2TRNSFR3CMPLT	BOOL	H4.13	 		0	
+      LESS_THAN	BOOL	CF007	System Less Than (LE) Flag		0	
+      _1TRNSFR4STRT	BOOL	H2.08	 		0	
+      _1TRNSFR4CMPT	BOOL	H2.09	 		0	
+      _2TRNSFR4STRT	BOOL	H5.08	 		0	
+      _2TRNSFR4CMPT	BOOL	H5.09	 		0	
+      _3TRNSFR1STRT	BOOL	H6.09	 		0	
+      _3TRNSFR1CMPLT	BOOL	H6.10	 		0	
+      _3TRNSFR2STRT	BOOL	H7.03	 		0	
+      _3TRNSFR2CMPLT	BOOL	H7.04	 		0	
+      _4TRNSFR1STRT	BOOL	H9.09	 		0	
+      _4TRNSFR1CMPLT	BOOL	H9.10	 		0	
+      _4TRNSFR2STRT	BOOL	H10.03	 		0	
+      _4TRNSFR2CMPLT	BOOL	H10.04	 		0	
+      _3TRNSFR3STRT	BOOL	H7.12	 		0	
+      _3TRNSFR3CMPLT	BOOL	H7.13	 		0	
+      _4TRNSFR3STRT	BOOL	H10.12	 		0	
+      _4TRNSFR3CMPLT	BOOL	H10.13	 		0	
+      _3TRNSFR4STRT	BOOL	H8.08	 		0	
+      _3TRNSFR4CMPLT	BOOL	H8.09	 		0	
+      _4TRNSFR4STRT	BOOL	H11.08	 		0	
+      _4TRNSFR4CMPLT	BOOL	H11.09	 		0	
+      	CHANNEL	2003	H/E - 1/2 Outlet Temp		0	
+      HE1TEMPIN	CHANNEL	2002	H/E - 1/2 Inlet Temp		0	
+      HE4INLETTEMP	CHANNEL	2007	H/E - 3/4 Outlet Temp		0	
+      HE3INLETTEMP	CHANNEL	2006	H/E - 3/4 Inlet Temp 		0	
+      GelMINUSFlowToMINUSUFHT	CHANNEL	2008	Gelly flow rate from Settling tanks to UFHT		0	
+      UFHT_GelyFlow	CHANNEL	D3000	Gelly Flow rate to UFHT		0	
+      _1FILL1STRT	BOOL	H0.01	Extractor 1 Start fill 1st Cook		0	
+      EXT1COOK	CHANNEL	D400	Extractor #1 Cook		0	
+      _1STCOOKTEMP	CHANNEL	D420	1st Cook Temperature Set Point		0	
+      _1CURTEMPSP	CHANNEL	D405	Extractor #1 Current Temperature Set Point		0	
+      _2NDCOOKTEMP	CHANNEL	D421	2nd Cook Temperature Set Point		0	
+      _3RDCOOKTEMP	CHANNEL	D422	3rd Cook Temperature Set Point		0	
+      _4THCOOKTEMP	CHANNEL	D423	4th Cook Temperature Set Point		0	
+      EXT2COOK	CHANNEL	D401	Extractor #2 Cook		0	
+      _2CURTEMPSP	CHANNEL	D406	Extractor #2 Current Temperature Setpoint 		0	
+      EXT3COOK	CHANNEL	D402	Extractor #3 Cook		0	
+      _3CURTEMPSP	CHANNEL	D407	Extractor #3 Current Temperature Setpoint 		0	
+      EXT4COOK	CHANNEL	D403	Extractor #4 Cook		0	
+      _4CURTEMPSP	CHANNEL	D408	Extractor #4 Current Temperature Setpoint 		0	
+      	CHANNEL	D425	Mod 1st Cook Temp SetPoint		0	
+      	CHANNEL	D426	Mod 2nd Cook Temp SetPoint		0	
+      	CHANNEL	D427	Mod 3rd Cook Temp SetPoint		0	
+      	CHANNEL	D428	Mod 4th Cook Temp SetPoint		0	
+      _1CURBATCH	CHANNEL	D430	 		0	
+      _2FILL1STRT	BOOL	H3.01	 		0	
+      _2CURBATCH	CHANNEL	D431	 		0	
+      _3FILL1STRT	BOOL	H6.01	 		0	
+      _3CURBATCH	CHANNEL	D432	 		0	
+      _4FILL1STRT	BOOL	H9.01	 		0	
+      _4CURBATCH	CHANNEL	D433	 		0	
+      _1COOK1TMR_Status	BOOL	T0001	Extractor 1 1st Cook Timer		0	
+      PRT1_STEP	WORD	D32100	PRT1 STEP NUMBER		0	
+      PRT1_DROP_EXT_STOP	BOOL	H101.12	Sequence Stop		0	
+      SV30MINUS10D	BOOL	40.04	Ext#1 Water Drain Valve "durring Transfaring"		0	
+      _1FILL1CMPLT	BOOL	H0.02	Extractor 1 Fill 1 Complete		0	
+      	BOOL	3353.00	1st Cook Fill From Bottom		0	
+      SCADA1FILL1	BOOL	475.12	EXT #1 Cook 1 Fill Start P.B.		0	
+      	CHANNEL	D31384	EXT #1 Level (SCALED)		0	
+      WATERSUPPLY	BOOL	41.14	Water Fill SV30-05		0	
+      	BOOL	W8.00	EXT #1 HI LVL		0	
+      _1HGHLVL	BOOL	42.00	EXT #1 High Level Switch		0	
+      	BOOL	485.01	stop 1st water fill EXT#1		0	
+      	BOOL	485.12	stop 1st water fill EXT#1 (HBLV)		0	
+      _1FILL2STRT	BOOL	H0.11	Extractor 1 2nd Cook Fill		0	
+      _1FILL2CMPLT	BOOL	H0.12	Extractor 1 2nd Cook Fill Complete		0	
+      _1WF3START	BOOL	H2.11	EXT#1 3rd cook water fraction add start		0	
+      _1WF3ADDCMPLT	BOOL	H2.12	EXT#1 3rd cook water fraction add complete		0	
+      _1WTRFEEDAM	BOOL	324.00	 		0	
+      _1WTRFEEDM	BOOL	320.00	 		0	
+      _1WTRFEED	BOOL	40.05	SV30-10		0	
+      	BOOL	T0080	EXT1 FILL 1 COMPLETE AIR OFF DELAY FOR 5 MINS		0	
+      _1SCADASTRT1HU	BOOL	506.02	EXT #1 Heat Up Start P.B.		0	
+      	BOOL	H14.00	1/2 Auto Heatup After Fill (1=Off / 0=On)		0	
+      _2GELFEED	BOOL	41.06	SV30-25		0	
+      _1HEAT1START	BOOL	H0.03	Extractor 1 Start Heat Up #1		0	
+      _1HEAT1CMPLT	BOOL	H0.04	Extractor 1 Heat Up Complete		0	
+      	BOOL	W19.11	Ext#1 1st Heatup Start		0	
+      HTCMPFLAG	BOOL	500.07	Extractor 1 Cook Heat Up Complete Flag		0	
+      _2HESHUTOFFAM	BOOL	325.03	 		0	
+      _2HESHUTOFFM	BOOL	321.03	 		0	
+      STMCNTRLVLV2	BOOL	41.07	SPARE "NOT IN USE"		0	
+      _1HEAT2STRT	BOOL	H0.13	Extractor 1 Start Heat Up #2		0	
+      _1HEAT2CMPLT	BOOL	H0.14	Extractor 1 2nd Cook Heat Up Complete		0	
+      _1HEAT3STRT	BOOL	H1.06	Extractor 1 Start Heat Up #3		0	
+      _1HEAT3CMPLT	BOOL	H1.07	 		0	
+      _1HEAT4STRT	BOOL	H2.02	Extractor 1 Start Heat Up #4 		0	
+      _1HEAT4CMPLT	BOOL	H2.03	 		0	
+      	BOOL	T0195	AIR_EXT-1A		0	
+      	BOOL	T0191	AIR_EXT-1		0	
+      GREATER_THAN	BOOL	CF005	System Greater Than (GE) Flag		0	
+      EQUALS	BOOL	CF006	System Equals (EQ) Flag		0	
+      _1AIRSHOTLENGTH_Status	BOOL	T0005	Air Shot Length		0	
+      _1AIRSHOTCMD	BOOL	H90.00	AIR SHOT COMMAND FOR EXTRACTOR #1		0	
+      _1AIRSHOTCNT_Status	BOOL	C0090	AIR SHOT TIMER COUNT OF 10 FOR EXTRACTOR 1		0	
+      	BOOL	T0245	EXT1 HEAT UP 25 MINS		0	
+      _1AIRSHOTAM	BOOL	324.01	 		0	
+      _1AIRSHOTM	BOOL	320.01	 		0	
+      	BOOL	T0165	AIR_SHOT_5min_TIMER		0	
+      	BOOL	610.00	EXT1 AIR SHOT COMMAND 1		0	
+      	BOOL	610.01	EXT1 AIR SHOT COMMAND 2		0	
+      	BOOL	610.02	EXT1 AIR SHOT COMMAND 3		0	
+      _1AIRSHOT	BOOL	40.06	Extractor #1 Air Shot Valve		0	
+      	BOOL	T0251	SHUT DOWN RECYC PUMP 5 MINS		0	
+      _2HEAT1STRT	BOOL	H3.03	 		0	
+      _2HEAT1CMPLT	BOOL	H3.04	 		0	
+      	BOOL	T0252	EXT2 SHUT DOWN RECYC PUMP FOR 5 MINS		0	
+      _2HEAT2STRT	BOOL	H3.13	 		0	
+      _2HEAT2CMPLT	BOOL	H3.14	 		0	
+      _2HEAT3START	BOOL	H4.06	 		0	
+      _2HEAT3CMPLT	BOOL	H4.07	 		0	
+      _2HEAT4STRT	BOOL	H5.02	 		0	
+      _2HEAT4CMPLT	BOOL	H5.03	 		0	
+      _12RECIRCLOCAL	BOOL	10.03	 		0	
+      _1GELFEED	BOOL	40.07	SV30-15		0	
+      _1RECIRCFD	BOOL	40.11	SV30-12		0	
+      _2RECIRCFEED	BOOL	41.08	SV30-22		0	
+      _1RECIRCRINSE	BOOL	40.09	Extractor 1 Recirc Pump Feed Valve		0	
+      SV30_25B	BOOL	6.01	Ext. 1/2 to Drum #2		0	
+      AutoJet_EXT_Isolation	BOOL	6.02	AutoJet EXT Isolation Valve		0	
+      	BOOL	T0155	5sec Delay		0	
+      EXT12RECIRCPMP	BOOL	10.02	Extractor 1 and 2 Recirc Pump		0	
+      _1GELFEEDAM	BOOL	324.02	 		0	
+      _1GELFEEDM	BOOL	320.02	 		0	
+      _1RECIRCFEEDAM	BOOL	324.04	 		0	
+      _1RECIRCFEEDM	BOOL	320.04	 		0	
+      A10_MAZ_SCADA	BOOL	324.10	 		0	
+      MAZ_VLV_ON	BOOL	320.10	Open the MAZ feed valve and Close A10 valve		0	
+      Feed_A10_MAZ	BOOL	40.15	Valves feed A10 Pump and the Mazrator"OFF feeds A10"		0	
+      HE1FEEDAM	BOOL	324.08	 		0	
+      HE1FEEDM	BOOL	320.08	 		0	
+      	BOOL	410.01	STK1 STEP - OPEN SPRAY BALL		0	
+      	BOOL	T0161	10 MIN SPRAY		0	
+      HE1FEED	BOOL	40.13	STK-1 SPRAY BALL VALVE		0	
+      HE2FEEDAM	BOOL	325.08	 		0	
+      HE2FEEDM	BOOL	321.08	 		0	
+      	BOOL	411.01	STK2 STEP - OPEN SPRAY BALL		0	
+      	BOOL	T0162	10 MIN SPRAY		0	
+      HE2FEED	BOOL	41.12	STK-2 SPRAY BALL VALVE		0	
+      _1RECIRCRINSEAM	BOOL	324.06	 		0	
+      _1RECIRCRINSEM	BOOL	320.06	 		0	
+      _1COOKTIMFLAG	BOOL	500.05	Extractor #1 Cook Flag Timer		0	
+      _1COOK1CMPLT	BOOL	H0.05	Extractor 1 Cook Complete		0	
+      _10MININCR	CHANNEL	D100	10 Minute Increment Timer		0	
+      _11COOKCNTR_Status	BOOL	C0002	Extractor 1 1st Cook 10 Minute Timer Integers		0	
+      _1SCADADRP	BOOL	506.04	Extractor 1 SCADA Drop Flag		0	
+      _1DROP1STRT	BOOL	H0.06	Extractor 1 Drop Valve Open		0	
+      SETTNK2LVL	CHANNEL	315	 		0	
+      _1DROP1CMPLT	BOOL	H0.07	Extractor 1 Drop Complete Flag		0	
+      	BOOL	W19.09	EXT#1 First Cook Drop Start to SCADA		0	
+      _1DROP2STRT	BOOL	H1.00	Extractor 1 2nd Cook Drop		0	
+      _1DROP2CMPLT	BOOL	H1.01	Extractor 1 Cook 2 Drop Complete		0	
+      _1DROP3STRT	BOOL	H1.09	 		0	
+      _1DROP3CMPLT	BOOL	H1.10	 		0	
+      _1DROP4STRT	BOOL	H2.05	 		0	
+      _1DROP4CMPLT	BOOL	H2.06	 		0	
+      _1DRPVLVAM	BOOL	324.05	 		0	
+      _1DRPVLVM	BOOL	320.05	 		0	
+      ST1HL	BOOL	42.02	Settling Tank 1 High Level		0	
+      	BOOL	328.05	SV30-10S_OPEN CMD		0	
+      _1DRPVLV	BOOL	40.10	Extractor 1 Drop Valve		0	
+      _1LOWLVL	BOOL	42.01	Extractor 1 Low Level		0	
+      _11SETCNRFLG	BOOL	500.11	Extractor 1 Settling Counter Flag		0	
+      _15MININCR	CHANNEL	D99	15 Minute Timer Increment		0	
+      _1SETL1CMPLT	BOOL	H0.08	Extractor 1 Settling Time Complete		0	
+      _1SCADATRNSFER	BOOL	506.06	Extractor 1 Cook SCADA Transfer Flag		0	
+      SETTNK12CLN	BOOL	H15.00	 		0	
+      SETTNK12CLNCMPL	BOOL	H15.02	 		0	
+      ST1DISCHARGEAM	BOOL	324.07	 		0	
+      ST1DISCHARGEM	BOOL	320.07	 		0	
+      SV30MINUS29_AM	BOOL	324.09	Valve SV30-29 on SCADA MODE		0	
+      SV30MINUS29_ON	BOOL	320.09	Open SV30-29 feed to PU-10		0	
+      	BOOL	410.00	STK1 STEP - START TRANSFER PUMP		0	
+      	BOOL	410.02	STK1 STEP - SWITCH VALVES		0	
+      STK1_Feed_A10Pump	BOOL	40.14	Pump 10 feed Valve from Settling Tank-1 SV30-51		0	
+      ST2DISCHARGEAM	BOOL	325.07	 		0	
+      ST2DISCHARGEM	BOOL	321.07	 		0	
+      SET12TRNSFRPMPM	BOOL	10.07	 		0	
+      STMINUS1TRNSFR_SP	BOOL	505.15	Settling Tank #1 Low Level Stop Transfer Pump PU30-121		0	
+      _2DROP1STRT	BOOL	H3.06	 		0	
+      STMINUS2TRNSFR_SP	BOOL	505.14	Settling Tank #2 Low Level Stop Transfer Pump PU30-121		0	
+      	BOOL	505.13	STK 1/2 LOW COND		0	
+      SV30MINUS50	BOOL	45.14	PU30-121 Outlet Valve		0	
+      EXT12TRNSFRPMP	BOOL	10.06	 		0	
+      TRNSFER12DELAM	BOOL	326.10	 		0	
+      TRNSFER12M	BOOL	322.10	 		0	
+      SETTNK1LVL	CHANNEL	314	 		0	
+      _2DROP2STRT	BOOL	H4.00	 		0	
+      _2DROP3STRT	BOOL	H4.09	 		0	
+      _2DROP4STRT	BOOL	H5.05	 		0	
+      _11SCADATRNSTOP	BOOL	506.08	Extractor 1 and 2 SCADA Transfer Stop		0	
+      	CHANNEL	2015	EXT Fill Flow litre/sec		0	
+      _2WTRFEED	BOOL	41.04	SV30-20 		0	
+      _3WTRFEED	BOOL	44.04	SV30-30		0	
+      _4WTRFEEDVLV	BOOL	45.04	SV30-40		0	
+      _4GELFEED	BOOL	45.06	SV30-45		0	
+      _3GELFEED	BOOL	44.06	SV30-35		0	
+      _1_SEC_PULSE	BOOL	CF102	System 1.0 second clock pulse bit		0	
+      WFSUPPLY_SV30_02	BOOL	40.02	Water Fraction SV30-02		0	
+      SCADASTRT1	BOOL	506.00	EXT #1 Cook 2/3/4 Fill Start P.B.		0	
+      	BOOL	W9.06	EXT #1 HI LVL >2min		0	
+      _1VOLUMEFLAG	BOOL	501.05	 		0	
+      	BOOL	W19.12	Ext#1 2nd Heatup Start		0	
+      	BOOL	T0084	EXT#1 2nd cook 15 min timer		0	
+      	BOOL	T0094	EXT#1 2nd cook +15 min timer		0	
+      _12COOKTIMFLAG	BOOL	501.08	Extractor #1 2nd Cook Flag Timer		0	
+      _1COOK2CMPLT	BOOL	H0.15	Extractor 1 2nd Cook Complete		0	
+      _12NDCOOK_Status	BOOL	T0020	Extractor 1 2nd Cook Time		0	
+      _12COOKCNTR_Status	BOOL	C0021	Extractor 1 2nd cook counter		0	
+      _12SETLFLAG	BOOL	501.14	Extractor 1 Cook 2 Settling Counter Flag		0	
+      _1SETL2CMPLT	BOOL	H1.02	Extractor 1 2nd Cook Settling Time Complete		0	
+      _12SETTIME_Status	BOOL	T0022	Extractor 1 Cook 2 Settling Time		0	
+      _1VOLUMEFLAG3	BOOL	502.08	 		0	
+      	BOOL	484.00	EXT1 3rd Cook WF ON/OFF		0	
+      	BOOL	480.00	WF Stop P.B.from SCADA		0	
+      STOP_WF	BOOL	477.05	Stop WF S.P. Reached		0	
+      	BOOL	W19.13	Ext#1 3rd Heatup Start		0	
+      _13COOKTIMFLAG	BOOL	502.11	 		0	
+      _1COOK3CMPLT	BOOL	H1.08	 		0	
+      _13COOK_Status	BOOL	T0024	 		0	
+      _13COOKCNTR_Status	BOOL	C0025	Extractor 1 3rd cook counter 		0	
+      _1SETL3FLAG	BOOL	503.02	 		0	
+      _1SETL3CMPLT	BOOL	H1.11	 		0	
+      _13SETTIME_Status	BOOL	T0026	 		0	
+      _14VOLUMEFLAG	BOOL	503.13	 		0	
+      	BOOL	H14.01	EXT1 4th Cook WF Added		0	
+      	BOOL	W19.14	Ext#1 4th Heatup Start		0	
+      _1COOK4TMRFLAG	BOOL	504.04	 		0	
+      _1COOK4CMPLT	BOOL	H2.04	 		0	
+      _1COOK4CNTR_Status	BOOL	C0028	Extractor 1 4th cook counter		0	
+      _1SETL4FLAG	BOOL	504.12	 		0	
+      _1COOK4SETTMR_Status	BOOL	T0031	 		0	
+      _1SETL4CMPLT	BOOL	H2.07	 		0	
+      _1SET4CNTR_Status	BOOL	C0029	 		0	
+      _1BATCHCMPLT	BOOL	505.05	 		0	
+      PRT2_STEP	WORD	D32200	Step Word (Counter)		0	
+      PRT2_DROP_EXT_STOP	BOOL	H201.12	Sequence Stop		0	
+      SV30MINUS20D	BOOL	41.03	Ext#2 Water Drain Valve "durring Transfaring"		0	
+      _2FILL1CMPLT	BOOL	H3.02	 		0	
+      	BOOL	475.13	EXT #2 Cook 1 Fill Start P.B.		0	
+      	CHANNEL	D31311	EXT #2 Level (SCALED)		0	
+      _2HGHLVL	BOOL	43.00	 		0	
+      	BOOL	W8.01	EXT #2 HI LVL		0	
+      	BOOL	485.02	stop 1st water fill EXT#2		0	
+      	BOOL	485.13	stop 1st water fill EXT#2 (HBLV)		0	
+      _2FILL2STRT	BOOL	H3.11	 		0	
+      _2FILL2CMPLT	BOOL	H3.12	 		0	
+      _2WF3START	BOOL	H5.11	EXT#2 3rd cook water fraction add start		0	
+      _2WF3ADDCMPLT	BOOL	H5.12	EXT#2 3rd cook water fraction add complete		0	
+      _2WTRFEEDAM	BOOL	325.00	 		0	
+      _2WTRFEEDM	BOOL	321.00	 		0	
+      	BOOL	T0081	EXT2 FILL COMPLETE AIR OFF DELAY 5 MINS		0	
+      _2SCADASTRT1HU	BOOL	507.02	 		0	
+      _2HTCMPFLAG	BOOL	494.07	 		0	
+      	BOOL	T0196	AIR_EXT-2A		0	
+      	BOOL	T0192	AIR_EXT-2		0	
+      _2AIRSHOTLENGTH_Status	BOOL	T0051	 		0	
+      _2AIRSHOTCMD	BOOL	H90.01	AIR SHOT COMMAND FOR EXTRACTOR #2		0	
+      _2AIRSHOTCNT_Status	BOOL	C0091	AIR SHOT TIMER COUNT OF 10 FOR EXTRACTOR 2		0	
+      	BOOL	T0246	EXT2 HEAT UP 25 MINS		0	
+      _2AIRSHOTAM	BOOL	325.01	 		0	
+      _2AIRSHOTM	BOOL	321.01	 		0	
+      	BOOL	T0166	AIR2_SHOT_5min_TIMER		0	
+      	BOOL	611.00	EXT2 AIR SHOT COMMAND 1		0	
+      	BOOL	611.01	EXT2 AIR SHOT COMMAND 2		0	
+      	BOOL	611.02	EXT2 AIR SHOT COMMAND 3		0	
+      _2AIRSHOT	BOOL	41.05	 		0	
+      _2GELFEEDAM	BOOL	325.02	 		0	
+      _2GELFEEDM	BOOL	321.02	 		0	
+      _2RECIRCFEEDAM	BOOL	325.04	 		0	
+      _2RECIRCFEEDM	BOOL	321.04	 		0	
+      	BOOL	411.00	STK2 STEP - START TRANSFER PUMP		0	
+      	BOOL	411.02	STK2 STEP - SWITCH VALVES		0	
+      STK2_Feed_A10Pump	BOOL	41.10	Pump 10 feed Valve from Settling Tank-2 SV30-52		0	
+      _2COOKTIMFLAG	BOOL	494.05	 		0	
+      _2COOK1CMPLT	BOOL	H3.05	 		0	
+      	BOOL	C0055	Extractor 2 1st cook counter		0	
+      _2SCADADRP	BOOL	507.04	 		0	
+      _2DROP1CMPLT	BOOL	H3.07	 		0	
+      _2DROP2CMPLT	BOOL	H4.01	 		0	
+      _2DROP3CMPLT	BOOL	H4.10	 		0	
+      _2DROP4CMPLT	BOOL	H5.06	 		0	
+      _2DRPVLVAM	BOOL	325.05	 		0	
+      _2DRPVLVM	BOOL	321.05	 		0	
+      ST2HL	BOOL	43.02	Settling Tank 2 High Level		0	
+      	BOOL	328.06	SV30-20S_OPEN CMD		0	
+      _2DRPVLV	BOOL	41.09	 		0	
+      _2LOWLVL	BOOL	43.01	 		0	
+      _2SET1CNRFLG	BOOL	494.11	 		0	
+      _2STL1CMPLT	BOOL	H3.08	 		0	
+      _2COOK1CNTR_Status	BOOL	C0073	 		0	
+      _2SCADATRNSFER	BOOL	507.06	 		0	
+      _2SCADA1TRNSSTOP	BOOL	507.08	 		0	
+      SCADASTRT2	BOOL	507.00	 		0	
+      	BOOL	W9.07	EXT #2 HI LVL > 2min		0	
+      _2VOLUMEFLAG	BOOL	495.05	 		0	
+      	BOOL	T0085	EXT#2 2nd cook 15 min Timer		0	
+      	BOOL	T0095	EXT#2 2nd cook +15 min Timer		0	
+      _1COOK2TIMFLAG	BOOL	495.08	 		0	
+      _2COOK2CMPLT	BOOL	H3.15	 		0	
+      _2COOK2_Status	BOOL	T0056	 		0	
+      _2COOK2CNTR_Status	BOOL	C0057	Extractor 2 2nd cook counter		0	
+      _2SETL2FLAG	BOOL	495.14	 		0	
+      _2SET2COMP	BOOL	H4.02	 		0	
+      _2SETL2TMR_Status	BOOL	T0058	 		0	
+      	BOOL	484.02	EXT2 3rd COOK WF ON/OFF		0	
+      _2WF3CMPLT	BOOL	480.01	Ext#2 Water Fraction STOP PB		0	
+      _2COOK3TIMFLAG	BOOL	496.11	 		0	
+      _2COOK3CMPLT	BOOL	H4.08	 		0	
+      _2COOK3TMR_Status	BOOL	T0071	 		0	
+      	BOOL	C0060	Extractor 2 3rd cook counter		0	
+      _2SETL3FLAG	BOOL	497.02	 		0	
+      _2SETL3CMPLT	BOOL	H4.11	 		0	
+      _2SETL3TMR_Status	BOOL	T0061	 		0	
+      	BOOL	H14.02	EXT2 4th Cook WF Added		0	
+      _2COOK4TMRFLAG	BOOL	498.04	 		0	
+      _2COOK4CMPLT	BOOL	H5.04	 		0	
+      _2COOK4CNTR_Status	BOOL	C0063	Extractor 2 4th cook counter		0	
+      _2SET4FLAG	BOOL	498.12	 		0	
+      _2COOK4SETTMR_Status	BOOL	T0064	 		0	
+      _2SETL4CMPLT	BOOL	H5.07	 		0	
+      _2BATCHCMPLT	BOOL	505.06	 		0	
+      ST12VLVAM	BOOL	325.09	 		0	
+      ST12VLVM	BOOL	321.09	 		0	
+      SV30MINUS19	BOOL	41.13	STK-1 DRAIN VALVE		0	
+      SV30MINUS29	BOOL	41.15	STK-2 DRAIN VALVE		0	
+      PRT3_STEP	WORD	D32300	Step Word (Counter)		0	
+      PRT3_DROP_EXT_STOP	BOOL	H301.12	Sequence Stop		0	
+      SV30_30D	BOOL	44.00	Ext#3 Water Drain Valve "durring Transfaring"		0	
+      _3FILL1CMPLT	BOOL	H6.02	 		0	
+      	BOOL	475.14	EXT #3 Cook 1 Fill Start P.B.		0	
+      LIT_3012	CHANNEL	D31300	EXT #3 Level (SCALED)		0	
+      _3HGHLVL	BOOL	46.00	 		0	
+      	BOOL	W8.02	EXT #3 HI LVL		0	
+      	BOOL	485.03	stop 1st water fill EXT#3		0	
+      	BOOL	485.11	stop 1st water fill EXT#3 (HBLV)		0	
+      _3FILL2STRT	BOOL	H6.11	 		0	
+      _3FILL2CMPLT	BOOL	H6.12	 		0	
+      _3WF3START	BOOL	H8.11	EXT#3 3rd cook water fraction add start		0	
+      _3WF3ADDCMPLT	BOOL	H8.12	EXT#3 3rd cook water fraction add complete		0	
+      _3WTRFEEDAM	BOOL	326.00	 		0	
+      _3WTRFEEDM	BOOL	322.00	 		0	
+      	BOOL	T0082	EXT3 FILL COMPLETE AIR OFF DELAY 5 MINS		0	
+      _3SCADASTRTHU	BOOL	508.02	 		0	
+      	BOOL	H14.03	3/4 Auto Heatup After Fill (1=Off / 0=On)		0	
+      _3HEAT1STRT	BOOL	H6.03	 		0	
+      _34HECMLFLAG	BOOL	490.07	 		0	
+      _3HEAT1CMPLT	BOOL	H6.04	 		0	
+      _3HESHUTOFFAM	BOOL	326.03	 		0	
+      _3HESHUTOFFM	BOOL	322.03	 		0	
+      _3HECNTRLVLV	BOOL	44.07	SPARE "NOT IN USE"		0	
+      _3HEAT2STRT	BOOL	H6.13	 		0	
+      _3HEAT2CMPLT	BOOL	H6.14	 		0	
+      _3HEAT3STRT	BOOL	H7.06	 		0	
+      _3HEAT3CMPLT	BOOL	H7.07	 		0	
+      _3HEAT4STRT	BOOL	H8.02	 		0	
+      _3HEAT4CMPLT	BOOL	H8.03	 		0	
+      	BOOL	T0197	AIR_EXT-3A		0	
+      	BOOL	T0193	AIR_EXT-3		0	
+      _3AIRSHOTLENGTH_Status	BOOL	T0100	 		0	
+      _3AIRSHOTCMD	BOOL	H90.02	AIR SHOT COMMAND FOR EXTRACTOR #3		0	
+      _3AIRSHOTCNT_Status	BOOL	C0092	AIR SHOT TIMER COUNT OF 10 FOR EXTRACTOR 3		0	
+      	BOOL	T0247	EXT3 HEAT UP 25 MINS		0	
+      _3AIRSHOTAM	BOOL	326.01	 		0	
+      _3AIRSHOTM	BOOL	322.01	 		0	
+      	BOOL	T0167	AIR2_SHOT_5min_TIMER		0	
+      	BOOL	612.00	EXT3 AIR SHOT COMMAND 1		0	
+      	BOOL	612.01	EXT3 AIR SHOT COMMAND 2		0	
+      	BOOL	612.02	EXT3 AIR SHOT COMMAND 3		0	
+      _3AIRSHOT	BOOL	44.05	 		0	
+      	BOOL	T0253	EXT3 SHUT DOWN RECIRC PUMP FOR 5 MINS		0	
+      _4HEAT1STRT	BOOL	H9.03	 		0	
+      _4HEAT1CMPLT	BOOL	H9.04	 		0	
+      	BOOL	T0254	EXT4 SHUT DOWN RECIRC PUMP FOR 5 MINS		0	
+      _4HEAT2STRT	BOOL	H9.13	 		0	
+      _4HEAT2CMPLT	BOOL	H9.14	 		0	
+      _4HEAT3STRT	BOOL	H10.06	 		0	
+      _4HEAT3CMPLT	BOOL	H10.07	 		0	
+      _4HEAT4STRT	BOOL	H11.02	 		0	
+      _4HEAT4CMPLT	BOOL	H11.03	 		0	
+      _34RECIRCLOCAL	BOOL	11.01	 		0	
+      _3RECIRCFEED	BOOL	44.12	SV30-32		0	
+      _4RCIRCFD	BOOL	45.09	SV30-42		0	
+      _3RECIRCRINSE	BOOL	44.10	SV30-33		0	
+      SV30_45B	BOOL	6.03	Ext. 3/4 to Drum #2		0	
+      	BOOL	T0156	5sec Delay		0	
+      EXT34RECIRCPMP	BOOL	11.00	 		0	
+      _3GELFEEDAM	BOOL	326.02	 		0	
+      _3GELFEEDM	BOOL	322.02	 		0	
+      HE3FEEDAM	BOOL	326.08	 		0	
+      HE3FEEDM	BOOL	322.08	 		0	
+      _3RECIRCFEEDAM	BOOL	326.04	 		0	
+      _3RECIRCFEEDM	BOOL	322.04	 		0	
+      	BOOL	412.01	STK3 STEP - OPEN SPRAY BALL		0	
+      	BOOL	T0163	10 MIN SPRAY		0	
+      _3HEFEED	BOOL	44.08	STK-3 SPRAY BALL VALVE		0	
+      HE4FEEDAM	BOOL	327.08	 		0	
+      HE4FEEDM	BOOL	323.08	 		0	
+      	BOOL	413.01	STK4 STEP - OPEN SPRAY BALL		0	
+      	BOOL	T0164	10 MIN SPRAY		0	
+      HE4FEED	BOOL	45.12	STK-4 SPRAY BALL VALVE		0	
+      _3RECIRCRINSEAM	BOOL	326.06	 		0	
+      _3RECIRCRINSEM	BOOL	322.06	 		0	
+      _3COOKTIMFLAG	BOOL	490.05	 		0	
+      _3COOK1CMPLT	BOOL	H6.05	 		0	
+      _3COOK1CNTR_Status	BOOL	C0104	Extractor 3 1st cook counter		0	
+      _3SCADADRP	BOOL	508.04	 		0	
+      _3DROP1STRT	BOOL	H6.06	 		0	
+      _3DROP1CMPLT	BOOL	H6.07	 		0	
+      _3DROP2STRT	BOOL	H7.00	 		0	
+      _3DROP2CMPLT	BOOL	H7.01	 		0	
+      _3DROP3STRT	BOOL	H7.09	 		0	
+      _3DROP3CMPLT	BOOL	H7.10	 		0	
+      _3DROP4STRT	BOOL	H8.05	 		0	
+      _3DROP4CMPLT	BOOL	H8.06	 		0	
+      _3DRPVLVAM	BOOL	326.05	 		0	
+      _3DRPVLVM	BOOL	322.05	 		0	
+      ST3HL	BOOL	46.02	 		0	
+      ON_OFF3	BOOL	328.07	SV30-30S_OPEN CMD		0	
+      _3DRPVLV	BOOL	44.09	 		0	
+      _3LOWLVL	BOOL	46.01	 		0	
+      _3SET1CNRFLG	BOOL	490.11	 		0	
+      _3SETL1CMPLT	BOOL	H6.08	 		0	
+      _3SCADATRNSFER	BOOL	508.06	 		0	
+      ST3DISCHARGEAM	BOOL	326.07	 		0	
+      ST3DISCHARGEM	BOOL	322.07	 		0	
+      _34TRNSFRDISAM	BOOL	327.09	 		0	
+      _34TRNSFRDISM	BOOL	323.09	 		0	
+      _34TRNSFRDIS	BOOL	45.13	PU30-341 Outlet Valve		0	
+      SETTNK34CLN	BOOL	H15.04	 		0	
+      SETTNK34CLNCMPT	BOOL	H15.06	 		0	
+      ST4DISCHARGEAM	BOOL	327.07	 		0	
+      ST4DISCHARGEM	BOOL	323.07	 		0	
+      SET34TRNSFRPMPM	BOOL	10.05	 		0	
+      	BOOL	406.14	Settling Tank #3 Low Level Stop Transfer Pump PU30-341		0	
+      LLTRNSFRALRM34	BOOL	406.15	Settling Tank #4 Low Level Stop Transfer Pump PU30-341		0	
+      	BOOL	406.13	STK 3/4 LOW COND		0	
+      EXT34TRNSFRPMP	BOOL	10.04	 		0	
+      SETTNK3LVL	CHANNEL	316	 		0	
+      _4DROP2STRT	BOOL	H10.00	 		0	
+      _4DROP3STRT	BOOL	H10.09	 		0	
+      _4DROP4STRT	BOOL	H11.05	 		0	
+      SETTNK4LVL	CHANNEL	317	 		0	
+      _3SCADATRNSSTOP	BOOL	508.08	 		0	
+      SCADASTRT3	BOOL	508.00	 		0	
+      	BOOL	W9.08	EXT #3 HI LVL > 2min		0	
+      _3VOLUMEFLAG	BOOL	491.05	 		0	
+      	BOOL	T0086	EXT#3 2nd cook 15min timer		0	
+      	BOOL	T0096	EXT#3 2nd cook +15min timer		0	
+      _3COOK2TIMFLAG	BOOL	491.08	 		0	
+      _3COOK2CMPLT	BOOL	H6.15	 		0	
+      _3COOK2CNTR_Status	BOOL	C0108	Extractor 3 2nd cook counter		0	
+      _3SETL2FLAG	BOOL	491.14	 		0	
+      _3SETL2CMPLT	BOOL	H7.02	 		0	
+      _3SET2TIME_Status	BOOL	T0109	 		0	
+      _3VOLUMEFLAG3	BOOL	492.08	 		0	
+      	BOOL	484.04	EXT3 3rd Cook WF ON/OFF		0	
+      _3WF	BOOL	480.02	 		0	
+      _3COOK3TIMFLAG	BOOL	492.11	 		0	
+      _3COOK3CMPLT	BOOL	H7.08	 		0	
+      _3COOK3_Status	BOOL	T0111	 		0	
+      _3COOK3CNTR_Status	BOOL	C0112	Extractor 3 3rd cook counter		0	
+      _3SETL3FLAG	BOOL	493.02	 		0	
+      _3SETL3CMPLT	BOOL	H7.11	 		0	
+      _3SET3TIME_Status	BOOL	T0113	 		0	
+      	BOOL	H14.04	EXT3 4th Cook WF Added		0	
+      _3VOLUMEFLAG4	BOOL	493.13	 		0	
+      _3COOK4TMRFLAG	BOOL	494.04	 		0	
+      _3COOK4CMPLT	BOOL	H8.04	 		0	
+      	BOOL	C0116	Extractor 3 4th cook counter		0	
+      _4SETL4FLAG	BOOL	494.12	 		0	
+      _3SETL4CMPLT	BOOL	H8.07	 		0	
+      _3BATCHCMPLT	BOOL	494.14	 		0	
+      PRT4_STEP	WORD	D32500	Step Word (Counter)		0	
+      PRT4_DROP_EXT_STOP	BOOL	H501.12	Sequence Stop		0	
+      SV30_40D	BOOL	45.03	Ext#4 Drain Valve Open		0	
+      _4FILL1CMPLT	BOOL	H9.02	 		0	
+      	BOOL	475.15	EXT #4 Cook 1 Fill Start P.B.		0	
+      	CHANNEL	D31295	EXT #4 Level (SCALED)		0	
+      _4HGHLVL	BOOL	47.00			0	
+      	BOOL	W8.03	EXT #4 HI LVL		0	
+      	BOOL	485.04	stop 1st water fill EXT#4		0	
+      	BOOL	485.15	stop 1st water fill EXT#4 (HBLV)		0	
+      _4FILL2STRT	BOOL	H9.11	 		0	
+      _4FILL2CMPLT	BOOL	H9.12	 		0	
+      _4WF3START	BOOL	H11.11	EXT#4 3rd cook water fraction add start		0	
+      _4WF3ADDCMPLT	BOOL	H11.12	EXT#4 3rd cook water fraction add complete		0	
+      _4WTRFEEDVLVAM	BOOL	327.00	 		0	
+      _4WTRFEEDVLVM	BOOL	323.00	 		0	
+      	BOOL	T0083	EXT4 FILL COMPLETE AIR OFF DELAY 5 MINS		0	
+      _4SCADASTRTHU	BOOL	509.02	 		0	
+      _4HTCMPLTFLAG	BOOL	484.07	 		0	
+      	BOOL	T0198	AIR_EXT-4A		0	
+      	BOOL	T0194	AIR_EXT-4		0	
+      _4AIRSHOTCMD	BOOL	H90.03	AIR SHOT COMMAND FOR EXTRACTOR #4		0	
+      _4AIRSHOTCNT_Status	BOOL	C0093	AIR SHOT TIMER COUNT OF 10 FOR EXTRACTOR 4		0	
+      	BOOL	T0248	EXT4 HEAT UP 25 MINS		0	
+      _4AIRSHOTAM	BOOL	327.01	 		0	
+      _4AIRSHOTM	BOOL	323.01	 		0	
+      	BOOL	T0168	AIR4_SHOT_5min_TIMER		0	
+      	BOOL	613.00	EXT4 AIR SHOT COMMAND 1		0	
+      	BOOL	613.01	EXT4 AIR SHOT COMMAND 2		0	
+      	BOOL	613.02	EXT4 AIR SHOT COMMAND 3		0	
+      _4AIRSHOT	BOOL	45.05	 		0	
+      _4GELFEEDAM	BOOL	327.02	 		0	
+      _4GELFEEDM	BOOL	323.02	 		0	
+      _4RECIRCFEEDAM	BOOL	327.04	 		0	
+      _4RECIRCFEEDM	BOOL	323.04	 		0	
+      _4RECIRCRINSEAM	BOOL	327.06	 		0	
+      _4RECIRCRINSEM	BOOL	323.06	 		0	
+      	BOOL	413.00	STK4 STEP - START TRANSFER PUMP		0	
+      	BOOL	413.02	STK4 STEP - SWITCH VALVES		0	
+      STK4_Feed_A10Pump	BOOL	45.10	Pump 10 feed Valve from Settling Tank-4 SV30-54		0	
+      _4COOKTIMFLAG	BOOL	484.05	 		0	
+      _4COOK1CMPLT	BOOL	H9.05	 		0	
+      	BOOL	C0124	Extractor 4 1st cook counter		0	
+      _4SCADADRP	BOOL	509.04	 		0	
+      _4DROP1STRT	BOOL	H9.06	 		0	
+      _4DROP1CMPLT	BOOL	H9.07	 		0	
+      _4DROP2CMPLT	BOOL	H10.01	 		0	
+      _4DROP3CMPLT	BOOL	H10.10	 		0	
+      _4DROP4CMPLT	BOOL	H11.06	 		0	
+      _4DRPVLVAM	BOOL	327.05	 		0	
+      _4DRPVLVM	BOOL	323.05	 		0	
+      	BOOL	47.13	ST4LSHH		0	
+      	BOOL	328.08	SV30-40S_OPEN CMD		0	
+      _4DRPVLV	BOOL	45.08	 		0	
+      _4LOWLVL	BOOL	47.01	 		0	
+      _4SET1CNRFLAG	BOOL	484.11	 		0	
+      _4STLCMPLT	BOOL	H9.08	 		0	
+      _4SCADATRNSFER	BOOL	509.06	 		0	
+      _4SCADATRNSSTOP	BOOL	509.08	 		0	
+      SCADADSTRT4	BOOL	509.00	 		0	
+      	BOOL	W9.09	EXT #4 HI LVL >2min		0	
+      _4VOLUMEFLAG	BOOL	485.05	 		0	
+      	BOOL	T0087	EXT#4 2nd cook 15min timer		0	
+      	BOOL	T0097	EXT#4 2nd cook +15min timer		0	
+      _4COOK2TIMFLAG	BOOL	485.08	 		0	
+      _4COOK2CMPLT	BOOL	H9.15	 		0	
+      _4COOK2_Status	BOOL	T0127	 		0	
+      	BOOL	C0128	Extractor 4 2nd cook counter		0	
+      _4SETL2FLAG	BOOL	485.14	stop 1st water fill EXT#3 (HBLV) 		0	
+      _4SETL2CMPLT	BOOL	H10.02	 		0	
+      	BOOL	484.06	EXT4 3rd Cook WF ON/OFF		0	
+      _4WF	BOOL	480.03	 		0	
+      _4COOK3TIMFLAG	BOOL	486.11	 		0	
+      _4COOK3CMPLT	BOOL	H10.08	 		0	
+      	BOOL	C0149	Extractor 4 3rd cook counter		0	
+      _4SETL3FLAG	BOOL	487.02	 		0	
+      _4SETL3CMPLT	BOOL	H9.00	 		0	
+      	BOOL	H14.05	EXT4 4th Cook WF Added		0	
+      _4COOK4TMRFLAG	BOOL	488.04	 		0	
+      _4COOK4RDY	BOOL	H11.04	 		0	
+      	BOOL	C0136	Extractor 4 4th cook counter		0	
+      _4SET4FLAG	BOOL	488.12	 		0	
+      _4COOK4SETTMR_Status	BOOL	T0138	 		0	
+      _4SETL4CMPLT	BOOL	H11.07	 		0	
+      _4BATCHCMPLT	BOOL	495.06	 		0	
+      LARDTRNSFRPMP	BOOL	10.01	Lard Transfer Pump Manual		0	
+      	BOOL	321.15	WFPMP_A/M		0	
+      	BOOL	325.15	WFPMP_MANSTART		0	
+      CONDPMPLOCAL	BOOL	11.03	 		0	
+      WFADDPMP_PU30_01	BOOL	6.00	Water Fraction pump PU30-001		0	
+      STTNK1420	CHANNEL	2021	 		0	
+      WFVOLUMESET	CHANNEL	D160	 		0	
+      STTNK2420	CHANNEL	2022	 		0	
+      STTNK3420	CHANNEL	2023	 		0	
+      STTNK420	CHANNEL	2024	 		0	
+      power_pack_M1	CHANNEL	2025	Chopper powerpack motor #1 Amp reading		0	
+      PowerPack_M1	CHANNEL	D980	Chopper powerpack motor #1 Amp reading to scada		0	
+      power_pack_M2	CHANNEL	2026	Chopper powerpack motor #2 Amp reading		0	
+      PowerPack_M2	CHANNEL	D981	Chopper powerpack motor #2 Amp reading to scada		0	
+      SPARE	CHANNEL	2027	Ext. H/E Temp Raw		0	
+      Spare_to_scada	CHANNEL	D982	Ext. H/E Temp Scaled		0	
+      	BOOL	350.03	Cook 1 Permissive		0	
+      	BOOL	350.01	Cook 2 Permissive		0	
+      	BOOL	350.00	Cook 3/4 Permissive		0	
+      	BOOL	351.03	Cook 3/4 Permissive HBLV 		0	
+      	BOOL	350.02	EXT. Fill Temp > 65degC		0	
+      	BOOL	350.15	EXT. Fill Temp >90degC		0	
+      	BOOL	351.00	EXT. Fill Temp < 65degC		0	
+      	BOOL	351.01	EXT. Fill Temp > 88degC		0	
+      	BOOL	350.04	Cook #1 Fill Temp < 70degC		0	
+      	BOOL	350.05	Cook #1 Fill Temp > 79degC		0	
+      	BOOL	T0150	Cook #2 Water Fill H/E On Delay		0	
+      	BOOL	350.09	Cook #2 Fill Temp < 70degC		0	
+      	BOOL	T0149	Cook #2 Water Fill H/E Off Delay		0	
+      	BOOL	350.10	Cook #2 Fill Temp > 75degC		0	
+      	BOOL	350.12	Cook #3/4 Fill Temp < 80degC		0	
+      	BOOL	350.13	Cook #3/4 Fill Temp > 85degC		0	
+      	BOOL	350.06	Ext. Cook #1 Fill Temp Limits		0	
+      	BOOL	350.11	Ext. Cook #2 Fill Temp Limits		0	
+      	BOOL	350.14	Ext. Cook #3/4 Fill Temp Limits		0	
+      	BOOL	351.02	Ext. Cook #3/4 HBLV Fill Temp Limits		0	
+      	BOOL	325.10	SV30-05 PLC/SCADA (0=PLC)		0	
+      	BOOL	321.10	SV30-05 SCADA ON		0	
+      ST34VLVAM	BOOL	326.09	 		0	
+      ST34VLVM	BOOL	322.09	 		0	
+      	BOOL	412.02	STK3 STEP - SWITCH VALVES		0	
+      ST34Drain_VLV	BOOL	44.13	Settling Tank 3 4 Drain Valve		0	
+      	BOOL	412.00	STK3 STEP - START TRANSFER PUMP		0	
+      STK3_Feed_A10Pump	BOOL	44.14	Pump 10 feed Valve from Settling Tank-3 SV30-53		0	
+      	BOOL	327.10	PLC/SCADA		0	
+      	BOOL	323.10	SCADA ON		0	
+      	BOOL	350.07	LOW STEAM PRESSURE RESET		0	
+      	BOOL	350.08	LOW STEAM PRESSURE INTLK		0	
+      	BOOL	320.11	PLC/SCADA (0=PLC)		0	
+      	BOOL	324.11	SCADA ON/OFF (1=ON)		0	
+      HE1_TEMP	BOOL	H91.01	EXTRACTOR #1 HEAT EXCHANGER REACHED SETPOINT		0	
+      HE2_TEMP	BOOL	H91.02	EXTRACTOR #2 HEAT EXCHANGER REACHED SETPOINT		0	
+      EXT1HUTIMER_Status	BOOL	T0139	 		0	
+      PU120_NOFLO_ALM	BOOL	H92.03	PU120 NO FLOW ALARM		0	
+      	BOOL	T0044	HE1 On Delay		0	
+      HE1_STM_ON_OFF	BOOL	11.04	 		0	
+      	BOOL	320.12	PLC/SCADA (0=PLC)		0	
+      	BOOL	324.12	SCADA ON		0	
+      HE2_STM_ON_OFF	BOOL	11.05	 		0	
+      	BOOL	320.13	PLC/SCADA (0=PLC)		0	
+      	BOOL	324.13	SCADA ON		0	
+      HE3_TEMP	BOOL	H91.03	EXTRACTOR #3 HEAT EXCHANGER REACHED SETPOINT		0	
+      HE4_TEMP	BOOL	H91.04	EXTRACTOR #4 HEAT EXCHANGER REACHED SETPOINT		0	
+      EXT2HUTIMER_Status	BOOL	T0140	 		0	
+      PU340_NOFLO_ALM	BOOL	H92.04	PU340 NO FLOW ALARM		0	
+      	BOOL	T0045	HE3 On Delay		0	
+      HE3_STM_ON_OFF	BOOL	11.06	 		0	
+      	BOOL	320.14	PLC/SCADA (0=PLC)		0	
+      	BOOL	324.14	SCADA ON		0	
+      HE4_STM_ON_OFF	BOOL	11.07	 		0	
+      EXT1_CONE	BOOL	42.15	EXT-1 CONE closed		0	
+      	BOOL	T0351	EXT1 Cone Closed Timer		0	
+      EXT2_CONE	BOOL	43.15	EXT-2 CONE closed		0	
+      EXT3_CONE	BOOL	46.15	EXT-3 CONE closed		0	
+      EXT4_CONE	BOOL	47.15	EXT-4 CONE closed		0	
+      SV30MINUS10S	BOOL	40.00	Ext#1 Shovel out Valve		0	
+      SV30MINUS20S	BOOL	41.00	Ext#2 Shovel Out Valve (Bad Solenoid - used external)		0	
+      scada_mode_3	BOOL	329.07	Scada Mode		0	
+      SV30_30S	BOOL	44.15	Ext#3 Shovel out Valve		0	
+      SV30_40S	BOOL	45.00	Ext#4 Shovel out Valve		0	
+      STKMINUS4_DRAIN_VLV	BOOL	45.01	STK-4 DRAIN VALVE		0	
+      SV30MINUS61	BOOL	40.08	Pit Valve on SCADA mode only to test EXT drain vlave for leakage		0	
+      	BOOL	12.02	SV30-02		0	
+      	BOOL	12.03	SPARE		0	
+      	BOOL	12.04	SV30-10D		0	
+      	BOOL	12.11	SV30-12		0	
+      	BOOL	12.12	SV30-18		0	
+      	BOOL	12.13	SV30-14		0	
+      	BOOL	12.14	SV30-51		0	
+      	BOOL	H29.01	Manual Reset		0	
+      	CHANNEL	H21	EXT1 3rd Cook Counter		0	
+      	CHANNEL	H22	EXT1 4th Cook Counter		0	
+      	BOOL	H29.02	Manual Reset		0	
+      	CHANNEL	H23	EXT2 3rd Cook Counter		0	
+      	CHANNEL	H24	EXT2 4th Cook Counter		0	
+      	BOOL	H29.03	Manual Reset		0	
+      	CHANNEL	H25	EXT3 3rd Cook Counter		0	
+      	CHANNEL	H26	EXT3 4th Cook Counter		0	
+      	BOOL	H29.04	Manual Reset		0	
+      	CHANNEL	H27	EXT4 3rd Cook Counter		0	
+      	CHANNEL	H28	EXT4 4th Cook Counter		0	
+      	CHANNEL	D360	FILLING DURATION		0	
+      	CHANNEL	D340	STANDARD_FILL_TIME		0	
+      	BOOL	340.00	FILLING_EXCEED_POPUP		0	
+      	CHANNEL	D361	HEATUP_DURATION		0	
+      	CHANNEL	D341	STANDARD_HEATUP_TIME		0	
+      	BOOL	340.01	HEATUP_EXCEED_POPUP		0	
+      	BOOL	H13.00	TRANSFER		0	
+      	CHANNEL	D362	DROP DURATION		0	
+      	CHANNEL	D342	STANDARD DROP TIME		0	
+      	BOOL	340.02	DROP EXCEED POPUP  BIT		0	
+      	BOOL	H13.01	AUTOJET		0	
+      	CHANNEL	D363	TRANSFER DURATION		0	
+      	CHANNEL	D343	STANDARD TRANSFER TIME		0	
+      	BOOL	340.03	TRANSFER EXCEED POPUP  BIT		0	
+      	BOOL	H12.04	AUTO JET ON STREAM		0	
+      	BOOL	H13.02	DEMIN		0	
+      	CHANNEL	D364	AUTOJET DURATION		0	
+      	CHANNEL	D344	STANDARD AUTOJET TIME		0	
+      	BOOL	340.04	AUTOJET EXCEED POPUP BIT		0	
+      	BOOL	H12.00	DEMIN START		0	
+      	BOOL	H13.03	EVAPATOR		0	
+      	CHANNEL	D365	DEMIN DURATION		0	
+      	BOOL	H12.05	DEMIN POLISHER		0	
+      	CHANNEL	D350	DEMIN C1A1		0	
+      	CHANNEL	D345	STANDARD DEMIN TIME		0	
+      	CHANNEL	D352	DEMIN PLSHR		0	
+      	BOOL	340.05	DEMIN EXCEED POPUP BIT		0	
+      	BOOL	H12.01	EVAP START		0	
+      	BOOL	H13.04	STERILIZER		0	
+      	CHANNEL	D366	EVAP DURATION		0	
+      	CHANNEL	D346	STANDARD EVAP TIME		0	
+      	BOOL	340.06	EVAP EXCEED POPUP BIT		0	
+      	BOOL	H12.02	STERILIZER START		0	
+      	BOOL	H13.05	OSCILLATING		0	
+      	CHANNEL	D367	STERILIZER DURATION		0	
+      	CHANNEL	D347	STANDARD STERILIZER TIME		0	
+      	BOOL	340.07	STER EXCEED POPUP BIT		0	
+      	BOOL	H12.03	CHEM START		0	
+      	BOOL	H13.06	EXT1DROP4		0	
+      	CHANNEL	D368	OSCILLATING DURATION		0	
+      	CHANNEL	D348	STANDARD CHEM TIME		0	
+      	BOOL	340.08	CHEM EXCEED POPUP BIT		0	
+      	CHANNEL	D369	DROP4 DURATION		0	
+      	CHANNEL	D349	STANDARD DROP4 TIME		0	
+      	BOOL	340.09	DROP4 EXCEED POPUP BIT		0	
+      	BOOL	T0236	EXCEED_POPUP_RESET		0	
+      	BOOL	322.12	STK1 TRANSFER TO CENTR PB		0	
+      	BOOL	T0032	30 SEC TIME DELAY		0	
+      	BOOL	T0033	30 SEC TIME DELAY		0	
+      	BOOL	410.03	STK1 STEP - CLOSE DRAIN VALVE		0	
+      	BOOL	322.13	STK2 TRANSFER TO CENTR PB		0	
+      	BOOL	T0034	30 SEC TIME DELAY		0	
+      	BOOL	T0035	30 SEC TIME DELAY		0	
+      	BOOL	411.03	STK2 STEP - CLOSE DRAIN VALVE		0	
+      	BOOL	322.14	STK3 TRANSFER TO CENTR PB		0	
+      	BOOL	T0036	30 SEC TIME DELAY		0	
+      	BOOL	T0037	30 SEC TIME DELAY		0	
+      	BOOL	412.03	STK3 STEP - CLOSE DRAIN VALVE		0	
+      	BOOL	322.15	STK4 TRANSFER TO CENTR PB		0	
+      	BOOL	T0038	30 SEC TIME DELAY		0	
+      	BOOL	T0039	30 SEC TIME DELAY		0	
+      	BOOL	413.03	STK4 STEP - CLOSE DRAIN VALVE		0	
+      	BOOL	410.04	Conditions true for startup of transfer		0	
+      	BOOL	12.00	SV30-10S		0	
+      RPDRNPMP	BOOL	40.01	Start Rind Transfer Drain Pump		0	
+      	BOOL	12.01	NOT USED		0	
+      RPKGBYPASSEXT1	BOOL	40.03	Extractor #1Feed Knife Gate		0	
+      	BOOL	12.05	SV30-10		0	
+      	BOOL	12.06	SV30-11		0	
+      	BOOL	12.07	SV30-15		0	
+      	BOOL	12.08	SV30-61		0	
+      	BOOL	12.09	SV30-13		0	
+      	BOOL	12.10	SV30-16		0	
+      	BOOL	12.15	Always Off		0	
+      	CHANNEL	D1460	1st Cook Temp S.P. from SCADA		0	
+      	CHANNEL	D1461	2nd Cook Temp S.P. from SCADA		0	
+      	CHANNEL	D1462	3rd Cook Temp S.P. from SCADA		0	
+      	CHANNEL	D1463	4th Cook Temp S.P. from SCADA		0	
+      	CHANNEL	D265	XFRB Control Word #1		0	
+      	CHANNEL	D266	07Hrs (7am)		0	
+      	CHANNEL	D267	Control Word #2		0	
+      	BOOL	W19.10	Synch Trigger from SCADA		0	
+      	CHANNEL	D261	07min : 07sec		0	
+      	CHANNEL	A352	 		0	
+      	CHANNEL	D279	Addtional Minutes and Seconds		0	
+      	CHANNEL	D280	Additional Hours		0	
+      	BOOL	W19.03	EXT #1 4th Cook Display		0	
+      	BOOL	W19.00	EXT #1 1st Cook Display		0	
+      	BOOL	W19.01	EXT #1 2nd Cook Display		0	
+      	BOOL	W19.02	EXT #1 3rd Cook Display		0	
+      	CHANNEL	D276	MIN : SEC		0	
+      	CHANNEL	D277	DAY : HOUR		0	
+      	CHANNEL	D278	YEAR : MONTH		0	
+      	CHANNEL	D297	MIN/SEC HOLDER		0	
+      	CHANNEL	D300	MINUTE		0	
+      	CHANNEL	D298	DAY/HOUR HOLDER		0	
+      	CHANNEL	D301	HOUR		0	
+      	CHANNEL	D302	DAY		0	
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+    <COMMENT>
+      April 23 2004
+      The Centrifuge Logic add to Extractor PLC program at Block-7
+      I change the addresses to match the 2nd expansion Rack in the new Extractors PLC
+      
+      
+    </COMMENT>
+  </SECTION>
+</LIBRARY>
