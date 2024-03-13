@@ -1,4 +1,6 @@
 import os
+import pandas as pd
+
 import components as cmp
 
 # Global Variables
@@ -11,7 +13,7 @@ ref_dir = os.path.join(dir, "Reference")
 output_dir = os.path.join(dir, "output")
 input_dir = os.path.join(dir, "input")
 
-def createfile(name="code", filetype="txt"):
+def createFile(name="code", filetype="txt"):
     # Set output dir
     os.chdir(output_dir)
     filename = name + "." + filetype
@@ -23,6 +25,21 @@ def createfile(name="code", filetype="txt"):
     
     file = open(filename,"w") 
     return file
+
+def openFile(filename="test_rungs.txt"):
+
+    # Give the location of the file 
+    dir = os.getcwd()
+    # input_dir = os.path.join(dir, "input")
+    file = os.path.join(input_dir, filename)
+    
+    # To open Workbook 
+    # wb = pd.read_excel(file) 
+    # wb = pd.read_excel(file, sheet_name = 0)
+    wb = pd.read_csv(file, sep='      ', header=None, engine='python')
+    wb.columns = ['logic']
+    return wb
+
 
 # To be completed
 def addContext(file, phase):
@@ -51,3 +68,10 @@ def addRung(file, r_num, logic, comment=None):
     r_num += 1
 
     return file, r_num
+
+
+# Testing - Functions
+# wb = openFile()
+# # print(wb.head())
+# for rowindex, row in wb.iterrows():
+#     print(row['logic'])
