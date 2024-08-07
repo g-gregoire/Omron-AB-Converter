@@ -1,4 +1,27 @@
-# Lookup conversion for Omron to AB
-
-LD : XIC
-OR : ,
+{
+    "'": "Comment",
+    "LD": ["XIC", "in"],
+    "LDNOT": ["XIO", "in"],
+    "ANDNOT": ["XIO", "in"],
+    "AND": ["XIC", "in"],
+    "OR": [",XIC", "in"],
+    "ORNOT": [",XIO", "in"],
+    "ANDLD": ["]", "branch"],
+    "ORLD": ["", "branch"],
+    "CMP": ["", "compare"],
+    "GREATER_THAN": ["", "compare"],
+    "LESS_THAN": ["", "compare"],
+    "EQUALS": ["", "compare"],
+    "TIM": ["", "count"],
+    "CNT": ["", "count"],
+    "OUT": ["OTE", "output"],
+    "SET": ["OTL", "output"],
+    "RSET": ["OTU", "output"],
+    "KEEP": ["OTL", "output"],
+    "ADD": ["", "math"],
+    "MOV": ["", "math"],
+    "DIFU": ["", "unknown"],
+    "DIFD": ["", "unknown"],
+    "XFER": ["", "unknown"],
+    "^^^": ";\n"
+}

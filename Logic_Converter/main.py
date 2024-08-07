@@ -2,22 +2,20 @@ import file_functions as ff
 import logic_converter as lc
 import lookup as lk
 
-EOL = "^^^"
-NL = "\n"
-# Open file
-wb = ff.openFile()
-output = ff.createFile("output", "txt")
+import traceback
 
-rung = ""
-for rowindex, row in wb.iterrows():
-    rung, flag = lc.getRung(row['logic'], rung)
+# input_file = "test_rungs_ster.txt"
+input_file = "basic_rungs1.txt"
 
-    if flag:
-        # print(rung)
-        lc.decodeRung(rung)
-        rung = ""
-        # Break for testing first rung only
-        # break
+# Open input file & create output file
+wb = ff.openFile(input_file)
+output_file = ff.createFile("output", "txt")
 
+try: 
+    lc.loop_rungs(wb, output_file, view_rungs=True, num_rungs=1)
+    print("Conversion complete")
+except Exception as e:
+    print("Conversion failed: ", e)
+    traceback.print_exc()
 
 # Testing - Functions
