@@ -3,6 +3,7 @@ import lookup as lk
 from structures import Rung, Block
 
 import pandas as pd
+from pprint import pprint
 
 
 EOL = "^^^"
@@ -448,3 +449,20 @@ def extractLine(line: str):
     conv_instr = lk.lookup[instr][1]
 
     return instr, param, instr_type, conv_instr
+
+def countInstructions(logic_file: pd.DataFrame):
+    # This function counts the number of different instructions in the program,
+    # and how many times each instruction is used
+    rung = ""
+    instr_count = {}
+    for rowindex, row in logic_file.iterrows():
+        # print(rung_num)
+        # Loop through each row and build the rung until the end of the rung
+        rung, end_of_rung = getRung(row['logic'], "")
+        instr = rung.split(' ')[0]
+        # print(instr)
+        if instr in instr_count:
+            instr_count[instr] += 1
+        else:
+            instr_count[instr] = 1
+    pprint(instr_count)

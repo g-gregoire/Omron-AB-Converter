@@ -3,6 +3,8 @@ import pandas as pd
 
 import components as cmp
 
+import xml.etree.ElementTree as ET
+
 # Global Variables
 n = '\n'
 filename = "test.L5X"
@@ -38,7 +40,33 @@ def openFile(filename="test_rungs.txt"):
     # wb = pd.read_excel(file, sheet_name = 0)
     wb = pd.read_csv(file, sep='      ', header=None, engine='python')
     wb.columns = ['logic']
+    # print(wb.head())
     return wb
+
+def prepareFile(logic_file: pd.DataFrame):
+    # This function brute force removes everything except the Mnemonic section
+    # Find row for <MNEMONIC> and remove everything before it
+    # Find row for </MNEMONIC> and remove everything after it
+    # Write the remaining to a new file
+    # Return the new file
+    start = None
+    for index, row in logic_file.iterrows():
+        if "<MNEMONIC>" in row['logic']:
+            start = index
+            # break
+        if "</MNEMONIC>" in row['logic']:
+            end = index
+            # break
+    # print("Start: ", start)
+    # print("End: ", end)
+    
+    # Update file range
+    if not start: return logic_file
+    logic_file = logic_file[start+1:end]
+    # print(logic_file.head())
+    # print(logic_file.tail())
+
+    return logic_file
 
 
 # To be completed

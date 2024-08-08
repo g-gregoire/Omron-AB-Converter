@@ -1,8 +1,0 @@
-<Rung Number="0" Type="N">
-<Comment>
-<![CDATA[' Multiple Output Bits]]>
-</Comment>
-<Text>
-<![CDATA[[[[XIC(00000),XIC(00001)],XIC(00002)],XIC(HR0000)]XIC(00003)[[OTE(HR0001),OTE(00500)],XIC(00004)OTE(00506)];]]>
-</Text>
-</Rung>
