@@ -12,7 +12,7 @@ wb = ff.openFile(input_file)
 output_file = ff.createFile("output", "txt")
 
 try: 
-    lc.loop_rungs(wb, output_file, view_rungs=True, num_rungs=1)
+    lc.loop_rungs(wb, output_file, view_rungs=True, num_rungs=-1)
     print("Conversion complete")
 except Exception as e:
     print("Conversion failed: ", e)

@@ -50,6 +50,7 @@ class Rung:
         if comment == "": self.comment = ""
         else: self.comment = comment
         self.converted_blocks = []
+        self.converted_logic = ""
 
     def __str__(self) -> str:
         return f"{self.blocks} {self.connectors}"
@@ -60,20 +61,34 @@ class Rung:
     def addConnector(self, connector: str):
         self.connectors.append(connector)
 
+    def addConvertedBlock(self, block: str):
+        self.converted_blocks.append(block)
+
+    def addComment(self, comment: str):
+        self.comment = comment
+
+    def addConvertedLogic(self, logic: str):
+        self.converted_logic = logic
+
     def viewRung(self):
+        print("Comment: ", self.comment)
         print("Blocks:")
         for block in self.blocks:
             print(block)
         # for connector in self.connectors:
-        print("Connectors: ")
-        print(self.connectors)
+        # print("Connectors: ")
+        # print(self.connectors)
+        print("Converted Blocks: ")
+        print(self.converted_blocks)
+        print("Converted Logic: ")
+        print(self.converted_logic)
 
-    def convertBlocks(self):
-        for index, block in enumerate(self.blocks):
-            print(block)
+    # def convertBlocks(self):
+    #     for index, block in enumerate(self.blocks):
+    #         print(block)
 
-            break
-        
+    #         break
+
     
 # Testing
 # test_block1 = Block(["XIC(IR1.0)"])

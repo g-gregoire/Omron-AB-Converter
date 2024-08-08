@@ -1,0 +1,123 @@
+      ' Basic LD-AND-OR
+      LD 0000
+      AND 0001
+      OR 0002
+      AND 0003
+      AND NOT 0004
+      OUT 0005
+      ^^^
+      '  Basic ANDLD
+      LD 0000
+      OR 0001
+      LD 0002
+      AND 0003
+      ANDLD
+      OUT PS1
+      ^^^
+      '  Basic ORLD
+      LD 0000
+      ANDNOT 0001
+      LD 0002
+      AND 0003
+      ORLD 
+      OUT PS1
+      ^^^
+      '  Combo ANDLD + ORLD
+      LDNOT 0000
+      AND 0001
+      LD 0002
+      ANDNOT 0003
+      LDNOT 0004
+      AND 0005
+      ORLD
+      ANDLD
+      OUT PS1
+      ^^^
+      ' Double ANDLD
+      LD 0000
+      ORNOT 0001
+      LDNOT 0002
+      OR 0003
+      ANDLD
+      LD 0004
+      OR 0005
+      ANDLD
+      OUT 0055
+      ^^^
+      ' Double ORLD
+      LD 0000
+      ANDNOT 0001
+      LDNOT 0002
+      ANDNOT 0003
+      ORLD
+      LD 0004
+      AND 0005
+      ORLD
+      OUT 0055
+      ^^^
+      ' Double OR with an ANDLD
+      LD 0000
+      ANDNOT 0001
+      LD 0002
+      AND 0003
+      OR 0004
+      ORNOT 0005
+      ANDLD 
+      OUT 0055
+      ^^^
+      ' Complicated Combo 1
+      LD 00000
+      LD 00001
+      LD 00002
+      ANDNOT 00003
+      ORLD ––
+      ANDLD ––
+      LDNOT 00004
+      AND 00005
+      ORLD ––
+      LDNOT 00006
+      AND 00007
+      ORLD ––
+      OUT LR 0000
+      ^^^
+      ' Complicated Combo 3
+      LD 00000
+      LD 00001
+      AND 00002
+      LD 00003
+      AND 00004
+      LD 00005
+      LD 00006
+      AND 00007
+      ORLD ––
+      ANDLD ––
+      ORLD ––
+      ANDLD ––
+      OUT LR0000
+      ^^^
+      ' Complicated Combo 4
+      LD 00000
+      AND 00001
+      LD 01000
+      AND 01001
+      ORLD ––
+      OR 00500
+      AND 00002
+      ANDNOT 00003
+      LD 00004
+      AND 00005
+      OR 00006
+      ANDLD ––
+      OUT 00500
+      ^^^
+      ' Multiple Output Bits
+      LD 00000
+      OR 00001
+      OR 00002
+      OR HR0000
+      AND 00003
+      OUT HR0001
+      OUT 00500
+      AND 00004
+      OUT 00506
+      ^^^

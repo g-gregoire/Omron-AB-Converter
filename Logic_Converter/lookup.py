@@ -6,14 +6,15 @@ lookup = {
     # LOAD Instructions
     "LD": ["LOAD", "XIC"],
     "LDNOT": ["LOAD", "XIO"],
+    # END LOAD Instructions
     "ORLD": ["LOAD", ""],
     "ANDLD": ["LOAD", "]"],
     # Input AND Instructions
     "AND": ["AND", "XIC"],
     "ANDNOT": ["AND", "XIO"],
     # Input OR Instructions
-    "OR": ["OR", ",XIC"],
-    "ORNOT": ["OR", ",XIO"],
+    "OR": ["OR", "XIC"],
+    "ORNOT": ["OR", "XIO"],
 
     # Output Instructions
     "OUT": ["OUTPUT", "OTE"],

@@ -1,7 +1,11 @@
-      LD 0000
-      OR 0001
-      LD 0002
-      ORNOT 0003
-      ANDLD
-      OUT PS1
+      ' Multiple Output Bits
+      LD 00000
+      OR 00001
+      OR 00002
+      OR HR0000
+      AND 00003
+      OUT HR0001
+      OUT 00500
+      AND 00004
+      OUT 00506
       ^^^
