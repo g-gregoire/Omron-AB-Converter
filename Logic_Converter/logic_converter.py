@@ -67,8 +67,9 @@ def getRung(text: str, rung: str):
 
     return rung, end_of_rung
 
-# Decode the rung and call the convert function
+# NOT USED 
 def decodeRung(rung: str):
+    # Decode the rung and call the convert function
     converted_rung = ""
     last_logic = ""
     last_instr = ""
@@ -123,13 +124,39 @@ def blockBreaker(rung: str):
     for index, line in enumerate(rung):
         # print(line)
         # Extract current line
-        instr, param, instr_type, conv_instr = extractLine(line)
+        instr, param, instr_type, conv_instr,_,_ = extractLine(line)
         # Extract previous line
         try: 
             last_line = rung[index-1]
             last_instr, last_param, last_instr_type, last_conv_instr = extractLine(last_line)
         except: 
             last_line = last_instr = last_param = last_instr_type = last_conv_instr = None
+        # Extract next line
+        try:
+            next_line = rung[index+1]
+            next_instr, next_param, next_instr_type, next_conv_instr,_,_ = extractLine(next_line)
+        except:
+            next_line = next_instr = next_param = next_instr_type = next_conv_instr = None
+
+        # If next block is a counter, create a new block since this involves a CTU instruction and a Reset instruction
+        if next_line and next_instr_type.upper() == "COUNTER":
+            # print("Counter is next")
+            # print(next_line)
+            if len(block.logic) > 0:
+                outputRung.addBlock(block) # Add the old block to the rung
+            block = Block() # Create a new block
+            new_block = Block() # Create a separate block from the current thread
+            new_block.addLine(next_line)
+            outputRung.addBlock(new_block) # Add the current output block to the rung
+            block = Block()
+            block.addLine("ANDLD") # This is used to artifically add an ORLD block
+            outputRung.addBlock(block)
+            block = Block()
+
+        if instr_type.upper() == "COUNTER":
+            # print("Counter")
+            line = line.replace("CNT", "RESET")
+            # print(line)
 
         if instr == "LD" or instr == "LDNOT":
             if not startRung:
@@ -165,15 +192,25 @@ def blockBreaker(rung: str):
             outputRung.addBlock(block)
             block = Block()
 
-        elif instr_type == "OUTPUT":
-            # print("New Block")
-            if len(block.logic) > 0 and checkMultipleOutputs(rung) and not OUTPUT_BLOCK:
+        elif instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER" or instr_type.upper() == "COUNTER":
+            # print("New Block - output type")
+            # Counter type needs to be handled specially
+            if instr_type.upper() == "COUNTER":
+                block.addLine(line)
+                outputRung.addBlock(block) # Add the current output block to the rung
+                block = Block() # Create a new block
+                block.addLine("ORLD") # This is used to artifically add an ORLD block
+                outputRung.addBlock(block)
+                block = Block()
+            elif checkMultipleOutputs(rung) and not OUTPUT_BLOCK:
+                # print(1)
                 outputRung.addBlock(block) # Add the old block to the rung
                 block = Block() # Create a new block
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 OUTPUT_BLOCK = True
+            # Output block is active but previous instruction was "AND" 
             elif len(block.logic) > 0 and OUTPUT_BLOCK and (last_instr != "AND" and last_instr != "ANDNOT"):
                 outputRung.addBlock(block) # Add the old block to the rung
                 block = Block() # Create a new block
@@ -204,16 +241,6 @@ def blockBreaker(rung: str):
     # outputRung.viewRung()
     return outputRung
 
-def checkMultipleOutputs(rung):
-    # This function checks for multiple outputs in a rung
-    output_count = 0
-    for line in rung:
-        instr, param, instr_type, conv_instr = extractLine(line)
-        if instr == "OUT" or instr == "SET" or instr == "RSET":
-            output_count += 1
-    # print(output_count)
-    return (output_count>0)
-
 def convertBlocks(rung: Rung):
     # This function converts the blocks in a rung
     for index, block in enumerate(rung.blocks):
@@ -224,20 +251,20 @@ def convertBlocks(rung: Rung):
         # Loop through each instruction in the block
         for index, line in enumerate(block.logic):
             # print(line)
-            instr, param, instr_type, conv_instr = extractLine(line) # Extract current line
+            instr, param, instr_type, conv_instr,_,_ = extractLine(line) # Extract current line
             if instr == "ORLD" or instr == "ANDLD":
                 converted_logic = instr
                 rung.addConvertedBlock(converted_logic)
                 continue
             try: # Extract next line
                 next_line = block.logic[index+1]
-                next_instr, next_param, next_instr_type, next_conv_instr = extractLine(next_line)
+                next_instr, next_param, next_instr_type, next_conv_instr,_,_ = extractLine(next_line)
             except: 
                 next_line = next_instr = next_param = next_instr_type = next_conv_instr = None
             # Extract next line
             try: 
                 after_next_line = block.logic[index+2]
-                after_next_instr, after_next_param, after_next_instr_type, after_next_conv_instr = extractLine(after_next_line)
+                after_next_instr, after_next_param, after_next_instr_type, after_next_conv_instr,_,_ = extractLine(after_next_line)
             except:
                 after_next_line = after_next_instr = after_next_param = after_next_instr_type = after_next_conv_instr = None
 
@@ -255,7 +282,8 @@ def convertBlocks(rung: Rung):
                 # print(converted_logic)
             
             # print("Add Logic")
-            converted_logic += conv_instr + "(" + param + ")"
+            converted_instruction = convertInstruction(line)
+            converted_logic += converted_instruction
             # print(converted_logic)
 
             # Allow for LD-AD-OR block (LD & AND are part of the first branch)
@@ -347,6 +375,7 @@ def assembleBlocks(rung: Rung):
     # print(converted_rung)
 
 def assembleBlocks2(rung: Rung):
+    # This function assembles the blocks into a rung
     new_rung = rung.converted_blocks.copy()
     new_block = ""
     index = 0
@@ -397,9 +426,48 @@ def assembleBlocks2(rung: Rung):
     rung.addConvertedLogic(new_rung[0])
     return rung
 
+def convertInstruction(line: str):
+    # This function converts an instruction from Omron to AB
+    instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
+    # converted_instruction = conv_instr + "(" + param + ")"
 
-# Convert Specific instructions from Omron to AB
+    # For logical instructions with 2 parameters like MOVE
+    if instr_type.upper() == "LOGICAL": 
+        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
+    # For output intsructions like OUT, SET, RSET
+    elif instr_type.upper() == "OUTPUT": 
+        converted_instruction = conv_instr + "(" + param + ")"
+    # For math instructions like ADD, SUB, MUL, SCL
+    elif instr_type.upper() == "MATH": 
+        converted_instruction = conv_instr + "(" + param + "," + param2 + "," + param3 + ")"
+    elif instr_type.upper() == "ONESHOT":
+        converted_instruction = conv_instr + "(" + param + "_storage" + "," + param + ")"
+    elif instr_type.upper() == "TIMER":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            # Convert from 1/10th sec to ms
+            preset = str(int(int(param2.replace("#", "")) * 1000 / 10)) 
+        else:
+            preset = param2
+        converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+    elif instr_type.upper() == "COUNTER":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            preset = param2.replace("#", "")
+        else:
+            preset = param2
+        converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+    elif instr_type.upper() == "RESET":
+        converted_instruction = conv_instr + "(" + param + ")"
+    
+
+
+    else:
+        converted_instruction = conv_instr + "(" + param + ")"
+
+    return converted_instruction
+
+# NOT USED 
 def convertLogic(line, last_line, last_instr):
+    # Convert Specific instructions from Omron to AB
     # print(line)
     logic = ""
     instr = line[0]
@@ -438,17 +506,36 @@ def convertLogic(line, last_line, last_instr):
     last_instr = instr
     return logic, instr, last_logic, conv_instr, last_instr
 
-
 def extractLine(line: str):
+    # This function extracts the instruction, parameter, param type and converted instruction from an inputted line
     args = line.split(" ")
     instr = args[0]
     try: param = args[1]
     except: param = None
+    try: param2 = args[2]
+    except: param2 = None
+    try: param3 = args[3]
+    except: param3 = None
 
     instr_type = lk.lookup[instr][0]
     conv_instr = lk.lookup[instr][1]
 
-    return instr, param, instr_type, conv_instr
+    # print(instr, param, param2, param3)
+
+    return instr, param, instr_type, conv_instr, param2, param3
+
+def checkMultipleOutputs(rung):
+    # This function checks for multiple outputs in a rung
+    # print("Checking for multiple outputs")
+    output_count = 0
+    for line in rung:
+        instr, param, instr_type, conv_instr,_,_ = extractLine(line)
+        if instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER":
+            output_count += 1
+        elif instr_type.upper() == "COUNTER":
+            output_count += 2
+    # print("Num of output: ", output_count)
+    return (output_count>1)
 
 def countInstructions(logic_file: pd.DataFrame):
     # This function counts the number of different instructions in the program,
@@ -465,4 +552,9 @@ def countInstructions(logic_file: pd.DataFrame):
             instr_count[instr] += 1
         else:
             instr_count[instr] = 1
+
+    # Order instructions alphabetically
+    instr_count = dict(sorted(instr_count.items()))
     pprint(instr_count)
+    return instr_count
+

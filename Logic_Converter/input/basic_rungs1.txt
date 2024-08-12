@@ -1,11 +1,6 @@
-      ' Multiple Output Bits
-      LD 00000
-      OR 00001
-      OR 00002
-      OR HR0000
-      AND 00003
-      OUT HR0001
-      OUT 00500
-      AND 00004
-      OUT 00506
+      ' Counter instruction
+      LD 494.00
+      AND P_1min
+      LDNOT PARK_POSITION
+      CNT 301 #105
       ^^^

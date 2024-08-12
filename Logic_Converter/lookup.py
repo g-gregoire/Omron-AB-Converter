@@ -20,10 +20,15 @@ lookup = {
     "OUT": ["OUTPUT", "OTE"],
     "SET": ["OUTPUT", "OTL"],
     "RSET": ["OUTPUT", "OTU"],
+    "DIFU(13)": ["oneshot", "OSR"],
+    "DIFD(14)": ["oneshot", "OSF"], 
     "KEEP(11)": ["KEEP", "OTL"],
 
     # Timer Instructions
-    "TIM": ["TIMER", ""],
+    "TIM": ["TIMER", "TON"],
+    # Count Instructions
+    "CNT": ["COUNTER", "CTU"],
+    "RESET": ["RESET", "RES"],
 
     # Comparison Instructions
     "CMP(20)": ["COMPARE", ""],
@@ -34,22 +39,19 @@ lookup = {
     "EQUALS": ["COMPARE", ""],
     "P_EQ": ["COMPARE", ""],
     
-    # Count Instructions
-    "CNT": ["COUNT", ""],
 
     # Math Instructions
-    "ADD(30)": ["math", ""],
-    "SUB(31)": ["math", ""],
-    "MUL(32)": ["math", ""],
+    "ADD(30)": ["math", "ADD"],
+    "SUB(31)": ["math", "SUB"],
+    "MUL(32)": ["math", "MUL"],
+    "DIV(33)": ["math", "DIV"],
     "SCL(64)" : ["math", ""],
 
     # Logical Instructions
-    "MOV(21)": ["logical", ""],
+    "MOV(21)": ["logical", "MOV"],
     "BIN(23)": ["logical", ""], # BCD to Binary
     "BCD(24)": ["logical", ""], # Binary to BCD
     "CLC(41)": ["logical", ""],
-    "DIFU(13)": ["oneshot", "ONS"],
-    "DIFD(14)": ["oneshot", "OSF"], # NEED TO CONFIRM INSTRUCTION
 
     # PID Instructions
     "PID(60)": ["pid", ""],

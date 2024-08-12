@@ -4,6 +4,7 @@ import lookup as lk
 
 import traceback
 
+# input_file = "Dryer_with_symbols.txt"
 # input_file = "Sterilizer_Section1.txt"
 input_file = "basic_rungs1.txt"
 
@@ -12,8 +13,8 @@ wb = ff.openFile(input_file)
 wb = ff.prepareFile(wb) # Remove everything except the Mnemonic section
 output_file = ff.createFile("output", "txt")
 
-COUNT_INSTR = True
-CONVERT = False
+COUNT_INSTR = False
+CONVERT = True
 
 
 if COUNT_INSTR:

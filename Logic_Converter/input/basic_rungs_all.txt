@@ -121,3 +121,48 @@
       AND 00004
       OUT 00506
       ^^^
+            ' Math instructions
+      LDNOT 232.08
+      ADD(30) DM503 DM506 DM508
+      DIV(33) DM508 #60 DM509
+      MUL(32) DM510 #100 DM513
+      DIV(33) DM513 #60 DM515
+      ^^^
+      ' Set & Reset
+      LDNOT CS1
+      AND CIP_MANUAL_PB
+      SET CIP_MANUAL_SELECTED
+      RSET CIP_AUTO_SELECTED
+      RSET CIP_AUTO_MONTHLY_SELECTED
+      RSET CIP_AUTO_SHORT_SELECTED
+      ^^^
+      ' Diff - oneshot outputs
+      LD 493.01
+      DIFU(13) 493.00
+      DIFD(14) 493.01
+      ^^^
+      ' Timer instruction
+      LD PS3
+      LD PS4
+      OR 503.10
+      OR I001
+      ANDLD
+      TIM 203 #600
+      OUT PS4
+      ^^^
+      ' Counter instruction
+      LD 494.00
+      AND P_1min
+      LDNOT PARK_POSITION
+      CNT 301 #105
+      ^^^
+      ' Compare Instruction
+      LD SS4
+      CMP(20) SEP_LEVEL #100
+      LD EQUALS
+      OR LESS_THAN
+      ANDLD
+      TIM 288 #15
+      AND TIM288
+      OUT 470.04
+      ^^^

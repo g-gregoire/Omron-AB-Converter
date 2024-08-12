@@ -1,0 +1,8 @@
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[' Counter instruction]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(494.00)XIC(P_1min)CTU(301,105,0),XIO(PARK_POSITION)RES(301)];]]>
+</Text>
+</Rung>
