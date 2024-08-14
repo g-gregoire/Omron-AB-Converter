@@ -23,6 +23,7 @@ lookup = {
     "DIFU(13)": ["oneshot", "OSR"],
     "DIFD(14)": ["oneshot", "OSF"], 
     "KEEP(11)": ["KEEP", "OTL"],
+    "OTU": ["KEEP", "OTU"],
 
     # Timer Instructions
     "TIM": ["TIMER", "TON"],
@@ -32,13 +33,18 @@ lookup = {
 
     # Comparison Instructions
     "CMP(20)": ["COMPARE", ""],
-    "GREATER_THAN": ["COMPARE", ""],
-    "P_GT": ["COMPARE", ""],
-    "LESS_THAN": ["COMPARE", ""],
-    "P_LT": ["COMPARE", ""],
-    "EQUALS": ["COMPARE", ""],
-    "P_EQ": ["COMPARE", ""],
-    
+    "GREATER_THAN": ["COMPARE", "GRT"],
+    "P_GT": ["COMPARE", "GRT"],
+    "LESS_THAN": ["COMPARE", "LES"],
+    "P_LT": ["COMPARE", "LES"],
+    "EQUALS": ["COMPARE", "EQU"],
+    "P_EQ": ["COMPARE", "EQU"],
+    # Converted Comparison Instructions
+    "EQU": ["COMPARE", "EQU"],
+    "GRT": ["COMPARE", "GRT"],
+    "GEQ": ["COMPARE", "GEQ"],
+    "LES": ["COMPARE", "LES"],
+    "LEQ": ["COMPARE", "LEQ"],
 
     # Math Instructions
     "ADD(30)": ["math", "ADD"],

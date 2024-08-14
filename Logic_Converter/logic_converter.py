@@ -14,6 +14,10 @@ END = ";"
 def loop_rungs(logic_file: pd.DataFrame, output_file, view_rungs = False, start_rung=0, num_rungs=-1):
     rung = ""
     rung_num = 0
+    catchErrors = {
+        "count": 0,
+        "list": []
+    }
     for rowindex, row in logic_file.iterrows():
         # print(rung_num)
         # Loop through each row and build the rung until the end of the rung
@@ -32,7 +36,7 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, view_rungs = False, start_
             # Call function to break the rung into blocks
             rung_blocks = blockBreaker(rung)
             # Call function to convert the blocks
-            converted_rung = convertBlocks(rung_blocks)
+            converted_rung, catchErrors = convertBlocks(rung_blocks, catchErrors)
             # Call function to assemble the blocks
             converted_rung = assembleBlocks2(converted_rung)
             # break
@@ -53,7 +57,7 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, view_rungs = False, start_
                 print("Reached end of requested rungs")
                 return
             
-    return
+    return catchErrors
 
 def getRung(text: str, rung: str):
     # Check if the end of the rung is reached (^^^) and set the flag true
@@ -71,8 +75,8 @@ def getRung(text: str, rung: str):
 def decodeRung(rung: str):
     # Decode the rung and call the convert function
     converted_rung = ""
-    last_logic = ""
-    last_instr = ""
+    prev_logic = ""
+    prev_instr = ""
     # Split instructions into an array; exclude the last empty string
     rung = rung.split(NL)[:-1]
 
@@ -83,21 +87,21 @@ def decodeRung(rung: str):
         args = line.split(" ")
 
         # Convert the logic from Omron to AB, taking into consideration the last instruction
-        logic, last_logic, conv_instr, last_instr = convertLogic(args, last_logic, last_instr)
+        logic, prev_logic, conv_instr, prev_instr = convertLogic(args, prev_logic, prev_instr)
         
-        # If this is the first instruction, set the logic to last_logic, but don't add to the rung
+        # If this is the first instruction, set the logic to prev_logic, but don't add to the rung
         if index == 0:
-            last_logic = logic
+            prev_logic = logic
             continue
         
         # If this is the last line, add the previous logic and current logic
         if index == len(rung) - 1:
-            converted_rung += last_logic + logic
+            converted_rung += prev_logic + logic
 
         # Otherwise, add the previous logic to the rung, and current logic to the previous logic
         else:
-            converted_rung += last_logic
-            last_logic = logic
+            converted_rung += prev_logic
+            prev_logic = logic
 
     # print(converted_rung)
     return converted_rung
@@ -122,21 +126,27 @@ def blockBreaker(rung: str):
 
     # Loop through each instruction in the rung
     for index, line in enumerate(rung):
-        # print(line)
+        print(line)
         # Extract current line
         instr, param, instr_type, conv_instr,_,_ = extractLine(line)
         # Extract previous line
         try: 
-            last_line = rung[index-1]
-            last_instr, last_param, last_instr_type, last_conv_instr = extractLine(last_line)
+            prev_line = rung[index-1]
+            prev_instr, prev_param, prev_instr_type, prev_conv_instr = extractLine(prev_line)
         except: 
-            last_line = last_instr = last_param = last_instr_type = last_conv_instr = None
+            prev_line = prev_instr = prev_param = prev_instr_type = prev_conv_instr = None
         # Extract next line
         try:
             next_line = rung[index+1]
             next_instr, next_param, next_instr_type, next_conv_instr,_,_ = extractLine(next_line)
         except:
             next_line = next_instr = next_param = next_instr_type = next_conv_instr = None
+        # Extract after next line
+        try:
+            after_next_line = rung[index+2]
+            after_next_instr, after_next_param, after_next_instr_type, after_next_conv_instr,_,_ = extractLine(after_next_line)
+        except:
+            after_next_line = after_next_instr = after_next_param = after_next_instr_type = after_next_conv_instr = None
 
         # If next block is a counter, create a new block since this involves a CTU instruction and a Reset instruction
         if next_line and next_instr_type.upper() == "COUNTER":
@@ -149,14 +159,63 @@ def blockBreaker(rung: str):
             new_block.addLine(next_line)
             outputRung.addBlock(new_block) # Add the current output block to the rung
             block = Block()
-            block.addLine("ANDLD") # This is used to artifically add an ORLD block
+            block.addLine("ANDLD") # This is used to artifically add an ANDLD block
             outputRung.addBlock(block)
             block = Block()
 
+        # Required since the counter instruction is split into 2 lines (CTU and RES)
         if instr_type.upper() == "COUNTER":
             # print("Counter")
             line = line.replace("CNT", "RESET")
             # print(line)
+        
+        if instr_type.upper() == "COMPARE":
+            # print("Compare")
+            # Determine which comparison is being used
+            EQU = GRT = LES = False
+            if next_line.find("EQUALS") != -1 or next_line.find("P_EQ") != -1:
+                EQU = True
+            elif next_line.find("GREATER_THAN") != -1 or next_line.find("P_GT") != -1:
+                GRT = True
+            elif next_line.find("LESS_THAN") != -1 or next_line.find("P_LT") != -1:
+                LES = True
+            if after_next_line.find("EQUALS") != -1 or after_next_line.find("P_EQ") != -1:
+                EQU = True
+            elif after_next_line.find("GREATER_THAN") != -1 or after_next_line.find("P_GT") != -1:
+                GRT = True
+            elif after_next_line.find("LESS_THAN") != -1 or after_next_line.find("P_LT") != -1:
+                LES = True
+            
+            if EQU and GRT:
+                # print("GEQ")
+                line = line.replace("CMP(20)", "GEQ")
+                # Pop next 3 lines
+                rung.pop(index+1)
+                rung.pop(index+1)
+                rung.pop(index+1)
+            elif EQU and LES:
+                # print("LEQ")
+                line = line.replace("CMP(20)", "LEQ")
+                # Pop next 3 lines
+                rung.pop(index+1)
+                rung.pop(index+1)
+                rung.pop(index+1)
+            elif EQU:
+                # print("EQU")
+                line = line.replace("CMP(20)", "EQU")
+                # Pop next line
+                rung.pop(index+1)
+            elif GRT:
+                # print("GRT")
+                line = line.replace("CMP(20)", "GRT")
+                # Pop next line
+                rung.pop(index+1)
+            elif LES:
+                # print("LES")
+                line = line.replace("CMP(20)", "LES")
+                # Pop next line
+                rung.pop(index+1)
+            
 
         if instr == "LD" or instr == "LDNOT":
             if not startRung:
@@ -174,6 +233,7 @@ def blockBreaker(rung: str):
                 block.addLine(line)
 
         elif instr == "OR" or instr == "ORNOT":
+            print("New Block - OR")
             if len(block.logic) > 0:
                 outputRung.addBlock(block) # Add the old block to the rung
             block = Block()
@@ -192,10 +252,40 @@ def blockBreaker(rung: str):
             outputRung.addBlock(block)
             block = Block()
 
-        elif instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER" or instr_type.upper() == "COUNTER":
-            # print("New Block - output type")
+        # Keep instruction - needs to be broken up into OTL and OTU
+        elif instr_type.upper() == "KEEP":
+            # print("keep")
+            insert_index = findLastLD(outputRung)
+            if insert_index != -1:
+                # Insert OTL instruction before the last LD instruction
+                block = Block()
+                block.addLine(line)
+                outputRung.blocks.insert(insert_index, block)
+                block = Block() 
+                block.addLine("ANDLD") # This is used to artifically add an ORLD block
+                outputRung.blocks.insert(insert_index+1, block)
+                block = Block()
+                # Insert OTU instruction in the Keep block
+                block = Block()
+                line = line.replace("KEEP(11)", "OTU")
+                block.addLine(line)
+                outputRung.addBlock(block) # Add the OTU block to the rung
+                block = Block() 
+                block.addLine("ANDLD") # This is used to artifically add an ORLD block
+                outputRung.addBlock(block)
+                block = Block()
+                block.addLine("ORLD") # This is used to artifically add an ORLD block
+                outputRung.addBlock(block)
+                block = Block()
+
+
+
+        elif instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER" \
+            or instr_type.upper() == "COUNTER" or instr_type.upper() == "MATH" or instr_type.upper() == "LOGICAL":
+            print("New Block - output type")
             # Counter type needs to be handled specially
             if instr_type.upper() == "COUNTER":
+                print(1)
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
@@ -203,7 +293,7 @@ def blockBreaker(rung: str):
                 outputRung.addBlock(block)
                 block = Block()
             elif checkMultipleOutputs(rung) and not OUTPUT_BLOCK:
-                # print(1)
+                print(2)
                 outputRung.addBlock(block) # Add the old block to the rung
                 block = Block() # Create a new block
                 block.addLine(line)
@@ -211,25 +301,41 @@ def blockBreaker(rung: str):
                 block = Block() # Create a new block
                 OUTPUT_BLOCK = True
             # Output block is active but previous instruction was "AND" 
-            elif len(block.logic) > 0 and OUTPUT_BLOCK and (last_instr != "AND" and last_instr != "ANDNOT"):
-                outputRung.addBlock(block) # Add the old block to the rung
-                block = Block() # Create a new block
+            elif len(block.logic) > 0 and OUTPUT_BLOCK and (prev_instr == "AND" and prev_instr == "ANDNOT"):
+                print(3)
+                # outputRung.addBlock(block) # Add the old block to the rung
+                # block = Block() # Create a new block
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
+                # if next_line == None:
+                    # print(3.5)
+                block = Block() # Create a new block
+                block.addLine("ORLD") # This is used to artifically add an ORLD block
+                    # outputRung.addBlock(block)
+                    # OUTPUT_BLOCK = False
             elif OUTPUT_BLOCK:
+                print(4)
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 block.addLine("ORLD") # This is used to artifically add an ORLD block
                 outputRung.addBlock(block)
                 block = Block()
+                if next_line == None:
+                    print(4.5)
+                    # block = Block() # Create a new block
+                    # block.addLine("ORLD") # This is used to artifically add an ORLD block
+                    # outputRung.addBlock(block)
+                    OUTPUT_BLOCK = False
             else:
+                print(5)
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
 
         else:
+            print(6)
             block.addLine(line) # Add any non-specific lines to the block
 
         if index == len(rung) - 1:
@@ -241,7 +347,7 @@ def blockBreaker(rung: str):
     # outputRung.viewRung()
     return outputRung
 
-def convertBlocks(rung: Rung):
+def convertBlocks(rung: Rung, catchErrors: dict):
     # This function converts the blocks in a rung
     for index, block in enumerate(rung.blocks):
         # print(block)
@@ -282,7 +388,7 @@ def convertBlocks(rung: Rung):
                 # print(converted_logic)
             
             # print("Add Logic")
-            converted_instruction = convertInstruction(line)
+            converted_instruction, catchErrors = convertInstruction(line, catchErrors)
             converted_logic += converted_instruction
             # print(converted_logic)
 
@@ -314,7 +420,7 @@ def convertBlocks(rung: Rung):
         # break
     # rung.viewRung()
 
-    return rung
+    return rung, catchErrors
 
 # NOT USED
 def assembleBlocks(rung: Rung):
@@ -426,13 +532,34 @@ def assembleBlocks2(rung: Rung):
     rung.addConvertedLogic(new_rung[0])
     return rung
 
-def convertInstruction(line: str):
+def convertInstruction(line: str, catchErrors: dict):
     # This function converts an instruction from Omron to AB
-    instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
-    # converted_instruction = conv_instr + "(" + param + ")"
 
+    ONS_instr = False
+
+    if line[0] == "@":
+        ONS_instr = True
+        line = line[1:]
+
+    instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
+
+    if conv_instr == None:
+        # Check what type of instruction it is, and just created it with the original instruction
+        if param3 != None:
+            converted_instruction = instr + "(" + param + "," + param2 + "," + param3 + ")"
+        elif param2 != None:
+            converted_instruction = instr + "(" + param + "," + param2 + ")"
+        else:
+            converted_instruction = instr + "(" + param + ")"
+        catchErrors["count"] += 1
+        catchErrors["list"].append(line)
+        
     # For logical instructions with 2 parameters like MOVE
-    if instr_type.upper() == "LOGICAL": 
+    elif instr_type.upper() == "LOGICAL": 
+        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "")
+        else:
+            param = param
         converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
     # For output intsructions like OUT, SET, RSET
     elif instr_type.upper() == "OUTPUT": 
@@ -454,31 +581,43 @@ def convertInstruction(line: str):
             preset = param2.replace("#", "")
         else:
             preset = param2
-        converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+        converted_instruction = "ONS" + "(" + param + "_ONS" + ")" 
+        converted_instruction += conv_instr + "(" + param + "," + preset + "," + "0" + ")"
     elif instr_type.upper() == "RESET":
         converted_instruction = conv_instr + "(" + param + ")"
-    
-
+    elif instr_type.upper() == "COMPARE":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param2 = param2.replace("#", "")
+        else:
+            param2 = param2
+        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
+    elif instr_type.upper() == "KEEP":
+        print("Keep instruction")
+        print(line)
+        converted_instruction = conv_instr + "(" + param + ")"
 
     else:
         converted_instruction = conv_instr + "(" + param + ")"
 
-    return converted_instruction
+    if ONS_instr:
+        converted_instruction = "ONS" + "(" + param2 + "_ONS" + ")" + converted_instruction
+
+    return converted_instruction, catchErrors
 
 # NOT USED 
-def convertLogic(line, last_line, last_instr):
+def convertLogic(line, prev_line, prev_instr):
     # Convert Specific instructions from Omron to AB
     # print(line)
     logic = ""
     instr = line[0]
     instr_type = lk.lookup[instr][0]
     try:
-        last_instr_type = lk.lookup[last_instr][0]
-    except: last_instr_type = None
+        prev_instr_type = lk.lookup[prev_instr][0]
+    except: prev_instr_type = None
 
-    # print(last_instr_type, instr_type)
+    # print(prev_instr_type, instr_type)
     # Previous Line Modifications
-    if last_instr_type == "OR" and instr_type == "AND":
+    if prev_instr_type == "OR" and instr_type == "AND":
         logic += "]"
 
     # Handle various instructions
@@ -496,18 +635,19 @@ def convertLogic(line, last_line, last_instr):
 
     # Handle last line updates
     if instr == "OR" or instr == "ORNOT":
-        if last_instr == "OR":
-            last_logic = last_line
+        if prev_instr == "OR":
+            prev_logic = prev_line
         else:
-            last_logic = "[" + last_line
+            prev_logic = "[" + prev_line
     else: 
-        last_logic = last_line
+        prev_logic = prev_line
     # print(logic)
-    last_instr = instr
-    return logic, instr, last_logic, conv_instr, last_instr
+    prev_instr = instr
+    return logic, instr, prev_logic, conv_instr, prev_instr
 
 def extractLine(line: str):
     # This function extracts the instruction, parameter, param type and converted instruction from an inputted line
+    line = line.replace("@" , "")
     args = line.split(" ")
     instr = args[0]
     try: param = args[1]
@@ -517,9 +657,12 @@ def extractLine(line: str):
     try: param3 = args[3]
     except: param3 = None
 
-    instr_type = lk.lookup[instr][0]
-    conv_instr = lk.lookup[instr][1]
-
+    try:
+        instr_type = lk.lookup[instr][0]
+        conv_instr = lk.lookup[instr][1]
+    except:
+        instr_type = "None"
+        conv_instr = None
     # print(instr, param, param2, param3)
 
     return instr, param, instr_type, conv_instr, param2, param3
@@ -530,11 +673,12 @@ def checkMultipleOutputs(rung):
     output_count = 0
     for line in rung:
         instr, param, instr_type, conv_instr,_,_ = extractLine(line)
-        if instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER":
+        if instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER"\
+            or instr_type.upper() == "MATH" or instr_type.upper() == "LOGICAL":
             output_count += 1
         elif instr_type.upper() == "COUNTER":
             output_count += 2
-    # print("Num of output: ", output_count)
+    print("Num of output: ", output_count) #, ". With: ", rung)
     return (output_count>1)
 
 def countInstructions(logic_file: pd.DataFrame):
@@ -557,4 +701,16 @@ def countInstructions(logic_file: pd.DataFrame):
     instr_count = dict(sorted(instr_count.items()))
     pprint(instr_count)
     return instr_count
+
+def findLastLD(rung: Rung):
+    # This function finds the last LD index in a block
+    return_index = -1
+    for index, block in enumerate(rung.blocks):
+        for line in block.logic:
+            instr, param, instr_type, conv_instr,_,_ = extractLine(line)
+            if instr == "LD" or instr == "LDNOT":
+                return_index = index
+    # print(return_index)
+    return return_index
+
 

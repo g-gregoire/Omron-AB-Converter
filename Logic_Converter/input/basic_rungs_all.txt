@@ -121,7 +121,7 @@
       AND 00004
       OUT 00506
       ^^^
-            ' Math instructions
+      ' Math instructions
       LDNOT 232.08
       ADD(30) DM503 DM506 DM508
       DIV(33) DM508 #60 DM509
@@ -135,6 +135,10 @@
       RSET CIP_AUTO_SELECTED
       RSET CIP_AUTO_MONTHLY_SELECTED
       RSET CIP_AUTO_SHORT_SELECTED
+      ^^^
+      ' Move Instruction
+      LD 506.01
+      MOV(21) #2 DM420
       ^^^
       ' Diff - oneshot outputs
       LD 493.01
@@ -156,7 +160,13 @@
       LDNOT PARK_POSITION
       CNT 301 #105
       ^^^
-      ' Compare Instruction
+      ' Compare - Simple
+      LD ON
+      CMP(20) CNTP207_PV #1
+      AND EQUALS
+      OUT ONDIVIDEOFFP207
+      ^^^
+      ' Compare - Double
       LD SS4
       CMP(20) SEP_LEVEL #100
       LD EQUALS
@@ -165,4 +175,13 @@
       TIM 288 #15
       AND TIM288
       OUT 470.04
+      ^^^
+      ' KEEP Instruction
+      LD PS1
+      ANDNOT PARK_POSITION
+      ANDNOT CS1
+      ANDNOT SS1
+      LD SS1
+      OR PARK_POSITION
+      KEEP(11) 506.00
       ^^^
