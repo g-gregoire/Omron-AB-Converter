@@ -16,7 +16,8 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, view_rungs = False, start_
     rung_num = 0
     catchErrors = {
         "count": 0,
-        "list": []
+        "list": [],
+        "error": False
     }
     for rowindex, row in logic_file.iterrows():
         # print(rung_num)
@@ -126,7 +127,7 @@ def blockBreaker(rung: str):
 
     # Loop through each instruction in the rung
     for index, line in enumerate(rung):
-        print(line)
+        # print(line)
         # Extract current line
         instr, param, instr_type, conv_instr,_,_ = extractLine(line)
         # Extract previous line
@@ -278,14 +279,13 @@ def blockBreaker(rung: str):
                 outputRung.addBlock(block)
                 block = Block()
 
-
-
+        # Manage output-type instructions
         elif instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER" \
             or instr_type.upper() == "COUNTER" or instr_type.upper() == "MATH" or instr_type.upper() == "LOGICAL":
-            print("New Block - output type")
+            # print("New Block - output type")
             # Counter type needs to be handled specially
             if instr_type.upper() == "COUNTER":
-                print(1)
+                # print(1)
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
@@ -293,7 +293,7 @@ def blockBreaker(rung: str):
                 outputRung.addBlock(block)
                 block = Block()
             elif checkMultipleOutputs(rung) and not OUTPUT_BLOCK:
-                print(2)
+                # print(2)
                 outputRung.addBlock(block) # Add the old block to the rung
                 block = Block() # Create a new block
                 block.addLine(line)
@@ -302,7 +302,7 @@ def blockBreaker(rung: str):
                 OUTPUT_BLOCK = True
             # Output block is active but previous instruction was "AND" 
             elif len(block.logic) > 0 and OUTPUT_BLOCK and (prev_instr == "AND" and prev_instr == "ANDNOT"):
-                print(3)
+                # print(3)
                 # outputRung.addBlock(block) # Add the old block to the rung
                 # block = Block() # Create a new block
                 block.addLine(line)
@@ -315,7 +315,7 @@ def blockBreaker(rung: str):
                     # outputRung.addBlock(block)
                     # OUTPUT_BLOCK = False
             elif OUTPUT_BLOCK:
-                print(4)
+                # print(4)
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
@@ -323,19 +323,19 @@ def blockBreaker(rung: str):
                 outputRung.addBlock(block)
                 block = Block()
                 if next_line == None:
-                    print(4.5)
+                    # print(4.5)
                     # block = Block() # Create a new block
                     # block.addLine("ORLD") # This is used to artifically add an ORLD block
                     # outputRung.addBlock(block)
                     OUTPUT_BLOCK = False
             else:
-                print(5)
+                # print(5)
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
 
         else:
-            print(6)
+            # print(6)
             block.addLine(line) # Add any non-specific lines to the block
 
         if index == len(rung) - 1:
@@ -390,6 +390,9 @@ def convertBlocks(rung: Rung, catchErrors: dict):
             # print("Add Logic")
             converted_instruction, catchErrors = convertInstruction(line, catchErrors)
             converted_logic += converted_instruction
+            if catchErrors["error"]:
+                rung.comment += " - ERROR CONVERTING THIS RUNG."
+                catchErrors["error"] = False
             # print(converted_logic)
 
             # Allow for LD-AD-OR block (LD & AND are part of the first branch)
@@ -553,6 +556,7 @@ def convertInstruction(line: str, catchErrors: dict):
             converted_instruction = instr + "(" + param + ")"
         catchErrors["count"] += 1
         catchErrors["list"].append(line)
+        catchErrors["error"] = True
         
     # For logical instructions with 2 parameters like MOVE
     elif instr_type.upper() == "LOGICAL": 
@@ -593,7 +597,7 @@ def convertInstruction(line: str, catchErrors: dict):
         converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
     elif instr_type.upper() == "KEEP":
         print("Keep instruction")
-        print(line)
+        # print(line)
         converted_instruction = conv_instr + "(" + param + ")"
 
     else:
@@ -678,7 +682,7 @@ def checkMultipleOutputs(rung):
             output_count += 1
         elif instr_type.upper() == "COUNTER":
             output_count += 2
-    print("Num of output: ", output_count) #, ". With: ", rung)
+    # print("Num of output: ", output_count) #, ". With: ", rung)
     return (output_count>1)
 
 def countInstructions(logic_file: pd.DataFrame):

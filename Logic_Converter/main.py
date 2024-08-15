@@ -15,8 +15,10 @@ output_file = ff.createFile("output", "txt")
 
 COUNT_INSTR = False
 CONVERT = True
+VIEW_RUNGS = True
 PRINT_ERRORS = True
 
+catchErrors = None
 
 if COUNT_INSTR:
     lc.countInstructions(wb)
@@ -24,14 +26,14 @@ if COUNT_INSTR:
 if CONVERT:
     # Convert the rungs to ladder logic
     try: 
-        catchErrors = lc.loop_rungs(wb, output_file, view_rungs=True, num_rungs=-1)
+        catchErrors = lc.loop_rungs(wb, output_file, view_rungs=VIEW_RUNGS, num_rungs=-1)
         print("Conversion complete")
     except Exception as e:
         print("Conversion failed: ", e)
         traceback.print_exc()
 
 if PRINT_ERRORS:
-    if catchErrors:
+    if catchErrors != None:
         if catchErrors["count"] == 0:
             print("No errors in conversion")
         else:
