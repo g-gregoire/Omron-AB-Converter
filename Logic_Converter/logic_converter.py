@@ -11,7 +11,7 @@ NL = "\n"
 SP = " "
 END = ";"
 
-def loop_rungs(logic_file: pd.DataFrame, output_file, view_rungs = False, start_rung=0, num_rungs=-1):
+def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1):
     rung = ""
     rung_num = 0
     catchErrors = {
@@ -32,14 +32,12 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, view_rungs = False, start_
                 rung = ""
                 continue
 
-            # Call function to convert the rung
-            # converted_rung = decodeRung(rung)
             # Call function to break the rung into blocks
-            rung_blocks = blockBreaker(rung)
+            rung_blocks = blockBreaker(rung, catchErrors)
             # Call function to convert the blocks
-            converted_rung, catchErrors = convertBlocks(rung_blocks, catchErrors)
+            converted_rung, catchErrors = convertBlocks(rung_blocks, catchErrors, tagfile)
             # Call function to assemble the blocks
-            converted_rung = assembleBlocks2(converted_rung)
+            converted_rung = assembleBlocks(converted_rung)
             # break
 
             ff.addRung(output_file, rung_num, converted_rung.converted_logic, converted_rung.comment)
@@ -72,43 +70,7 @@ def getRung(text: str, rung: str):
 
     return rung, end_of_rung
 
-# NOT USED 
-def decodeRung(rung: str):
-    # Decode the rung and call the convert function
-    converted_rung = ""
-    prev_logic = ""
-    prev_instr = ""
-    # Split instructions into an array; exclude the last empty string
-    rung = rung.split(NL)[:-1]
-
-    # Loop through each instruction in the rung
-    for index, line in enumerate(rung):
-        
-        # Split out the instruction and the tag
-        args = line.split(" ")
-
-        # Convert the logic from Omron to AB, taking into consideration the last instruction
-        logic, prev_logic, conv_instr, prev_instr = convertLogic(args, prev_logic, prev_instr)
-        
-        # If this is the first instruction, set the logic to prev_logic, but don't add to the rung
-        if index == 0:
-            prev_logic = logic
-            continue
-        
-        # If this is the last line, add the previous logic and current logic
-        if index == len(rung) - 1:
-            converted_rung += prev_logic + logic
-
-        # Otherwise, add the previous logic to the rung, and current logic to the previous logic
-        else:
-            converted_rung += prev_logic
-            prev_logic = logic
-
-    # print(converted_rung)
-    return converted_rung
-
-
-def blockBreaker(rung: str):
+def blockBreaker(rung: str, catchErrors: dict):
     # This function splits rung into logic/load blocks
 
     # print(rung)
@@ -127,7 +89,7 @@ def blockBreaker(rung: str):
 
     # Loop through each instruction in the rung
     for index, line in enumerate(rung):
-        # print(line)
+        print(line)
         # Extract current line
         instr, param, instr_type, conv_instr,_,_ = extractLine(line)
         # Extract previous line
@@ -174,48 +136,54 @@ def blockBreaker(rung: str):
             # print("Compare")
             # Determine which comparison is being used
             EQU = GRT = LES = False
-            if next_line.find("EQUALS") != -1 or next_line.find("P_EQ") != -1:
-                EQU = True
-            elif next_line.find("GREATER_THAN") != -1 or next_line.find("P_GT") != -1:
-                GRT = True
-            elif next_line.find("LESS_THAN") != -1 or next_line.find("P_LT") != -1:
-                LES = True
-            if after_next_line.find("EQUALS") != -1 or after_next_line.find("P_EQ") != -1:
-                EQU = True
-            elif after_next_line.find("GREATER_THAN") != -1 or after_next_line.find("P_GT") != -1:
-                GRT = True
-            elif after_next_line.find("LESS_THAN") != -1 or after_next_line.find("P_LT") != -1:
-                LES = True
+            if next_line == None: # Added for strange coding where CMP and comp_type are on different rungs
+                # print("End of rung")
+                catchErrors["error"] = True
+                catchErrors["list"].append(line)
+                outputRung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
+            else:
+                if next_line.find("EQUALS") != -1 or next_line.find("P_EQ") != -1:
+                    EQU = True
+                elif next_line.find("GREATER_THAN") != -1 or next_line.find("P_GT") != -1:
+                    GRT = True
+                elif next_line.find("LESS_THAN") != -1 or next_line.find("P_LT") != -1:
+                    LES = True
+                if after_next_line.find("EQUALS") != -1 or after_next_line.find("P_EQ") != -1:
+                    EQU = True
+                elif after_next_line.find("GREATER_THAN") != -1 or after_next_line.find("P_GT") != -1:
+                    GRT = True
+                elif after_next_line.find("LESS_THAN") != -1 or after_next_line.find("P_LT") != -1:
+                    LES = True
             
-            if EQU and GRT:
-                # print("GEQ")
-                line = line.replace("CMP(20)", "GEQ")
-                # Pop next 3 lines
-                rung.pop(index+1)
-                rung.pop(index+1)
-                rung.pop(index+1)
-            elif EQU and LES:
-                # print("LEQ")
-                line = line.replace("CMP(20)", "LEQ")
-                # Pop next 3 lines
-                rung.pop(index+1)
-                rung.pop(index+1)
-                rung.pop(index+1)
-            elif EQU:
-                # print("EQU")
-                line = line.replace("CMP(20)", "EQU")
-                # Pop next line
-                rung.pop(index+1)
-            elif GRT:
-                # print("GRT")
-                line = line.replace("CMP(20)", "GRT")
-                # Pop next line
-                rung.pop(index+1)
-            elif LES:
-                # print("LES")
-                line = line.replace("CMP(20)", "LES")
-                # Pop next line
-                rung.pop(index+1)
+                if EQU and GRT:
+                    # print("GEQ")
+                    line = line.replace("CMP(20)", "GEQ")
+                    # Pop next 3 lines
+                    rung.pop(index+1)
+                    rung.pop(index+1)
+                    rung.pop(index+1)
+                elif EQU and LES:
+                    # print("LEQ")
+                    line = line.replace("CMP(20)", "LEQ")
+                    # Pop next 3 lines
+                    rung.pop(index+1)
+                    rung.pop(index+1)
+                    rung.pop(index+1)
+                elif EQU:
+                    # print("EQU")
+                    line = line.replace("CMP(20)", "EQU")
+                    # Pop next line
+                    rung.pop(index+1)
+                elif GRT:
+                    # print("GRT")
+                    line = line.replace("CMP(20)", "GRT")
+                    # Pop next line
+                    rung.pop(index+1)
+                elif LES:
+                    # print("LES")
+                    line = line.replace("CMP(20)", "LES")
+                    # Pop next line
+                    rung.pop(index+1)
             
 
         if instr == "LD" or instr == "LDNOT":
@@ -234,7 +202,7 @@ def blockBreaker(rung: str):
                 block.addLine(line)
 
         elif instr == "OR" or instr == "ORNOT":
-            print("New Block - OR")
+            # print("New Block - OR")
             if len(block.logic) > 0:
                 outputRung.addBlock(block) # Add the old block to the rung
             block = Block()
@@ -347,7 +315,7 @@ def blockBreaker(rung: str):
     # outputRung.viewRung()
     return outputRung
 
-def convertBlocks(rung: Rung, catchErrors: dict):
+def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame):
     # This function converts the blocks in a rung
     for index, block in enumerate(rung.blocks):
         # print(block)
@@ -388,10 +356,11 @@ def convertBlocks(rung: Rung, catchErrors: dict):
                 # print(converted_logic)
             
             # print("Add Logic")
-            converted_instruction, catchErrors = convertInstruction(line, catchErrors)
+            # Convert the instruction
+            converted_instruction, catchErrors = convertInstruction(line, catchErrors, tagfile)
             converted_logic += converted_instruction
             if catchErrors["error"]:
-                rung.comment += " - ERROR CONVERTING THIS RUNG."
+                rung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
                 catchErrors["error"] = False
             # print(converted_logic)
 
@@ -425,8 +394,284 @@ def convertBlocks(rung: Rung, catchErrors: dict):
 
     return rung, catchErrors
 
-# NOT USED
 def assembleBlocks(rung: Rung):
+    # This function assembles the blocks into a rung
+    new_rung = rung.converted_blocks.copy()
+    new_block = ""
+    index = 0
+    while len(new_rung) > 1:
+        block = new_rung[index]
+        # print(index, block)
+        
+        if index > 100: # Watchdog break out of infinite loop
+            break
+        if block == "ORLD":
+            # print(index, block)
+            # print(index-1, new_rung[index-1])
+            # print(index-2, new_rung[index-2])
+
+            new_block = "[" + new_rung[index-2] + "," + new_rung[index-1] + "]"
+            new_rung[index-2] = new_block # Replace the first block with the new block
+            new_rung.pop(index-1) # Remove the third block
+            new_rung.pop(index-1) # Remove the second block
+            # print(new_rung)
+            # Reset index
+            index = 0
+            continue
+        elif block == "ANDLD":
+            # print(index, block)
+            # print(index-1, new_rung[index-1])
+            # print(index-2, new_rung[index-2])
+            new_block = new_rung[index-2] + new_rung[index-1]
+            new_rung[index-2] = new_block # Replace the first block with the new block
+            new_rung.pop(index-1) # Remove the second block
+            new_rung.pop(index-1) # Remove the third block
+            # print(new_rung)
+            # Reset index and continue
+            index = 0
+            continue
+
+
+        # If end of rung, without any ORLD or ANDLD, combine the remaining blocks
+        if index == len(new_rung) - 1:
+            new_block = ""
+            index = 0
+            while len(new_rung) > 1:
+                new_rung[index] = new_rung[index] + new_rung[index+1]
+                new_rung.pop(index+1)
+            # print(new_block)
+        
+        # Increment index
+        index += 1
+    rung.addConvertedLogic(new_rung[0])
+    return rung
+
+def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
+    # This function converts an instruction from Omron to AB
+    # print(line)
+    ONS_instr = False
+
+    if line[0] == "@":
+        ONS_instr = True
+        line = line[1:]
+
+    instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
+    # print(param)
+    if param != None:
+        param = convertTagname(param, tagfile)
+    if param2 != None:
+        param2 = convertTagname(param2, tagfile)
+    if param3 != None:
+        param3 = convertTagname(param3, tagfile)
+
+    if conv_instr == None or param == None:
+        # Check what type of instruction it is, and just created it with the original instruction
+        if param == None:
+            converted_instruction = instr
+        elif param3 != None:
+            converted_instruction = instr + "(" + param + "," + param2 + "," + param3 + ")"
+        elif param2 != None:
+            converted_instruction = instr + "(" + param + "," + param2 + ")"
+        else:
+            converted_instruction = instr + "(" + param + ")"
+        catchErrors["count"] += 1
+        catchErrors["list"].append(line)
+        catchErrors["error"] = True
+    # For logical instructions with 2 parameters like MOVE
+    elif instr_type.upper() == "LOGICAL": 
+        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "")
+        else:
+            param = param
+        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
+    # For output intsructions like OUT, SET, RSET
+    elif instr_type.upper() == "OUTPUT": 
+        converted_instruction = conv_instr + "(" + param + ")"
+    # For math instructions like ADD, SUB, MUL, SCL
+    elif instr_type.upper() == "MATH": 
+        #Check if it's a hardcoded value (e.g. #10) and remove the #
+        if param.find("#") != -1: param = param.replace("#", "")
+        else: param = param
+        if param2.find("#") != -1: param2 = param2.replace("#", "")
+        else: param2 = param2
+
+        converted_instruction = conv_instr + "(" + param + "," + param2 + "," + param3 + ")"
+    elif instr_type.upper() == "ONESHOT":
+        converted_instruction = conv_instr + "(" + param + "_storage" + "," + param + ")"
+    elif instr_type.upper() == "TIMER":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            # Convert from 1/10th sec to ms
+            preset = str(int(int(param2.replace("#", "")) * 1000 / 10)) 
+        else:
+            preset = param2
+        converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+    elif instr_type.upper() == "COUNTER":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            preset = param2.replace("#", "")
+        else:
+            preset = param2
+        converted_instruction = "ONS" + "(" + param + "_ONS" + ")" 
+        converted_instruction += conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+    elif instr_type.upper() == "RESET":
+        converted_instruction = conv_instr + "(" + param + ")"
+    elif instr_type.upper() == "COMPARE":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param2 = param2.replace("#", "")
+        else:
+            param2 = param2
+        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
+    elif instr_type.upper() == "KEEP":
+        # print("Keep instruction")
+        # print(line)
+        converted_instruction = conv_instr + "(" + param + ")"
+    else:
+        # print("Other Instruction: ", instr, param)
+        converted_instruction = conv_instr + "(" + param + ")"
+
+    if ONS_instr and param != None:
+        converted_instruction = "ONS" + "(" + param2 + "_ONS" + ")" + converted_instruction
+
+    return converted_instruction, catchErrors
+
+def extractLine(line: str):
+    # This function extracts the instruction, parameter, param type and converted instruction from an inputted line
+    line = line.replace("@" , "")
+    args = line.split(" ")
+    instr = args[0]
+    try: param = args[1]
+    except: param = None
+    try: param2 = args[2]
+    except: param2 = None
+    try: param3 = args[3]
+    except: param3 = None
+
+    try:
+        instr_type = lk.lookup[instr][0]
+        conv_instr = lk.lookup[instr][1]
+    except:
+        instr_type = "None"
+        conv_instr = None
+    # print(instr, param, param2, param3)
+
+    return instr, param, instr_type, conv_instr, param2, param3
+
+def convertTagname(address: str, tagfile: pd.DataFrame):
+    # This function searches the tagfile to determine if a converted tagname exists
+    # If it does, it returns the converted tagname
+    # If it doesn't, it returns the original tagname
+    # print(address)
+    # print(tagfile.head())
+    
+    # if it's a hardcoded value (e.g. #10), return the value as is
+    if address.find("#") != -1:
+        return address
+    else:
+        # Search the tagfile for the address
+        # try:
+        if address.find("HR") >= 0 or address.find("AR") >= 0:
+            query = tagfile.query(f'address == "{address}"')
+        elif address.isnumeric() or address.find(".") >= 0:
+            # print(1)
+            query = tagfile.query(f'address == "{address}"')
+        else:
+            # print(2)
+            query = tagfile.query(f'address == "{address}"')
+        # print(query)
+        if query.empty:
+            converted_tagname = address
+        else:
+            converted_tagname = query["tagname"].to_string(index=False)
+        # except:
+        #     converted_tagname = address
+
+        print(converted_tagname)
+        return converted_tagname
+    
+def checkMultipleOutputs(rung):
+    # This function checks for multiple outputs in a rung
+    # print("Checking for multiple outputs")
+    output_count = 0
+    for line in rung:
+        instr, param, instr_type, conv_instr,_,_ = extractLine(line)
+        if instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER"\
+            or instr_type.upper() == "MATH" or instr_type.upper() == "LOGICAL":
+            output_count += 1
+        elif instr_type.upper() == "COUNTER":
+            output_count += 2
+    # print("Num of output: ", output_count) #, ". With: ", rung)
+    return (output_count>1)
+
+def countInstructions(logic_file: pd.DataFrame):
+    # This function counts the number of different instructions in the program,
+    # and how many times each instruction is used
+    rung = ""
+    instr_count = {}
+    for rowindex, row in logic_file.iterrows():
+        # print(rung_num)
+        # Loop through each row and build the rung until the end of the rung
+        rung, end_of_rung = getRung(row['logic'], "")
+        instr = rung.split(' ')[0]
+        # print(instr)
+        if instr in instr_count:
+            instr_count[instr] += 1
+        else:
+            instr_count[instr] = 1
+
+    # Order instructions alphabetically
+    instr_count = dict(sorted(instr_count.items()))
+    pprint(instr_count)
+    return instr_count
+
+def findLastLD(rung: Rung):
+    # This function finds the last LD index in a block
+    return_index = -1
+    for index, block in enumerate(rung.blocks):
+        for line in block.logic:
+            instr, param, instr_type, conv_instr,_,_ = extractLine(line)
+            if instr == "LD" or instr == "LDNOT":
+                return_index = index
+    # print(return_index)
+    return return_index
+
+
+#%% DEPRECATED / NOT USED CODE
+# NOT USED 
+def decodeRung(rung: str):
+    # Decode the rung and call the convert function
+    converted_rung = ""
+    prev_logic = ""
+    prev_instr = ""
+    # Split instructions into an array; exclude the last empty string
+    rung = rung.split(NL)[:-1]
+
+    # Loop through each instruction in the rung
+    for index, line in enumerate(rung):
+        
+        # Split out the instruction and the tag
+        args = line.split(" ")
+
+        # Convert the logic from Omron to AB, taking into consideration the last instruction
+        logic, prev_logic, conv_instr, prev_instr = convertLogic(args, prev_logic, prev_instr)
+        
+        # If this is the first instruction, set the logic to prev_logic, but don't add to the rung
+        if index == 0:
+            prev_logic = logic
+            continue
+        
+        # If this is the last line, add the previous logic and current logic
+        if index == len(rung) - 1:
+            converted_rung += prev_logic + logic
+
+        # Otherwise, add the previous logic to the rung, and current logic to the previous logic
+        else:
+            converted_rung += prev_logic
+            prev_logic = logic
+
+    # print(converted_rung)
+    return converted_rung
+
+# NOT USED
+def assembleBlocks_old(rung: Rung):
     # This function assembles the blocks in a rung
     converted_rung = ""
     OR_BLOCK = False
@@ -483,131 +728,6 @@ def assembleBlocks(rung: Rung):
     
     # print(converted_rung)
 
-def assembleBlocks2(rung: Rung):
-    # This function assembles the blocks into a rung
-    new_rung = rung.converted_blocks.copy()
-    new_block = ""
-    index = 0
-    while len(new_rung) > 1:
-        block = new_rung[index]
-        # print(index, block)
-        
-        if index > 100: # Watchdog break out of infinite loop
-            break
-        if block == "ORLD":
-            # print(index, block)
-            # print(index-1, new_rung[index-1])
-            # print(index-2, new_rung[index-2])
-
-            new_block = "[" + new_rung[index-2] + "," + new_rung[index-1] + "]"
-            new_rung[index-2] = new_block # Replace the first block with the new block
-            new_rung.pop(index-1) # Remove the third block
-            new_rung.pop(index-1) # Remove the second block
-            # print(new_rung)
-            # Reset index
-            index = 0
-            continue
-        elif block == "ANDLD":
-            # print(index, block)
-            # print(index-1, new_rung[index-1])
-            # print(index-2, new_rung[index-2])
-            new_block = new_rung[index-2] + new_rung[index-1]
-            new_rung[index-2] = new_block # Replace the first block with the new block
-            new_rung.pop(index-1) # Remove the second block
-            new_rung.pop(index-1) # Remove the third block
-            # print(new_rung)
-            # Reset index and continue
-            index = 0
-            continue
-
-
-        # If end of rung, without any ORLD or ANDLD, combine the remaining blocks
-        if index == len(new_rung) - 1:
-            new_block = ""
-            index = 0
-            while len(new_rung) > 1:
-                new_rung[index] = new_rung[index] + new_rung[index+1]
-                new_rung.pop(index+1)
-            # print(new_block)
-        
-        # Increment index
-        index += 1
-    rung.addConvertedLogic(new_rung[0])
-    return rung
-
-def convertInstruction(line: str, catchErrors: dict):
-    # This function converts an instruction from Omron to AB
-
-    ONS_instr = False
-
-    if line[0] == "@":
-        ONS_instr = True
-        line = line[1:]
-
-    instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
-
-    if conv_instr == None:
-        # Check what type of instruction it is, and just created it with the original instruction
-        if param3 != None:
-            converted_instruction = instr + "(" + param + "," + param2 + "," + param3 + ")"
-        elif param2 != None:
-            converted_instruction = instr + "(" + param + "," + param2 + ")"
-        else:
-            converted_instruction = instr + "(" + param + ")"
-        catchErrors["count"] += 1
-        catchErrors["list"].append(line)
-        catchErrors["error"] = True
-        
-    # For logical instructions with 2 parameters like MOVE
-    elif instr_type.upper() == "LOGICAL": 
-        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param = param.replace("#", "")
-        else:
-            param = param
-        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
-    # For output intsructions like OUT, SET, RSET
-    elif instr_type.upper() == "OUTPUT": 
-        converted_instruction = conv_instr + "(" + param + ")"
-    # For math instructions like ADD, SUB, MUL, SCL
-    elif instr_type.upper() == "MATH": 
-        converted_instruction = conv_instr + "(" + param + "," + param2 + "," + param3 + ")"
-    elif instr_type.upper() == "ONESHOT":
-        converted_instruction = conv_instr + "(" + param + "_storage" + "," + param + ")"
-    elif instr_type.upper() == "TIMER":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            # Convert from 1/10th sec to ms
-            preset = str(int(int(param2.replace("#", "")) * 1000 / 10)) 
-        else:
-            preset = param2
-        converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
-    elif instr_type.upper() == "COUNTER":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            preset = param2.replace("#", "")
-        else:
-            preset = param2
-        converted_instruction = "ONS" + "(" + param + "_ONS" + ")" 
-        converted_instruction += conv_instr + "(" + param + "," + preset + "," + "0" + ")"
-    elif instr_type.upper() == "RESET":
-        converted_instruction = conv_instr + "(" + param + ")"
-    elif instr_type.upper() == "COMPARE":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param2 = param2.replace("#", "")
-        else:
-            param2 = param2
-        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
-    elif instr_type.upper() == "KEEP":
-        print("Keep instruction")
-        # print(line)
-        converted_instruction = conv_instr + "(" + param + ")"
-
-    else:
-        converted_instruction = conv_instr + "(" + param + ")"
-
-    if ONS_instr:
-        converted_instruction = "ONS" + "(" + param2 + "_ONS" + ")" + converted_instruction
-
-    return converted_instruction, catchErrors
-
 # NOT USED 
 def convertLogic(line, prev_line, prev_instr):
     # Convert Specific instructions from Omron to AB
@@ -648,73 +768,3 @@ def convertLogic(line, prev_line, prev_instr):
     # print(logic)
     prev_instr = instr
     return logic, instr, prev_logic, conv_instr, prev_instr
-
-def extractLine(line: str):
-    # This function extracts the instruction, parameter, param type and converted instruction from an inputted line
-    line = line.replace("@" , "")
-    args = line.split(" ")
-    instr = args[0]
-    try: param = args[1]
-    except: param = None
-    try: param2 = args[2]
-    except: param2 = None
-    try: param3 = args[3]
-    except: param3 = None
-
-    try:
-        instr_type = lk.lookup[instr][0]
-        conv_instr = lk.lookup[instr][1]
-    except:
-        instr_type = "None"
-        conv_instr = None
-    # print(instr, param, param2, param3)
-
-    return instr, param, instr_type, conv_instr, param2, param3
-
-def checkMultipleOutputs(rung):
-    # This function checks for multiple outputs in a rung
-    # print("Checking for multiple outputs")
-    output_count = 0
-    for line in rung:
-        instr, param, instr_type, conv_instr,_,_ = extractLine(line)
-        if instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER"\
-            or instr_type.upper() == "MATH" or instr_type.upper() == "LOGICAL":
-            output_count += 1
-        elif instr_type.upper() == "COUNTER":
-            output_count += 2
-    # print("Num of output: ", output_count) #, ". With: ", rung)
-    return (output_count>1)
-
-def countInstructions(logic_file: pd.DataFrame):
-    # This function counts the number of different instructions in the program,
-    # and how many times each instruction is used
-    rung = ""
-    instr_count = {}
-    for rowindex, row in logic_file.iterrows():
-        # print(rung_num)
-        # Loop through each row and build the rung until the end of the rung
-        rung, end_of_rung = getRung(row['logic'], "")
-        instr = rung.split(' ')[0]
-        # print(instr)
-        if instr in instr_count:
-            instr_count[instr] += 1
-        else:
-            instr_count[instr] = 1
-
-    # Order instructions alphabetically
-    instr_count = dict(sorted(instr_count.items()))
-    pprint(instr_count)
-    return instr_count
-
-def findLastLD(rung: Rung):
-    # This function finds the last LD index in a block
-    return_index = -1
-    for index, block in enumerate(rung.blocks):
-        for line in block.logic:
-            instr, param, instr_type, conv_instr,_,_ = extractLine(line)
-            if instr == "LD" or instr == "LDNOT":
-                return_index = index
-    # print(return_index)
-    return return_index
-
-

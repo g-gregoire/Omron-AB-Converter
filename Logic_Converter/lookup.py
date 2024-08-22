@@ -57,7 +57,8 @@ lookup = {
     "MOV(21)": ["logical", "MOV"],
     "BIN(23)": ["logical", ""], # BCD to Binary
     "BCD(24)": ["logical", ""], # Binary to BCD
-    "CLC(41)": ["logical", ""],
+    
+    "CLC(41)": ["other", ""],
 
     # PID Instructions
     "PID(60)": ["pid", ""],

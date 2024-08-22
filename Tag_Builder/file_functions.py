@@ -2,6 +2,8 @@ import os
 import lookup as lk
 import routine_components as rt
 
+import pandas as pd
+
 # Global Variables
 n = '\n'
 filename = "test.L5X"
@@ -53,6 +55,7 @@ def createTagFile(name="tags", filetype="txt", output_dir=""):
     return file
 
 def addTag(tag, desc, type, file):
+    # print(tag, desc, type)
 
     # tag = tag.replace("_","")
     # desc = desc.replace("_","")
@@ -64,3 +67,26 @@ def addTag(tag, desc, type, file):
     file.write(n)
 
     return file
+
+def createExcel(tagList:list, file, output_filename, output_dir):
+    # Set output dir
+    os.chdir(output_dir)
+    filename = output_filename + ".csv"
+
+    # Test open and write a file
+    # Delete and then open a file for writing 
+    try: os.remove(filename)
+    except: pass
+
+    # Create Excel file
+    # writer = pd.ExcelWriter(filename, engine='xlsxwriter')
+    # for tag in tagList:
+    #     tag.to_excel(writer, sheet_name=tag['tagname'], index=False)
+    # writer.save()
+
+    # Conver taglist to DataFrame
+    tagList = pd.DataFrame(tagList)
+    # Assuming df is your DataFrame
+    tagList.to_csv(filename, index=False)
+
+    return 

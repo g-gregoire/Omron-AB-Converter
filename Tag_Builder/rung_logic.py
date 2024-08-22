@@ -14,7 +14,7 @@ def createTags(tagList, tagFile, output_filename=None, output_ext="txt"):
 
     for tag in tagList:
 
-        tagFile = f.addTag(tag['symbol'], tag['description'] , tag['type'], tagFile)
+        tagFile = f.addTag(tag['tagname'], tag['description'] , tag['type'], tagFile)
         # print(tag['symbol'], tag['description'], tag['type'])
 
     tagFile.close()

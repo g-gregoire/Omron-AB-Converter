@@ -35,11 +35,17 @@ def openFile(filename="test_rungs.txt"):
     # input_dir = os.path.join(dir, "input")
     file = os.path.join(input_dir, filename)
     
-    # To open Workbook 
-    # wb = pd.read_excel(file) 
-    # wb = pd.read_excel(file, sheet_name = 0)
-    wb = pd.read_csv(file, sep='      ', header=None, engine='python')
-    wb.columns = ['logic']
+    # Open Workbook 
+    if filename.find("rungs") >= 0:
+        wb = pd.read_csv(file, sep='      ', header=None, engine='python')
+        wb.columns = ['logic']
+    elif filename.find(".csv") >= 0:
+        wb = pd.read_csv(file, header=0, engine='python')
+        wb = wb.fillna('')
+    else:
+        wb = pd.read_csv(file, sep='      ', header=None, engine='python')
+        wb.columns = ['logic']
+
     # print(wb.head())
     return wb
 
