@@ -4,6 +4,7 @@ from structures import Rung, Block
 
 import pandas as pd
 from pprint import pprint
+import re
 
 
 EOL = "^^^"
@@ -89,9 +90,14 @@ def blockBreaker(rung: str, catchErrors: dict):
 
     # Loop through each instruction in the rung
     for index, line in enumerate(rung):
-        print(line)
+        # print(line)
         # Extract current line
         instr, param, instr_type, conv_instr,_,_ = extractLine(line)
+        
+        # Skip instruction if it's CLC(41)
+        if instr == "CLC(41)":
+            continue
+
         # Extract previous line
         try: 
             prev_line = rung[index-1]
@@ -110,6 +116,26 @@ def blockBreaker(rung: str, catchErrors: dict):
             after_next_instr, after_next_param, after_next_instr_type, after_next_conv_instr,_,_ = extractLine(after_next_line)
         except:
             after_next_line = after_next_instr = after_next_param = after_next_instr_type = after_next_conv_instr = None
+
+        # If parameter matches pattern TRx where x is a number, using regex
+        if param != None and re.match(r"TR\d", param):
+            # print("TR Block")
+            if instr == "OUT":
+                if len(block.logic) > 0:
+                    outputRung.addBlock(block) # Add the old block to the rung
+                block = Block() 
+                block.addLine("STBR") # This is used to artifically add an Start Branch (STBR) block
+                outputRung.addBlock(block)
+                block = Block()
+                continue
+            elif instr == "LD":
+                if len(block.logic) > 0:
+                    outputRung.addBlock(block) # Add the old block to the rung
+                block = Block() 
+                block.addLine("NWBR") # This is used to artifically add an Start Branch (NWBR) block
+                outputRung.addBlock(block)
+                block = Block()
+                continue
 
         # If next block is a counter, create a new block since this involves a CTU instruction and a Reset instruction
         if next_line and next_instr_type.upper() == "COUNTER":
@@ -134,6 +160,9 @@ def blockBreaker(rung: str, catchErrors: dict):
         
         if instr_type.upper() == "COMPARE":
             # print("Compare")
+            if len(block.logic) > 0:
+                outputRung.addBlock(block) # Add the old block to the rung
+            block = Block() # Create a new block
             # Determine which comparison is being used
             EQU = GRT = LES = False
             if next_line == None: # Added for strange coding where CMP and comp_type are on different rungs
@@ -184,7 +213,6 @@ def blockBreaker(rung: str, catchErrors: dict):
                     line = line.replace("CMP(20)", "LES")
                     # Pop next line
                     rung.pop(index+1)
-            
 
         if instr == "LD" or instr == "LDNOT":
             if not startRung:
@@ -249,7 +277,9 @@ def blockBreaker(rung: str, catchErrors: dict):
 
         # Manage output-type instructions
         elif instr_type.upper() == "OUTPUT" or instr_type.upper() == "ONESHOT" or instr_type.upper() == "TIMER" \
-            or instr_type.upper() == "COUNTER" or instr_type.upper() == "MATH" or instr_type.upper() == "LOGICAL":
+            or instr_type.upper() == "COUNTER" or instr_type.upper() == "MATH" or instr_type.upper() == "LOGICAL"\
+            or instr_type.upper() == "COPY" or instr_type.upper() == "SCALING" or instr_type.upper() == "PID"\
+            or instr_type.upper() == "BTD" or instr.upper() == "BIN(23)" or instr.upper() == "BCD(24)":
             # print("New Block - output type")
             # Counter type needs to be handled specially
             if instr_type.upper() == "COUNTER":
@@ -262,7 +292,8 @@ def blockBreaker(rung: str, catchErrors: dict):
                 block = Block()
             elif checkMultipleOutputs(rung) and not OUTPUT_BLOCK:
                 # print(2)
-                outputRung.addBlock(block) # Add the old block to the rung
+                if len(block.logic) > 0:
+                    outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 block.addLine(line)
                 outputRung.addBlock(block) # Add the current output block to the rung
@@ -285,7 +316,8 @@ def blockBreaker(rung: str, catchErrors: dict):
             elif OUTPUT_BLOCK:
                 # print(4)
                 block.addLine(line)
-                outputRung.addBlock(block) # Add the current output block to the rung
+                if len(block.logic) > 0:
+                    outputRung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 block.addLine("ORLD") # This is used to artifically add an ORLD block
                 outputRung.addBlock(block)
@@ -326,6 +358,7 @@ def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame):
         for index, line in enumerate(block.logic):
             # print(line)
             instr, param, instr_type, conv_instr,_,_ = extractLine(line) # Extract current line
+
             if instr == "ORLD" or instr == "ANDLD":
                 converted_logic = instr
                 rung.addConvertedBlock(converted_logic)
@@ -399,12 +432,16 @@ def assembleBlocks(rung: Rung):
     new_rung = rung.converted_blocks.copy()
     new_block = ""
     index = 0
+    NUM_BRANCHES = 0 # Used to handle TR branch closing
+
     while len(new_rung) > 1:
         block = new_rung[index]
         # print(index, block)
         
         if index > 100: # Watchdog break out of infinite loop
             break
+        
+        # Handle ORLD block
         if block == "ORLD":
             # print(index, block)
             # print(index-1, new_rung[index-1])
@@ -418,6 +455,8 @@ def assembleBlocks(rung: Rung):
             # Reset index
             index = 0
             continue
+        
+        # Handle ANDLD block
         elif block == "ANDLD":
             # print(index, block)
             # print(index-1, new_rung[index-1])
@@ -431,6 +470,22 @@ def assembleBlocks(rung: Rung):
             index = 0
             continue
 
+        # Handle STBR block - Start Branch - these are handled by just removing the block
+        elif block == "STBR":
+            # if the next instruction is a checking instruction, add a bracket
+            if new_rung[index+1].find("XIC") != -1 or new_rung[index+1].find("XIO") != -1:
+                new_rung[index+1] = "[" + new_rung[index+1]
+            new_rung.pop(index) # Remove the block
+
+
+        # Handle NWBR block - New Branch - these are handled by just removing the block
+        elif block == "NWBR":
+            # print(new_rung[index+2])
+            # If the following instruction does not have an ORLD, add a comma
+            if new_rung[index+2] != "ORLD":
+                new_rung[index+1] = "," + new_rung[index+1]
+            new_rung.pop(index) # Remove the block
+
 
         # If end of rung, without any ORLD or ANDLD, combine the remaining blocks
         if index == len(new_rung) - 1:
@@ -443,6 +498,10 @@ def assembleBlocks(rung: Rung):
         
         # Increment index
         index += 1
+
+    # Add the closing brackets for the TR branches at the end of the rung
+    for i in range(NUM_BRANCHES):
+        new_rung[0] += "]"
     rung.addConvertedLogic(new_rung[0])
     return rung
 
@@ -450,13 +509,71 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
     # This function converts an instruction from Omron to AB
     # print(line)
     ONS_instr = False
+    NEEDS_DN_BIT = False
+
+    instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
 
     if line[0] == "@":
         ONS_instr = True
         line = line[1:]
+    # If it's a timer or counter tag, add the .DN bit
+    elif param != None and (param.find("TIM") != -1 or param.find("CNT") != -1): 
+        NEEDS_DN_BIT = True
+    # If it's a timer instruction, add TIM to the tag
+    elif line.find("TIM ") != -1: 
+        param = "TIM" + param
+    # If it's a counter instruction, add CNT to the tag
+    elif line.find("CNT ") != -1: 
+        param = "CNT" + param
 
-    instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
-    # print(param)
+    # If it's a scaling instruction, extract internal parameters
+    elif instr_type.upper() == "SCALING":
+        # Create additional required parameters (P1, P2, P3, P4) for scaling
+        try: 
+            # print(param2)
+            p_base = int(param2.split("DM")[1])
+            p_prefix = param2.split("DM")[0] + "DM"
+            # print(p_base, p_prefix)
+            p1 = param2
+            p2 = p_prefix + str(p_base + 1)
+            p3 = p_prefix + str(p_base + 2)
+            p4 = p_prefix + str(p_base + 3)
+        except:
+            p1 = p2 = p3 = p4 = param2
+        # print("Scaling values: " + p1, p2, p3, p4)
+
+    # If it's a PID instruction, extract internal parameters
+    elif instr_type.upper() == "PID":
+        # Create additional required parameters (P, I, D, Sampling) for PID
+        try: 
+            # print(param2)
+            p_base = int(param2.split("DM")[1])
+            p_prefix = param2.split("DM")[0] + "DM"
+            # print(p_base, p_prefix)
+            SP = param2
+            KP = p_prefix + str(p_base + 1)
+            KI = p_prefix + str(p_base + 2)
+            KD = p_prefix + str(p_base + 3)
+            SampRate = p_prefix + str(p_base + 4)
+        except:
+            SP = KP = KI = KD = SampRate = param2
+        # print("PID values: " + SP, KP, KI, KD, SampRate)
+    
+    # If it's a MOVB instruction, break up designation word into two destination bits
+    elif instr_type.upper() == "BTD":
+        # Ensure that the destination bit is in the correct format: 4 numbers with leading zeros if needed
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param2 = param2.replace("#", "")
+        # Make sure param2 has 4 digits
+        while len(param2) < 4:
+            param2 = "0" + param2
+        # print(param2)
+        dest_bit = str(int(param2[0:2]))
+        source_bit = str(int(param2[2:4]))
+        # print(source_bit, dest_bit)
+
+
+    # Convert the tagname
     if param != None:
         param = convertTagname(param, tagfile)
     if param2 != None:
@@ -464,7 +581,13 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
     if param3 != None:
         param3 = convertTagname(param3, tagfile)
 
+    # Check to add .DN bit
+    if NEEDS_DN_BIT:
+        param = param + ".DN"
+
     if conv_instr == None or param == None:
+        # If instruction has code (xx), remove it using regex
+        instr = instr.split("(")[0]
         # Check what type of instruction it is, and just created it with the original instruction
         if param == None:
             converted_instruction = instr
@@ -474,16 +597,30 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
             converted_instruction = instr + "(" + param + "," + param2 + ")"
         else:
             converted_instruction = instr + "(" + param + ")"
-        catchErrors["count"] += 1
-        catchErrors["list"].append(line)
-        catchErrors["error"] = True
+        if not (instr == "STBR" or instr == "NWBR"):
+            catchErrors["count"] += 1
+            catchErrors["list"].append(line)
+            catchErrors["error"] = True
+
     # For logical instructions with 2 parameters like MOVE
     elif instr_type.upper() == "LOGICAL": 
         if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
             param = param.replace("#", "")
-        else:
-            param = param
         converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
+    # For word copy instructions like XFER (->COP)
+    elif instr_type.upper() == "COPY":
+        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "")
+            # Omron arguments are Length, Source, Destination
+            # AB arguments are Source, Destination, Length
+            converted_instruction = conv_instr + "(" + param2 + "," + param3 + "," + param + ")"
+    
+    # For BTD instructions like MOVB
+    elif instr_type.upper() == "BTD":
+        # Omron arguments are Source, Bit Designation, Destination
+        # AB arguments are Source, Source Bit, Destination, Destination Bit, Length
+        converted_instruction = conv_instr + "(" + param + "," + source_bit + "," + param3 + "," + dest_bit + "," + "1" + ")"
+
     # For output intsructions like OUT, SET, RSET
     elif instr_type.upper() == "OUTPUT": 
         converted_instruction = conv_instr + "(" + param + ")"
@@ -494,8 +631,25 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
         else: param = param
         if param2.find("#") != -1: param2 = param2.replace("#", "")
         else: param2 = param2
-
         converted_instruction = conv_instr + "(" + param + "," + param2 + "," + param3 + ")"
+
+    # For scaling instructions like SCL, needs to be handled specially
+    elif instr_type.upper() == "SCALING":
+
+        # Parameters calculated higher up, before tagname conversion
+        # Converted equation is: Result = P3 - (P3 - P1) / (P4 - P2) * (P4 - Input)
+        converted_instruction = f"{conv_instr}({param3},{p3}-({p3}-{p1})/({p4}-{p2})*({p4}-{param}))"
+        # print(converted_instruction)
+
+    # For PID instructions like PID, needs to be handled specially
+    elif instr_type.upper() == "PID":
+
+        # Parameters calculated higher up, before tagname conversion
+        # Order of arguments for Omron is Process Variable, Constants (incl. P, I, D, Sampling Period), Control Variable
+        # Order of arguments for AB is PID, Process Variable, Tieback(0), Control Variable, Inhold bit (0), Inhold value (0)
+        converted_instruction = f"{conv_instr}({param}_PID, {param}, 0, {param3}, 0, 0)"
+        # print(converted_instruction)
+
     elif instr_type.upper() == "ONESHOT":
         converted_instruction = conv_instr + "(" + param + "_storage" + "," + param + ")"
     elif instr_type.upper() == "TIMER":
@@ -524,9 +678,23 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
         # print("Keep instruction")
         # print(line)
         converted_instruction = conv_instr + "(" + param + ")"
+
     else:
-        # print("Other Instruction: ", instr, param)
-        converted_instruction = conv_instr + "(" + param + ")"
+        # If instruction has code (xx), remove it using regex
+        conv_instr = conv_instr.split("(")[0]
+        
+        # Remove any odd characters from parameter
+        param = param.replace("#", "")
+
+        # Build instruction based on which parameters are available
+        converted_instruction = conv_instr + "("
+        if param != None:
+            converted_instruction += param
+        if param2 != None:
+            converted_instruction += "," + param2
+        if param3 != None:
+            converted_instruction += "," + param3
+        converted_instruction += ")"
 
     if ONS_instr and param != None:
         converted_instruction = "ONS" + "(" + param2 + "_ONS" + ")" + converted_instruction
@@ -560,8 +728,13 @@ def convertTagname(address: str, tagfile: pd.DataFrame):
     # If it does, it returns the converted tagname
     # If it doesn't, it returns the original tagname
     # print(address)
-    # print(tagfile.head())
+    INDIRECT_ADDRESS = False
     
+    # If it's an indirect address, so flag it to be put in the global array
+    if address.find("*") != -1:
+        address = address.replace("*", "")
+        INDIRECT_ADDRESS = True
+
     # if it's a hardcoded value (e.g. #10), return the value as is
     if address.find("#") != -1:
         return address
@@ -581,10 +754,13 @@ def convertTagname(address: str, tagfile: pd.DataFrame):
             converted_tagname = address
         else:
             converted_tagname = query["tagname"].to_string(index=False)
-        # except:
-        #     converted_tagname = address
+        
+        # Add converted tagname to the global array if needed
+        if INDIRECT_ADDRESS:
+            converted_tagname = "Global_Array[" + converted_tagname + "]" 
+            INDIRECT_ADDRESS = False
 
-        print(converted_tagname)
+        # print(converted_tagname)
         return converted_tagname
     
 def checkMultipleOutputs(rung):

@@ -1,5 +1,13 @@
-# Lookup conversion fOR Omron to AB
+# Component files
+header = "header.xml"
+datatypes = "datatypes.xml"
+aoi = "AOIs.xml"
+tags = "tags.xml"
+routine_header = "routine-header.xml"
+footer = "footer.xml"
+tagcsv = "tag.csv"
 
+# Lookup conversion fOR Omron to AB
 lookup = {
     # Comments
     "'": "Comment",
@@ -15,6 +23,9 @@ lookup = {
     # Input OR Instructions
     "OR": ["OR", "XIC"],
     "ORNOT": ["OR", "XIO"],
+    # Branching Instructions
+    # "STBR": ["BRANCH", "STBR"],
+    # "NWBR": ["BRANCH", "NWBR"],
 
     # Output Instructions
     "OUT": ["OUTPUT", "OTE"],
@@ -51,22 +62,32 @@ lookup = {
     "SUB(31)": ["math", "SUB"],
     "MUL(32)": ["math", "MUL"],
     "DIV(33)": ["math", "DIV"],
-    "SCL(64)" : ["math", ""],
+    # Binary Math
+    "ADB(50)": ["math", "ADD"],
+    "SBB(51)": ["math", "SUB"],
+    "MLB(52)": ["math", "MUL"],
+    "DVB(53)": ["math", "DIV"],
+    
+    "SCL(64)": ["scaling", "CPT"],
+
+    # PID Instructions
+    "PID(60)": ["pid", "PID"],
 
     # Logical Instructions
     "MOV(21)": ["logical", "MOV"],
-    "BIN(23)": ["logical", ""], # BCD to Binary
-    "BCD(24)": ["logical", ""], # Binary to BCD
-    
-    "CLC(41)": ["other", ""],
+    "XFER(70)": ["copy", "COP"],
+    "MOVB(82)": ["btd", "BTD"],
+
+    # Other Instructions - No 1:1 conversion
+    # "CLC(41)": ["other", "CLC"],
+    # "BIN(23)": ["other", "BIN"], # Binary to BCD
+    # "BCD(24)": ["other", "BCD"], # BCD to Binary
+    # "ADB(50)": ["other", "ADB"],
+    # "SCL(64)": ["other", "SCL"],
 
     # PID Instructions
-    "PID(60)": ["pid", ""],
+    # "PID(60)": ["pid", "PID"],
 
     # End of rung
     "^^^": ";\n",
-    
-    # Unknown Instructions
-    "XFER": ["unknown", ""],
-    "ADB": ["unknown", ""],
 }

@@ -2,6 +2,7 @@ import os
 import pandas as pd
 
 import components as cmp
+import lookup as lk
 
 import xml.etree.ElementTree as ET
 
@@ -11,14 +12,13 @@ filename = "test.L5X"
 
 # Set directories
 dir = os.getcwd()
-ref_dir = os.path.join(dir, "Reference")
+ref_dir = os.path.join(dir, "ref")
 output_dir = os.path.join(dir, "output")
 input_dir = os.path.join(dir, "input")
 
-def createFile(name="code", filetype="txt"):
+def createFile(filename="code.txt"):
     # Set output dir
     os.chdir(output_dir)
-    filename = name + "." + filetype
 
     # Test open and write a file
     # Delete and then open a file for writing
@@ -76,12 +76,28 @@ def prepareFile(logic_file: pd.DataFrame):
 
 
 # To be completed
-def addContext(file, phase):
-    pass
+def addContext(file):
+    # Change to Reference folder
+    os.chdir(ref_dir)
+
+    # Write file header
+    f = open(lk.header, "r")
+    text = f.read()
+    file.write(text)
+    file.write(n)
+
+    return file
 
 # To be completed
 def addFooter(file):
-    pass
+    # Write footer
+    os.chdir(ref_dir)
+
+    f = open(lk.footer, "r")
+    file.write(f.read())
+    file.write(n)
+
+    return file
 
 # Specific routine logic
 def addRung(file, r_num, logic, comment=None):
@@ -102,7 +118,6 @@ def addRung(file, r_num, logic, comment=None):
     r_num += 1
 
     return file, r_num
-
 
 # Testing - Functions
 # wb = openFile()

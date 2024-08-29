@@ -18,7 +18,7 @@ def getDirectories(curDir):
     output_dir = os.path.join(curDir, "Output")
     return curDir, input_dir, output_dir, ref_dir
 
-def createfile(name="test", filetype="txt"):
+def createfile(name="test", filetype="CSV"):
     # Set output dir
     os.chdir(output_dir)
     filename = name + "." + filetype
@@ -31,7 +31,7 @@ def createfile(name="test", filetype="txt"):
     file = open(filename,"w") 
     return file
 
-def createTagFile(name="tags", filetype="txt", output_dir=""):
+def createTagFile(name="tags", filetype="CSV", output_dir=""):
 
     # Set output dirt
     if output_dir == "": output_dir = os.getcwd()
@@ -61,17 +61,24 @@ def addTag(tag, desc, type, file):
     # desc = desc.replace("_","")
     # type = type.replace("_","")
     
-    text = rt.new_tag.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+    if type == "REAL":
+        text = rt.new_tag_float.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+    elif type == "TIMER":
+        text = rt.new_tag_timer.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+    elif type == "COUNTER":
+        text = rt.new_tag_counter.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+    else:
+        text = rt.new_tag.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
     
     file.write(text)
     file.write(n)
 
     return file
 
-def createExcel(tagList:list, file, output_filename, output_dir):
+def createExcel(tagList:list, file, output_filename, output_dir, filetype="CSV"):
     # Set output dir
     os.chdir(output_dir)
-    filename = output_filename + ".csv"
+    filename = output_filename + "." + filetype
 
     # Test open and write a file
     # Delete and then open a file for writing 
@@ -90,3 +97,8 @@ def createExcel(tagList:list, file, output_filename, output_dir):
     tagList.to_csv(filename, index=False)
 
     return 
+
+def getSystemName(filename:str):
+    # Gets System Name from file name
+    system_name = filename.split("_")[-1].split(".")[0]
+    return system_name

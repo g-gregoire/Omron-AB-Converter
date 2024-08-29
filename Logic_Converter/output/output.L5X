@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R01_IDH_Main" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="Grantek" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R01_IDH_Main" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA['  SWECO 7/40 MESH SELECTION]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[XIC(STER_LEVEL_BALANCE_TK_ALARM)[OSR(IDH_ADDR_500_10_storage,IDH_ADDR_500_10),XIC(IDH_ADDR_500_10)OTU(STER_LEVEL_BALANCE_TK_ALARM)],XIC(IDH_ADDR_501_00)[[[[[[[[[[XIO(T032_TMR.DN),TON(T029_TMR,900000,0)],XIC(T029_TMR.DN)TON(T033_TMR,900000,0)],TON(T034_TMR,910000,0)],XIO(T033_TMR.DN)OTU(BUTTERFLY_4_NC_TO)],XIC(T034_TMR.DN)OTU(BUTTERFLY_1_NC_TO)],XIC(T033_TMR.DN)XIO(T032_TMR.DN)OTL(BUTTERFLY_4_NC_TO)],TON(T032_TMR,10000,0)],XIC(T029_TMR.DN)XIO(T034_TMR.DN)OTL(BUTTERFLY_1_NC_TO)],OTU(IDH_ADDR_39_10)];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+
