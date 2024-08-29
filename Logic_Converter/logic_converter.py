@@ -482,7 +482,7 @@ def assembleBlocks(rung: Rung):
         elif block == "NWBR":
             # print(new_rung[index+2])
             # If the following instruction does not have an ORLD, add a comma
-            if new_rung[index+2] != "ORLD":
+            if index + 2 < len(new_rung) and new_rung[index+2] != "ORLD":
                 new_rung[index+1] = "," + new_rung[index+1]
             new_rung.pop(index) # Remove the block
 

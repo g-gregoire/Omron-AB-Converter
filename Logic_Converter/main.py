@@ -5,8 +5,8 @@ import main_functions as mf
 
 import traceback
 
-input_file = "basic_rungs1.txt"
-# input_file = "Dryer_no_symbols.txt"
+# input_file = "basic_rungs1.txt"
+input_file = "Dryer_no_symbols.txt"
 # input_file = "Sterilizer_Section1.txt"
 
 tag_filename = "tag_lookup.csv"
@@ -14,7 +14,7 @@ tag_filename = "tag_lookup.csv"
 output_filename = "output.L5X"
 
 CONVERT = True # Perform conversion
-VIEW_RUNGS = True # View the rungs as they are converted
+VIEW_RUNGS = False # View the rungs as they are converted
 COUNT_INSTR = False # Count the number & type of instructions in the file
 PRINT_ERRORS = True # Print errors of failed conversions
 
