@@ -4,12 +4,12 @@ import logic_converter as lc
 
 import traceback
 
-def runConversion(input_file, tag_filename, output_filename="logic.txt", CONVERT=False, VIEW_RUNGS=False, COUNT_INSTR=False, PRINT_ERRORS=False):
+def runConversion(input_filename, tag_filename, output_filename="logic.txt", CONVERT=False, VIEW_RUNGS=False, COUNT_INSTR=False, PRINT_ERRORS=False):
 
     # Open input file & create output file
-    logic_wb = ff.openFile(input_file)
+    logic_wb = ff.openFile(input_filename)
     logic_wb = ff.prepareFile(logic_wb) # Remove everything except the Mnemonic section
-    output_file = ff.createFile(output_filename)
+    output_file = ff.createFile(output_filename, input_filename)
     tag_file = ff.openFile(tag_filename)
     output_file = ff.addContext(output_file)
 
@@ -20,7 +20,7 @@ def runConversion(input_file, tag_filename, output_filename="logic.txt", CONVERT
     
     # Add specific logic chunks
     if COUNT_INSTR:
-        lc.countInstructions(file)
+        lc.countInstructions(logic_wb)
 
     if CONVERT:
         # Convert the rungs to ladder logic

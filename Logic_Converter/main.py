@@ -5,9 +5,9 @@ import main_functions as mf
 
 import traceback
 
-# input_file = "basic_rungs1.txt"
-input_file = "Dryer_no_symbols.txt"
-# input_file = "Sterilizer_Section1.txt"
+input_filename = "Dryer_no_symbols.txt"
+# input_filename = "Sterilizer_no_symbols.txt"
+# input_filename = "basic_rungs1.txt"
 
 tag_filename = "tag_lookup.csv"
 
@@ -20,6 +20,6 @@ PRINT_ERRORS = True # Print errors of failed conversions
 
 catchErrors = None
 
-mf.runConversion(input_file, tag_filename, output_filename=output_filename, CONVERT=CONVERT, VIEW_RUNGS=VIEW_RUNGS, COUNT_INSTR=COUNT_INSTR, PRINT_ERRORS=[PRINT_ERRORS])
+mf.runConversion(input_filename, tag_filename, output_filename=output_filename, CONVERT=CONVERT, VIEW_RUNGS=VIEW_RUNGS, COUNT_INSTR=COUNT_INSTR, PRINT_ERRORS=[PRINT_ERRORS])
 
 # Testing - Functions

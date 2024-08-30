@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R01_IDH_Main" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="Grantek" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R01_IDH_Main" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(LSH1)XIC(P_1min)XIO(COUNTER_STOP)[XIC(SCADA_RESET_P_B),XIO(LSH1)]ONS(CNT061_PV_ONS)CTU(CNT061_PV,0020,0)[RES(CNT061_PV),OTU(COUNTER_STOP)];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+

@@ -117,26 +117,6 @@ def blockBreaker(rung: str, catchErrors: dict):
         except:
             after_next_line = after_next_instr = after_next_param = after_next_instr_type = after_next_conv_instr = None
 
-        # If parameter matches pattern TRx where x is a number, using regex
-        if param != None and re.match(r"TR\d", param):
-            # print("TR Block")
-            if instr == "OUT":
-                if len(block.logic) > 0:
-                    outputRung.addBlock(block) # Add the old block to the rung
-                block = Block() 
-                block.addLine("STBR") # This is used to artifically add an Start Branch (STBR) block
-                outputRung.addBlock(block)
-                block = Block()
-                continue
-            elif instr == "LD":
-                if len(block.logic) > 0:
-                    outputRung.addBlock(block) # Add the old block to the rung
-                block = Block() 
-                block.addLine("NWBR") # This is used to artifically add an Start Branch (NWBR) block
-                outputRung.addBlock(block)
-                block = Block()
-                continue
-
         # If next block is a counter, create a new block since this involves a CTU instruction and a Reset instruction
         if next_line and next_instr_type.upper() == "COUNTER":
             # print("Counter is next")
@@ -156,7 +136,8 @@ def blockBreaker(rung: str, catchErrors: dict):
         if instr_type.upper() == "COUNTER":
             # print("Counter")
             line = line.replace("CNT", "RESET")
-            # print(line)
+            line = line.replace(param, "CNT"+param)
+            # print(line, param)
         
         if instr_type.upper() == "COMPARE":
             # print("Compare")
@@ -214,6 +195,31 @@ def blockBreaker(rung: str, catchErrors: dict):
                     # Pop next line
                     rung.pop(index+1)
 
+        # If parameter matches pattern TRx where x is a number, using regex
+        if param != None and re.match(r"TR\d", param):
+            # print("TR Block")
+            outputRung.has_TR_blocks = True
+            TR_NUM = param[-1]
+            # print(TR_NUM)
+            if instr == "OUT":
+                if len(block.logic) > 0:
+                    outputRung.addBlock(block) # Add the old block to the rung
+                block = Block() 
+                block.addLine("STBR-"+TR_NUM) # This is used to artifically add an Start Branch (STBR) block
+                outputRung.addBlock(block)
+                block = Block()
+                continue
+            elif instr == "LD":
+                if len(block.logic) > 0:
+                    outputRung.addBlock(block) # Add the old block to the rung
+                block = Block() 
+                block.addLine("NWBR-"+TR_NUM) # This is used to artifically add an Start Branch (NWBR) block
+                outputRung.addBlock(block)
+                block = Block()
+                continue
+            # continue
+
+
         if instr == "LD" or instr == "LDNOT":
             if not startRung:
                 # print("Start Rung")
@@ -251,6 +257,8 @@ def blockBreaker(rung: str, catchErrors: dict):
 
         # Keep instruction - needs to be broken up into OTL and OTU
         elif instr_type.upper() == "KEEP":
+            if len(block.logic) > 0:
+                outputRung.addBlock(block) # Add the old block to the rung
             # print("keep")
             insert_index = findLastLD(outputRung)
             if insert_index != -1:
@@ -429,10 +437,126 @@ def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame):
 
 def assembleBlocks(rung: Rung):
     # This function assembles the blocks into a rung
-    new_rung = rung.converted_blocks.copy()
+    blocks = rung.converted_blocks.copy()
+    # NUM_BRANCHES = 0 # Used to handle TR branch closing
+
+    # If there are any TR branches and break them up
+    if rung.has_TR_blocks:
+        rung = TRBreaker(blocks, rung)
+        # pprint(rung.TR_blocks)
+        
+        # In reverse order, convert the TR blocks
+        converted_TR_blocks = ""
+        for index, TR_block in enumerate(reversed(rung.TR_blocks)):
+            # print(rung.TR_blocks[TR_block])
+            sub_logic_holder = []
+            logic_holder = []
+            if len(rung.TR_blocks[TR_block]) > 1:
+                # Group up sub blocks
+                for index, block in enumerate(rung.TR_blocks[TR_block]):
+                    logic = subBlockAssembler(block)
+                    sub_logic_holder.append(logic)
+                    if index > 0:
+                        sub_logic_holder.append("ORLD")
+                # Add remaining blocks together now
+                logic_holder = subBlockAssembler(sub_logic_holder)
+                # print(logic_holder)
+
+                # Now replace this back into the next TR block
+                if TR_block > 0:
+                    # find index of TR block flag
+                    # print("check: ", rung.TR_blocks[TR_block-1])
+                    check_flag = "TR"+str(TR_block)
+                    # print(check_flag)
+                    try:
+                        TR_index = rung.TR_blocks[TR_block-1].index([check_flag])
+                    except:
+                        TR_index = 0
+                    
+                    # Replace flag with grouped logic
+                    # print("pre-holder", logic_holder, rung.TR_blocks[TR_block-1][TR_index-1][-1])
+                    if rung.TR_blocks[TR_block-1][TR_index-1][-1] == "ANDLD":
+                        rung.TR_blocks[TR_block-1][TR_index-1].append(logic_holder)
+                    else:
+                        rung.TR_blocks[TR_block-1][TR_index-1][-1] += logic_holder
+                    # Remove flag
+                    rung.TR_blocks[TR_block-1].pop(TR_index)
+                    # print(rung.TR_blocks[TR_block-1][0])
+                    # try:
+                    #     return rung.TR_blocks[index+1].index(value)
+                    # except ValueError:
+                    #     return -1  # Value not found
+            else:
+                # On the final (first) TR block, convert the logic set new_rung
+                if TR_block == 0:
+                    new_rung = subBlockAssembler(rung.TR_blocks[TR_block][0])
+                    # print("final: ", new_rung)
+                else:
+                    new_rung = subBlockAssembler(rung.TR_blocks[TR_block][0])
+    else:
+        # If there are no TR branches, convert the blocks normally
+        new_rung = subBlockAssembler(blocks)
+        # print(new_rung)
+    
+    rung.addConvertedLogic(new_rung)
+    return rung
+
+# Not working - currently used
+def TRBreaker(blocks, rung: Rung):
+    # This function breaks up the TR branches in the rung
+    TR_flag = 0
+    temp_array = []
+    for index, block in enumerate(blocks):
+        # print(block)
+        if block.find("STBR") != -1:
+            # Add to TR Blocks
+            temp_flag = int(block.split("-")[1])+1
+            # print(TR_flag, temp_flag)
+            if temp_flag > TR_flag:
+                # print("Inception block")
+                if TR_flag in rung.TR_blocks: 
+                    rung.TR_blocks[TR_flag].append(temp_array)
+                    rung.TR_blocks[TR_flag].append(["TR"+str(temp_flag)])
+                else: 
+                    rung.TR_blocks[TR_flag] = [temp_array]
+                    rung.TR_blocks[TR_flag].append(["TR"+str(temp_flag)])
+            else:
+                if TR_flag in rung.TR_blocks: rung.TR_blocks[TR_flag].append(temp_array)
+                else: rung.TR_blocks[TR_flag] = [temp_array]
+            temp_array = [] # Reset temp_array
+
+            TR_flag = int(block.split("-")[1])+1
+        
+        elif block.find("NWBR") != -1:
+            # Add to TR Blocks
+            if len(temp_array) > 0:
+                if TR_flag in rung.TR_blocks: rung.TR_blocks[TR_flag].append(temp_array)
+                else: rung.TR_blocks[TR_flag] = [temp_array]
+                # rung.TR_blocks[TR_flag].append(["ORLD"]) # Add an ORLD block
+                temp_array = [] # Reset temp_array
+
+                TR_flag = int(block.split("-")[1])+1
+            else: continue
+
+        else:
+            # Add to TR Blocks
+            if len(block) > 0:
+                temp_array.append(block)
+
+            # If last block in the array, add to TR Blocks
+            if index == len(blocks) - 1:
+                if len(temp_array) > 0:
+                    if TR_flag in rung.TR_blocks: rung.TR_blocks[TR_flag].append(temp_array)
+                    else: rung.TR_blocks[TR_flag] = [temp_array]
+                else: continue
+        # print(rung.TR_blocks)
+        
+    return rung
+
+def subBlockAssembler(new_rung: Rung):
+    # Used as a sub-function to assemble the blocks
     new_block = ""
     index = 0
-    NUM_BRANCHES = 0 # Used to handle TR branch closing
 
     while len(new_rung) > 1:
         block = new_rung[index]
@@ -443,67 +567,67 @@ def assembleBlocks(rung: Rung):
         
         # Handle ORLD block
         if block == "ORLD":
+            # print(1)
             # print(index, block)
             # print(index-1, new_rung[index-1])
             # print(index-2, new_rung[index-2])
 
-            new_block = "[" + new_rung[index-2] + "," + new_rung[index-1] + "]"
-            new_rung[index-2] = new_block # Replace the first block with the new block
-            new_rung.pop(index-1) # Remove the third block
-            new_rung.pop(index-1) # Remove the second block
-            # print(new_rung)
-            # Reset index
-            index = 0
-            continue
+            if len(new_rung) > 2:
+                if index >= 2:
+                    # print("ORLD Statement: ", new_rung)
+                    # print(new_rung[index], new_rung[index-1], new_rung[index-2])
+                    new_block = "[" + new_rung[index-2] + "," + new_rung[index-1] + "]"
+                    new_rung[index-2] = new_block # Replace the first block with the new block
+                    new_rung.pop(index-1) # Remove the third block
+                    new_rung.pop(index-1) # Remove the second block
+                else:
+                    new_rung.pop(index)
+                # print(new_block)
+                # Reset index
+                index = 0
+                continue
+            else:
+                new_rung.pop(index) # Remove the ORLD block
+                continue
+
         
         # Handle ANDLD block
         elif block == "ANDLD":
+            # print(2)
             # print(index, block)
             # print(index-1, new_rung[index-1])
             # print(index-2, new_rung[index-2])
-            new_block = new_rung[index-2] + new_rung[index-1]
-            new_rung[index-2] = new_block # Replace the first block with the new block
-            new_rung.pop(index-1) # Remove the second block
-            new_rung.pop(index-1) # Remove the third block
-            # print(new_rung)
-            # Reset index and continue
-            index = 0
-            continue
-
-        # Handle STBR block - Start Branch - these are handled by just removing the block
-        elif block == "STBR":
-            # if the next instruction is a checking instruction, add a bracket
-            if new_rung[index+1].find("XIC") != -1 or new_rung[index+1].find("XIO") != -1:
-                new_rung[index+1] = "[" + new_rung[index+1]
-            new_rung.pop(index) # Remove the block
-
-
-        # Handle NWBR block - New Branch - these are handled by just removing the block
-        elif block == "NWBR":
-            # print(new_rung[index+2])
-            # If the following instruction does not have an ORLD, add a comma
-            if index + 2 < len(new_rung) and new_rung[index+2] != "ORLD":
-                new_rung[index+1] = "," + new_rung[index+1]
-            new_rung.pop(index) # Remove the block
-
+            if len(new_rung) > 2:
+                if index >= 2:
+            
+                    new_block = new_rung[index-2] + new_rung[index-1]
+                    new_rung[index-2] = new_block # Replace the first block with the new block
+                    new_rung.pop(index-1) # Remove the second block
+                    new_rung.pop(index-1) # Remove the third block
+                else:
+                    new_rung.pop(index)
+                # print(new_rung)
+                # Reset index and continue
+                index = 0
+                continue
+            else:
+                new_rung.pop(index) # Remove the ANDLD block
+                continue
 
         # If end of rung, without any ORLD or ANDLD, combine the remaining blocks
         if index == len(new_rung) - 1:
+            # print(3)
             new_block = ""
             index = 0
             while len(new_rung) > 1:
                 new_rung[index] = new_rung[index] + new_rung[index+1]
                 new_rung.pop(index+1)
-            # print(new_block)
         
+        # print("End Block :", new_rung)
         # Increment index
         index += 1
-
-    # Add the closing brackets for the TR branches at the end of the rung
-    for i in range(NUM_BRANCHES):
-        new_rung[0] += "]"
-    rung.addConvertedLogic(new_rung[0])
-    return rung
+    
+    return new_rung[0]
 
 def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
     # This function converts an instruction from Omron to AB
@@ -517,7 +641,7 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
         ONS_instr = True
         line = line[1:]
     # If it's a timer or counter tag, add the .DN bit
-    elif param != None and (param.find("TIM") != -1 or param.find("CNT") != -1): 
+    elif param != None and instr.upper() != "RESET" and (param.find("TIM") != -1 or param.find("CNT") != -1): 
         NEEDS_DN_BIT = True
     # If it's a timer instruction, add TIM to the tag
     elif line.find("TIM ") != -1: 
@@ -597,7 +721,7 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
             converted_instruction = instr + "(" + param + "," + param2 + ")"
         else:
             converted_instruction = instr + "(" + param + ")"
-        if not (instr == "STBR" or instr == "NWBR"):
+        if not (instr.find("STBR") != -1 or instr.find("NWBR") != -1):
             catchErrors["count"] += 1
             catchErrors["list"].append(line)
             catchErrors["error"] = True
@@ -802,11 +926,13 @@ def findLastLD(rung: Rung):
     # This function finds the last LD index in a block
     return_index = -1
     for index, block in enumerate(rung.blocks):
+        # print(block)
         for line in block.logic:
             instr, param, instr_type, conv_instr,_,_ = extractLine(line)
+            # print(instr)
             if instr == "LD" or instr == "LDNOT":
                 return_index = index
-    # print(return_index)
+    print(return_index)
     return return_index
 
 

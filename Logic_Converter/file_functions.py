@@ -16,7 +16,7 @@ ref_dir = os.path.join(dir, "ref")
 output_dir = os.path.join(dir, "output")
 input_dir = os.path.join(dir, "input")
 
-def createFile(filename="code.txt"):
+def createFile(filename="code.txt", input_filename="system.txt"):
     # Set output dir
     os.chdir(output_dir)
 
@@ -24,6 +24,9 @@ def createFile(filename="code.txt"):
     # Delete and then open a file for writing
     try: os.remove(filename)
     except: pass
+
+    systemName = getSystemName(input_filename)
+    filename = systemName + "_" + filename
     
     file = open(filename,"w") 
     return file
@@ -119,7 +122,12 @@ def addRung(file, r_num, logic, comment=None):
 
     return file, r_num
 
-# Testing - Functions
+def getSystemName(filename:str):
+    # Gets System Name from file name
+    system_name = filename.split("_")[0].split(".")[0]
+    return system_name
+
+#%% Testing - Functions
 # wb = openFile()
 # # print(wb.head())
 # for rowindex, row in wb.iterrows():

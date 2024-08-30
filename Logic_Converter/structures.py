@@ -51,6 +51,8 @@ class Rung:
         else: self.comment = comment
         self.converted_blocks = []
         self.converted_logic = ""
+        self.has_TR_blocks = False
+        self.TR_blocks = {}
 
     def __str__(self) -> str:
         return f"{self.blocks} {self.connectors}"
