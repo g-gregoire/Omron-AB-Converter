@@ -6,18 +6,18 @@ import pprint as pp
 
 import file_functions as f
   
-def parseList(filename="", input_dir=""):
+def parseList(filename="", input_dir="", CONVERT_SCADA=False):
 
     if filename == "":
         filename = "PLC_Tags_IDH.xlsx" #use if nothing given by main file
 
     system_name = f.getSystemName(filename)
     
-    # Set input dirt
+    # Set input dir
     if input_dir == "": input_dir = os.getcwd()
     os.chdir(input_dir)
     file = os.path.join(input_dir, filename)
-    
+        
     # To open Workbook 
     # List of Symbols with either Tagnames or Descriptions
     global_symbols = pd.read_excel(file, sheet_name = 1)
@@ -32,7 +32,6 @@ def parseList(filename="", input_dir=""):
     # List of all tags used in SCADA
     scada_taglist = pd.read_excel(file, sheet_name = 6)
     scada_taglist = scada_taglist.fillna('')
-
     # print(scada_taglist.head())
     
     taglist = []

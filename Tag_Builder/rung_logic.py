@@ -2,6 +2,11 @@ import file_functions as f
 import logic_snippets as lgc
 import routine_components as rt
 
+import os
+import pandas as pd
+import parse as p
+
+
 def createFile(phase, tagfile, output_filename=None, output_ext="txt", phasetag_only = False):
 
     file = f.createfile(output_filename, output_ext)
@@ -20,3 +25,64 @@ def createTags(tagList, tagFile, output_filename=None, output_ext="txt"):
     tagFile.close()
 
     return tagFile
+
+def createSCADAoutput(input_filename, scada_filename, input_dir="", output_dir=""): 
+
+    # Set input dir
+    if input_dir == "": input_dir = os.getcwd()
+    os.chdir(input_dir)
+    file = os.path.join(input_dir, scada_filename)
+
+    # Get system name
+    system_name = f.getSystemName(input_filename)
+    
+    # Create SCADA output file
+    scada_output_name = "SCADA_Tags_" + system_name
+    scada_output_file = f.createfile(scada_output_name, "csv")
+
+    # Read SCADA input file
+    if system_name == "IDH":
+        scada_taglist = pd.read_excel(file, sheet_name = 1)
+    elif system_name == "Sterilizer":
+        scada_taglist = pd.read_excel(file, sheet_name = 3)
+    else:
+        scada_taglist = pd.read_excel(file, sheet_name = 0)
+    scada_taglist = scada_taglist.fillna('')
+    print(scada_taglist.head())
+
+    # Change to output Dir and Read lookup file
+    lookup_filename = system_name + "_tag_lookup.CSV"
+    if output_dir == "": os.chdir(output_dir)
+    tag_lookup = pd.read_csv(lookup_filename)
+    tag_lookup = tag_lookup.fillna('')
+    print(tag_lookup.head())
+
+    # Loop through SCADA input file and write to SCADA output file
+    for index, row in scada_taglist.iterrows():
+        # print(row)
+        # scada_output_file.write(row['Tag Name'] + "," + row['Description'] + "\n")
+        address = row['Clean_Address']
+        print(address)
+
+        # Convert to PLC Address and then lookup new address
+        plc_address = p.scadaToPlcAddress(address)
+        print(plc_address)
+
+        # Lookup new address in tag_lookup
+        query = tag_lookup.loc[tag_lookup['address'] == plc_address]
+        if not query.empty:
+            tag = query["tagname"].to_string(index=False)
+            print(tag)
+
+        # Write tagname to New_Addres column
+        scada_taglist.at[index, 'New_Address'] = tag
+
+        # break
+    
+    # Save the new SCADA taglist
+    print(scada_taglist.head())
+    scada_taglist.to_csv(scada_output_file, index=False)
+
+    
+
+    return 0

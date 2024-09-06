@@ -11,11 +11,13 @@ import parse
 # CONSTANTS FOR FUNCTIONALITY
 CREATE_TAGS = True
 CREATE_EXCEL = True
+CONVERT_SCADA_TAGS = True
 
-# input_filename = "PLC_Tags_IDH.xlsx"
-input_filename = "PLC_Tags_Sterilizer.xlsx"
+input_filename = "PLC_Tags_IDH.xlsx"
+# input_filename = "PLC_Tags_Sterilizer.xlsx"
 output_filename = "tag_import"
 tag_filename = "tag_lookup"
+scada_input_filename = "SCADA_Tags.xlsx"
 
 dir = os.getcwd()
 base_dir, input_dir, output_dir, ref_dir = f.getDirectories(dir)
@@ -33,6 +35,10 @@ if CREATE_TAGS:
     if CREATE_EXCEL:
         # Create Excel file for tag import
         tagfile = f.createExcel(tagList, tagfile, tag_filename, output_dir, system_ref = input_filename)
+
+    if CONVERT_SCADA_TAGS:
+        # Create Excel file for tag import
+        scada_file = rung.createSCADAoutput(input_filename, scada_input_filename, input_dir=input_dir, output_dir=output_dir)
 
 
 #%% Random tests
