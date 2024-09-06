@@ -31,13 +31,14 @@ def createfile(name="test", filetype="CSV"):
     file = open(filename,"w") 
     return file
 
-def createTagFile(name="tags", filetype="CSV", output_dir=""):
+def createTagFile(name="tags", filetype="CSV", output_dir="", system_ref="IDH"):
 
     # Set output dirt
     if output_dir == "": output_dir = os.getcwd()
     os.chdir(output_dir)
 
-    filename = name + "." + filetype
+    system_name = getSystemName(system_ref)
+    filename = system_name + "_" + name + "." + filetype
 
     # Test open and write a file
     # Delete and then open a file for writing 
@@ -75,10 +76,11 @@ def addTag(tag, desc, type, file):
 
     return file
 
-def createExcel(tagList:list, file, output_filename, output_dir, filetype="CSV"):
+def createExcel(tagList:list, file, output_filename, output_dir, filetype="CSV", system_ref="IDH"):
     # Set output dir
     os.chdir(output_dir)
-    filename = output_filename + "." + filetype
+    system_name = getSystemName(system_ref)
+    filename = system_name + "_" + output_filename + "." + filetype
 
     # Test open and write a file
     # Delete and then open a file for writing 
@@ -101,4 +103,5 @@ def createExcel(tagList:list, file, output_filename, output_dir, filetype="CSV")
 def getSystemName(filename:str):
     # Gets System Name from file name
     system_name = filename.split("_")[-1].split(".")[0]
+    # print(system_name)
     return system_name

@@ -1,24 +1,24 @@
-      LD 420.08
-      ANDNOT 420.14
+      LD 421.04
+      LDNOT 492.03
       LD 421.06
-      ANDNOT 421.08
+      LD 492.00
+      LD 0.03
+      OR 233.03
+      ANDLD
       ORLD
-      LD 421.10
-      ANDNOT 421.12
-      ORLD
-      LD 422.06
-      ANDNOT 422.08
-      ORLD
-      LD 422.12
-      ANDNOT 422.14
-      ORLD
+      OR 492.01
+      OR 490.04
+      OR 421.06
+      ANDLD
+      OR 492.03
+      ANDLD
       OUT TR0
-      AND TIM018
-      TIM 017 #1200
+      TIM 234 #6000
+      AND TIM234
+      TIM 235 #6000
       LD TR0
-      ANDNOT TIM017
-      TIM 018 #50
+      ANDNOT 421.06
+      RSET 490.04
       LD TR0
-      AND TIM017
-      TIM 019 #50
+      OUT 421.06
       ^^^

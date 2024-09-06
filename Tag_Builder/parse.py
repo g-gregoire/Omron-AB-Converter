@@ -24,7 +24,7 @@ def parseList(filename="", input_dir=""):
     global_symbols = global_symbols.fillna('')
     # print(global_symbols.head())
 
-    # Full list of all tags used in program
+    # Full list of all tags used in program (Cross-ref)
     full_taglist = pd.read_excel(file, sheet_name = 2)
     full_taglist = full_taglist.fillna('')
     # print(full_taglist.head())
@@ -53,12 +53,12 @@ def parseList(filename="", input_dir=""):
         # print(rowindex)
         
         address = row["Address"].replace("(bit)","")
-        # print(address)
         if address.find("HR") >= 0 or address.find("AR") >= 0:
+            # print(0)
             query = global_symbols.query(f'Address == "{address}"')
         elif address.isnumeric() or address.find(".") >= 0:
             # print(1)
-            query = global_symbols.query(f'Address == {address}')
+            query = global_symbols.query(f'Address == "{address}"')
         else:
             # print(2)
             query = global_symbols.query(f'Address == "{address}"')
@@ -82,6 +82,7 @@ def parseList(filename="", input_dir=""):
 
         tagname, tag_description = nameCreator(address, symbol, description, scada_tagname, scada_desc, system_name)
         
+        # print("Appending: ", address, tagname, tag_description, tagType)
         taglist.append({
             "address" : address,
             "tagname" : tagname,
@@ -91,7 +92,7 @@ def parseList(filename="", input_dir=""):
         
         # print(taglist)
         # break # Break to only run first one
-        # if rowindex > 16: break # Break to only run first ten
+        # if rowindex > 250: break # Break to only run first ten
     
     # Now go through SCADA taglist to see if any tags are missing
     for rowindex, row in scada_taglist.iterrows():
@@ -120,7 +121,12 @@ def parseList(filename="", input_dir=""):
 
              # Cannot have two underscores in a row
             tagname = re.sub('_+', '_', tagname)
+            tagname = tagname.replace("-","_").replace("(","").replace(")","").replace(",","_").replace("/","")\
+                .replace(" ","_").replace("|","").replace("*","").replace("#","").replace("<","")\
+                .replace(">","").replace(":","").replace(";","").replace("=","").replace("+","")\
+                .replace("%","").replace("$","").replace("@","").replace("!","").replace("^","")
 
+            # print("Appending: ", address, tagname, tag_description, tagType)
             taglist.append({
                 "address" : address,
                 "tagname" : tagname,
@@ -169,13 +175,15 @@ def typeFinder(address:str, tagQuery:pd.DataFrame = pd.DataFrame()):
 def scadaToPlcAddress(scada_address:str):
     # Convert SCADA address to PLC address
     # print(scada_address)
-    if scada_address.find(".") >= 0:
+    if scada_address.find(".") >= 0: # For BOOL IR tags (digital in/out)
         address = scada_address.replace("IR", "")
         split = address.split(".")
         if int(split[1]) < 10:
             return split[0] + ".0" + str(int(split[1]))
         else:
             return split[0] + "." + str(int(split[1]))
+    elif scada_address.find("IR") >= 0: # For INT/REAL IR Tags (analog in/out)
+        return scada_address.replace("IR", "")
     else:
         return scada_address
     
@@ -262,9 +270,10 @@ def nameCreator(address:str, symbol="", description="", scada_tagname="", scada_
 
     ## Check for invalid characters
     # Remove (, ), , and / from tagname
-    tagname = tagname.replace("(","").replace(")","").replace(",","_").replace("/","")\
-    .replace(" ","_").replace("|","").replace("*","").replace("#","").replace("<","")\
-    .replace(">","").replace(":","").replace(";","").replace("=","").replace("+","")
+    tagname = tagname.replace("-","_").replace("(","").replace(")","").replace(",","_").replace("/","")\
+                .replace(" ","_").replace("|","").replace("*","").replace("#","").replace("<","")\
+                .replace(">","").replace(":","").replace(";","").replace("=","").replace("+","")\
+                .replace("%","").replace("$","").replace("@","").replace("!","").replace("^","")
 
     # Cannot use hyphen in tagname
     if tagname.find("-") >= 0:

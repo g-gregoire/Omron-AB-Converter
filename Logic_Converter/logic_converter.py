@@ -12,6 +12,9 @@ NL = "\n"
 SP = " "
 END = ";"
 
+# To be used as global variables
+one_shot_index = 0
+
 def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1, system_name:str="Sterilizer"):
     rung = ""
     rung_num = 0
@@ -502,7 +505,7 @@ def assembleBlocks(rung: Rung):
         # print(new_rung)
 
     # Clean the logic - check for any errors or missed items
-    new_rung = logicCleaner(new_rung)
+    new_rung = logicCleanup(new_rung)
     
     rung.addConvertedLogic(new_rung)
     return rung
@@ -638,6 +641,10 @@ def subBlockAssembler(new_rung: Rung):
 def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
     # This function converts an instruction from Omron to AB
     # print(line)
+    # Pull in global variable for Oneshots
+    global one_shot_index
+
+    # Set default values
     ONS_instr = False
     NEEDS_DN_BIT = False
 
@@ -782,6 +789,7 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
 
     elif instr_type.upper() == "ONESHOT":
         converted_instruction = conv_instr + "(" + param + "_storage" + "," + param + ")"
+
     elif instr_type.upper() == "TIMER":
         if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
             # Convert from 1/10th sec to ms
@@ -789,13 +797,17 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
         else:
             preset = param2
         converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+
     elif instr_type.upper() == "COUNTER":
         if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
             preset = param2.replace("#", "")
         else:
             preset = param2
-        converted_instruction = "ONS" + "(" + param + "_ONS" + ")" 
+        converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" 
+        # Make sure to increment global one shot index
+        one_shot_index += 1
         converted_instruction += conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+
     elif instr_type.upper() == "RESET":
         converted_instruction = conv_instr + "(" + param + ")"
     elif instr_type.upper() == "COMPARE":
@@ -827,16 +839,45 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
         converted_instruction += ")"
 
     if ONS_instr and param != None:
-        converted_instruction = "ONS" + "(" + param2 + "_ONS" + ")" + converted_instruction
+        converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" + converted_instruction
+        # Make sure to increment global one shot index
+        one_shot_index += 1
 
     return converted_instruction, catchErrors
 
-def logicCleaner(new_rung:str): 
+def logicCleanup(rung:str): 
+    # This function cleans up the logic string
+    # print("OG:" + rung)
 
     # Remove any remaining ORLDs or ANDLDs
-    cleaned_rung = new_rung.replace("ORLD","").replace("ANDLD", "")
+    cleaned_rung = rung.replace("ORLD","").replace("ANDLD", "")
 
-    # To do - clean up unnecessary branch brackets ([[[[)
+    # Clean up unnecessary branch brackets ([[[[)
+    # We want to look for any instances of "[[" and a corresponding "]," \
+    # and replace "[[" with "[" and "]," with ","
+    # NOT WORKING SUFFICIENTLY WELL - CURRENTLY DISABLED
+    # x_index = 0
+    # y_index = len(cleaned_rung)-1
+    # while cleaned_rung.find("[[") != -1:
+    #     if cleaned_rung[x_index] == "[" and cleaned_rung[x_index+1] == "[":
+    #         for y_index in range(len(cleaned_rung)-1, 0, -1):
+    #             if cleaned_rung[y_index]  == "," and cleaned_rung[y_index-1] == "]":
+    #                 print("i: ", x_index, cleaned_rung[x_index], cleaned_rung[x_index+1])
+    #                 print("y: ", y_index, cleaned_rung[y_index-1], cleaned_rung[y_index])
+    #                 cleaned_rung = cleaned_rung[:y_index-1] + cleaned_rung[y_index:]
+    #                 y_index = len(cleaned_rung)-1 # Reset index
+    #                 cleaned_rung = cleaned_rung[:x_index] + cleaned_rung[x_index+1:]
+    #                 x_index = 0 # Reset index
+    #                 break
+    #     x_index += 1
+    #     y_index -= 1
+    #     # Watchdog
+    #     if x_index > 10000 or y_index < 0:
+    #         print("x: ", x_index, "y: ", y_index)
+    #         print("Watchdog break")
+    #         break
+
+    # print("Cl:" + cleaned_rung)
 
     return cleaned_rung
 
@@ -956,7 +997,7 @@ def findLastLD(rung: Rung):
     return return_index
 
 
-#%% DEPRECATED / NOT USED CODE
+#region DEPRECATED / NOT USED CODE
 # NOT USED 
 def decodeRung(rung: str):
     # Decode the rung and call the convert function
@@ -1090,3 +1131,5 @@ def convertLogic(line, prev_line, prev_instr):
     # print(logic)
     prev_instr = instr
     return logic, instr, prev_logic, conv_instr, prev_instr
+#endregion
+
