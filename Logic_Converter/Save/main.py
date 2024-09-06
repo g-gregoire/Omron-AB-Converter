@@ -5,7 +5,7 @@ import main_functions as mf
 
 import traceback
 
-input_filename = "IDH_no_symbols.txt"
+input_filename = "Dryer_no_symbols.txt"
 # input_filename = "Sterilizer_no_symbols.txt"
 # input_filename = "basic_rungs1.txt"
 

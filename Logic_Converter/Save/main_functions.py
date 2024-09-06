@@ -6,16 +6,12 @@ import traceback
 
 def runConversion(input_filename, tag_filename, output_filename="logic.txt", CONVERT=False, VIEW_RUNGS=False, COUNT_INSTR=False, PRINT_ERRORS=False):
 
-    system_name = ff.getSystemName(input_filename)
-    # system_name = "Sterilizer"
-    tag_filename = system_name + "_" + tag_filename
-
     # Open input file & create output file
     logic_wb = ff.openFile(input_filename)
     logic_wb = ff.prepareFile(logic_wb) # Remove everything except the Mnemonic section
     output_file = ff.createFile(output_filename, input_filename)
     tag_file = ff.openFile(tag_filename)
-    output_file = ff.addContext(output_file, system_name)
+    output_file = ff.addContext(output_file)
 
     # Initialize variables
     catchErrors = None
@@ -29,7 +25,7 @@ def runConversion(input_filename, tag_filename, output_filename="logic.txt", CON
     if CONVERT:
         # Convert the rungs to ladder logic
         try:
-            catchErrors = lc.loop_rungs(logic_wb, output_file, tag_file, view_rungs=VIEW_RUNGS, num_rungs=-1, system_name= system_name)
+            catchErrors = lc.loop_rungs(logic_wb, output_file, tag_file, view_rungs=VIEW_RUNGS, num_rungs=-1)
             print("Conversion complete")
         except Exception as e:
             print("Conversion failed: ", e)

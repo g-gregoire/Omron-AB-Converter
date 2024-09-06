@@ -1,10 +1,24 @@
-      LD 45.05
-      AND P_1min
-      ANDNOT 503.11
-      LD 503.06
-      ORNOT 45.05
+      LD 420.08
+      ANDNOT 420.14
+      LD 421.06
+      ANDNOT 421.08
+      ORLD
+      LD 421.10
+      ANDNOT 421.12
+      ORLD
+      LD 422.06
+      ANDNOT 422.08
+      ORLD
+      LD 422.12
+      ANDNOT 422.14
+      ORLD
       OUT TR0
-      CNT 061 #0020
+      AND TIM018
+      TIM 017 #1200
       LD TR0
-      RSET 503.11
+      ANDNOT TIM017
+      TIM 018 #50
+      LD TR0
+      AND TIM017
+      TIM 019 #50
       ^^^

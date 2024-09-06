@@ -79,14 +79,13 @@ def prepareFile(logic_file: pd.DataFrame):
 
 
 # To be completed
-def addContext(file, system_name:str):
+def addContext(file):
     # Change to Reference folder
     os.chdir(ref_dir)
 
     # Write file header
     f = open(lk.header, "r")
     text = f.read()
-    text = text.replace("_system_", system_name)
     file.write(text)
     file.write(n)
 

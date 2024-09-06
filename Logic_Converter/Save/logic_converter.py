@@ -12,7 +12,7 @@ NL = "\n"
 SP = " "
 END = ";"
 
-def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1, system_name:str="Sterilizer"):
+def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1):
     rung = ""
     rung_num = 0
     catchErrors = {
@@ -36,7 +36,7 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = Fals
             # Call function to break the rung into blocks
             rung_blocks = blockBreaker(rung, catchErrors)
             # Call function to convert the blocks
-            converted_rung, catchErrors = convertBlocks(rung_blocks, catchErrors, tagfile, system_name)
+            converted_rung, catchErrors = convertBlocks(rung_blocks, catchErrors, tagfile)
             # Call function to assemble the blocks
             converted_rung = assembleBlocks(converted_rung)
             # break
@@ -193,9 +193,6 @@ def blockBreaker(rung: str, catchErrors: dict):
                     # print("LES")
                     line = line.replace("CMP(20)", "LES")
                     # Pop next line
-                    rung.pop(index+1)
-                else:
-                    line = line.replace("CMP(20)", "LES")
                     rung.pop(index+1)
 
         # If parameter matches pattern TRx where x is a number, using regex
@@ -358,7 +355,7 @@ def blockBreaker(rung: str, catchErrors: dict):
     # outputRung.viewRung()
     return outputRung
 
-def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
+def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame):
     # This function converts the blocks in a rung
     for index, block in enumerate(rung.blocks):
         # print(block)
@@ -401,7 +398,7 @@ def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_n
             
             # print("Add Logic")
             # Convert the instruction
-            converted_instruction, catchErrors = convertInstruction(line, catchErrors, tagfile, system_name)
+            converted_instruction, catchErrors = convertInstruction(line, catchErrors, tagfile)
             converted_logic += converted_instruction
             if catchErrors["error"]:
                 rung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
@@ -500,9 +497,6 @@ def assembleBlocks(rung: Rung):
         # If there are no TR branches, convert the blocks normally
         new_rung = subBlockAssembler(blocks)
         # print(new_rung)
-
-    # Clean the logic - check for any errors or missed items
-    new_rung = logicCleaner(new_rung)
     
     rung.addConvertedLogic(new_rung)
     return rung
@@ -635,7 +629,7 @@ def subBlockAssembler(new_rung: Rung):
     
     return new_rung[0]
 
-def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
+def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame):
     # This function converts an instruction from Omron to AB
     # print(line)
     ONS_instr = False
@@ -705,11 +699,11 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
 
     # Convert the tagname
     if param != None:
-        param = convertTagname(param, tagfile, system_name)
+        param = convertTagname(param, tagfile)
     if param2 != None:
-        param2 = convertTagname(param2, tagfile, system_name)
+        param2 = convertTagname(param2, tagfile)
     if param3 != None:
-        param3 = convertTagname(param3, tagfile, system_name)
+        param3 = convertTagname(param3, tagfile)
 
     # Check to add .DN bit
     if NEEDS_DN_BIT:
@@ -831,15 +825,6 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
 
     return converted_instruction, catchErrors
 
-def logicCleaner(new_rung:str): 
-
-    # Remove any remaining ORLDs or ANDLDs
-    cleaned_rung = new_rung.replace("ORLD","").replace("ANDLD", "")
-
-    # To do - clean up unnecessary branch brackets ([[[[)
-
-    return cleaned_rung
-
 def extractLine(line: str):
     # This function extracts the instruction, parameter, param type and converted instruction from an inputted line
     line = line.replace("@" , "")
@@ -862,7 +847,7 @@ def extractLine(line: str):
 
     return instr, param, instr_type, conv_instr, param2, param3
 
-def convertTagname(address: str, tagfile: pd.DataFrame, system_name:str):
+def convertTagname(address: str, tagfile: pd.DataFrame):
     # This function searches the tagfile to determine if a converted tagname exists
     # If it does, it returns the converted tagname
     # If it doesn't, it returns the original tagname
@@ -890,12 +875,7 @@ def convertTagname(address: str, tagfile: pd.DataFrame, system_name:str):
             query = tagfile.query(f'address == "{address}"')
         # print(query)
         if query.empty:
-            converted_tagname = ""
-            split = address.split(".")
-            tagname = system_name + "_ADDR_"
-            for word in split:
-                if word == split[-1]: converted_tagname += word
-                else: converted_tagname = tagname + word + "_"
+            converted_tagname = address
         else:
             converted_tagname = query["tagname"].to_string(index=False)
         
@@ -939,7 +919,7 @@ def countInstructions(logic_file: pd.DataFrame):
 
     # Order instructions alphabetically
     instr_count = dict(sorted(instr_count.items()))
-    # pprint(instr_count)
+    pprint(instr_count)
     return instr_count
 
 def findLastLD(rung: Rung):
@@ -952,7 +932,7 @@ def findLastLD(rung: Rung):
             # print(instr)
             if instr == "LD" or instr == "LDNOT":
                 return_index = index
-    # print(return_index)
+    print(return_index)
     return return_index
 
 
