@@ -13,8 +13,8 @@ CREATE_TAGS = True
 CREATE_EXCEL = True
 CONVERT_SCADA_TAGS = True
 
-input_filename = "PLC_Tags_IDH.xlsx"
-# input_filename = "PLC_Tags_Sterilizer.xlsx"
+# input_filename = "PLC_Tags_IDH.xlsx"
+input_filename = "PLC_Tags_Sterilizer.xlsx"
 output_filename = "tag_import"
 tag_filename = "tag_lookup"
 scada_input_filename = "SCADA_Tags.xlsx"
