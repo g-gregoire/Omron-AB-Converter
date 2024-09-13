@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R01_IDH_Main" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="Grantek" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R01_basic_Main" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="Grantek" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
 <Controller Use="Context" Name="demo_proj">
 <Programs Use="Context">
 <Program Use="Context" Name="MainProgram">
 <Routines Use="Context">
-<Routine Use="Target" Name="R01_IDH_Main" Type="RLL">
+<Routine Use="Target" Name="R01_basic_Main" Type="RLL">
 <RLLContent>
 <Rung Number="0" Type="N">
 <Comment>
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(STER_CIP_CS11)[XIO(basic_ADDR_492_03)[[[[XIC(STER_CIP_CS12),XIC(basic_ADDR_492_00)[XIC(basic_ADDR_0_03),XIC(STER_CIP_START_SCADA_PB)]],XIC(basic_ADDR_492_01)],XIC(basic_ADDR_490_04)],XIC(STER_CIP_CS12)],XIC(basic_ADDR_492_03)][[[TON(TIM234,600000,0),XIC(TIM234.DN)TON(TIM235,600000,0)],XIO(STER_CIP_CS12)OTU(basic_ADDR_490_04)],OTE(STER_CIP_CS12)];]]>
+<![CDATA[XIC(P_On)LES(basic_T235_TMR.DN,3000)OTE(basic_ADDR_HR90_00);]]>
 </Text>
 </Rung>
 </RLLContent>

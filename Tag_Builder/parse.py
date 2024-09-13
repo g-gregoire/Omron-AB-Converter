@@ -52,12 +52,16 @@ def parseList(filename="", input_dir="", CONVERT_SCADA=False):
         # print(rowindex)
         
         address = row["Address"].replace("(bit)","")
+        # print(address)
         if address.find("HR") >= 0 or address.find("AR") >= 0:
             # print(0)
             query = global_symbols.query(f'Address == "{address}"')
-        elif address.isnumeric() or address.find(".") >= 0:
+        elif address.find(".") >= 0:
             # print(1)
             query = global_symbols.query(f'Address == "{address}"')
+        elif address.isnumeric():
+            # print(1)
+            query = global_symbols.query(f'Address == {address}')
         else:
             # print(2)
             query = global_symbols.query(f'Address == "{address}"')
@@ -77,9 +81,9 @@ def parseList(filename="", input_dir="", CONVERT_SCADA=False):
         tagType = typeFinder(row["Address"], query)
 
         # Convert to scada name then search for Scada tagname
-        scada_tagname, scada_desc = checkForScadaTags(scada_taglist, row["Address"], tagType)
+        scada_tagname, scada_desc = checkForScadaTags(scada_taglist, row["Address"], tagType, system_name)
 
-        tagname, tag_description = nameCreator(address, symbol, description, scada_tagname, scada_desc, system_name)
+        tagname, tag_description = nameCreator(address, symbol, description, scada_tagname, scada_desc, system_name, tagType)
         
         # print("Appending: ", address, tagname, tag_description, tagType)
         taglist.append({
@@ -144,10 +148,10 @@ def parseList(filename="", input_dir="", CONVERT_SCADA=False):
 
 def typeFinder(address:str, tagQuery:pd.DataFrame = pd.DataFrame()):
     # Handle timer (TIM) tags
-    if re.match(r'TIM\d{3}', address):
+    if re.match(r'TIM\d{2,3}', address):
         return "TIMER"
     # Handle counter (CNT) tags
-    if re.match(r'CNT\d{3}', address):
+    if re.match(r'CNT\d{2,3}', address):
         return "COUNTER"
     if address.find("(bit)") >= 0: # Deal with explicit Bit definitions first
         return "BOOL"
@@ -186,18 +190,18 @@ def scadaToPlcAddress(scada_address:str):
     else:
         return scada_address
     
-def checkForScadaTags(scada_taglist:pd.DataFrame, tagname:str, tagtype:str):
+def checkForScadaTags(scada_taglist:pd.DataFrame, tagname:str, tagtype:str, system_name:str=""):
     # Convert PLC address to SCADA address
     tag = []
     # print(tagname, tagtype)
     if tagtype == "BOOL":
         # Handle timer (TIM) tags
         if tagname.find("TIM") >= 0:
-            tagname = tagname.replace("TIM", "").replace("(bit)", "") + "_TMR"
+            tagname = system_name + "_" + tagname.replace("TIM", "").replace("(bit)", "") + "_TMR"
             tag.append(tagname)
         # Handle counter (CNT) tags
         elif tagname.find("CNT") >= 0:
-            tagname = tagname.replace("CNT", "").replace("(bit)", "") + "_CTR"
+            tagname = system_name + "_" + tagname.replace("CNT", "").replace("(bit)", "") + "_CTR"
             tag.append(tagname)
         else:
             try:
@@ -225,8 +229,8 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tagname:str, tagtype:str):
     return scada_tagname, scada_description
 
 
-def nameCreator(address:str, symbol="", description="", scada_tagname="", scada_description="", system_name=""):
-    # print(address, symbol, description, scada_tagname, scada_description)
+def nameCreator(address:str, symbol="", description="", scada_tagname="", scada_description="", system_name="", tagtype=""):
+    print(address, symbol, description, scada_tagname, scada_description)
     # Determine tag name to use
 
     if scada_tagname != "": # Use symbol if it exists already
@@ -245,11 +249,11 @@ def nameCreator(address:str, symbol="", description="", scada_tagname="", scada_
         tagname = description.upper().replace(".", "_").replace("/", "").replace("()", "").replace(")", "").split()[:4]
         tagname = "_".join(tagname)
     # Handle timer (TIM) tags
-    elif re.match(r'TIM\d{3}', address):
-        tagname = address.replace("TIM", "T").replace("(bit)", "") + "_TMR"
+    elif re.match(r'TIM\d{2,3}', address):
+        tagname = system_name + "_" + address.replace("TIM", "T").replace("(bit)", "") + "_TMR"
     # Handle counter (CNT) tags
-    elif re.match(r'CNT\d{3}', address):
-        tagname = address.replace("CNT", "C").replace("(bit)", "") + "_CTR"
+    elif re.match(r'CNT\d{2,3}', address):
+        tagname = system_name + "_" + address.replace("CNT", "C").replace("(bit)", "") + "_CTR"
     else: # If none exist, create tagname from address
         # print(5)
         split = address.split(".")
@@ -258,6 +262,13 @@ def nameCreator(address:str, symbol="", description="", scada_tagname="", scada_
             if word == split[-1]: tagname += word
             else: tagname = tagname + word + "_"
         # print(tagname)
+
+    # Handle Timer & Counter tags
+    # If it's a timmer and does not include "_TMR" in the tagname, add it
+    if tagtype == "TIMER" and tagname.find("_TMR") == -1:
+        tagname = tagname + "_TMR"
+    if tagtype == "COUNTER" and tagname.find("_CTR") == -1:
+        tagname = tagname + "_CTR"
 
     # Determine tag description to use
     if scada_description != "": # Use SCADA description if it exists
@@ -288,6 +299,9 @@ def nameCreator(address:str, symbol="", description="", scada_tagname="", scada_
     # Tagname cannot start with a number
     if tagname[0].isnumeric():
         tagname = "Tag_" + tagname
+    
+    # Add original Omron address to description
+    tag_description += " - OMR: " + address
     
     # Add quotes to description
     if tag_description != "":
