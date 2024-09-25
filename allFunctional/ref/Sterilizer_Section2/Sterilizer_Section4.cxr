@@ -1,0 +1,204 @@
+<LIBRARY>
+  <PLCTYPE>
+    C200HE
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      LD ON
+      CMP(20) DM2990 #2000
+      AND EQUALS
+      OUT TR0
+      CMP(20) DM2341 DM2981
+      ANDNOT EQUALS
+      MOV(21) DM2341 DM2981
+      MOV(21) DM2341 DM501
+      LD TR0
+      AND EQUALS
+      CMP(20) DM501 DM2981
+      ANDNOT EQUALS
+      MOV(21) DM501 DM2981
+      MOV(21) DM501 DM2341
+      MOV(21) DM501 DM2133
+      MOV(21) DM2346 DM2138
+      MOV(21) DM2351 DM2143
+      MOV(21) DM2356 DM2148
+      SET 92.00
+      ^^^
+      LD ON
+      OUT TR0
+      CMP(20) DM511 #0
+      ANDNOT EQUALS
+      ORW(35) DM511 #F000 DM511
+      LD TR0
+      CMP(20) DM2990 #2000
+      AND EQUALS
+      OUT TR0
+      CMP(20) DM2346 DM2982
+      ANDNOT EQUALS
+      MOV(21) DM2346 DM2982
+      MOV(21) DM2346 DM511
+      LD TR0
+      AND EQUALS
+      CMP(20) DM511 DM2982
+      ANDNOT EQUALS
+      MOV(21) DM511 DM2982
+      MOV(21) DM511 DM2346
+      MOV(21) DM511 DM2138
+      MOV(21) DM2341 DM2133
+      MOV(21) DM2351 DM2143
+      MOV(21) DM2356 DM2148
+      SET 92.00
+      ^^^
+      LD ON
+      CMP(20) DM2990 #2000
+      AND EQUALS
+      OUT TR0
+      CMP(20) DM2351 DM2983
+      ANDNOT EQUALS
+      MOV(21) DM2351 DM2983
+      MOV(21) DM2351 DM521
+      LD TR0
+      AND EQUALS
+      CMP(20) DM521 DM2983
+      ANDNOT EQUALS
+      MOV(21) DM521 DM2983
+      MOV(21) DM521 DM2351
+      MOV(21) DM521 DM2143
+      MOV(21) DM2346 DM2138
+      MOV(21) DM2341 DM2133
+      MOV(21) DM2356 DM2148
+      SET 92.00
+      ^^^
+      LD ON
+      CMP(20) DM2990 #2000
+      AND EQUALS
+      OUT TR0
+      CMP(20) DM2356 DM2984
+      ANDNOT EQUALS
+      MOV(21) DM2356 DM2984
+      MOV(21) DM2356 DM531
+      LD TR0
+      AND EQUALS
+      CMP(20) DM531 DM2984
+      ANDNOT EQUALS
+      MOV(21) DM531 DM2984
+      MOV(21) DM531 DM2356
+      MOV(21) DM531 DM2148
+      MOV(21) DM2346 DM2138
+      MOV(21) DM2351 DM2143
+      MOV(21) DM2341 DM2133
+      SET 92.00
+      ^^^
+      LD 289.08
+      @CLC(41)
+      @ADD(30) #3 DM2995 DM2995
+      @CLC(41)
+      @ADD(30) DM2995 #1 DM2996
+      @CLC(41)
+      @ADD(30) #2 DM2995 DM2997
+      CMP(20) DM2995 #2539
+      ANDNOT LESS_THAN
+      ANDNOT 92.00
+      OR FIRST_SCAN
+      MOV(21) #2500 DM2995
+      MOV(21) #2501 DM2996
+      MOV(21) #2502 DM2997
+      ^^^
+      LD 92.00
+      CMP(20) DM2995 #2580
+      ANDNOT LESS_THAN
+      MOV(21) #2500 DM2995
+      MOV(21) #2501 DM2996
+      MOV(21) #2502 DM2997
+      RSET 92.00
+      ^^^
+      LDNOT 289.08
+      MOV(21) *DM2995 DM2990
+      MOV(21) *DM2996 DM2991
+      MOV(21) *DM2997 DM2992
+      ^^^
+      LD ON
+      ANDNOT 289.08
+      ANDNOT FIRST_SCAN
+      @PMCR(17) *DM2990 *DM2991 *DM2992
+      ^^^
+      LD ON
+      OUT 92.02
+      ^^^
+      LD 92.02
+      ANDNOT 289.08
+      ANDNOT FIRST_SCAN
+      PMCR(17) DM2020 DM2021 DM2305
+      ^^^
+      LD ON
+      OUT TR0
+      MOV(21) DM2301 Before_loop
+      ANDNOT ON
+      MOV(21) DM2341 DM501
+      LD TR0
+      MOV(21) DM2381 DM502
+      XFER(70) #3 DM2361 DM503
+      MOV(21) DM2321 DM506
+      ^^^
+      LD ON
+      OUT TR0
+      ANDW(34) DM2306 #FFF VACUUM
+      ANDW(34) DM511 #FFF DM519
+      ANDNOT ON
+      MOV(21) DM2346 DM511
+      LD TR0
+      MOV(21) DM2386 DM512
+      XFER(70) #3 DM2366 DM513
+      MOV(21) DM2326 DM516
+      ^^^
+      LD ON
+      OUT TR0
+      MOV(21) DM2311 SEP_LEVEL
+      ANDNOT ON
+      MOV(21) DM2351 DM521
+      LD TR0
+      MOV(21) DM2391 DM522
+      XFER(70) #3 DM2371 DM523
+      MOV(21) DM2331 DM526
+      ^^^
+      LD ON
+      OUT TR0
+      ANDW(34) DM2316 #FFFF GEL_FLOWRATE
+      ANDNOT ON
+      MOV(21) DM2356 DM531
+      LD TR0
+      MOV(21) DM2396 DM532
+      XFER(70) #3 DM2376 DM533
+      MOV(21) DM2336 DM536
+      ^^^
+      LD ON
+      CMP(20) SEP_LEVEL #1100
+      LD GREATER_THAN
+      OR EQUALS
+      ANDLD
+      MOV(21) #0 SEP_LEVEL
+      ^^^
+      LD ON
+      CMP(20) SEP_LEVEL #3
+      AND LESS_THAN
+      MOV(21) #0 SEP_LEVEL
+      ^^^
+      END(01)
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+      ON	BOOL	253.13	System Normally On Flag		0	
+      EQUALS	BOOL	255.06	System Equals (EQ) Flag		0	
+      	CHANNEL	DM501	Before loop S.P		0	
+      	CHANNEL	DM521	Separator Level Setpoint		0	
+      LESS_THAN	BOOL	255.07	System Less Than (LE) Flag		0	
+      FIRST_SCAN	BOOL	253.15	System First Scan Flag		0	
+      Before_loop	CHANNEL	DM500	Before Loop Temp		0	
+      VACUUM	CHANNEL	DM510	Separator Vacuum		0	
+      SEP_LEVEL	CHANNEL	DM520	Separator Level		0	
+      GEL_FLOWRATE	CHANNEL	DM530	Gelly flow rate L/m		0	
+      GREATER_THAN	BOOL	255.05	System Greater Than (GE) Flag		0	
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

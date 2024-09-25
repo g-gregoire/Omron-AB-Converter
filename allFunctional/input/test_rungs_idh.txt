@@ -1,0 +1,22 @@
+      LD PS1
+      OUT PS2
+      ^^^
+      LD PS2
+      LD PS3
+      OR STER_LVL_8PERCENT
+      ANDLD
+      OUT PS3
+      ^^^
+      LD PS3
+      LD PS4
+      OR 503.10
+      OR I001
+      ANDLD
+      TIM 203 #600
+      OUT PS4
+      ^^^
+      LD PS4
+      AND PS4TIMER_Status
+      OUT PS5
+      RSET SCADA_STRT_PRO
+      ^^^

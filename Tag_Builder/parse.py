@@ -52,12 +52,16 @@ def parseList(filename="", input_dir="", CONVERT_SCADA=False):
         # print(rowindex)
         
         address = row["Address"].replace("(bit)","")
+        print(address)
         if address.find("HR") >= 0 or address.find("AR") >= 0:
             # print(0)
             query = global_symbols.query(f'Address == "{address}"')
-        elif address.isnumeric() or address.find(".") >= 0:
+        elif address.find(".") >= 0:
             # print(1)
             query = global_symbols.query(f'Address == "{address}"')
+        elif address.isnumeric():
+            # print(1)
+            query = global_symbols.query(f'Address == {address}')
         else:
             # print(2)
             query = global_symbols.query(f'Address == "{address}"')
@@ -226,7 +230,7 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tagname:str, tagtype:str):
 
 
 def nameCreator(address:str, symbol="", description="", scada_tagname="", scada_description="", system_name=""):
-    # print(address, symbol, description, scada_tagname, scada_description)
+    print(address, symbol, description, scada_tagname, scada_description)
     # Determine tag name to use
 
     if scada_tagname != "": # Use symbol if it exists already

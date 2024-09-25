@@ -48,31 +48,31 @@ def createSCADAoutput(input_filename, scada_filename, input_dir="", output_dir="
     else:
         scada_taglist = pd.read_excel(file, sheet_name = 0)
     scada_taglist = scada_taglist.fillna('')
-    print(scada_taglist.head())
+    # print(scada_taglist.head())
 
     # Change to output Dir and Read lookup file
     lookup_filename = system_name + "_tag_lookup.CSV"
     if output_dir == "": os.chdir(output_dir)
     tag_lookup = pd.read_csv(lookup_filename)
     tag_lookup = tag_lookup.fillna('')
-    print(tag_lookup.head())
+    # print(tag_lookup.head())
 
     # Loop through SCADA input file and write to SCADA output file
     for index, row in scada_taglist.iterrows():
         # print(row)
         # scada_output_file.write(row['Tag Name'] + "," + row['Description'] + "\n")
         address = row['Clean_Address']
-        print(address)
+        # print(address)
 
         # Convert to PLC Address and then lookup new address
         plc_address = p.scadaToPlcAddress(address)
-        print(plc_address)
+        # print(plc_address)
 
         # Lookup new address in tag_lookup
         query = tag_lookup.loc[tag_lookup['address'] == plc_address]
         if not query.empty:
             tag = query["tagname"].to_string(index=False)
-            print(tag)
+            # print(tag)
 
         # Write tagname to New_Addres column
         scada_taglist.at[index, 'New_Address'] = tag
@@ -80,7 +80,7 @@ def createSCADAoutput(input_filename, scada_filename, input_dir="", output_dir="
         # break
     
     # Save the new SCADA taglist
-    print(scada_taglist.head())
+    # print(scada_taglist.head())
     scada_taglist.to_csv(scada_output_file, index=False)
 
     

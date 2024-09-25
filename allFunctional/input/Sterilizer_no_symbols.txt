@@ -1,0 +1,3326 @@
+<LIBRARY>
+  <COMMENT>
+    no-symbols
+  </COMMENT>
+  <PLCTYPE>
+    C200HE
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      LD 400.00
+      OR 0.01
+      OR 233.01
+      ANDNOT 451.06
+      AND 0.08
+      ANDNOT 233.08
+      ANDNOT 420.00
+      OUT 400.00
+      ^^^
+      LD 400.00
+      OUT 400.02
+      ^^^
+      LD 400.02
+      LD 400.04
+      OR 501.10
+      ANDLD
+      OUT 400.04
+      ^^^
+      LD 400.04
+      LD 400.06
+      OR 503.10
+      OR 0.01
+      ANDLD
+      TIM 203 #600
+      OUT 400.06
+      ^^^
+      LD 400.06
+      AND TIM203
+      OUT 400.08
+      RSET 233.01
+      ^^^
+      LD 400.08
+      ANDNOT 400.10
+      CMP(20) DM510 #500
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 470.00
+      ^^^
+      LD 400.08
+      LD 470.00
+      OR 400.10
+      OR 0.01
+      ANDLD
+      OUT 400.10
+      ^^^
+      LD 400.10
+      ANDNOT 400.12
+      OUT TR0
+      CMP(20) DM520 #400
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 480.01
+      LD TR0
+      OUT 470.01
+      ^^^
+      LD 400.10
+      LD 470.01
+      OR 400.12
+      OR 0.01
+      ANDLD
+      OUT 400.12
+      TIM 205 #50
+      ^^^
+      LD 400.12
+      LD TIM205
+      OR 400.14
+      ANDLD
+      OUT 400.14
+      ^^^
+      LD 400.14
+      ANDNOT 401.00
+      CMP(20) DM500 #142
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 470.02
+      ^^^
+      LD 400.14
+      LD 401.00
+      OR 470.02
+      OR 0.01
+      ANDLD
+      OUT TR0
+      TIM 207 #1200
+      AND TIM207
+      TIM 208 #1
+      LD TR0
+      OUT 401.00
+      ^^^
+      LD 401.00
+      AND TIM208
+      OUT 401.02
+      ^^^
+      LD 401.02
+      LD 401.04
+      OR 0.01
+      OR 401.02
+      ANDLD
+      ANDNOT 1.07
+      LDNOT 470.08
+      OR 401.04
+      ANDLD
+      OUT 401.04
+      ^^^
+      LD 401.04
+      LD 401.06
+      ORNOT 500.00
+      OR 401.04
+      ANDLD
+      OUT 401.06
+      TIM 209 #450
+      ^^^
+      LD 401.06
+      LD TIM209
+      OR 401.06
+      ANDLD
+      OUT 401.08
+      ^^^
+      LD 401.08
+      ANDNOT 401.12
+      CMP(20) DM520 #750
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 470.03
+      ^^^
+      LD 401.08
+      LD 401.10
+      OR 470.03
+      OR 0.01
+      OR 233.03
+      ANDLD
+      OUT 401.10
+      TIM 211 #120
+      ^^^
+      LD 401.10
+      AND TIM211
+      OUT 401.12
+      ^^^
+      LD 401.12
+      ANDNOT TIM215
+      LD 502.04
+      OR 401.14
+      ANDLD
+      OUT 401.14
+      ^^^
+      LD 401.14
+      LDNOT 502.04
+      OR P_On
+      ANDLD
+      TIM 215 #1200
+      ^^^
+      LD 301.03
+      LD CNT050
+      CNT 050 #20
+      ^^^
+      LD P_On
+      ADD(30) CNT50 #100 DM99
+      ^^^
+      LD P_On
+      MOV(21) *DM99 415
+      ^^^
+      LD 420.08
+      ANDNOT 420.10
+      LD 421.12
+      ANDNOT 421.14
+      ORLD
+      CMP(20) DM410 #46
+      AND P_LT
+      TIM 281 #0600
+      AND TIM281
+      OUT 490.00
+      ^^^
+      LD 420.06
+      AND 421.10
+      ANDNOT 421.14
+      CMP(20) DM410 #92
+      AND P_LT
+      OUT 490.15
+      ^^^
+      LD 420.06
+      ANDNOT 421.10
+      CMP(20) DM410 #100
+      AND P_GT
+      LD 490.15
+      ORNOT 420.00
+      KEEP(11) 490.13
+      ^^^
+      LD 421.10
+      LD 490.00
+      OR TIM304
+      OR TIM284
+      ANDLD
+      TIM 284 #600
+      ^^^
+      LD 421.06
+      CMP(20) DM410 DM412
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      TIM 298 #30
+      AND TIM298
+      SET 490.06
+      ^^^
+      LD 421.06
+      ANDNOT 421.08
+      LD 490.06
+      OR 489.15
+      OR TIM296
+      ANDLD
+      OUT 490.01
+      ^^^
+      LD 490.01
+      AND 421.06
+      TIM 292 #9000
+      ^^^
+      LD 421.06
+      ANDNOT 421.08
+      AND 490.01
+      ANDNOT 490.02
+      TIM 290 #1800
+      ^^^
+      LD P_Off
+      AND TIM290
+      ANDNOT CNT004
+      CMP(20) DM410 #7000
+      AND P_LT
+      SET 490.02
+      ^^^
+      LD 490.02
+      TIM 291 #5
+      LDNOT 420.00
+      CNT 004 #2
+      ^^^
+      LD TIM291
+      RSET 490.02
+      ^^^
+      LD 422.06
+      ANDNOT 422.08
+      ANDNOT 490.03
+      TIM 293 #1800
+      ^^^
+      LD TIM293
+      CMP(20) DM410 #120
+      AND P_LT
+      SET 490.03
+      ^^^
+      LD 490.03
+      TIM 294 #50
+      ^^^
+      LD TIM294
+      RSET 490.03
+      ^^^
+      LD P_On
+      MOV(21) 481 491
+      MOV(21) 492 482
+      ^^^
+      LDNOT 420.00
+      RSET 490.06
+      ^^^
+      LDNOT 420.00
+      AND 491.00
+      SET 492.00
+      RSET 492.01
+      RSET 492.02
+      RSET 492.03
+      ^^^
+      LDNOT 420.00
+      AND 491.01
+      SET 492.01
+      RSET 492.00
+      RSET 492.02
+      RSET 492.03
+      ^^^
+      LDNOT 420.00
+      AND 491.02
+      SET 492.02
+      SET 492.01
+      RSET 492.00
+      RSET 492.03
+      ^^^
+      LDNOT 420.00
+      AND 491.03
+      SET 492.03
+      SET 492.01
+      RSET 492.00
+      RSET 492.02
+      ^^^
+      LDNOT 492.00
+      ANDNOT 492.01
+      ANDNOT 492.02
+      ANDNOT 492.03
+      SET 492.01
+      ^^^
+      LD 0.03
+      OUT TR0
+      TIM 297 #20
+      AND TIM297
+      DIFU(13) 490.05
+      LD TR0
+      AND 490.05
+      SET 490.04
+      ^^^
+      LD 0.03
+      OUT TR0
+      TIM 302 #60
+      AND TIM302
+      DIFU(13) 490.08
+      LD TR0
+      AND TIM302
+      SET 490.09
+      ^^^
+      LDNOT 1.09
+      AND 420.00
+      SET 234.00
+      ^^^
+      LDNOT 1.10
+      AND 420.00
+      SET 234.01
+      ^^^
+      LDNOT 0.08
+      AND 420.00
+      SET 234.02
+      ^^^
+      LD 233.08
+      AND 420.00
+      SET 234.03
+      ^^^
+      LD 400.00
+      AND 420.00
+      SET 234.04
+      ^^^
+      LD 420.00
+      OUT TR0
+      ANDNOT 1.09
+      TIM 299 #200
+      LD TR0
+      AND 1.09
+      LDNOT 420.00
+      KEEP(11) 425.00
+      ^^^
+      LD 1.10
+      LDNOT 1.10
+      KEEP(11) 494.00
+      ^^^
+      LD 494.00
+      AND P_1min
+      LDNOT 1.10
+      CNT 301 #105
+      ^^^
+      LD CNT301
+      OUT 494.01
+      ^^^
+      LD 0.03
+      OR 233.03
+      AND 506.07
+      LDNOT 506.07
+      KEEP(11) 506.08
+      ^^^
+      LD 420.00
+      OR 0.03
+      OR 233.03
+      ANDNOT 506.07
+      ANDNOT 423.02
+      AND 0.08
+      ANDNOT 233.08
+      ANDNOT 400.00
+      LD 1.09
+      ORNOT TIM299
+      OR 425.00
+      ANDLD
+      AND 1.10
+      OUT 420.00
+      ^^^
+      LD 420.06
+      ANDNOT 422.08
+      OUT TR0
+      ANDNOT TIM287
+      TIM 285 #1200
+      LD TR0
+      AND TIM285
+      TIM 287 #300
+      ^^^
+      LD 420.00
+      OUT 420.02
+      TIM 222 #200
+      AND 420.02
+      DIFU(13) 490.12
+      AND 490.12
+      AND 492.01
+      LD CNT007
+      ANDNOT 420.00
+      CNT 007 #1
+      ^^^
+      LD 420.02
+      LD TIM222
+      OR 490.04
+      OR 420.04
+      ANDLD
+      OUT TR0
+      TIM 224 #50
+      ANDNOT 420.04
+      RSET 490.04
+      LD TR0
+      OUT 420.04
+      RSET 233.03
+      ^^^
+      LD 420.04
+      LD TIM224
+      OR 490.04
+      OR 420.06
+      ANDLD
+      OUT TR0
+      TIM 226 #50
+      ANDNOT 420.06
+      RSET 490.04
+      LD TR0
+      OUT 420.06
+      ^^^
+      LD 420.06
+      LD TIM226
+      OR 490.04
+      OR 420.08
+      ANDLD
+      OUT TR0
+      TIM 228 #7200
+      ANDNOT 420.08
+      RSET 490.04
+      LD TR0
+      OUT 420.08
+      AND 420.08
+      TIM 306 #6000
+      AND CNT007
+      TIM 308 #4200
+      TIM 309 #5400
+      ^^^
+      LD 420.08
+      LD TIM228
+      OR 490.09
+      OR 420.10
+      LD 492.00
+      LD 492.01
+      LD 490.00
+      OR TIM306
+      ANDLD
+      ORLD
+      OR 490.04
+      OR 420.10
+      ANDLD
+      OR 492.03
+      ANDLD
+      OUT TR0
+      ANDNOT 420.12
+      RSET 490.04
+      LD TR0
+      OUT 420.10
+      RSET 490.09
+      ^^^
+      LD 420.10
+      OUT 420.12
+      ANDNOT 420.14
+      TIM 230 #100
+      ^^^
+      LD 420.12
+      LD TIM230
+      OR 490.04
+      OR 420.14
+      OR 492.03
+      ANDLD
+      OUT TR0
+      ANDNOT 420.14
+      RSET 490.04
+      LD TR0
+      OUT 420.14
+      ^^^
+      LD 420.14
+      LD 421.00
+      ORNOT 500.11
+      OR P_On
+      OR 492.03
+      ANDLD
+      OUT 421.00
+      ^^^
+      LD 421.00
+      TIM 232 #100
+      OUT 421.02
+      ^^^
+      LD 421.02
+      LD TIM232
+      OR 490.04
+      OR 421.04
+      OR 492.03
+      ANDLD
+      OUT TR0
+      ANDNOT 421.04
+      RSET 490.04
+      LD TR0
+      OUT 421.04
+      ^^^
+      LD 421.04
+      LDNOT 492.03
+      LD 421.06
+      LD 492.00
+      LD 0.03
+      OR 233.03
+      ANDLD
+      ORLD
+      OR 492.01
+      OR 490.04
+      OR 421.06
+      ANDLD
+      OR 492.03
+      ANDLD
+      OUT TR0
+      TIM 234 #6000
+      AND TIM234
+      TIM 235 #6000
+      LD TR0
+      ANDNOT 421.06
+      RSET 490.04
+      LD TR0
+      OUT 421.06
+      ^^^
+      LD P_On
+      CMP(20) TIM235 #3000
+      AND P_LT
+      OUT HR90.00
+      ^^^
+      LD 421.06
+      LD 492.00
+      AND TIM235
+      LD 492.01
+      LD TIM292
+      OR 421.08
+      ANDLD
+      ORLD
+      OR 490.04
+      OR 421.08
+      OR 492.03
+      ANDLD
+      OUT TR0
+      ANDNOT 421.08
+      RSET 490.04
+      LD TR0
+      OUT 421.08
+      ^^^
+      LD 421.08
+      ANDNOT 493.00
+      LD 421.10
+      LDNOT 500.11
+      ANDNOT 424.02
+      ORLD
+      OR P_On
+      ANDLD
+      OUT 421.10
+      TIM 237 #100
+      AND TIM237
+      TIM 236 #100
+      ^^^
+      LD 421.10
+      LD TIM236
+      OR 490.04
+      OR 421.12
+      ANDLD
+      OUT TR0
+      TIM 238 #600
+      ANDNOT 421.12
+      RSET 490.04
+      LD TR0
+      OUT 421.12
+      AND 421.12
+      TIM 304 #8400
+      ^^^
+      LD 421.12
+      LD 492.00
+      AND TIM238
+      LD 492.01
+      LD 490.00
+      OR TIM304
+      OR 421.14
+      ANDLD
+      ORLD
+      OR 490.04
+      OR 421.14
+      ANDLD
+      OUT TR0
+      ANDNOT 421.14
+      RSET 490.04
+      LD TR0
+      AND TIM284
+      OUT 421.14
+      ^^^
+      LD 421.14
+      LD 422.00
+      OR P_On
+      ANDLD
+      OUT 422.00
+      ^^^
+      LD 422.00
+      LD 422.02
+      OR P_On
+      ANDLD
+      OUT 422.02
+      TIM 240 #200
+      ^^^
+      LD 422.02
+      LD TIM240
+      OR 490.04
+      OR 422.04
+      ANDLD
+      OUT TR0
+      ANDNOT 422.04
+      RSET 490.04
+      LD TR0
+      OUT 422.04
+      ^^^
+      LD 422.04
+      LD 492.00
+      LD 0.03
+      OR 233.03
+      ANDLD
+      OR 492.01
+      OR 422.06
+      OR 490.04
+      ANDLD
+      OUT TR0
+      TIM 242 #4800
+      AND 492.02
+      TIM 243 #7200
+      LD TR0
+      ANDNOT 422.06
+      RSET 490.04
+      LD TR0
+      OUT 422.06
+      ^^^
+      LD 422.06
+      TIM 280 #350
+      TIM 282 #2500
+      ^^^
+      LD 422.06
+      OUT TR0
+      LD 492.00
+      AND TIM242
+      LD 492.01
+      ANDNOT 492.02
+      LD 492.02
+      AND 493.01
+      ORLD
+      AND TIM242
+      ORLD
+      LD 490.04
+      LDNOT 492.02
+      OR 493.01
+      ANDLD
+      ORLD
+      OR 422.08
+      ANDLD
+      OUT TR1
+      ANDNOT 422.08
+      RSET 490.04
+      LD TR1
+      OUT 422.08
+      LD TR0
+      AND 492.02
+      ANDNOT 493.01
+      LD TIM243
+      OR 490.04
+      ANDLD
+      OUT TR0
+      ANDNOT 493.01
+      RSET 490.04
+      LD TR0
+      SET 493.01
+      ^^^
+      LD 493.01
+      DIFU(13) 493.00
+      ^^^
+      LD 422.08
+      LDNOT 424.02
+      ANDNOT 500.11
+      OR 490.04
+      OR 422.10
+      ANDLD
+      OUT TR0
+      TIM 244 #0
+      ANDNOT 422.10
+      RSET 490.04
+      LD TR0
+      OUT 422.10
+      ^^^
+      LD 422.10
+      OR 422.08
+      AND TIM244
+      OUT 422.12
+      TIM 246 #50
+      ^^^
+      LD 422.12
+      LD TIM246
+      OR 490.04
+      OR 422.14
+      ANDLD
+      OUT TR0
+      ANDNOT 422.14
+      RSET 490.04
+      LD TR0
+      OUT 422.14
+      ^^^
+      LD 422.14
+      LD 423.00
+      LD 490.04
+      LD 424.04
+      AND 501.11
+      ORLD
+      ORLD
+      ANDLD
+      OUT 423.00
+      ANDNOT 423.00
+      RSET 490.04
+      ^^^
+      LD 423.00
+      ANDNOT 423.02
+      AND 501.11
+      AND 424.04
+      ANDNOT 490.10
+      LDNOT 420.00
+      KEEP(11) 490.10
+      ^^^
+      LD 423.00
+      AND 490.10
+      TIM 248 #150
+      AND TIM248
+      LDNOT 420.00
+      KEEP(11) 490.11
+      ^^^
+      LD 423.00
+      ANDNOT 423.02
+      AND 490.11
+      TIM 247 #150
+      ^^^
+      LD 423.00
+      ANDNOT 423.02
+      AND 490.11
+      AND TIM247
+      TIM 249 #160
+      ^^^
+      LD 423.00
+      ANDNOT 423.02
+      AND 490.11
+      AND TIM247
+      AND TIM249
+      TIM 310 #150
+      ^^^
+      LD 423.00
+      ANDNOT 423.02
+      AND 490.11
+      AND TIM247
+      AND TIM249
+      AND TIM310
+      TIM 311 #160
+      ^^^
+      LD 423.00
+      ANDNOT 423.02
+      AND 490.11
+      AND TIM247
+      AND TIM249
+      AND TIM310
+      AND TIM311
+      TIM 245 #150
+      ^^^
+      LD 423.00
+      LD 423.02
+      OR TIM245
+      OR 490.04
+      ANDLD
+      OUT 423.02
+      RSET 490.04
+      RSET 492.02
+      RSET 492.03
+      RSET 493.01
+      ^^^
+      LD 423.00
+      DIFD(14) 423.09
+      AND 423.09
+      LD 400.00
+      ANDNOT CNT248
+      KEEP(11) 423.10
+      ^^^
+      LD 423.10
+      AND P_1min
+      LD 400.00
+      ANDNOT CNT307
+      OR 423.12
+      CNT 307 #2
+      ^^^
+      LDNOT 400.00
+      AND CNT307
+      OUT 423.11
+      ^^^
+      LD 420.00
+      ANDNOT 423.02
+      OUT 233.09
+      ^^^
+      LDNOT 421.06
+      ANDNOT 421.08
+      ANDNOT 421.10
+      ANDNOT 421.12
+      ANDNOT 421.14
+      OUT 423.04
+      ^^^
+      LDNOT 422.00
+      ANDNOT 422.02
+      ANDNOT 422.04
+      ANDNOT 422.06
+      ANDNOT 422.08
+      OUT 423.06
+      ^^^
+      LDNOT 422.10
+      ANDNOT 422.12
+      ANDNOT 422.14
+      ANDNOT 423.00
+      ANDNOT 423.02
+      OUT 423.08
+      ^^^
+      LD 423.04
+      AND 423.06
+      AND 423.08
+      OUTNOT 3.10
+      ^^^
+      LD 450.00
+      LD 400.02
+      LD 0.07
+      OR 233.07
+      ANDLD
+      ORLD
+      ANDNOT 451.06
+      AND 0.08
+      ANDNOT 233.08
+      OUT 450.00
+      ^^^
+      LD 450.00
+      OUT 450.02
+      TIM 250 #200
+      TIM 251 #3000
+      ^^^
+      LD 450.02
+      LD 450.04
+      LD 503.11
+      ANDNOT 420.00
+      ORLD
+      LDNOT 500.11
+      AND 420.00
+      ORLD
+      AND TIM250
+      ORNOT 401.06
+      ANDLD
+      OUT 450.04
+      RSET 233.07
+      TIM 252 #900
+      ^^^
+      LD 450.04
+      LD 450.06
+      ORNOT 401.06
+      OR TIM252
+      ANDLD
+      OUT 450.06
+      ^^^
+      LD 450.06
+      ANDNOT 450.08
+      MOV(21) #90 DM521
+      TIM 253 #900
+      ^^^
+      LD 450.06
+      CMP(20) DM520 #100
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      TIM 288 #15
+      AND TIM288
+      OUT 470.04
+      ^^^
+      LD 450.06
+      LDNOT 401.06
+      LD 470.04
+      AND TIM253
+      ORLD
+      OR 450.08
+      OR 0.01
+      ANDLD
+      OUT 450.08
+      TIM 254 #100
+      ^^^
+      LD 450.08
+      MOV(21) #90 DM521
+      ^^^
+      LD 450.08
+      LD 450.10
+      OR TIM254
+      ORNOT 401.06
+      ANDLD
+      OUT 450.10
+      TIM 256 #100
+      TIM 257 #6000
+      ^^^
+      LD 450.10
+      LD 450.12
+      LD TIM256
+      AND 500.04
+      ORLD
+      ORNOT 401.06
+      ANDLD
+      OUT 450.12
+      TIM 258 #100
+      ^^^
+      LD 450.12
+      LD 450.14
+      ORNOT 401.06
+      OR TIM258
+      ANDLD
+      OUT 450.14
+      ^^^
+      LD 450.14
+      LDNOT 401.06
+      OR 501.10
+      OR 451.00
+      ANDLD
+      OUT 451.00
+      TIM 260 #200
+      ^^^
+      LD 451.00
+      LD TIM260
+      ORNOT 401.06
+      OR 451.02
+      ANDLD
+      OUT 451.02
+      TIM 262 #100
+      ^^^
+      LD 451.02
+      LD TIM262
+      ORNOT 401.06
+      OR 451.04
+      ANDLD
+      OUT 451.04
+      TIM 264 #6000
+      TIM 265 #3000
+      ^^^
+      LD 451.04
+      LD 451.06
+      OR TIM264
+      OR 501.11
+      ANDLD
+      ANDNOT 500.02
+      AND 470.04
+      OUT 451.06
+      ^^^
+      LD 420.00
+      ANDNOT 500.11
+      ANDNOT 455.08
+      OUT 455.02
+      TIM 270 #20
+      ^^^
+      LD 455.02
+      AND TIM270
+      OUT 455.04
+      TIM 272 #100
+      ^^^
+      LD 455.04
+      AND TIM272
+      OUT 455.08
+      ^^^
+      LD 420.02
+      ANDNOT 501.00
+      ANDNOT 465.08
+      OUT 465.02
+      TIM 274 #200
+      ^^^
+      LD 465.02
+      AND TIM274
+      OUT 465.04
+      TIM 275 #100
+      ^^^
+      LD 465.04
+      AND TIM275
+      OUT 465.08
+      ^^^
+      LD P_On
+      CMP(20) 111 #5
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 500.10
+      ^^^
+      LD P_On
+      CMP(20) 111 #6
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      TIM 289 #20
+      AND TIM289
+      OUT 503.11
+      ^^^
+      LD P_On
+      CMP(20) 111 #10
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 500.00
+      ^^^
+      LD P_On
+      OUT TR0
+      CMP(20) 111 #25
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 500.02
+      LD TR0
+      CMP(20) 111 #35
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 504.05
+      ^^^
+      LD P_On
+      CMP(20) 111 #30
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      TIM 259 #25
+      AND TIM259
+      OUT 503.10
+      ^^^
+      LD P_On
+      OUT TR0
+      CMP(20) 111 #35
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 502.14
+      LD TR0
+      CMP(20) 111 #45
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 502.15
+      ^^^
+      LD P_On
+      CMP(20) 111 #6
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 500.11
+      ^^^
+      LD 422.14
+      CMP(20) 111 #8
+      AND P_LT
+      OUT TR0
+      ANDNOT 424.04
+      TIM 036 #30
+      LD TR0
+      AND TIM036
+      LDNOT 420.00
+      KEEP(11) 424.04
+      ^^^
+      LD P_On
+      CMP(20) 111 #13
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 503.02
+      ^^^
+      LD P_On
+      OUT TR0
+      CMP(20) 111 #15
+      LD P_LT
+      OR P_EQ
+      ANDLD
+      SET 503.03
+      LD TR0
+      ANDNOT 450.00
+      RSET 503.03
+      ^^^
+      LD P_On
+      CMP(20) 111 #80
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 500.12
+      ^^^
+      LD P_On
+      CMP(20) 111 #68
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 504.07
+      ^^^
+      LD P_On
+      CMP(20) 111 #55
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 500.04
+      ^^^
+      LD P_On
+      CMP(20) 111 #90
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      TIM 037 #50
+      AND TIM037
+      OUT 500.05
+      ^^^
+      LDNOT 500.00
+      OR 501.15
+      AND 500.13
+      OUT 501.15
+      ^^^
+      LD P_On
+      CMP(20) 104 #75
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 502.10
+      ^^^
+      LD P_On
+      CMP(20) 112 #10
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 501.00
+      ^^^
+      LD P_On
+      CMP(20) 112 #5
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 424.02
+      ^^^
+      LD P_On
+      CMP(20) 112 #30
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      TIM 033 #20
+      AND TIM033
+      OUT 424.03
+      ^^^
+      LD P_On
+      OUT TR0
+      CMP(20) 112 #15
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 501.02
+      LD TR0
+      ANDNOT 501.02
+      TIM 030 #600
+      ^^^
+      LD P_On
+      CMP(20) 112 #80
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 501.04
+      ^^^
+      LD P_On
+      CMP(20) 112 #30
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 501.03
+      ^^^
+      LD P_On
+      CMP(20) 112 #25
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      TIM 031 #20
+      AND TIM031
+      OUT 501.01
+      ^^^
+      LD P_On
+      CMP(20) 112 #35
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      TIM 032 #20
+      AND TIM032
+      OUT 501.05
+      ^^^
+      LD 401.04
+      CMP(20) 111 #95
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 500.08
+      ^^^
+      LD 500.08
+      LD 500.09
+      OR 0.00
+      OR 233.00
+      ANDLD
+      OUT 500.09
+      ^^^
+      LD P_On
+      OUT TR0
+      CMP(20) 111 #5
+      AND 400.10
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 500.06
+      LD TR0
+      CMP(20) 111 #20
+      AND 401.12
+      ANDNOT 450.00
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 500.01
+      LD TR0
+      CMP(20) 111 #15
+      AND 401.12
+      ANDNOT 450.00
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 500.03
+      ^^^
+      LD 500.06
+      LD 500.07
+      OR 0.00
+      OR 233.00
+      ANDLD
+      OUT 500.07
+      ^^^
+      LD 400.10
+      CMP(20) 112 #90
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 501.08
+      ^^^
+      LD P_On
+      CMP(20) 112 #90
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 501.12
+      ^^^
+      LD P_On
+      CMP(20) 112 #95
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 501.13
+      ^^^
+      LD 420.00
+      ANDNOT 501.12
+      LD 501.13
+      OR 501.14
+      ANDLD
+      OUT 501.14
+      ^^^
+      LD 501.08
+      LD 501.09
+      OR 0.00
+      OR 233.00
+      ANDLD
+      OUT 501.09
+      ^^^
+      LD 401.10
+      ANDNOT 450.14
+      CMP(20) 112 #6
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 501.06
+      ^^^
+      LD 401.12
+      LD 504.00
+      OR 501.06
+      ANDLD
+      ANDNOT 504.01
+      OUT 504.00
+      ^^^
+      LD 504.00
+      CMP(20) 112 #8
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 504.01
+      ^^^
+      LD 504.00
+      LD 501.07
+      OR 0.00
+      OR 233.00
+      ANDLD
+      OUT 501.07
+      ^^^
+      LD 400.12
+      AND 0.12
+      OUT 502.00
+      ^^^
+      LD 502.00
+      LD 502.01
+      OR 0.00
+      OR 233.00
+      ANDLD
+      OUT 502.01
+      ^^^
+      '  480.05 will drive the After Loop temperature into alarm and cause V103 to switch to recirc\nThis is for validation puroses ONLY
+      LD 401.12
+      OUT TR0
+      AND 480.05
+      SET 480.06
+      LD TR0
+      AND 480.06
+      TIM 216 #0350
+      AND TIM216
+      RSET 480.05
+      RSET 480.06
+      ^^^
+      '  480.07 will drive the Before Loop temperature into alarm and cause V103 to switch to recirc\nThis is for validation puroses ONLY
+      LD 401.12
+      OUT TR0
+      AND 480.07
+      SET 480.08
+      LD TR0
+      AND 480.08
+      TIM 217 #0350
+      AND TIM217
+      RSET 480.07
+      RSET 480.08
+      ^^^
+      LD P_On
+      OUT TR0
+      ANDNOT 480.06
+      MOV(21) 101 DM480
+      LD TR0
+      AND 480.06
+      MOV(21) #135 DM480
+      ^^^
+      LD P_On
+      OUT TR0
+      ANDNOT 480.08
+      MOV(21) DM500 DM481
+      LD TR0
+      AND 480.08
+      MOV(21) #135 DM481
+      ^^^
+      LD 401.12
+      CMP(20) DM480 #139
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 470.05
+      ^^^
+      LD 470.05
+      TIM 015 #6000
+      ^^^
+      LD 401.12
+      CMP(20) DM480 #139
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      ANDNOT 450.04
+      ANDNOT 420.00
+      OUT 470.12
+      ^^^
+      LD 401.12
+      CMP(20) DM481 #139
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      ANDNOT 450.04
+      ANDNOT 420.00
+      OUT 470.14
+      ^^^
+      LD 470.12
+      OR 470.14
+      TIM 016 #10
+      ^^^
+      LD 401.12
+      AND 470.05
+      AND TIM015
+      LD 401.12
+      LD 470.12
+      OR 470.14
+      ANDLD
+      AND TIM016
+      ORLD
+      ANDNOT TIM257
+      ANDNOT 450.04
+      OUT 502.04
+      ^^^
+      LD 502.04
+      LD 0.00
+      OR 502.05
+      OR 233.00
+      ANDLD
+      OUT 502.05
+      ^^^
+      LD 401.12
+      CMP(20) DM520 #100
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 470.06
+      ^^^
+      LD 401.12
+      AND 470.06
+      ANDNOT 450.14
+      OUT 502.08
+      ^^^
+      LD 502.08
+      LD 0.00
+      OR 502.09
+      OR 233.00
+      ANDLD
+      OUT 502.09
+      ^^^
+      LD 400.08
+      CMP(20) DM510 #300
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 470.07
+      ^^^
+      LD 400.08
+      AND 470.07
+      ANDNOT TIM257
+      ANDNOT 450.04
+      OUT 502.12
+      ^^^
+      LD 502.12
+      LD 0.00
+      OR 502.13
+      OR 233.00
+      ANDLD
+      OUT 502.13
+      ^^^
+      LD 400.00
+      LD 1.05
+      AND P_Off
+      OR 1.04
+      OR 1.03
+      OR 1.02
+      OR 1.01
+      ANDLD
+      OUT 503.00
+      ^^^
+      LD 503.00
+      LD 0.00
+      OR 503.01
+      OR 233.00
+      ANDLD
+      OUT 503.01
+      ^^^
+      LDNOT TIM001
+      TIM 000 #10
+      ^^^
+      LD TIM000
+      TIM 001 #10
+      OUT 301.00
+      ^^^
+      LDNOT TIM003
+      TIM 002 #100
+      ^^^
+      LD TIM002
+      TIM 003 #10
+      OUT 301.03
+      ^^^
+      LD 420.10
+      OR 421.04
+      AND 301.00
+      LD 420.12
+      ANDNOT 420.14
+      LD 421.02
+      ANDNOT 421.04
+      ORLD
+      LD 421.06
+      ANDNOT 421.08
+      ORLD
+      CNT 005 #2
+      ^^^
+      LD 422.04
+      AND 301.00
+      LD 422.06
+      ANDNOT 422.08
+      CNT 006 #4
+      ^^^
+      LD 0.05
+      OR 233.05
+      LD 305.00
+      OR 423.02
+      OR 501.11
+      CNT 010 #2
+      ^^^
+      LD CNT010
+      OUT 305.00
+      ^^^
+      LD P_On
+      CMP(20) CNT10 #1
+      AND P_EQ
+      OUT 305.01
+      ^^^
+      LD 0.06
+      LD 305.03
+      OR 423.02
+      OR 501.11
+      CNT 011 #2
+      ^^^
+      LD CNT011
+      OUT 305.03
+      ^^^
+      LD P_On
+      CMP(20) CNT11 #1
+      AND P_EQ
+      OUT 305.04
+      ^^^
+      LD 401.02
+      ANDNOT 451.00
+      LD 400.00
+      ANDNOT 400.04
+      ORLD
+      ANDNOT 305.01
+      ANDNOT 305.04
+      AND 301.00
+      OUT 305.10
+      ^^^
+      LD P_On
+      OUT TR0
+      CMP(20) 112 #4
+      AND P_LT
+      TIM 266 #40
+      AND TIM266
+      OUT 501.11
+      LD TR0
+      CMP(20) 112 #8
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 501.10
+      ^^^
+      LD 0.04
+      LD CNT012
+      CNT 012 #2
+      ^^^
+      LD P_On
+      CMP(20) CNT12 #1
+      AND P_EQ
+      OUT 306.00
+      ^^^
+      LD 420.00
+      AND 421.10
+      ANDNOT 421.12
+      LD 400.00
+      CNT 313 #5
+      ^^^
+      LD P_Off
+      AND 420.00
+      CMP(20) CNT313 #4
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 490.14
+      ^^^
+      LD 400.04
+      ANDNOT 400.06
+      OR 400.10
+      ANDNOT 451.06
+      LD 420.06
+      ANDNOT 422.08
+      AND TIM285
+      LD 415.00
+      OR P_On
+      ANDLD
+      ORLD
+      ANDNOT 502.00
+      OUT 232.02
+      ^^^
+      LD 400.04
+      LD 420.06
+      ANDNOT 422.08
+      AND TIM285
+      LDNOT 471.01
+      OR P_On
+      ANDLD
+      ORLD
+      ANDNOT 451.06
+      ANDNOT 502.00
+      OUT 232.03
+      ^^^
+      LD 420.04
+      LDNOT 423.00
+      LD 423.00
+      ANDNOT 423.02
+      ANDNOT 424.04
+      ANDNOT 490.10
+      ORLD
+      ANDLD
+      ANDNOT 310.14
+      LD 310.14
+      AND 312.14
+      ORLD
+      OUT 2.02
+      ^^^
+      LD 420.04
+      LDNOT 423.00
+      LD 423.00
+      ANDNOT 423.02
+      AND 490.11
+      LDNOT TIM247
+      LD TIM249
+      LDNOT TIM310
+      LD TIM311
+      ANDNOT TIM245
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      ORLD
+      ANDLD
+      ANDNOT 310.15
+      LD 310.15
+      AND 312.15
+      ORLD
+      OUT 2.03
+      ^^^
+      LD 400.02
+      OR 400.14
+      ANDNOT 311.00
+      ANDNOT 420.00
+      LD 420.06
+      ANDNOT 420.10
+      ANDNOT TIM308
+      AND CNT007
+      LD 420.06
+      ANDNOT 420.10
+      ANDNOT CNT007
+      ORLD
+      LD 421.10
+      ANDNOT 421.12
+      ORLD
+      ANDNOT 311.00
+      ANDNOT 400.00
+      ORLD
+      LD 311.00
+      AND 313.00
+      ORLD
+      OUT 2.04
+      ^^^
+      LD 400.08
+      ANDNOT 450.04
+      ANDNOT 311.01
+      LD 311.01
+      AND 313.01
+      ORLD
+      OUT 2.05
+      ^^^
+      LD 400.02
+      ANDNOT 400.08
+      ANDNOT 450.02
+      ANDNOT 500.04
+      LD 401.00
+      ANDNOT 450.02
+      ANDNOT 500.04
+      LD 2.06
+      ORNOT 500.02
+      ANDLD
+      ORLD
+      LD 421.06
+      ANDNOT 421.08
+      LD 422.06
+      ANDNOT 422.08
+      ORLD
+      ANDNOT 500.12
+      LDNOT 500.11
+      OR 2.06
+      ANDLD
+      ORLD
+      ANDNOT 420.00
+      ANDNOT 311.02
+      LD 311.02
+      AND 313.02
+      ORLD
+      OUT 2.06
+      ^^^
+      LD 305.01
+      AND 401.12
+      AND 1.08
+      LD 420.06
+      ANDNOT 421.10
+      AND 490.13
+      ANDNOT 490.14
+      AND 415.02
+      ORLD
+      ANDNOT 311.03
+      LD 311.03
+      AND 313.03
+      ORLD
+      OUT 2.07
+      ^^^
+      LD 305.04
+      AND 401.12
+      LD 420.06
+      ANDNOT 421.10
+      AND 415.03
+      ORLD
+      ANDNOT 311.04
+      LD 311.04
+      AND 313.04
+      ORLD
+      AND P_Off
+      OUT 2.08
+      ^^^
+      LD 420.06
+      ANDNOT 423.02
+      ANDNOT 311.05
+      LD 311.05
+      AND 313.05
+      ORLD
+      OUT 2.09
+      ^^^
+      LD 420.06
+      ANDNOT 421.06
+      ANDNOT 311.06
+      TIM 503 #2400
+      AND TIM503
+      LD 421.08
+      ANDNOT 422.06
+      OR 422.08
+      ANDNOT 311.06
+      LD 311.06
+      AND 313.06
+      ORLD
+      ORLD
+      OUT 2.10
+      ^^^
+      LD 232.01
+      OUT 2.11
+      ^^^
+      LD 232.01
+      OUT 2.12
+      ^^^
+      LD 492.02
+      ANDNOT 493.01
+      AND 422.06
+      ANDNOT 422.08
+      ANDNOT TIM282
+      OUT 2.13
+      ^^^
+      LD 492.01
+      ANDNOT 492.02
+      LD 492.02
+      AND 493.01
+      ORLD
+      AND 422.06
+      ANDNOT 422.08
+      LDNOT TIM280
+      OR 490.03
+      ANDLD
+      OUT 2.14
+      ^^^
+      LD 492.01
+      AND 421.06
+      ANDNOT 421.08
+      TIM 296 #4200
+      LDNOT 490.01
+      ANDNOT TIM296
+      OR 490.02
+      ANDLD
+      OUT 2.15
+      ^^^
+      LD 492.01
+      AND 421.06
+      ANDNOT 421.08
+      AND 2.15
+      OUT TR0
+      TIM 300 #3000
+      AND TIM300
+      CMP(20) DM410 #6500
+      LD TR0
+      AND P_LT
+      OUT 490.07
+      ^^^
+      LD 420.02
+      ANDNOT 450.00
+      LD 450.14
+      ANDNOT 501.00
+      ORLD
+      OUT 3.00
+      ^^^
+      LD 401.02
+      LD 400.06
+      ANDNOT 400.14
+      ORLD
+      OUT 3.01
+      ^^^
+      LD P_On
+      OUT TR0
+      AND 3.01
+      @MOV(21) #630 DM511
+      LD TR0
+      ANDNOT 3.01
+      @MOV(21) #0 DM511
+      ^^^
+      LD 4.00
+      OR 4.01
+      OUT 3.02
+      ^^^
+      LD 400.00
+      ANDNOT 401.02
+      ANDNOT 450.04
+      LD 401.08
+      ANDNOT 401.12
+      ORLD
+      OUT 3.03
+      ^^^
+      LD P_On
+      OUT TR0
+      AND 3.03
+      @MOV(21) #320 DM521
+      LD TR0
+      ANDNOT 3.03
+      @MOV(21) #350 DM521
+      LD TR0
+      AND 400.00
+      @MOV(21) #200 DM531
+      LD TR0
+      AND 470.08
+      MOV(21) #140 DM531
+      ^^^
+      LD 420.02
+      OUT 3.04
+      ^^^
+      LD P_On
+      OUT TR0
+      AND 3.04
+      @MOV(21) #95 DM501
+      @MOV(21) #50 DM521
+      LD TR0
+      ANDNOT 3.04
+      @MOV(21) #145 DM501
+      ^^^
+      LDNOT 4.01
+      ANDNOT 4.00
+      OUT 3.05
+      ^^^
+      LD 420.02
+      ANDNOT 423.02
+      AND CNT007
+      OUT 3.06
+      ^^^
+      LD 421.06
+      ANDNOT 421.10
+      OUT 3.07
+      ^^^
+      LD 420.10
+      ANDNOT 420.12
+      ANDNOT CNT005
+      LD 421.00
+      ANDNOT 421.02
+      ANDNOT CNT005
+      ORLD
+      LD 421.04
+      ANDNOT 421.06
+      ANDNOT CNT005
+      ORLD
+      LD 422.04
+      ANDNOT 422.06
+      ANDNOT CNT006
+      ORLD
+      AND 301.00
+      LD 500.08
+      ANDNOT 500.09
+      ORLD
+      LD 500.06
+      ANDNOT 500.07
+      ORLD
+      LD 501.08
+      ANDNOT 501.09
+      ORLD
+      LD 501.06
+      ANDNOT 501.07
+      ORLD
+      LD 502.00
+      ANDNOT 502.01
+      ORLD
+      LD 502.04
+      ANDNOT 502.05
+      ORLD
+      LD 502.08
+      ANDNOT 502.09
+      ORLD
+      LD 502.12
+      ANDNOT 502.13
+      ORLD
+      LD 503.00
+      ANDNOT 503.01
+      ORLD
+      OUT 3.08
+      ^^^
+      LD 500.06
+      OR 500.08
+      OR 501.08
+      OR 501.06
+      OR 502.00
+      OR 502.04
+      OR 502.08
+      OR 502.12
+      OR 503.00
+      OUT 3.09
+      ^^^
+      LD 420.02
+      AND CNT007
+      ANDNOT 423.02
+      OUT 3.11
+      ^^^
+      LD 420.08
+      AND CNT007
+      AND TIM308
+      ANDNOT TIM309
+      ANDNOT 420.10
+      OUT 3.12
+      ^^^
+      LD 509.02
+      OUT 3.13
+      ^^^
+      LD 509.01
+      OUT 3.14
+      ^^^
+      LD 509.00
+      OUT 3.15
+      ^^^
+      LD 420.00
+      ANDNOT 501.05
+      LDNOT 501.03
+      OR 4.00
+      ANDLD
+      LDNOT 421.06
+      OR 421.10
+      ANDLD
+      ANDNOT 422.06
+      ANDNOT 400.00
+      ANDNOT 310.01
+      LDNOT 501.04
+      LDNOT 501.14
+      AND 4.00
+      ORLD
+      ANDLD
+      LD 451.00
+      AND 1.10
+      LD 501.10
+      OR 4.00
+      ANDLD
+      ANDNOT 501.02
+      ANDNOT TIM264
+      ORLD
+      LD 310.01
+      AND 312.01
+      ORLD
+      OUT 4.00
+      ^^^
+      LD 422.06
+      ANDNOT 422.08
+      LD 421.06
+      ANDNOT 421.08
+      ORLD
+      AND 501.15
+      LD 450.04
+      ANDNOT 450.10
+      LD 503.11
+      OR 4.01
+      ANDLD
+      ANDNOT 503.10
+      ORLD
+      LD 450.10
+      ANDNOT 450.14
+      LDNOT 502.15
+      OR 4.01
+      ANDLD
+      ANDNOT 500.04
+      ORLD
+      LD 451.04
+      ANDNOT 451.06
+      LDNOT 500.02
+      OR 4.01
+      ANDLD
+      ANDNOT 503.10
+      ANDNOT TIM265
+      ORLD
+      LD 420.00
+      ANDNOT 420.14
+      LD 421.00
+      ANDNOT 421.04
+      ORLD
+      LD 421.10
+      ANDNOT 422.06
+      ORLD
+      LDNOT 502.14
+      OR 4.01
+      ANDLD
+      ANDNOT 502.15
+      ORLD
+      LD 421.08
+      AND 424.02
+      ANDNOT 421.10
+      ORLD
+      ANDNOT 423.00
+      ANDNOT 310.00
+      ANDNOT 500.05
+      LD 310.00
+      AND 312.00
+      ORLD
+      OUT 4.01
+      ^^^
+      LD 420.08
+      ANDNOT 420.14
+      LD 421.10
+      ANDNOT 421.12
+      ORLD
+      LD 422.12
+      ANDNOT 422.14
+      ORLD
+      ANDNOT TIM018
+      ANDNOT 310.02
+      LD 450.10
+      ANDNOT 451.00
+      ORLD
+      LD 310.02
+      AND 312.02
+      ORLD
+      OUT 4.02
+      ^^^
+      LD 420.00
+      ANDNOT 310.03
+      LD 310.03
+      AND 312.03
+      ORLD
+      OUT 4.03
+      ^^^
+      LD 420.08
+      ANDNOT TIM308
+      OR 420.10
+      ANDNOT 480.03
+      LD 480.04
+      ORNOT 4.04
+      ANDLD
+      ANDNOT 422.14
+      AND 500.00
+      AND 500.10
+      ANDNOT 421.06
+      ANDNOT 421.10
+      ANDNOT 422.06
+      LD 400.14
+      ANDNOT 450.04
+      ORLD
+      ANDNOT 310.04
+      LD 310.04
+      AND 312.04
+      ORLD
+      OUT 4.04
+      ^^^
+      LD 400.10
+      ANDNOT 450.04
+      OUT 4.05
+      ^^^
+      LD 420.00
+      OR 450.04
+      OUT 4.06
+      ^^^
+      LD 420.02
+      ANDNOT 420.10
+      ANDNOT TIM308
+      LD 420.10
+      ANDNOT 422.14
+      ORLD
+      AND CNT007
+      LD 420.02
+      ANDNOT 422.14
+      ANDNOT CNT007
+      ORLD
+      ANDNOT 310.05
+      LD 310.05
+      ANDNOT 312.05
+      ORLD
+      OUT 4.07
+      ^^^
+      LD 420.00
+      ANDNOT 310.06
+      LD 310.06
+      AND 312.06
+      ORLD
+      OUT 4.08
+      ^^^
+      LD 420.06
+      ANDNOT 422.08
+      AND TIM285
+      LD 400.00
+      ANDNOT 401.02
+      ORLD
+      OR 401.14
+      OR 500.06
+      LD 450.04
+      ANDNOT 450.10
+      ORLD
+      OR 501.14
+      LD 401.12
+      ANDNOT 500.10
+      ORLD
+      ANDNOT 310.07
+      LD 310.07
+      AND 312.07
+      ORLD
+      OUT 4.09
+      ^^^
+      LD 401.04
+      CMP(20) 112 #1350
+      AND P_GT
+      OUT 407.11
+      ^^^
+      LD 4.02
+      LD 420.14
+      ANDNOT 421.00
+      ORLD
+      LD 421.08
+      ANDNOT 421.10
+      ORLD
+      LD 421.14
+      ANDNOT 422.00
+      ORLD
+      LD 422.08
+      ANDNOT 422.10
+      ORLD
+      LD 422.14
+      ANDNOT 423.02
+      ORLD
+      OUT 424.00
+      ^^^
+      LD 421.10
+      ANDNOT 421.12
+      LD 422.00
+      ANDNOT 422.02
+      ORLD
+      LD 422.04
+      ANDNOT 422.06
+      ORLD
+      LD 421.00
+      ANDNOT 421.02
+      ORLD
+      OUT 424.01
+      ^^^
+      LD 420.08
+      ANDNOT 421.06
+      AND 5.11
+      ANDNOT TIM232
+      ANDNOT TIM501
+      ANDNOT 420.14
+      TIM 500 #600
+      ^^^
+      LD TIM500
+      ANDNOT TIM501
+      TIM 501 #600
+      ^^^
+      LD 400.00
+      ANDNOT 401.02
+      OR 424.00
+      ANDNOT 310.08
+      LD 310.08
+      AND 312.08
+      ORLD
+      OUT 4.10
+      ^^^
+      LD 420.10
+      AND 415.08
+      LD TIM021
+      KEEP(11) HR0.01
+      ^^^
+      LD HR0.01
+      TIM 020 #600
+      ^^^
+      LD TIM020
+      TIM 021 #20
+      ^^^
+      LD P_Off
+      LD 420.06
+      ANDNOT 420.10
+      LD 421.06
+      ANDNOT 421.08
+      ORLD
+      LD 421.12
+      ANDNOT 421.14
+      ORLD
+      LD 422.06
+      ANDNOT 422.08
+      ORLD
+      ANDLD
+      OUT TR0
+      ANDNOT TIM024
+      DIFU(13) 313.14
+      AND 313.14
+      SET 313.15
+      LD TR0
+      TIM 024 #0200
+      ^^^
+      LD P_Off
+      AND TIM024
+      RSET 313.15
+      ^^^
+      LD 420.02
+      LD 313.15
+      OR P_On
+      ANDLD
+      ANDNOT 310.09
+      LD 310.09
+      AND 312.09
+      ORLD
+      OUT 4.11
+      ^^^
+      LD 420.02
+      AND 415.08
+      OUT 4.12
+      ^^^
+      LD 420.00
+      ANDNOT 310.11
+      LD 310.11
+      AND 312.11
+      ORLD
+      OUT 4.13
+      ^^^
+      LD 420.00
+      OUT TR0
+      ANDNOT 493.02
+      TIM 023 #2400
+      LD TR0
+      LD TIM023
+      OR 493.02
+      ANDLD
+      ANDNOT 310.12
+      LD 310.12
+      AND 312.12
+      ORLD
+      OUT 4.14
+      ^^^
+      LD 420.00
+      LD 400.00
+      CNT 312 #5
+      ^^^
+      LD 420.00
+      CMP(20) CNT312 #3
+      LD P_LT
+      OR P_EQ
+      ANDLD
+      OUT 493.02
+      ^^^
+      LD 400.00
+      LD 421.06
+      ANDNOT 421.08
+      LD 422.06
+      ANDNOT 422.08
+      ORLD
+      ANDNOT 500.05
+      LDNOT 500.12
+      OR 4.15
+      ANDLD
+      ORLD
+      ANDNOT 310.13
+      LD 310.13
+      AND 312.13
+      ORLD
+      OUT 502.02
+      ^^^
+      LD 420.00
+      ANDNOT 421.06
+      LD 421.08
+      ANDNOT 422.06
+      ORLD
+      LD 422.08
+      ANDNOT 423.02
+      ORLD
+      LD 421.06
+      OR 422.06
+      LD 500.12
+      LD 500.05
+      OR 4.15
+      ANDLD
+      LDNOT 424.03
+      LDNOT 501.01
+      OR 4.15
+      ANDLD
+      ORLD
+      ANDLD
+      ORLD
+      LD 421.10
+      LD 490.00
+      OR TIM304
+      ANDLD
+      ANDNOT TIM284
+      ORLD
+      ANDNOT 310.13
+      LD 310.13
+      AND 312.13
+      ORLD
+      OUT 4.15
+      ^^^
+      LD 421.06
+      ANDNOT 421.08
+      LD 422.06
+      ANDNOT 422.08
+      ORLD
+      ANDNOT 424.03
+      LDNOT 501.01
+      OR 6.06
+      ANDLD
+      LD 421.10
+      LD 490.00
+      OR TIM304
+      ANDLD
+      ANDNOT TIM284
+      ORLD
+      ANDNOT 311.11
+      LD 311.11
+      AND 311.12
+      ORLD
+      OUT 6.06
+      ^^^
+      LD 420.00
+      ANDNOT 421.06
+      LD 421.08
+      ANDNOT 422.06
+      ORLD
+      LD 422.08
+      ANDNOT 423.02
+      ORLD
+      LD 421.06
+      ANDNOT 421.08
+      LD 422.06
+      ANDNOT 422.08
+      ORLD
+      AND 500.12
+      LD 500.05
+      OR 6.07
+      ANDLD
+      ORLD
+      ANDNOT 311.13
+      LD 311.13
+      AND 311.14
+      ORLD
+      OUT 6.07
+      ^^^
+      LD 0.02
+      LD 500.08
+      ANDNOT 500.09
+      LD 500.06
+      ANDNOT 500.07
+      ORLD
+      LD 501.08
+      ANDNOT 501.09
+      ORLD
+      LD 501.06
+      ANDNOT 501.07
+      ORLD
+      LD 502.00
+      ANDNOT 502.01
+      ORLD
+      LD 502.04
+      ANDNOT 502.05
+      ORLD
+      LD 502.08
+      ANDNOT 502.09
+      ORLD
+      LD 502.12
+      ANDNOT 502.13
+      ORLD
+      LD 503.00
+      ANDNOT 503.01
+      ORLD
+      AND 301.00
+      ORLD
+      OUT 5.00
+      ^^^
+      LD 0.02
+      LD 401.02
+      ANDNOT 401.04
+      AND 301.00
+      ANDNOT 450.00
+      ORLD
+      LD 401.04
+      ANDNOT 450.02
+      ANDNOT 450.00
+      ORLD
+      LD 400.00
+      ANDNOT 401.02
+      ANDNOT 450.00
+      ORLD
+      OUT 5.01
+      ^^^
+      LD 420.10
+      ANDNOT 420.12
+      LD 421.00
+      ANDNOT 421.02
+      ORLD
+      LD 421.04
+      ANDNOT 421.06
+      ORLD
+      LD 422.00
+      ANDNOT 422.02
+      ORLD
+      LD 422.04
+      ANDNOT 422.06
+      ORLD
+      AND 301.00
+      LD 420.00
+      ANDNOT 420.10
+      ORLD
+      LD 420.12
+      ANDNOT 421.00
+      ORLD
+      LD 421.02
+      ANDNOT 421.04
+      ORLD
+      LD 421.06
+      ANDNOT 422.00
+      ORLD
+      LD 422.02
+      ANDNOT 422.04
+      ORLD
+      OR 422.06
+      OR 0.02
+      OUT 5.02
+      ^^^
+      LD 450.00
+      OR 0.02
+      OUT 5.03
+      ^^^
+      LD 4.00
+      OR 0.02
+      OR 306.00
+      OUT 5.04
+      ^^^
+      LD 305.10
+      OR 305.01
+      OR 0.02
+      OUT 5.05
+      ^^^
+      LD 305.10
+      OR 305.04
+      OR 0.02
+      OUT 5.06
+      ^^^
+      LD P_On
+      AND 420.00
+      CMP(20) DM520 #120
+      LD P_LT
+      OR P_EQ
+      ANDLD
+      TIM 034 #15
+      AND TIM034
+      OUT 471.01
+      ^^^
+      LD P_On
+      OUT TR0
+      AND 400.02
+      CMP(20) DM520 #650
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 470.08
+      LD TR0
+      AND 420.00
+      OUT TR0
+      CMP(20) DM520 #400
+      LD P_LT
+      OR P_EQ
+      ANDLD
+      OUT 470.13
+      LD TR0
+      AND 423.00
+      CMP(20) DM520 #10
+      LD P_LT
+      OR P_EQ
+      ANDLD
+      TIM 035 #40
+      AND TIM035
+      OUT 480.02
+      ^^^
+      LD 400.02
+      CMP(20) DM510 #500
+      AND P_LT
+      OUT 470.10
+      ^^^
+      LD 400.02
+      LD 470.08
+      OR 470.10
+      AND 301.00
+      LDNOT 470.08
+      ANDNOT 470.10
+      ORLD
+      ANDLD
+      OR 0.02
+      OUT 5.07
+      ^^^
+      LD 400.12
+      ANDNOT 401.00
+      AND 301.00
+      OR 401.00
+      OR 0.02
+      OUT 5.08
+      ^^^
+      LD 401.04
+      ANDNOT 401.10
+      AND 301.00
+      OR 401.10
+      OR 0.02
+      OUT 5.09
+      ^^^
+      LD 401.10
+      ANDNOT 450.08
+      ANDNOT 4.09
+      OR 0.02
+      OUT 5.10
+      ^^^
+      LD 420.08
+      ANDNOT 421.06
+      OR 0.02
+      OUT 5.11
+      ^^^
+      LD 421.04
+      ANDNOT 421.06
+      ANDNOT 492.03
+      AND 301.00
+      LD 421.06
+      ANDNOT 421.10
+      ORLD
+      OR 0.02
+      OUT 5.12
+      ^^^
+      LD 421.10
+      ANDNOT 422.06
+      OR 0.02
+      OUT 5.13
+      ^^^
+      LD 500.06
+      ANDNOT 500.07
+      LD 500.08
+      ANDNOT 500.09
+      ORLD
+      AND 301.00
+      OR 500.08
+      OR 500.07
+      OR 0.02
+      OUT 5.14
+      ^^^
+      LD 502.08
+      ANDNOT 502.09
+      AND 301.00
+      OR 502.09
+      OR 0.02
+      OUT 5.15
+      ^^^
+      LD 501.09
+      OR 501.07
+      LD 501.06
+      ANDNOT 501.07
+      LD 501.08
+      ANDNOT 501.09
+      ORLD
+      AND 301.00
+      ORLD
+      OR 0.02
+      OUT 6.00
+      ^^^
+      LD 503.00
+      ANDNOT 503.01
+      AND 301.00
+      OR 503.01
+      OR 0.02
+      OUT 6.01
+      ^^^
+      LD 422.04
+      ANDNOT 422.06
+      AND 301.00
+      LD 422.06
+      ANDNOT 422.10
+      ORLD
+      OR 0.02
+      OUT 6.02
+      ^^^
+      LD 420.00
+      LD 422.10
+      LD 6.03
+      ANDNOT TIM283
+      ORLD
+      ANDLD
+      OR 0.02
+      OUT 6.03
+      TIM 283 #450
+      ^^^
+      LD 502.04
+      ANDNOT 502.05
+      AND 301.00
+      OR 502.05
+      OR 0.02
+      OUT 6.04
+      ^^^
+      LD 502.00
+      ANDNOT 502.01
+      AND 301.00
+      OR 502.01
+      OR 0.02
+      OUT 6.05
+      ^^^
+      LD 1.12
+      OUT 504.10
+      ^^^
+      LD 1.13
+      OUT 504.11
+      ^^^
+      LD 1.14
+      OUT 504.12
+      ^^^
+      LD CNT007
+      LD 420.02
+      ANDNOT 420.10
+      ANDNOT TIM308
+      LD 421.10
+      ANDNOT 423.02
+      ORLD
+      ANDLD
+      OUT 6.08
+      ^^^
+      LD 511.00
+      OUT 6.09
+      ^^^
+      LD 511.01
+      OUT 6.10
+      ^^^
+      LD 511.02
+      OUT 6.11
+      ^^^
+      LD 511.03
+      OUT 6.12
+      ^^^
+      LD 511.04
+      OUT 6.13
+      ^^^
+      LD 511.05
+      OUT 6.14
+      ^^^
+      LD 511.06
+      OUT 6.15
+      ^^^
+      LDNOT 300.00
+      MOV(21) #200 DM1001
+      MOV(21) #0 DM1000
+      OUT 100.02
+      ^^^
+      LDNOT 300.00
+      MOV(21) #200 DM1003
+      MOV(21) #0 DM1002
+      OUT 100.03
+      ^^^
+      LDNOT 300.00
+      MOV(21) #9999 DM1005
+      MOV(21) #0 DM1004
+      OUT 100.04
+      ^^^
+      LDNOT 300.00
+      MOV(21) #100 DM1007
+      MOV(21) #0 DM1006
+      OUT 100.05
+      ^^^
+      LDNOT 300.00
+      MOV(21) #100 DM1101
+      MOV(21) #0 DM1100
+      OUT 110.02
+      ^^^
+      LDNOT 300.00
+      MOV(21) #100 DM1103
+      MOV(21) #0 DM1102
+      OUT 110.03
+      ^^^
+      LDNOT 300.00
+      MOV(21) #150 DM1105
+      MOV(21) #0 DM1104
+      OUT 110.04
+      ^^^
+      LDNOT 300.00
+      MOV(21) #5000 DM1107
+      MOV(21) #0 DM1106
+      OUT 110.05
+      ^^^
+      LD P_On
+      BIN(23) 510 511
+      ^^^
+      LD 420.00
+      ANDNOT 420.08
+      MOV(21) #40 510
+      ^^^
+      LD 420.08
+      ANDNOT 421.06
+      MOV(21) #41 510
+      ^^^
+      LD 421.06
+      ANDNOT 421.10
+      MOV(21) #42 510
+      ^^^
+      LD 421.10
+      ANDNOT 422.04
+      MOV(21) #43 510
+      ^^^
+      LD 422.04
+      ANDNOT 422.10
+      MOV(21) #44 510
+      ^^^
+      LD 422.10
+      ANDNOT 423.00
+      MOV(21) #45 510
+      ^^^
+      LD 423.00
+      MOV(21) #46 510
+      ^^^
+      LD 400.02
+      ANDNOT 400.04
+      MOV(21) #47 510
+      ^^^
+      LD 420.14
+      ANDNOT 421.00
+      LD 421.08
+      ANDNOT 421.10
+      ORLD
+      LD 421.14
+      ANDNOT 422.00
+      ORLD
+      LD 422.08
+      ANDNOT 422.10
+      ORLD
+      LD 422.14
+      ANDNOT 423.00
+      ORLD
+      MOV(21) #48 510
+      ^^^
+      LD 401.02
+      ANDNOT 401.04
+      MOV(21) #49 510
+      ^^^
+      LD 421.00
+      ANDNOT 421.02
+      LD 422.00
+      ANDNOT 422.02
+      ORLD
+      LD 420.10
+      ANDNOT 420.12
+      ORLD
+      LD 422.10
+      ANDNOT 422.12
+      ORLD
+      LD 421.10
+      ANDNOT 421.10
+      ORLD
+      MOV(21) #50 510
+      ^^^
+      LDNOT 420.00
+      ANDNOT 400.00
+      MOV(21) #59 510
+      ^^^
+      LD 400.00
+      ANDNOT 400.14
+      MOV(21) #60 510
+      ^^^
+      LD 400.02
+      ANDNOT 400.04
+      OR 423.00
+      LD 450.14
+      ANDNOT 451.00
+      ORLD
+      MOV(21) #61 510
+      ^^^
+      LD 400.02
+      ANDNOT 400.04
+      MOV(21) #62 510
+      ^^^
+      LD 400.02
+      ANDNOT 400.04
+      MOV(21) #63 510
+      ^^^
+      LD 400.14
+      ANDNOT 401.00
+      MOV(21) #64 510
+      ^^^
+      LD 400.04
+      ANDNOT 400.06
+      LD 401.04
+      ANDNOT 401.06
+      ORLD
+      LD 450.02
+      ANDNOT 450.04
+      ORLD
+      MOV(21) #65 510
+      ^^^
+      LD 401.08
+      ANDNOT 401.10
+      LD 450.06
+      ANDNOT 450.08
+      ORLD
+      MOV(21) #66 510
+      ^^^
+      LD 400.14
+      ANDNOT 401.00
+      MOV(21) #67 510
+      ^^^
+      LD 401.04
+      ANDNOT 401.10
+      MOV(21) #68 510
+      ^^^
+      LD 401.10
+      MOV(21) #69 510
+      ^^^
+      LD 450.00
+      ANDNOT 450.04
+      MOV(21) #70 510
+      ^^^
+      LD 450.04
+      ANDNOT 450.06
+      MOV(21) #71 510
+      ^^^
+      LD 400.06
+      ANDNOT 400.10
+      MOV(21) #73 510
+      ^^^
+      LD 272.12
+      MOV(21) #0 510
+      ^^^
+      LD 502.04
+      MOV(21) #1 510
+      ^^^
+      LD P_Off
+      MOV(21) #2 510
+      ^^^
+      LD 500.06
+      MOV(21) #3 510
+      ^^^
+      LD 501.06
+      MOV(21) #4 510
+      ^^^
+      LD 502.00
+      MOV(21) #7 510
+      ^^^
+      LD P_Off
+      MOV(21) #8 510
+      ^^^
+      LD 502.12
+      MOV(21) #9 510
+      ^^^
+      LD 500.08
+      MOV(21) #10 510
+      ^^^
+      LD 501.08
+      MOV(21) #11 510
+      ^^^
+      LD 502.08
+      MOV(21) #13 510
+      ^^^
+      LD 501.06
+      MOV(21) #14 510
+      ^^^
+      LD 1.01
+      MOV(21) #20 510
+      ^^^
+      LD 1.02
+      MOV(21) #21 510
+      ^^^
+      LD 1.03
+      MOV(21) #22 510
+      ^^^
+      LD 1.04
+      MOV(21) #23 510
+      ^^^
+      LD 1.05
+      AND P_Off
+      MOV(21) #24 510
+      ^^^
+      LDNOT 0.08
+      OR 233.08
+      MOV(21) #25 510
+      ^^^
+      LD P_On
+      BIN(23) 508 509
+      ^^^
+      LD 502.12
+      MOV(21) #1 508
+      ^^^
+      LD 501.06
+      MOV(21) #4 508
+      ^^^
+      LD 500.06
+      MOV(21) #6 508
+      ^^^
+      LD 502.00
+      MOV(21) #7 508
+      ^^^
+      LD 420.00
+      ANDNOT TIM277
+      TIM 276 #1800
+      ^^^
+      LD TIM276
+      TIM 277 #300
+      ^^^
+      LD 232.02
+      ANDNOT 311.09
+      LD 311.09
+      AND 313.09
+      ORLD
+      OUT 2.00
+      ^^^
+      LD 232.03
+      ANDNOT 311.10
+      LD 311.10
+      AND 313.10
+      ORLD
+      OUT 2.01
+      ^^^
+      LD 420.04
+      AND 2.01
+      TIM 278 #200
+      ^^^
+      LD TIM276
+      OUT 232.01
+      ^^^
+      LD 400.00
+      ANDNOT 1.10
+      ANDNOT 420.00
+      ANDNOT 450.00
+      LD 450.00
+      OR 1.10
+      KEEP(11) 506.00
+      ^^^
+      LD 506.00
+      MOV(21) #1 DM420
+      ^^^
+      LD 450.00
+      ANDNOT 1.10
+      ANDNOT 420.00
+      ANDNOT 400.00
+      LD 420.00
+      OR 400.00
+      OR 1.10
+      KEEP(11) 506.01
+      ^^^
+      LD 506.01
+      MOV(21) #2 DM420
+      ^^^
+      LD 420.00
+      AND 1.10
+      ANDNOT 400.00
+      ANDNOT 450.00
+      ANDNOT 506.06
+      LD 400.00
+      OR 506.06
+      KEEP(11) 506.02
+      ^^^
+      LD 506.02
+      MOV(21) #3 DM420
+      ^^^
+      LD 1.10
+      ANDNOT 420.00
+      ANDNOT 400.00
+      ANDNOT 450.00
+      LD 420.00
+      ORNOT 1.10
+      OR 400.00
+      KEEP(11) 506.03
+      ^^^
+      LD 506.03
+      MOV(21) #4 DM420
+      ^^^
+      LD 420.00
+      AND P_1min
+      LD 400.00
+      CNT 305 #105
+      ^^^
+      LD CNT305
+      MOV(21) #5 DM420
+      OUT 506.06
+      ^^^
+      LDNOT 1.10
+      ANDNOT 420.00
+      ANDNOT 400.00
+      ANDNOT 450.00
+      LD 420.00
+      OR 400.00
+      KEEP(11) 506.05
+      ^^^
+      LD 506.05
+      MOV(21) #6 DM420
+      ^^^
+      LD 420.00
+      OUT TR0
+      CMP(20) DM500 #90
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      OUT 480.03
+      LD TR0
+      CMP(20) DM500 #85
+      LD P_LT
+      OR P_EQ
+      ANDLD
+      OUT 480.04
+      ^^^
+      LD 400.00
+      ANDNOT 1.10
+      LD 450.00
+      KEEP(11) 500.15
+      ^^^
+      LD P_On
+      MOV(21) 113 DM403
+      MOV(21) 114 DM404
+      MOV(21) 103 DM405
+      ^^^
+      LD 400.00
+      CMP(20) DM403 #95
+      LD P_LT
+      OR P_EQ
+      ANDLD
+      TIM 502 #100
+      AND TIM502
+      OUT 315.04
+      ^^^
+      LD P_On
+      MOV(21) 103 DM410
+      ^^^
+      LD P_On
+      MUL(32) DM411 #100 DM412
+      ^^^
+      LDNOT 420.00
+      MOV(21) #0 DM910
+      ^^^
+      LD 420.00
+      ANDNOT 420.12
+      MOV(21) #1 DM910
+      ^^^
+      LD 420.12
+      ANDNOT 421.06
+      MOV(21) #2 DM910
+      ^^^
+      LD 421.06
+      ANDNOT 421.10
+      MOV(21) #3 DM910
+      ^^^
+      LD 421.10
+      ANDNOT 422.06
+      MOV(21) #4 DM910
+      ^^^
+      LD 422.06
+      ANDNOT 422.10
+      MOV(21) #5 DM910
+      ^^^
+      LD 422.10
+      MOV(21) #6 DM910
+      ^^^
+      LD 420.08
+      ANDNOT 420.14
+      LD 421.06
+      ANDNOT 421.08
+      ORLD
+      LD 421.10
+      ANDNOT 421.12
+      ORLD
+      LD 422.06
+      ANDNOT 422.08
+      ORLD
+      LD 422.12
+      ANDNOT 422.14
+      ORLD
+      OUT TR0
+      AND TIM018
+      TIM 017 #1200
+      LD TR0
+      ANDNOT TIM017
+      TIM 018 #50
+      LD TR0
+      AND TIM017
+      TIM 019 #50
+      ^^^
+      LD 420.06
+      ANDNOT 423.00
+      OUT TR0
+      CMP(20) DM530 #2000
+      LD P_LT
+      OR P_EQ
+      ANDLD
+      TIM 022 #1200
+      LD TR0
+      AND TIM022
+      OUT 471.00
+      ^^^
+      LD P_On
+      OUT TR0
+      CMP(20) 111 #15
+      LD P_EQ
+      OR P_LT
+      ANDLD
+      OUT 500.13
+      LD TR0
+      CMP(20) 111 #30
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 500.14
+      ^^^
+      LD 421.06
+      ANDNOT 421.08
+      OUT TR0
+      AND 0.09
+      @ADD(30) DM538 #1 DM538
+      @MUL(32) DM538 #2 DM539
+      LD TR0
+      CMP(20) DM539 #60
+      LD P_EQ
+      OR P_GT
+      ANDLD
+      OUT 489.15
+      ^^^
+      LD 420.00
+      AND 421.08
+      @MOV(21) DM539 DM541
+      @MOV(21) #0 DM538
+      @MOV(21) #0 DM539
+      LD P_On
+      CMP(20) DM2990 #2000
+      AND P_EQ
+      OUT TR0
+      CMP(20) DM2341 DM2981
+      ANDNOT P_EQ
+      MOV(21) DM2341 DM2981
+      MOV(21) DM2341 DM501
+      LD TR0
+      AND P_EQ
+      CMP(20) DM501 DM2981
+      ANDNOT P_EQ
+      MOV(21) DM501 DM2981
+      MOV(21) DM501 DM2341
+      MOV(21) DM501 DM2133
+      MOV(21) DM2346 DM2138
+      MOV(21) DM2351 DM2143
+      MOV(21) DM2356 DM2148
+      SET 92.00
+      ^^^
+      LD P_On
+      OUT TR0
+      CMP(20) DM511 #0
+      ANDNOT P_EQ
+      ORW(35) DM511 #F000 DM511
+      LD TR0
+      CMP(20) DM2990 #2000
+      AND P_EQ
+      OUT TR0
+      CMP(20) DM2346 DM2982
+      ANDNOT P_EQ
+      MOV(21) DM2346 DM2982
+      MOV(21) DM2346 DM511
+      LD TR0
+      AND P_EQ
+      CMP(20) DM511 DM2982
+      ANDNOT P_EQ
+      MOV(21) DM511 DM2982
+      MOV(21) DM511 DM2346
+      MOV(21) DM511 DM2138
+      MOV(21) DM2341 DM2133
+      MOV(21) DM2351 DM2143
+      MOV(21) DM2356 DM2148
+      SET 92.00
+      ^^^
+      LD P_On
+      CMP(20) DM2990 #2000
+      AND P_EQ
+      OUT TR0
+      CMP(20) DM2351 DM2983
+      ANDNOT P_EQ
+      MOV(21) DM2351 DM2983
+      MOV(21) DM2351 DM521
+      LD TR0
+      AND P_EQ
+      CMP(20) DM521 DM2983
+      ANDNOT P_EQ
+      MOV(21) DM521 DM2983
+      MOV(21) DM521 DM2351
+      MOV(21) DM521 DM2143
+      MOV(21) DM2346 DM2138
+      MOV(21) DM2341 DM2133
+      MOV(21) DM2356 DM2148
+      SET 92.00
+      ^^^
+      LD P_On
+      CMP(20) DM2990 #2000
+      AND P_EQ
+      OUT TR0
+      CMP(20) DM2356 DM2984
+      ANDNOT P_EQ
+      MOV(21) DM2356 DM2984
+      MOV(21) DM2356 DM531
+      LD TR0
+      AND P_EQ
+      CMP(20) DM531 DM2984
+      ANDNOT P_EQ
+      MOV(21) DM531 DM2984
+      MOV(21) DM531 DM2356
+      MOV(21) DM531 DM2148
+      MOV(21) DM2346 DM2138
+      MOV(21) DM2351 DM2143
+      MOV(21) DM2341 DM2133
+      SET 92.00
+      ^^^
+      LD 289.08
+      @CLC(41)
+      @ADD(30) #3 DM2995 DM2995
+      @CLC(41)
+      @ADD(30) DM2995 #1 DM2996
+      @CLC(41)
+      @ADD(30) #2 DM2995 DM2997
+      CMP(20) DM2995 #2539
+      ANDNOT P_LT
+      ANDNOT 92.00
+      OR P_First_Cycle
+      MOV(21) #2500 DM2995
+      MOV(21) #2501 DM2996
+      MOV(21) #2502 DM2997
+      ^^^
+      LD 92.00
+      CMP(20) DM2995 #2580
+      ANDNOT P_LT
+      MOV(21) #2500 DM2995
+      MOV(21) #2501 DM2996
+      MOV(21) #2502 DM2997
+      RSET 92.00
+      ^^^
+      LDNOT 289.08
+      MOV(21) *DM2995 DM2990
+      MOV(21) *DM2996 DM2991
+      MOV(21) *DM2997 DM2992
+      ^^^
+      LD P_On
+      ANDNOT 289.08
+      ANDNOT P_First_Cycle
+      @PMCR(17) *DM2990 *DM2991 *DM2992
+      ^^^
+      LD P_On
+      OUT 92.02
+      ^^^
+      LD 92.02
+      ANDNOT 289.08
+      ANDNOT P_First_Cycle
+      PMCR(17) DM2020 DM2021 DM2305
+      ^^^
+      LD P_On
+      OUT TR0
+      MOV(21) DM2301 DM500
+      ANDNOT P_On
+      MOV(21) DM2341 DM501
+      LD TR0
+      MOV(21) DM2381 DM502
+      XFER(70) #3 DM2361 DM503
+      MOV(21) DM2321 DM506
+      ^^^
+      LD P_On
+      OUT TR0
+      ANDW(34) DM2306 #FFF DM510
+      ANDW(34) DM511 #FFF DM519
+      ANDNOT P_On
+      MOV(21) DM2346 DM511
+      LD TR0
+      MOV(21) DM2386 DM512
+      XFER(70) #3 DM2366 DM513
+      MOV(21) DM2326 DM516
+      ^^^
+      LD P_On
+      OUT TR0
+      MOV(21) DM2311 DM520
+      ANDNOT P_On
+      MOV(21) DM2351 DM521
+      LD TR0
+      MOV(21) DM2391 DM522
+      XFER(70) #3 DM2371 DM523
+      MOV(21) DM2331 DM526
+      ^^^
+      LD P_On
+      OUT TR0
+      ANDW(34) DM2316 #FFFF DM530
+      ANDNOT P_On
+      MOV(21) DM2356 DM531
+      LD TR0
+      MOV(21) DM2396 DM532
+      XFER(70) #3 DM2376 DM533
+      MOV(21) DM2336 DM536
+      ^^^
+      LD P_On
+      CMP(20) DM520 #1100
+      LD P_GT
+      OR P_EQ
+      ANDLD
+      MOV(21) #0 DM520
+      ^^^
+      LD P_On
+      CMP(20) DM520 #3
+      AND P_LT
+      MOV(21) #0 DM520
+      ^^^
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>
