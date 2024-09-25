@@ -796,6 +796,13 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
             preset = str(int(int(param2.replace("#", "")) * 1000 / 10)) 
         else:
             preset = param2
+
+        # Check for "TIM" in the tagname and replace it
+        # if param.find("TIM") != -1:
+        #     param = param.replace("TIM", "T")
+        # # If there's no "_TMR" in the tagname, add it
+        # if param.find("_TMR") == -1:
+        #     param = param + "_TMR"
         converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
 
     elif instr_type.upper() == "COUNTER":
@@ -917,11 +924,17 @@ def convertTagname(address: str, tagfile: pd.DataFrame, system_name:str):
 
     # if it's a hardcoded value (e.g. #10), return the value as is
     if address.find("#") != -1:
+        # print(3)
+        return address
+    # If it's an internal P_ address (ie., P_ON, P_1min), return the value as is
+    elif address.find("P_") != -1:
+        # print(4)
         return address
     else:
         # Search the tagfile for the address
         # try:
         if address.find("HR") >= 0 or address.find("AR") >= 0:
+            # print(0)
             query = tagfile.query(f'address == "{address}"')
         elif address.isnumeric() or address.find(".") >= 0:
             # print(1)
@@ -931,13 +944,25 @@ def convertTagname(address: str, tagfile: pd.DataFrame, system_name:str):
             query = tagfile.query(f'address == "{address}"')
         # print(query)
         if query.empty:
-            converted_tagname = ""
-            split = address.split(".")
-            tagname = system_name + "_ADDR_"
-            for word in split:
-                if word == split[-1]: converted_tagname += word
-                else: converted_tagname = tagname + word + "_"
+            # print(1.0)
+            # Check for "TIM" in the tagname and replace it
+            if address.find("TIM") != -1:
+                converted_tagname = system_name + "_" + address.replace("TIM", "T") + "_TMR"
+            # Check for "CNT" in the tagname and replace it
+            elif address.find("CNT") != -1:
+                converted_tagname = system_name + "_" + address.replace("CNT", "C") + "_CTR"
+            else:
+                converted_tagname = ""
+                split = address.split(".")
+                tagname = system_name + "_ADDR_"
+                if len(split) > 1:
+                    for word in split:
+                        if word == split[-1]: converted_tagname += word
+                        else: converted_tagname = tagname + word + "_"
+                else:
+                    converted_tagname = tagname + split[0]
         else:
+            # print(1.1)
             converted_tagname = query["tagname"].to_string(index=False)
         
         # Add converted tagname to the global array if needed
