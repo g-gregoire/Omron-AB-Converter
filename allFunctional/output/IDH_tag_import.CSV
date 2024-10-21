@@ -65,7 +65,7 @@ TAG,,T52_48,"Small Cooling Tower Outlet",REAL,,"(RADIX := Float, Constant := fal
 TAG,,IDH_ADDR_185,,DINT,,"(RADIX := Decimal, Constant := false, ExternalAccess := Read/Write)"
 TAG,,RH51_1,"Outside R/H",REAL,,"(RADIX := Float, Constant := false, ExternalAccess := Read/Write)"
 TAG,,T51_3,"IDH Outlet Temp",REAL,,"(RADIX := Float, Constant := false, ExternalAccess := Read/Write)"
-TAG,,REGEN_FAN_STACK_TEMP,"Regen Fan Stack Temp",REAL,,"(RADIX := Float, Constant := false, ExternalAccess := Read/Write)"
+TAG,,T51_5,"Regen Fan Stack Temp",REAL,,"(RADIX := Float, Constant := false, ExternalAccess := Read/Write)"
 TAG,,IDH_ADDR_190,,DINT,,"(RADIX := Decimal, Constant := false, ExternalAccess := Read/Write)"
 TAG,,T51_1,"Air Temp After CC1",REAL,,"(RADIX := Float, Constant := false, ExternalAccess := Read/Write)"
 TAG,,T51_2,"Temp Before Dessicant Wheel",REAL,,"(RADIX := Float, Constant := false, ExternalAccess := Read/Write)"

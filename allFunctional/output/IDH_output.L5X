@@ -1,0 +1,1712 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R01_IDH_Main" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="Grantek" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R01_IDH_Main" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_289_08)[[ONS(OneShots[0])ADD(3,DM3005,DM3005),ONS(OneShots[1])ADD(DM3005,1,DM3006)],ONS(OneShots[2])ADD(2,DM3005,DM3007)][[[[LES(DM3005,3054)XIO(IDH_ADDR_91_01)XIO(IDH_ADDR_92_00),XIC(P_First_Cycle)],MOV(3010,DM3005)],MOV(3011,DM3006)],MOV(3012,DM3007)];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_92_00)XIO(IDH_ADDR_91_01)LES(DM3005,3078)[[[MOV(3010,DM3005),MOV(3011,DM3006)],MOV(3012,DM3007)],OTU(IDH_ADDR_92_00)];]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_91_01)[[[[[ONS(OneShots[3])MOV(3079,DM3005),ONS(OneShots[4])MOV(3080,DM3006)],ONS(OneShots[5])MOV(3081,DM3007)],LES(DM3005,3087)MOV(3010,DM3005)],MOV(3011,DM3006)],MOV(3012,DM3007)];]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[[MOV(Global_Array[DM3005],DM3000),MOV(Global_Array[DM3006],DM3001)],MOV(Global_Array[DM3007],DM3002)];]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_289_08)[[TON(TIMER0_STATUS,2000,0),XIC(TIMER0_STATUS.DN)ONS(OneShots[6])ADD(1,DM3005,DM3008)],MOV(Global_Array[DM3008],DM3009)];]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[EQU(DM3000,3100)[[XIC(IDH_ADDR_91_01)XIO(IDH_ADDR_91_00)[[[[OTU(IDH_ADDR_91_01),MOV(DM3500,DM3521)],MOV(DM3501,DM3526)],MOV(DM3500,DM3505)],MOV(DM3501,DM3506)],XIO(IDH_ADDR_91_01)[[[[EQU(DM3521,DM3505)MOV(DM3521,DM3505),MOV(DM3521,DM3500)],[EQU(DM3526,DM3506)MOV(DM3526,DM3506),MOV(DM3526,DM3501)]],EQU(DM3500,DM3521)OTL(IDH_ADDR_91_01)],EQU(DM3501,DM3526)OTL(IDH_ADDR_91_01)]],OTE(IDH_ADDR_91_00)],[MOV(DM3500,DM3143),MOV(DM3501,DM3148)]];]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (PMCR(17)).]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_91_03)XIO(IDH_ADDR_289_08)XIO(P_First_Cycle)ONS(OneShots[7])PMCR(Global_Array[DM3000],Global_Array[DM3001],Global_Array[DM3002]);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(DM3000,3100)EQU(DM3553,0)[[[[[MOV(DM3553,DM3800),MOV(DM3558,DM3801)],MOV(DM3563,DM3802)],MOV(DM3568,DM3803)],MOV(DM3573,DM3804)],MOV(DM3578,DM3805)];]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(DM3000,3100)EQU(DM3553,0)[[[[[MOV(DM3800,DM3553),MOV(DM3801,DM3558)],MOV(DM3802,DM3563)],MOV(DM3803,DM3568)],MOV(DM3804,DM3573)],MOV(DM3805,DM3578)];]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(DM3000,3100)EQU(DM3603,0)[[[[[MOV(DM3603,DM3806),MOV(DM3608,DM3807)],MOV(DM3613,DM3808)],MOV(DM3618,DM3809)],MOV(DM3623,DM3810)],MOV(DM3628,DM3811)];]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(DM3000,3100)EQU(DM3603,0)[[[[[MOV(DM3806,DM3603),MOV(DM3807,DM3608)],MOV(DM3808,DM3613)],MOV(DM3809,DM3618)],MOV(DM3810,DM3623)],MOV(DM3811,DM3628)];]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (PMCR(17)).]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_91_03)XIO(IDH_ADDR_289_08)XIO(P_First_Cycle)ONS(OneShots[8])PMCR(#1174,DM4000,DM4005);]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR10_00)XIO(IDH_ADDR_HR10_01)XIO(IDH_ADDR_HR10_02)XIO(IDH_ADDR_HR10_03)[[[[[OSR(TO_CONTROL_P72_storage,TO_CONTROL_P72),MOV(DM0,DM900)],MOV(DM1,DM901)],MOV(1,DM902)],LES(DM1727,200)OTE(IDH_ADDR_120_01)],LES(DM1737,110)OTE(IDH_ADDR_120_02)];]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_HR10_00)XIC(IDH_ADDR_HR10_01)XIO(IDH_ADDR_HR10_02)[[[[[OSR(IDH_ADDR_232_04_storage,IDH_ADDR_232_04),MOV(DM2,DM900)],MOV(DM3,DM901)],MOV(2,DM902)],LES(DM1727,200)OTE(IDH_ADDR_120_01)],LES(DM1737,110)OTE(IDH_ADDR_120_02)];]]>
+</Text>
+</Rung>
+<Rung Number="14" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR10_00)XIC(IDH_ADDR_HR10_01)XIO(IDH_ADDR_HR10_02)[[[[[OSR(IDH_ADDR_232_05_storage,IDH_ADDR_232_05),MOV(DM4,DM900)],MOV(DM5,DM901)],MOV(3,DM902)],LES(DM1727,210)OTE(IDH_ADDR_120_03)],LES(DM1737,95)OTE(IDH_ADDR_120_04)];]]>
+</Text>
+</Rung>
+<Rung Number="15" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_HR10_00)XIO(IDH_ADDR_HR10_01)XIC(IDH_ADDR_HR10_02)[[[[[OSR(IDH_ADDR_232_06_storage,IDH_ADDR_232_06),MOV(DM6,DM900)],MOV(DM7,DM901)],MOV(4,DM902)],LES(DM1727,190)OTE(IDH_ADDR_120_05)],LES(DM1737,75)OTE(IDH_ADDR_120_06)];]]>
+</Text>
+</Rung>
+<Rung Number="16" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR10_00)XIO(IDH_ADDR_HR10_01)XIC(IDH_ADDR_HR10_02)[[[[OSR(IDH_ADDR_232_07_storage,IDH_ADDR_232_07),OTE(IDH_ADDR_40_00)],MOV(DM8,DM900)],MOV(DM9,DM901)],MOV(5,DM902)];]]>
+</Text>
+</Rung>
+<Rung Number="17" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(TO_CONTROL_P72)XIO(IDH_ADDR_232_04)XIO(IDH_ADDR_232_05)XIO(IDH_ADDR_232_06)XIO(IDH_ADDR_232_07)OTE(IDH_ADDR_232_08);]]>
+</Text>
+</Rung>
+<Rung Number="18" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIO(TIM010.DN)XIC(IDH_ADDR_232_08)TON(TIM010,1000,0);]]>
+</Text>
+</Rung>
+<Rung Number="19" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(TIM010.DN)[[XIC(CNT020.DN)ONS(OneShots[9])CTU(CNT020,900,0),XIO(IDH_ADDR_232_08)],RES(CNT020)];]]>
+</Text>
+</Rung>
+<Rung Number="20" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(P_On)XIC(CNT020.DN)ONS(OneShots[10])CTU(CNT030,150,0),XIO(IDH_ADDR_232_08)RES(CNT030)];]]>
+</Text>
+</Rung>
+<Rung Number="21" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_232_08)MOV(CNT20.DN,STER_TR74_BEFORE_LOOP);]]>
+</Text>
+</Rung>
+<Rung Number="22" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_232_08)MOV(CNT30.DN,STER_TR74_STPT_AI);]]>
+</Text>
+</Rung>
+<Rung Number="23" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_232_08)[[[SUB(900,STER_TR74_BEFORE_LOOP,DM502),DIV(DM502,60,DM503)],SUB(150,STER_TR74_STPT_AI,DM505)],MUL(DM505,15,STER_TR74_OUT_AI)];]]>
+</Text>
+</Rung>
+<Rung Number="24" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_232_08)[[[ADD(DM503,STER_TR74_OUT_AI,DM508),DIV(DM508,60,DM509)],MUL(STER_VAC,100,DM513)],DIV(DM513,60,DM515)];]]>
+</Text>
+</Rung>
+<Rung Number="25" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_232_08)BTD(DM509,0,STER_VAC_STPT_AR,8,1)BTD(DM509,1,STER_VAC_STPT_AR,9,1)BTD(DM509,2,STER_VAC_STPT_AR,10,1)BTD(DM509,3,STER_VAC_STPT_AR,11,1);]]>
+</Text>
+</Rung>
+<Rung Number="26" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_232_08)BTD(DM509,4,STER_VAC_STPT_AR,12,1)BTD(DM509,5,STER_VAC_STPT_AR,13,1)BTD(DM509,6,STER_VAC_STPT_AR,14,1)BTD(DM509,7,STER_VAC_STPT_AR,15,1);]]>
+</Text>
+</Rung>
+<Rung Number="27" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_232_08)BTD(DM515,0,STER_VAC_STPT_AR,0,1)BTD(DM515,1,STER_VAC_STPT_AR,1,1)BTD(DM515,2,STER_VAC_STPT_AR,2,1)BTD(DM515,3,STER_VAC_STPT_AR,3,1)BTD(DM515,4,STER_VAC_STPT_AR,4,1)BTD(DM515,5,STER_VAC_STPT_AR,5,1);]]>
+</Text>
+</Rung>
+<Rung Number="28" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_232_08)BTD(DM515,6,STER_VAC_STPT_AR,6,1)BTD(DM515,7,STER_VAC_STPT_AR,7,1);]]>
+</Text>
+</Rung>
+<Rung Number="29" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(TO_CONTROL_P72)MOV(5,DM512);]]>
+</Text>
+</Rung>
+<Rung Number="30" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_232_04)MOV(1,DM512);]]>
+</Text>
+</Rung>
+<Rung Number="31" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_232_05)MOV(2,DM512);]]>
+</Text>
+</Rung>
+<Rung Number="32" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_232_06)MOV(3,DM512);]]>
+</Text>
+</Rung>
+<Rung Number="33" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_232_07)MOV(4,DM512);]]>
+</Text>
+</Rung>
+<Rung Number="34" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_00)EQU(DM902,1)OTE(ALARMCANCEL);]]>
+</Text>
+</Rung>
+<Rung Number="35" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_00)EQU(DM902,2)OTE(STER_LAMP_TEST_DI);]]>
+</Text>
+</Rung>
+<Rung Number="36" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_00)EQU(DM902,3)OTE(I004);]]>
+</Text>
+</Rung>
+<Rung Number="37" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_00)EQU(DM902,4)OTE(I006);]]>
+</Text>
+</Rung>
+<Rung Number="38" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_00)EQU(DM902,5)OTE(I008);]]>
+</Text>
+</Rung>
+<Rung Number="39" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_01)EQU(DM902,1)OTE(I001);]]>
+</Text>
+</Rung>
+<Rung Number="40" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_01)EQU(DM902,2)OTE(I003);]]>
+</Text>
+</Rung>
+<Rung Number="41" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_01)EQU(DM902,3)OTE(I005);]]>
+</Text>
+</Rung>
+<Rung Number="42" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_01)EQU(DM902,4)OTE(I007);]]>
+</Text>
+</Rung>
+<Rung Number="43" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_01)EQU(DM902,5)OTE(STER_TOGGLE_SWITCH_MANUAL);]]>
+</Text>
+</Rung>
+<Rung Number="44" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_04)OTE(IDH_ADDR_HR1_00);]]>
+</Text>
+</Rung>
+<Rung Number="45" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_05)OTE(IDH_ADDR_HR1_01);]]>
+</Text>
+</Rung>
+<Rung Number="46" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)OTE(IDH_ADDR_AR1_00);]]>
+</Text>
+</Rung>
+<Rung Number="47" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)OTE(IDH_ADDR_AR1_01);]]>
+</Text>
+</Rung>
+<Rung Number="48" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)OTE(IDH_ADDR_AR1_02);]]>
+</Text>
+</Rung>
+<Rung Number="49" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)OTE(IDH_ADDR_AR1_03);]]>
+</Text>
+</Rung>
+<Rung Number="50" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)OTE(IDH_ADDR_AR1_07);]]>
+</Text>
+</Rung>
+<Rung Number="51" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)OTE(IDH_ADDR_AR1_08);]]>
+</Text>
+</Rung>
+<Rung Number="52" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)OTE(IDH_ADDR_AR1_09);]]>
+</Text>
+</Rung>
+<Rung Number="53" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)[[[[[MOV(FF,100),MOV(7BC,110)],MOV(9800,130)],MOV(0,170)],MOV(0,180)],MOV(0,190)];]]>
+</Text>
+</Rung>
+<Rung Number="54" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)COP(181,DM1821,8)COP(191,DM1921,8);]]>
+</Text>
+</Rung>
+<Rung Number="55" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[MOV(185,DM1790),MOV(186,DM1886)];]]>
+</Text>
+</Rung>
+<Rung Number="56" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)ADD(171,DM1710,DM1711)CPT(DM1717,DM1714-(DM1714-DM1712)/(DM1715-DM1713)*(DM1715-DM1711));]]>
+</Text>
+</Rung>
+<Rung Number="57" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[[[ADD(172,DM1720,DM1721),CPT(DM1727,DM1724-(DM1724-DM1722)/(DM1725-DM1723)*(DM1725-DM1721))],XIC(IDH_ADDR_172_15)MOV(0,DM1727)],MOV(DM1727,DM920)];]]>
+</Text>
+</Rung>
+<Rung Number="58" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM184,DM182-(DM182-DM180)/(DM183-DM181)*(DM183-172));]]>
+</Text>
+</Rung>
+<Rung Number="59" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)GRT(172,0)LEQ(172,FFFF)CPT(DM204,DM202-(DM202-DM200)/(DM203-DM201)*(DM203-172));]]>
+</Text>
+</Rung>
+<Rung Number="60" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM314,DM312-(DM312-DM310)/(DM313-DM311)*(DM313-188));]]>
+</Text>
+</Rung>
+<Rung Number="61" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)DIV(DM204,600,DM215);]]>
+</Text>
+</Rung>
+<Rung Number="62" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (ADDL(54)).]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(P_1s)ADDL(DM215,DM217,DM217);]]>
+</Text>
+</Rung>
+<Rung Number="63" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)LES(DM1727,20)OTE(IDH_ADDR_1_00);]]>
+</Text>
+</Rung>
+<Rung Number="64" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_1_00)TON(TIM015,10000,0);]]>
+</Text>
+</Rung>
+<Rung Number="65" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(TIM015.DN)OTE(IDH_ADDR_39_06);]]>
+</Text>
+</Rung>
+<Rung Number="66" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[[ADD(173,DM1730,DM1731),CPT(DM1737,DM1734-(DM1734-DM1732)/(DM1735-DM1733)*(DM1735-DM1731))],XIC(IDH_ADDR_173_15)MOV(0,DM1737)];]]>
+</Text>
+</Rung>
+<Rung Number="67" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)LES(DM1737,20)OTE(I101);]]>
+</Text>
+</Rung>
+<Rung Number="68" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(I101)TON(TIM016,10000,0);]]>
+</Text>
+</Rung>
+<Rung Number="69" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(TIM016.DN)OTE(IDH_ADDR_39_07);]]>
+</Text>
+</Rung>
+<Rung Number="70" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(P_On)ADD(174,DM1740,DM1741)CPT(DM1747,DM1744-(DM1744-DM1742)/(DM1745-DM1743)*(DM1745-DM1741));]]>
+</Text>
+</Rung>
+<Rung Number="71" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)MOV(174,DM1741)CPT(DM1747,DM1744-(DM1744-DM1742)/(DM1745-DM1743)*(DM1745-DM1741));]]>
+</Text>
+</Rung>
+<Rung Number="72" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)ADD(175,DM1750,DM1751)CPT(DM1757,DM1754-(DM1754-DM1752)/(DM1755-DM1753)*(DM1755-DM1751));]]>
+</Text>
+</Rung>
+<Rung Number="73" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)ADD(176,DM1760,DM1761)CPT(DM1767,DM1764-(DM1764-DM1762)/(DM1765-DM1763)*(DM1765-DM1761));]]>
+</Text>
+</Rung>
+<Rung Number="74" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)ADD(177,DM1770,DM1771)CPT(DM1777,DM1774-(DM1774-DM1772)/(DM1775-DM1773)*(DM1775-DM1771));]]>
+</Text>
+</Rung>
+<Rung Number="75" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)ADD(178,DM1780,DM1781)CPT(DM1787,DM1784-(DM1784-DM1782)/(DM1785-DM1783)*(DM1785-DM1781));]]>
+</Text>
+</Rung>
+<Rung Number="76" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)MUL(DM1727,10,DM1728);]]>
+</Text>
+</Rung>
+<Rung Number="77" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)ADD(100,DM900,DM800);]]>
+</Text>
+</Rung>
+<Rung Number="78" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (CMP(20)). - ERROR CONVERTING THIS RUNG (LD).]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIO(IDH_ADDR_40_00)(DM1728,DM800);]]>
+</Text>
+</Rung>
+<Rung Number="79" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_GT)XIO(IDH_ADDR_40_00)OSR(IDH_ADDR_HR2_00_storage,IDH_ADDR_HR2_00);]]>
+</Text>
+</Rung>
+<Rung Number="80" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)MUL(DM1737,10,DM1738);]]>
+</Text>
+</Rung>
+<Rung Number="81" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)ADD(100,DM901,DM801);]]>
+</Text>
+</Rung>
+<Rung Number="82" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (CMP(20)). - ERROR CONVERTING THIS RUNG (LD).]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIO(IDH_ADDR_40_00)(DM1738,DM801);]]>
+</Text>
+</Rung>
+<Rung Number="83" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_GT)XIO(IDH_ADDR_40_00)OSR(IDH_ADDR_HR2_01_storage,IDH_ADDR_HR2_01);]]>
+</Text>
+</Rung>
+<Rung Number="84" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (CMP(20)). - ERROR CONVERTING THIS RUNG (LD).]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)(Sterilizer_ADDR_111,DM1121);]]>
+</Text>
+</Rung>
+<Rung Number="85" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM939,DM937-(DM937-DM935)/(DM938-DM936)*(DM938-Sterilizer_ADDR_111));]]>
+</Text>
+</Rung>
+<Rung Number="86" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_LT)OSR(IDH_ADDR_HR2_10_storage,IDH_ADDR_HR2_10);]]>
+</Text>
+</Rung>
+<Rung Number="87" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (CMP(20)). - ERROR CONVERTING THIS RUNG (LD).]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)(Sterilizer_ADDR_112,DM1122);]]>
+</Text>
+</Rung>
+<Rung Number="88" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_LT)OSR(IDH_ADDR_HR2_11_storage,IDH_ADDR_HR2_11);]]>
+</Text>
+</Rung>
+<Rung Number="89" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM934,DM932-(DM932-DM930)/(DM933-DM931)*(DM933-Sterilizer_ADDR_113));]]>
+</Text>
+</Rung>
+<Rung Number="90" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)GEQ(DM939,70)TON(TIM028,15000,0)[XIC(TIM028.DN)[XIC(STK_25PERCENT),XIC(STLOWACK)]OTL(HLST),XIC(TIM035.DN)OTU(HLST)];]]>
+</Text>
+</Rung>
+<Rung Number="91" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(HLST)TON(TIM035,30000,0);]]>
+</Text>
+</Rung>
+<Rung Number="92" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (CMP(20)). - ERROR CONVERTING THIS RUNG (LD).]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)(Sterilizer_ADDR_113,DM1123);]]>
+</Text>
+</Rung>
+<Rung Number="93" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_LT)OSR(IDH_ADDR_HR2_12_storage,IDH_ADDR_HR2_12);]]>
+</Text>
+</Rung>
+<Rung Number="94" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[[XIC(IDH_ADDR_HR2_00),XIC(IDH_ADDR_HR2_01)]OTL(IDH_ADDR_HR2_02),XIC(IDH_ADDR_HR2_03)OTU(IDH_ADDR_HR2_02)];]]>
+</Text>
+</Rung>
+<Rung Number="95" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR3_00)XIO(IDH_ADDR_HR3_01)OTE(IDH_ADDR_39_15);]]>
+</Text>
+</Rung>
+<Rung Number="96" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_1s)[ADD(DM100,30,DM102),MUL(DM102,40,DM104)];]]>
+</Text>
+</Rung>
+<Rung Number="97" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_02)XIO(IDH_ADDR_HR1_07)[[[MOV(DM104,DM106),MOV(DM106,DM2600)],XIO(ALWAYSMINUSFALSE)PID(191_PID, 191, 0, Sterilizer_ADDR_101, 0, 0)],XIC(ALWAYSMINUSFALSE)MOV(0,Sterilizer_ADDR_101)];]]>
+</Text>
+</Rung>
+<Rung Number="98" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)GRT(191,F000)OTE(ALWAYSMINUSFALSE);]]>
+</Text>
+</Rung>
+<Rung Number="99" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_1s)[ADD(DM110,20,DM112),MUL(DM112,44,DM114)];]]>
+</Text>
+</Rung>
+<Rung Number="100" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_03)XIO(IDH_ADDR_HR1_07)[[[MOV(DM114,DM116),MOV(DM116,DM2650)],XIO(IDH_ADDR_300_01)PID(192_PID, 192, 0, STERILE_TK_TEMP, 0, 0)],XIC(IDH_ADDR_300_01)MOV(0,STERILE_TK_TEMP)];]]>
+</Text>
+</Rung>
+<Rung Number="101" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)GRT(192,F000)OTE(IDH_ADDR_300_01);]]>
+</Text>
+</Rung>
+<Rung Number="102" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_1s)[ADD(DM120,46,DM122),MUL(DM122,18,DM124)];]]>
+</Text>
+</Rung>
+<Rung Number="103" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_04)[[[MOV(DM124,DM126),MOV(DM126,DM2700)],XIO(IDH_ADDR_300_02)PID(188_PID, 188, 0, Sterilizer_ADDR_103, 0, 0)],XIC(IDH_ADDR_300_02)MOV(0,Sterilizer_ADDR_103)];]]>
+</Text>
+</Rung>
+<Rung Number="104" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)GRT(188,F000)OTE(IDH_ADDR_300_02);]]>
+</Text>
+</Rung>
+<Rung Number="105" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_1s)[ADD(DM130,20,DM132),MUL(DM132,44,DM134)];]]>
+</Text>
+</Rung>
+<Rung Number="106" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_Off)XIC(IDH_ADDR_HR1_05)XIO(IDH_ADDR_HR1_07)[[[MOV(DM134,DM136),MOV(DM136,DM2750)],XIO(IDH_ADDR_300_03)PID(187_PID, 187, 0, Sterilizer_ADDR_104, 0, 0)],XIC(IDH_ADDR_300_03)MOV(0,Sterilizer_ADDR_104)];]]>
+</Text>
+</Rung>
+<Rung Number="107" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)GRT(187,F000)OTE(IDH_ADDR_300_03);]]>
+</Text>
+</Rung>
+<Rung Number="108" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)MOV(DM134,DM136);]]>
+</Text>
+</Rung>
+<Rung Number="109" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[[[[MOV(DM255,DM256),MUL(DM256,9,DM257)],DIV(DM257,5,DM258)],ADD(DM258,20,DM259)],MOV(DM259,DM220)];]]>
+</Text>
+</Rung>
+<Rung Number="110" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_09)[XIC(P_Off)ONS(OneShots[11])MOV(DM220,DM220),[[[[[ONS(OneShots[12])MOV(DM221,DM221),ONS(OneShots[13])MOV(DM222,DM222)],ONS(OneShots[14])MOV(DM223,DM223)],ONS(OneShots[15])MOV(DM224,DM224)],ONS(OneShots[16])MOV(0,DM225)],ONS(OneShots[17])MOV(404,DM226)]];]]>
+</Text>
+</Rung>
+<Rung Number="111" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_09)XIO(IDH_ADDR_50_06)[[[[PID(DM274_PID, DM274, 0, DM260, 0, 0),XIC(P_ER)OTE(IDH_ADDR_HR1_10)],XIC(P_CY)OTE(IDH_ADDR_HR1_11)],LES(DM260,0)MOV(0,DM260)],GRT(DM260,FFF)MOV(FFF,DM260)];]]>
+</Text>
+</Rung>
+<Rung Number="112" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_HR1_09)XIO(IDH_ADDR_50_06)MOV(DM261,DM260);]]>
+</Text>
+</Rung>
+<Rung Number="113" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_50_06)[XIO(IDH_ADDR_HR1_09),XIC(IDH_ADDR_HR1_09)]MOV(DM260,Sterilizer_ADDR_104);]]>
+</Text>
+</Rung>
+<Rung Number="114" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM289,DM287-(DM287-DM285)/(DM288-DM286)*(DM288-194));]]>
+</Text>
+</Rung>
+<Rung Number="115" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM274,DM272-(DM272-DM270)/(DM273-DM271)*(DM273-187));]]>
+</Text>
+</Rung>
+<Rung Number="116" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM279,DM277-(DM277-DM275)/(DM278-DM276)*(DM278-192));]]>
+</Text>
+</Rung>
+<Rung Number="117" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM284,DM282-(DM282-DM280)/(DM283-DM281)*(DM283-191));]]>
+</Text>
+</Rung>
+<Rung Number="118" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)MOV(187,DM5204)CPT(DM5209,DM5207-(DM5207-DM5205)/(DM5208-DM5206)*(DM5208-DM5204));]]>
+</Text>
+</Rung>
+<Rung Number="119" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_50_06)XIC(IDH_ADDR_HR1_05)XIO(IDH_ADDR_HR1_07)ONS(OneShots[18])MOV(DM5211,DM5210);]]>
+</Text>
+</Rung>
+<Rung Number="120" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_50_06)XIO(IDH_ADDR_HR1_05)XIC(IDH_ADDR_HR1_07)MOV(90,DM5211);]]>
+</Text>
+</Rung>
+<Rung Number="121" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_HR1_05)XIO(IDH_ADDR_HR1_07)MOV(DM5211,DM5211);]]>
+</Text>
+</Rung>
+<Rung Number="122" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(IDH_ADDR_50_06)[ADD(DM5215,3,DM5200),GRT(DM5209,DM5200)OTE(IDH_ADDR_50_00)];]]>
+</Text>
+</Rung>
+<Rung Number="123" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(IDH_ADDR_50_06)[ADD(DM5215,5,DM5201),GRT(DM5209,DM5201)OTE(IDH_ADDR_50_01)];]]>
+</Text>
+</Rung>
+<Rung Number="124" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(IDH_ADDR_50_06)[SUB(DM5215,3,DM5202),LES(DM5209,DM5202)OTE(IDH_ADDR_50_02)];]]>
+</Text>
+</Rung>
+<Rung Number="125" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(IDH_ADDR_50_06)[SUB(DM5215,5,DM5203),LES(DM5209,DM5203)OTE(IDH_ADDR_50_03)];]]>
+</Text>
+</Rung>
+<Rung Number="126" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_50_06)XIC(IDH_ADDR_HR1_05)XIO(IDH_ADDR_HR1_07)XIC(P_1s)[XIC(IDH_ADDR_50_06)ONS(OneShots[19])CTU(CNT041,600,0),XIC(IDH_ADDR_51_00)RES(CNT041)];]]>
+</Text>
+</Rung>
+<Rung Number="127" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_50_06)XIC(IDH_ADDR_HR1_05)XIO(IDH_ADDR_HR1_07)XIC(CNT041.DN)[[[XIC(IDH_ADDR_50_03)ADD(DM5211,3,DM5211),XIC(IDH_ADDR_50_02)XIO(IDH_ADDR_50_03)ADD(DM5211,2,DM5211)],XIC(IDH_ADDR_50_00)XIO(IDH_ADDR_50_01)SUB(DM5211,2,DM5211)],XIC(IDH_ADDR_50_01)SUB(DM5211,3,DM5211)];]]>
+</Text>
+</Rung>
+<Rung Number="128" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_50_06)XIC(IDH_ADDR_HR1_05)XIO(IDH_ADDR_HR1_07)[GRT(DM5211,100)MOV(100,DM5211),LES(DM5211,5)MOV(5,DM5211)];]]>
+</Text>
+</Rung>
+<Rung Number="129" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(IDH_ADDR_50_06)[[MOV(DM5211,DM5212),MUL(DM5212,28,DM5213)],MOV(DM5213,Sterilizer_ADDR_104)];]]>
+</Text>
+</Rung>
+<Rung Number="130" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(CNT041.DN)OTE(IDH_ADDR_51_00);]]>
+</Text>
+</Rung>
+<Rung Number="131" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_05)XIO(IDH_ADDR_HR1_07)MOV(DM5211,DM5210);]]>
+</Text>
+</Rung>
+<Rung Number="132" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_Off)XIC(P_1s)[ADD(DM140,20,DM142),MUL(DM142,44,DM144)];]]>
+</Text>
+</Rung>
+<Rung Number="133" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM5221,DM5219-(DM5219-DM5217)/(DM5220-DM5218)*(DM5220-197));]]>
+</Text>
+</Rung>
+<Rung Number="134" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_50_07)[[[[[[MOV(&1230,DM2800),MOV(100,DM2801)],MOV(90,DM2802)],MOV(0000,DM2803)],MOV(500,DM2804)],MOV(0000,DM2805)],MOV(404,DM2806)];]]>
+</Text>
+</Rung>
+<Rung Number="135" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_50_07)PID(187_PID, 187, 0, DM149, 0, 0);]]>
+</Text>
+</Rung>
+<Rung Number="136" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[[GRT(197,F32),XIC(IDH_ADDR_300_06)]OTE(IDH_ADDR_300_04),LES(197,10)OTE(IDH_ADDR_300_06)];]]>
+</Text>
+</Rung>
+<Rung Number="137" Type="N">
+<Comment>
+<![CDATA['  T51-12 Semi Auto Control\nWINTER Mode Only\n\nPCR from Phil Shyu 01/30/2019\n\nIf in Manual and Winter Mode move the forced value (%) from SCADA to the output]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_HR1_06)XIC(IDH_ADDR_HR1_08)MOV(DM141,105);]]>
+</Text>
+</Rung>
+<Rung Number="138" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_HR1_06)XIC(IDH_ADDR_HR1_08)MOV(28,DM147);]]>
+</Text>
+</Rung>
+<Rung Number="139" Type="N">
+<Comment>
+<![CDATA['  If in Auto and Winter Mode move a value to DM148 (counter preset)]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_HR1_06)XIC(IDH_ADDR_HR1_08)MOV(300,DM148);]]>
+</Text>
+</Rung>
+<Rung Number="140" Type="N">
+<Comment>
+<![CDATA['  If in Summer Mode write 0% to the output]]>
+</Comment>
+<Text>
+<![CDATA[[XIO(IDH_ADDR_HR1_06),XIC(IDH_ADDR_HR1_06)]XIO(IDH_ADDR_HR1_08)MOV(0000,105);]]>
+</Text>
+</Rung>
+<Rung Number="141" Type="N">
+<Comment>
+<![CDATA['  If in Auto and Winter enable the counter\nIf in Manual or Summer reset the counter\nIf in Auto and Winter reset counter as soon as its done]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_06)XIC(IDH_ADDR_HR1_08)XIC(P_1s)[[[XIO(IDH_ADDR_HR1_06),XIO(IDH_ADDR_HR1_08)],XIC(IDH_ADDR_HR1_06)XIC(IDH_ADDR_HR1_08)XIC(CNT052.DN)ONS(OneShots[20])CTU(CNT052,DM148,0)],RES(CNT052)];]]>
+</Text>
+</Rung>
+<Rung Number="142" Type="N">
+<Comment>
+<![CDATA['  When in Auto and Winter and timer done compare]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_06)XIC(IDH_ADDR_HR1_08)XIC(CNT052.DN)LES(DM274,91)[LES(105,F78)ADD(105,28,105),[[XIC(P_GT),XIC(P_EQ)],MOV(FA0,105)]];]]>
+</Text>
+</Rung>
+<Rung Number="143" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_06)XIC(IDH_ADDR_HR1_08)XIC(CNT052.DN)GRT(DM274,97)[GEQ(105,28)SUB(105,28,105),XIC(P_LT)MOV(0000,105)];]]>
+</Text>
+</Rung>
+<Rung Number="144" Type="N">
+<Comment>
+<![CDATA['  Small Cooling Tower Temperature Scaling]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(DM304,DM302-(DM302-DM300)/(DM303-DM301)*(DM303-182));]]>
+</Text>
+</Rung>
+<Rung Number="145" Type="N">
+<Comment>
+<![CDATA['  Small Cooling Tower\nLow Speed Fan Control]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_01)GEQ(DM304,520)[TON(TIM021,60000,0),XIC(TIM021.DN)OTE(IDH_ADDR_60_00)];]]>
+</Text>
+</Rung>
+<Rung Number="146" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_01)LES(DM304,600)[TON(TIM022,35000,0),XIC(TIM022.DN)OTE(IDH_ADDR_60_01)];]]>
+</Text>
+</Rung>
+<Rung Number="147" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_01)LES(DM304,500)[TON(TIM023,60000,0),XIC(TIM023.DN)OTE(IDH_ADDR_HR2_04)];]]>
+</Text>
+</Rung>
+<Rung Number="148" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_60_00)XIC(IDH_ADDR_60_01)OSR(IDH_ADDR_HR2_05_storage,IDH_ADDR_HR2_05);]]>
+</Text>
+</Rung>
+<Rung Number="149" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(IDH_ADDR_HR2_05)OTL(IDH_ADDR_HR2_06),[XIC(IDH_ADDR_HR2_04),XIO(IDH_ADDR_60_01)]OTU(IDH_ADDR_HR2_06)];]]>
+</Text>
+</Rung>
+<Rung Number="150" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_01)XIC(IDH_ADDR_HR2_06)XIO(IDH_ADDR_39_01)XIO(IDH_ADDR_HR2_09)OTE(IDH_ADDR_39_00);]]>
+</Text>
+</Rung>
+<Rung Number="151" Type="N">
+<Comment>
+<![CDATA['  Small Cooling Tower\nHigh Speed Fan Control]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_01)GRT(DM304,603)[TON(TIM024,10000,0),XIC(TIM024.DN)OTE(IDH_ADDR_60_02)];]]>
+</Text>
+</Rung>
+<Rung Number="152" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_01)LES(DM304,600)[TON(TIM025,20000,0),XIC(TIM025.DN)OTE(IDH_ADDR_HR2_07)];]]>
+</Text>
+</Rung>
+<Rung Number="153" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_60_02)OSR(IDH_ADDR_HR2_08_storage,IDH_ADDR_HR2_08);]]>
+</Text>
+</Rung>
+<Rung Number="154" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(IDH_ADDR_HR2_08)OTL(IDH_ADDR_HR2_09),XIC(IDH_ADDR_HR2_07)OTU(IDH_ADDR_HR2_09)];]]>
+</Text>
+</Rung>
+<Rung Number="155" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_44_01)XIC(IDH_ADDR_HR2_09)XIO(IDH_ADDR_39_00)OTE(IDH_ADDR_39_01);]]>
+</Text>
+</Rung>
+<Rung Number="156" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_HR1_07)[[[MOV(DM134,DM136),MOV(DM136,DM2850)],XIO(IDH_ADDR_300_05)PID(187_PID, 187, 0, Sterilizer_ADDR_101, 0, 0)],XIC(IDH_ADDR_300_05)MOV(0,Sterilizer_ADDR_101)];]]>
+</Text>
+</Rung>
+<Rung Number="157" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)GRT(187,F000)OTE(IDH_ADDR_300_05);]]>
+</Text>
+</Rung>
+<Rung Number="158" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_First_Cycle)MOV(30,DM150);]]>
+</Text>
+</Rung>
+<Rung Number="159" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[ONS(OneShots[21])CTU(CNT031,5,0),XIC(IDH_ADDR_300_10)RES(CNT031)];]]>
+</Text>
+</Rung>
+<Rung Number="160" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)LES(187,DM136)OTE(IDH_ADDR_300_11);]]>
+</Text>
+</Rung>
+<Rung Number="161" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(CNT031.DN)[[[LES(Sterilizer_ADDR_104,ED8)XIO(IDH_ADDR_300_11)SUB(DM150,1,DM150),[[XIC(P_GT),XIC(P_EQ)],ADD(DM150,1,DM150)]],XIC(P_Off)MOV(DM150,DM140)],OTE(IDH_ADDR_300_09)];]]>
+</Text>
+</Rung>
+<Rung Number="162" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_300_09)OTE(IDH_ADDR_300_10);]]>
+</Text>
+</Rung>
+<Rung Number="163" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_1min)[LES(DM150,7)MOV(6,DM150),GRT(DM150,60)MOV(60,DM150)];]]>
+</Text>
+</Rung>
+<Rung Number="164" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_11_00)OTE(BTLOW);]]>
+</Text>
+</Rung>
+<Rung Number="165" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_11_01)OTE(STER_LEVEL_BALANCE_TK_DA);]]>
+</Text>
+</Rung>
+<Rung Number="166" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_11_02)OTE(BTGRTRTHAN25PERCENT);]]>
+</Text>
+</Rung>
+<Rung Number="167" Type="N">
+<Comment>
+<![CDATA['  Sterilizer CIP Pumps 117 and 66\nSpeed Control]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(STER_TO_DRIER_CIP_STEP,1)[XIO(TIM005.DN)[MOV(DM3499,DM3500),MOV(850,DM3501)],[TON(TIM005,360000,0),OTE(IDH_ADDR_120_07)]];]]>
+</Text>
+</Rung>
+<Rung Number="168" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(STER_TO_DRIER_CIP_STEP,1)XIC(TIM005.DN)[MOV(850,DM3501),MOV(DM3499,DM3500)];]]>
+</Text>
+</Rung>
+<Rung Number="169" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(STER_TO_DRIER_CIP_STEP,2)[[MOV(DM3499,DM3500),MOV(850,DM3501)],OTE(IDH_ADDR_120_08)];]]>
+</Text>
+</Rung>
+<Rung Number="170" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[EQU(STER_TO_DRIER_CIP_STEP,3),XIC(IDH_ADDR_11_04)][[MOV(575,DM3500),MOV(700,DM3501)],OTE(IDH_ADDR_120_09)];]]>
+</Text>
+</Rung>
+<Rung Number="171" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(STER_TO_DRIER_CIP_STEP,4)[[XIO(TIM006.DN),XIC(P_On)][MOV(DM3499,DM3500),MOV(850,DM3501)],[TON(TIM006,360000,0),OTE(IDH_ADDR_120_10)]];]]>
+</Text>
+</Rung>
+<Rung Number="172" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_Off)EQU(STER_TO_DRIER_CIP_STEP,4)XIC(TIM006.DN)[MOV(850,DM3501),MOV(DM3499,DM3500)];]]>
+</Text>
+</Rung>
+<Rung Number="173" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(STER_TO_DRIER_CIP_STEP,5)[[MOV(575,DM3500),MOV(700,DM3501)],OTE(IDH_ADDR_120_11)];]]>
+</Text>
+</Rung>
+<Rung Number="174" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)EQU(STER_TO_DRIER_CIP_STEP,6)[[MOV(DM3499,DM3500),MOV(850,DM3501)],OTE(IDH_ADDR_120_12)];]]>
+</Text>
+</Rung>
+<Rung Number="175" Type="N">
+<Comment>
+<![CDATA[ - ERROR CONVERTING THIS RUNG (CMP(20)). - ERROR CONVERTING THIS RUNG (LD).]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)(DM3499,650);]]>
+</Text>
+</Rung>
+<Rung Number="176" Type="N">
+<Comment>
+<![CDATA['  CIP Low Flow Alarm - P117]]>
+</Comment>
+<Text>
+<![CDATA[[[[[[XIC(IDH_ADDR_120_07),XIC(IDH_ADDR_120_08)],XIC(IDH_ADDR_120_09)],XIC(IDH_ADDR_120_10)],XIC(IDH_ADDR_120_11)],XIC(IDH_ADDR_120_12)]LES(DM1727,2000)[TON(_10_SEC_PULSE_STATUS,15000,0),OTE(IDH_ADDR_120_13)];]]>
+</Text>
+</Rung>
+<Rung Number="177" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_120_07)XIO(IDH_ADDR_120_08)XIO(IDH_ADDR_120_09)XIO(IDH_ADDR_120_10)XIO(IDH_ADDR_120_11)XIO(IDH_ADDR_120_12)OTE(STER_LEVEL_BALANCE_TK_LOW);]]>
+</Text>
+</Rung>
+<Rung Number="178" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(STER_LEVEL_BALANCE_TK_LOW)XIO(BTGRTRTHAN55PERCENT)XIC(P_1s)[[XIO(STER_LEVEL_BALANCE_TK_LOW)ONS(OneShots[22])CTU(CNT051,60,0),XIC(CNT051.DN)],RES(CNT051)];]]>
+</Text>
+</Rung>
+<Rung Number="179" Type="N">
+<Comment>
+<![CDATA['  Pulse Input from Flowmeter\n1 Pulse every 20 Litres\nBit remains on for 5 seconds to ensure that the signal gets to SCADA and the Chemetator PLC]]>
+</Comment>
+<Text>
+<![CDATA[XIC(STER_LEVEL_BALANCE_TK_LOW)XIO(BTGRTRTHAN55PERCENT)XIC(_BTGRTRTHAN30PERCENT)XIC(IDH_ADDR_45_08)OTL(CIPMINUSOVERFLOW);]]>
+</Text>
+</Rung>
+<Rung Number="180" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(CIPMINUSOVERFLOW)[TON(TIM060,30000,0),XIC(TIM060.DN)OTU(CIPMINUSOVERFLOW)];]]>
+</Text>
+</Rung>
+<Rung Number="181" Type="N">
+<Comment>
+<![CDATA['  SWECO 7/40 MESH SELECTION]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[[[[[[[XIC(STER_LEVEL_BALANCE_TK_ALARM)[[[[OSR(BT_LL_5PERCENT_storage,BT_LL_5PERCENT),XIC(BT_LL_5PERCENT)OTL(LLST)],OTU(IDH_ADDR_39_08)],OTU(IDH_ADDR_39_11)],OTU(STER_LEVEL_BALANCE_TK_ALARM)],XIC(LLST)],XIO(TIM032.DN)[[TON(TIM029,900000,0),XIC(TIM029.DN)TON(TIM033,900000,0)],TON(TIM034,910000,0)]],XIO(TIM033.DN)OTU(IDH_ADDR_39_11)],XIC(TIM034.DN)OTU(IDH_ADDR_39_08)],[XIC(TIM033.DN)XIO(TIM032.DN)OTL(IDH_ADDR_39_11),TON(TIM032,10000,0)]],XIC(TIM029.DN)XIO(TIM034.DN)OTL(IDH_ADDR_39_08)],[[[[[[[[OTU(IDH_ADDR_39_10),OTU(IDH_ADDR_39_09)],OTU(STERIL_TK_25)],OTU(STER_LVL_8PERCENT)],OTU(MLST)],OTU(STK_25PERCENT)],OTU(STLOWACK)],OTU(STKLEVELGRTRTHAN95PERCENT)],OTU(LOWTEMPACK)]];]]>
+</Text>
+</Rung>
+<Rung Number="182" Type="N">
+<Comment>
+<![CDATA['  SWECO 8/40 MESH SELECTION]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[XIC(BTLOWACK)[[OSR(BT_LVL_storage,BT_LVL),XIC(BT_LVL)OTL(STERIL_TK_25)],OTU(BTLOWACK)],[[[[[[[[[[XIC(STERIL_TK_25)OTL(IDH_ADDR_39_08),OTL(IDH_ADDR_39_09)],OTU(IDH_ADDR_39_10)],OTU(IDH_ADDR_39_11)],OTU(LLST)],OTU(STER_LVL_8PERCENT)],OTU(MLST)],OTU(STK_25PERCENT)],OTU(STLOWACK)],OTU(STKLEVELGRTRTHAN95PERCENT)],OTU(LOWTEMPACK)]];]]>
+</Text>
+</Rung>
+<Rung Number="183" Type="N">
+<Comment>
+<![CDATA['  SWECO 8/20 MESH]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[XIC(STHIGHALARM)[[OSR(STHIGHCANCEL_storage,STHIGHCANCEL),XIC(STHIGHCANCEL)OTL(STER_LVL_8PERCENT)],OTU(STHIGHALARM)],[[[[[[[[[[XIC(STER_LVL_8PERCENT)OTU(IDH_ADDR_39_08),OTL(IDH_ADDR_39_09)],OTU(IDH_ADDR_39_10)],OTU(IDH_ADDR_39_11)],OTU(LLST)],OTU(STERIL_TK_25)],OTU(MLST)],OTU(STK_25PERCENT)],OTU(STLOWACK)],OTU(STKLEVELGRTRTHAN95PERCENT)],OTU(LOWTEMPACK)]];]]>
+</Text>
+</Rung>
+<Rung Number="184" Type="N">
+<Comment>
+<![CDATA['  SWECO 20 MESH SELECTION]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[XIC(BTHIGHALARM)[[OSR(BTK_LEVEL_75PERCENT_storage,BTK_LEVEL_75PERCENT),XIC(BTK_LEVEL_75PERCENT)OTL(MLST)],OTU(BTHIGHALARM)],[[[[[[[[[[XIC(MLST)OTU(IDH_ADDR_39_08),OTL(IDH_ADDR_39_09)],OTL(IDH_ADDR_39_10)],OTL(IDH_ADDR_39_11)],OTU(LLST)],OTU(STERIL_TK_25)],OTU(STER_LVL_8PERCENT)],OTU(STK_25PERCENT)],OTU(STLOWACK)],OTU(STKLEVELGRTRTHAN95PERCENT)],OTU(LOWTEMPACK)]];]]>
+</Text>
+</Rung>
+<Rung Number="185" Type="N">
+<Comment>
+<![CDATA['  SWECO 40 MESH SELECTION\n(PULSED OUTPUT)]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[[[[[XIC(BTHIGHCANCEL)[[OSR(BTLESSTHAN15PERCENT_storage,BTLESSTHAN15PERCENT),XIC(BTLESSTHAN15PERCENT)OTL(STK_25PERCENT)],OTU(BTHIGHCANCEL)],XIC(STK_25PERCENT)],[XIO(TIM027.DN)TON(TIM026,DM25,0),XIC(TIM026.DN)TON(TIM027,DM28,0)]],[[[OTL(IDH_ADDR_39_08),OTL(IDH_ADDR_39_11)],OTL(IDH_ADDR_39_10)],XIO(HLST)XIO(TIM026.DN)OTL(IDH_ADDR_39_09)]],[[XIC(HLST),XIC(TIM026.DN)],OTU(IDH_ADDR_39_09)]],[[[[[[OTU(LLST),OTU(STERIL_TK_25)],OTU(STER_LVL_8PERCENT)],OTU(MLST)],OTU(STLOWACK)],OTU(STKLEVELGRTRTHAN95PERCENT)],OTU(LOWTEMPACK)]];]]>
+</Text>
+</Rung>
+<Rung Number="186" Type="N">
+<Comment>
+<![CDATA['  SWECO 40/8 MESH]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[[[[[[[[[XIC(STK_35PERCENT)[[OSR(STLOWALARM_storage,STLOWALARM),XIC(STLOWALARM)OTL(STLOWACK)],OTU(STK_35PERCENT)],XIC(STLOWACK)],[[OTL(IDH_ADDR_39_08),OTL(IDH_ADDR_39_11)][[XIC(P_Off)XIO(TIM036.DN),XIC(P_Off)XIO(HLST)],XIC(P_On)],OTL(IDH_ADDR_39_09)]],[[XIC(P_Off)XIC(TIM036.DN),XIC(P_Off)XIC(HLST)],OTU(IDH_ADDR_39_09)]],[[XIC(P_Off)XIO(TIM038.DN),XIC(HLST)],OTU(IDH_ADDR_39_10)]],[[XIC(P_Off)XIC(TIM038.DN),XIO(HLST)],OTL(IDH_ADDR_39_10)]],[[[[[[[OTU(LLST),OTU(STERIL_TK_25)],OTU(STER_LVL_8PERCENT)],OTU(MLST)],OTU(STK_25PERCENT)],OTU(STKLEVELGRTRTHAN95PERCENT)],OTU(LOWTEMPACK)],XIO(TIM037.DN)TON(TIM036,240000,0)]],XIC(TIM036.DN)TON(TIM037,100,0)],XIO(TIM039.DN)TON(TIM038,DM31,0)],XIC(TIM038.DN)TON(TIM039,DM34,0)];]]>
+</Text>
+</Rung>
+<Rung Number="187" Type="N">
+<Comment>
+<![CDATA['  Walter Special Request\n04/05/2017]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[XIC(STTKLESS90PERCENT)[[OSR(STTKHIGH85PERCENT_storage,STTKHIGH85PERCENT),XIC(STTKHIGH85PERCENT)OTL(STKLEVELGRTRTHAN95PERCENT)],OTU(STTKLESS90PERCENT)],[[[[[[[[[[XIC(STKLEVELGRTRTHAN95PERCENT)OTU(IDH_ADDR_39_08),OTU(IDH_ADDR_39_09)],OTL(IDH_ADDR_39_10)],OTL(IDH_ADDR_39_11)],OTU(LLST)],OTU(STERIL_TK_25)],OTU(MLST)],OTU(STK_25PERCENT)],OTU(STLOWACK)],OTU(STER_LVL_8PERCENT)],OTU(LOWTEMPACK)]];]]>
+</Text>
+</Rung>
+<Rung Number="188" Type="N">
+<Comment>
+<![CDATA['  REGRINDING SELECTION\n09/27/2018]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[XIC(IDH_ADDR_502_03)[[OSR(LOWTEMPALARM_storage,LOWTEMPALARM),XIC(LOWTEMPALARM)OTL(LOWTEMPACK)],OTU(IDH_ADDR_502_03)],[[[[[[[[[[XIC(LOWTEMPACK)OTL(IDH_ADDR_39_08),OTL(IDH_ADDR_39_11)],OTL(IDH_ADDR_39_09)],OTL(IDH_ADDR_39_10)],OTU(LLST)],OTU(STERIL_TK_25)],OTU(MLST)],OTU(STK_25PERCENT)],OTU(STLOWACK)],OTU(STER_LVL_8PERCENT)],OTU(STKLEVELGRTRTHAN95PERCENT)]];]]>
+</Text>
+</Rung>
+<Rung Number="189" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[MUL(DM24,600,DM25),MUL(DM27,10,DM28)];]]>
+</Text>
+</Rung>
+<Rung Number="190" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[MUL(DM30,10,DM31),MUL(DM33,10,DM34)];]]>
+</Text>
+</Rung>
+<Rung Number="191" Type="N">
+<Comment>
+<![CDATA['  SPARE SWECO GRINDING AREA OUTPUTS - SOLENOIDS]]>
+</Comment>
+<Text>
+<![CDATA[XIO(P_On)OTE(IDH_ADDR_39_12);]]>
+</Text>
+</Rung>
+<Rung Number="192" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(P_On)OTE(IDH_ADDR_39_13);]]>
+</Text>
+</Rung>
+<Rung Number="193" Type="N">
+<Comment>
+<![CDATA['  Sterilizer Area Ozone Generator Leak Alarm]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_11_05)[TON(TIM068,30000,0),XIC(TIM068.DN)OTE(VERYMINUSLOWMINUSLEVEL)];]]>
+</Text>
+</Rung>
+<Rung Number="194" Type="N">
+<Comment>
+<![CDATA['  Sterilizer Area Ozone Generator Trouble Alarm]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_11_06)[TON(TIM069,30000,0),XIC(TIM069.DN)OTE(IDH_ADDR_501_15)];]]>
+</Text>
+</Rung>
+<Rung Number="195" Type="N">
+<Comment>
+<![CDATA['  Carrier Chiller Alarm\nNo Compressors Running and Outside Air Temp High\nChiller Removed 12/2018]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_42_01)XIO(IDH_ADDR_42_02)XIO(IDH_ADDR_42_03)XIO(IDH_ADDR_42_04)XIO(IDH_ADDR_42_05)XIO(IDH_ADDR_42_06)GEQ(193,6D5)OTE(PRESWAK);]]>
+</Text>
+</Rung>
+<Rung Number="196" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(IDH_ADDR_42_01)XIO(IDH_ADDR_42_02)XIO(IDH_ADDR_42_03)XIO(IDH_ADDR_42_04)XIO(IDH_ADDR_42_05)XIO(IDH_ADDR_42_06)GEQ(195,700)OTE(IDH_ADDR_502_02);]]>
+</Text>
+</Rung>
+<Rung Number="197" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(PRESWAK),XIC(IDH_ADDR_502_02)]OTE(HIGHPRESSW);]]>
+</Text>
+</Rung>
+<Rung Number="198" Type="N">
+<Comment>
+<![CDATA['  SATAKE COLOR SORTER\nALARMS]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_45_04)OTE(STER_VSD_FAULT_ALARM);]]>
+</Text>
+</Rung>
+<Rung Number="199" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_45_05)OTE(VSDALARMACK);]]>
+</Text>
+</Rung>
+<Rung Number="200" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_45_06)OTE(BALANCE_TANK_LEVEL_13);]]>
+</Text>
+</Rung>
+<Rung Number="201" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_45_07)OTE(IDH_ADDR_503_03);]]>
+</Text>
+</Rung>
+<Rung Number="202" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_45_05)XIC(P_1min)XIO(BT_6)[XIC(IDH_ADDR_503_06),XIO(IDH_ADDR_45_05)]ONS(OneShots[23])CTU(CNT061,0020,0)[RES(CNT061),OTU(BT_6)];]]>
+</Text>
+</Rung>
+<Rung Number="203" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)MOV(CNT61.DN,DM10);]]>
+</Text>
+</Rung>
+<Rung Number="204" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_503_06)[TON(TIM063,15000,0),XIC(TIM063.DN)OTU(IDH_ADDR_503_06)];]]>
+</Text>
+</Rung>
+<Rung Number="205" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_503_08)[[TON(TIM064,15000,0),OTL(BT_6)],XIC(TIM064.DN)OTU(IDH_ADDR_503_08)];]]>
+</Text>
+</Rung>
+<Rung Number="206" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_45_05)XIC(IDH_ADDR_45_04)XIO(IDH_ADDR_503_12)[TON(TIM066,1000,0),XIC(TIM066.DN)OTE(IDH_ADDR_503_07)];]]>
+</Text>
+</Rung>
+<Rung Number="207" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_503_04)[[TON(TIM062,15000,0),OTL(BT_30)],XIC(TIM062.DN)OTU(IDH_ADDR_503_04)];]]>
+</Text>
+</Rung>
+<Rung Number="208" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(BT_30)[TON(TIM065,300000,0),XIC(TIM065.DN)OTU(BT_30)];]]>
+</Text>
+</Rung>
+<Rung Number="209" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[[[XIC(IDH_ADDR_45_04),XIC(IDH_ADDR_45_05)],XIC(IDH_ADDR_45_06)],XIC(IDH_ADDR_45_07)]XIO(BT_30)OTE(IDH_ADDR_503_05);]]>
+</Text>
+</Rung>
+<Rung Number="210" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[[[XIO(IDH_ADDR_45_04),XIO(IDH_ADDR_45_05)],XIO(IDH_ADDR_45_06)],XIO(IDH_ADDR_45_07)]XIC(IDH_ADDR_503_12)OTE(IDH_ADDR_503_13);]]>
+</Text>
+</Rung>
+<Rung Number="211" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IDH_ADDR_503_05)OTE(IDH_ADDR_39_14);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+

@@ -28,7 +28,7 @@ def createFile(phase, tagfile, output_filename=None, input_filename="IDH.csv"):
 
 #     return tagFile
 
-def createSCADAoutput(input_filename, scada_filename): 
+def createSCADAoutput(input_filename, scada_filename, tag_lookup): 
 
     _, input_dir, output_dir, _ = f.getDirectories(dir)
 
@@ -57,8 +57,6 @@ def createSCADAoutput(input_filename, scada_filename):
     # Change to output Dir and Read lookup file
     lookup_filename = system_name + "_tag_lookup.CSV"
     if output_dir == "": os.chdir(output_dir)
-    tag_lookup = pd.read_csv(lookup_filename)
-    tag_lookup = tag_lookup.fillna('')
     # print(tag_lookup.head())
 
     # Loop through SCADA input file and write to SCADA output file

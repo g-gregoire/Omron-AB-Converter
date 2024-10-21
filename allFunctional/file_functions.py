@@ -67,7 +67,7 @@ def createTagFile(name="tags", filetype="CSV", system_ref="IDH"):
 
     return file
 
-def createExcel(tagList:list, file, output_filename, filetype="CSV", system_ref="IDH"):
+def createExcel(tagList:list, output_filename, system_ref="IDH"):
     # Set output dir
     os.chdir(output_dir)
     system_name = getSystemName(system_ref)
@@ -78,18 +78,12 @@ def createExcel(tagList:list, file, output_filename, filetype="CSV", system_ref=
     try: os.remove(filename)
     except: pass
 
-    # Create Excel file
-    # writer = pd.ExcelWriter(filename, engine='xlsxwriter')
-    # for tag in tagList:
-    #     tag.to_excel(writer, sheet_name=tag['tagname'], index=False)
-    # writer.save()
-
     # Conver taglist to DataFrame
     tagList = pd.DataFrame(tagList)
-    # Assuming df is your DataFrame
+    # Create Excel file
     tagList.to_csv(filename, index=False)
 
-    return 
+    return tagList
 
 def openFile(filename="test_rungs.txt"):
 

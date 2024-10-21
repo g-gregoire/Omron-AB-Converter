@@ -67,7 +67,10 @@ lookup = {
     "SBB(51)": ["math", "SUB"],
     "MLB(52)": ["math", "MUL"],
     "DVB(53)": ["math", "DIV"],
+    # Binary Math
+    "ANDW(34)": ["math", "AND"],
     
+    # Scaling Instructions
     "SCL(64)": ["scaling", "CPT"],
 
     # PID Instructions
@@ -75,6 +78,8 @@ lookup = {
 
     # Logical Instructions
     "MOV(21)": ["logical", "MOV"],
+    "BIN(23)": ["logical", "MOV"],
+    "BCD(24)": ["logical", "MOV"],
     "XFER(70)": ["copy", "COP"],
     "MOVB(82)": ["btd", "BTD"],
 

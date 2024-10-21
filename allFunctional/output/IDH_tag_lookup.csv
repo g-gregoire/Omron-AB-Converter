@@ -58,7 +58,7 @@ address,tagname,description,type
 185,IDH_ADDR_185,,DINT
 186,RH51_1,"""Outside R/H""",REAL
 187,T51_3,"""IDH Outlet Temp""",REAL
-188,REGEN_FAN_STACK_TEMP,"""Regen Fan Stack Temp""",REAL
+188,T51_5,"""Regen Fan Stack Temp""",REAL
 190,IDH_ADDR_190,,DINT
 191,T51_1,"""Air Temp After CC1""",REAL
 192,T51_2,"""Temp Before Dessicant Wheel""",REAL
