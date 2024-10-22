@@ -8,10 +8,7 @@ import file_functions as f
 
 dir = os.getcwd()
   
-def parseList(filename="", CONVERT_SCADA=False):
-
-    if filename == "":
-        filename = "IDH_PLC_Tags.xlsx" #use if nothing given by main file
+def parseList(filename="IDH_PLC_Tags.xlsx", scada_input_filename="SCADA_Tags.xlsx"):
 
     system_name = f.getSystemName(filename)
     
@@ -92,6 +89,7 @@ def parseList(filename="", CONVERT_SCADA=False):
             "address" : address,
             "tagname" : tagname,
             "description" : tag_description,
+            "SCADA_Tag" : "",
             "type" : tagType
         })
         

@@ -7,14 +7,24 @@ import parse
 import pandas as pd
 import traceback
 
-def tagConversion(tag_input_filename, tag_filename, scada_input_filename, output_filename, CREATE_TAGS = False, CREATE_EXCEL = False, CONVERT_SCADA_TAGS = False):
+def getFileContents(tag_input_filename, scada_input_filename, logic_input_filename):
+    # This file is used to extract the following files for use throughout the conversion processes
+    # 1. PLC Tag List
+    # 2. SCADA Tag List
+    # 3. PLC Logic File
+
+    # Extract PLC Tag List
+    pass
+
+
+def tagConversion(tag_input_filename, tag_filename, scada_input_filename, output_filename, CREATE_TAGS = True, CREATE_LOOKUP = True, CONVERT_SCADA_TAGS = True):
 
     # Create file to be used for tag import
     if CREATE_TAGS:
         # Create tag output file
         tag_import_file = f.createTagFile(output_filename, system_ref = tag_input_filename)
         # Parse input file for tag information
-        tagList = parse.parseList(filename=tag_input_filename)
+        tagList = parse.parseList(tag_input_filename, scada_input_filename)
         # Create tags from List
         # tag_import_file = rung.createTags(tagList, tag_import_file, output_filename)
         for tag in tagList:
@@ -22,8 +32,8 @@ def tagConversion(tag_input_filename, tag_filename, scada_input_filename, output
             # print(tag['symbol'], tag['description'], tag['type'])
         # tag_import_file.close()
 
-        if CREATE_EXCEL:
-            # Create Excel file for tag import
+        if CREATE_LOOKUP:
+            # Create General Lookup file for PLC and SCADA tags
             tag_lookup = f.createExcel(tagList, tag_filename, tag_input_filename)
             # tag_lookup = pd.DataFrame(tagList)
 
@@ -34,7 +44,7 @@ def tagConversion(tag_input_filename, tag_filename, scada_input_filename, output
 
     return tag_lookup, tag_import_file
 
-def runConversion(logic_input_file, tag_lookup, tag_import_file, output_filename="logic.txt", CONVERT=False, VIEW_RUNGS=False, COUNT_INSTR=False, PRINT_ERRORS=False):
+def logicConversion(logic_input_file, tag_lookup, tag_import_file, output_filename="logic.txt", CONVERT=False, VIEW_RUNGS=False, COUNT_INSTR=False, PRINT_ERRORS=False):
 
     system_name = f.getSystemName(logic_input_file)
     # system_name = "Sterilizer"

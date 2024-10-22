@@ -73,8 +73,7 @@ def createExcel(tagList:list, output_filename, system_ref="IDH"):
     system_name = getSystemName(system_ref)
     filename = system_name + "_" + output_filename
 
-    # Test open and write a file
-    # Delete and then open a file for writing 
+    # Delete if already exists
     try: os.remove(filename)
     except: pass
 
