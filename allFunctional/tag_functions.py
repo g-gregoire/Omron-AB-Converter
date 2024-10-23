@@ -28,13 +28,9 @@ def createFile(phase, tagfile, output_filename=None, input_filename="IDH.csv"):
 
 #     return tagFile
 
-def createSCADAoutput(input_filename, scada_filename, tag_lookup): 
+def createSCADAoutput(input_filename, scada_taglist, tag_lookup): 
 
     _, input_dir, output_dir, _ = f.getDirectories(dir)
-
-    # Set input dir
-    os.chdir(input_dir)
-    file = os.path.join(input_dir, scada_filename)
 
     # Get system name
     system_name = f.getSystemName(input_filename)
@@ -43,16 +39,6 @@ def createSCADAoutput(input_filename, scada_filename, tag_lookup):
     # Create SCADA output file
     scada_output_name = "SCADA_tags.csv"
     scada_output_file = f.createFile(scada_output_name, system_name)
-
-    # Read SCADA input file
-    if system_name == "IDH":
-        scada_taglist = pd.read_excel(file, sheet_name = 1)
-    elif system_name == "Sterilizer":
-        scada_taglist = pd.read_excel(file, sheet_name = 3)
-    else:
-        scada_taglist = pd.read_excel(file, sheet_name = 0)
-    scada_taglist = scada_taglist.fillna('')
-    # print(scada_taglist.head())
 
     # Change to output Dir and Read lookup file
     lookup_filename = system_name + "_tag_lookup.CSV"

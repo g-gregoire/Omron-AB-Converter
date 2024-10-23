@@ -8,7 +8,7 @@ import file_functions as f
 
 dir = os.getcwd()
   
-def parseList(filename="IDH_PLC_Tags.xlsx", scada_input_filename="SCADA_Tags.xlsx"):
+def parseList(filename="IDH_PLC_Tags.xlsx", scada_taglist=None):
 
     system_name = f.getSystemName(filename)
     
@@ -16,8 +16,10 @@ def parseList(filename="IDH_PLC_Tags.xlsx", scada_input_filename="SCADA_Tags.xls
     _, input_dir, _, _ = f.getDirectories(dir)
     os.chdir(input_dir)
     file = os.path.join(input_dir, filename)
+
+    # Expand the list of tags
+    # global_symbols, full_taglist, scada_taglist = 
         
-    # To open Workbook 
     # List of Symbols with either Tagnames or Descriptions
     global_symbols = pd.read_excel(file, sheet_name = 1)
     global_symbols = global_symbols.fillna('')
@@ -29,9 +31,9 @@ def parseList(filename="IDH_PLC_Tags.xlsx", scada_input_filename="SCADA_Tags.xls
     # print(full_taglist.head())
 
     # List of all tags used in SCADA
-    scada_taglist = pd.read_excel(file, sheet_name = 6)
-    scada_taglist = scada_taglist.fillna('')
-    # print(scada_taglist.head())
+    scada_taglist_unique = pd.read_excel(file, sheet_name = 6)
+    scada_taglist_unique = scada_taglist_unique.fillna('')
+    # print(scada_taglist_unique.head())
     
     taglist = []
 
@@ -80,7 +82,7 @@ def parseList(filename="IDH_PLC_Tags.xlsx", scada_input_filename="SCADA_Tags.xls
         tagType = typeFinder(row["Address"], query)
 
         # Convert to scada name then search for Scada tagname
-        scada_tagname, scada_desc = checkForScadaTags(scada_taglist, row["Address"], tagType)
+        scada_tagname, scada_desc = checkForScadaTags(scada_taglist_unique, row["Address"], tagType)
 
         tagname, tag_description = nameCreator(address, symbol, description, scada_tagname, scada_desc, system_name)
         
@@ -89,8 +91,9 @@ def parseList(filename="IDH_PLC_Tags.xlsx", scada_input_filename="SCADA_Tags.xls
             "address" : address,
             "tagname" : tagname,
             "description" : tag_description,
-            "SCADA_Tag" : "",
-            "type" : tagType
+            "SCADA_tagname" : [],
+            "type" : tagType,
+            "source" : "PLC"
         })
         
         # print(taglist)
@@ -111,8 +114,10 @@ def parseList(filename="IDH_PLC_Tags.xlsx", scada_input_filename="SCADA_Tags.xls
         query = [tag for tag in taglist if tag["address"] == address]
         if query:
             # print("Tag already exists")
-            # Tag has already been added, so skip
-            continue
+            # Tag has already been added, add it to the SCADA_Tag list
+            # print(query[0]["address"])
+            query[0]["SCADA_tagname"].append(row["TAG"])
+            query[0]["source"] = "BOTH"
             
         else:
             # If tag does not exist, create tag
@@ -134,7 +139,9 @@ def parseList(filename="IDH_PLC_Tags.xlsx", scada_input_filename="SCADA_Tags.xls
                 "address" : address,
                 "tagname" : tagname,
                 "description" : tag_description,
-                "type" : tagType
+                "SCADA_tagname" : [row["TAG"]],
+                "type" : tagType,
+                "source" : "SCADA"
             })
 
         # break # Break to only run first one
