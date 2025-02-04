@@ -27,6 +27,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
     # address = "HR01.00" # Weird tag structure
     # address = "0.02" # Physical I/O (for digital truncation in SCADA, ie. 0.02 vs IR0.2)
 
+    ### PLC TAGS ###
     # Iterate through each row of the cross-ref list
     for rowindex, row in cross_ref.iterrows():
         # print(rowindex)
@@ -89,6 +90,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         # break # Break to only run first one
         # if rowindex > 250: break # Break to only run first ten
 
+    ### SCADA TAGS ###
     # Now go through SCADA taglist to see if any tags are missing
     for rowindex, row in scada_taglist.iterrows():
         # break
@@ -114,7 +116,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         else:
             # If tag does not exist, create tag
             # print("Tag does not exist in list. Adding tag:")
-            detailed_address["address"] = original_address
+            detailed_address["address"] = address
             detailed_address["tagname"] = row["TAG"]
             detailed_address["description"] = row["DESCRIPTION"]
             # detailed_address["description"] = '"' + row["DESCRIPTION"] + '"'
@@ -143,7 +145,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         # taglist = dict(sorted(taglist.items()))
 
     # Lastly go through the taglist and check for aliases
-    util.check_for_aliases(taglist)
+    util.check_for_aliases(taglist, system_name)
     
     if VIEW_TAGS:
         pp.pprint(taglist)

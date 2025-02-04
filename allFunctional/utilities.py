@@ -229,7 +229,7 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
     # print(scada_tagname, scada_description)
     return scada_tagname, scada_description
 
-def check_for_aliases(taglist):
+def check_for_aliases(taglist, system_name):
     for tag in taglist:
         prefix = tag["prefix"]
         address = tag["address"]
@@ -243,9 +243,7 @@ def check_for_aliases(taglist):
             whole_number2 = get_whole_number(tag2["number"])
             prefix2 = tag2["prefix"]
             if prefix == prefix2 and whole_number == whole_number2 and tag2["address"] != address:
-                if prefix == "D":
-                    print("Alias found: ", tag2["address"], "and ", address)
-                tag["alias"] = get_alias(tag)
+                tag["alias"] = get_alias(tag, system_name)
                 break
         
 
@@ -256,7 +254,7 @@ def get_whole_number(number:str):
 
     return str(whole_number)
 
-def get_alias(tag):
+def get_alias(tag, system_name):
     prefix = tag["prefix"]
     address = tag["address"]
     number = tag["number"]
@@ -269,11 +267,14 @@ def get_alias(tag):
         int_number = number
         bit_number = None
     
+    # Check for None bit
+    if prefix == None: prefix = "IR"
+
     # Add alias to tag
     if bit_number:
-        alias = f"{prefix}_array[{int_number}].{bit_number}"
+        alias = f"{system_name}_{prefix}_array[{int_number}].{bit_number}"
     else:
-        alias = f"{prefix}_array[{int_number}]"
+        alias = f"{system_name}_{prefix}_array[{int_number}]"
 
     # print(alias)
     return alias
