@@ -1,9 +1,10 @@
 import file_functions as f
 import routine_components as rt
+import parse as p
+import utilities as util
 
 import os
 import pandas as pd
-import parse as p
 
 dir = os.getcwd()
 
@@ -28,14 +29,10 @@ def createFile(phase, tagfile, output_filename=None, input_filename="IDH.csv"):
 
 #     return tagFile
 
-def createSCADAoutput(input_filename, scada_taglist, tag_lookup): 
+def createSCADAoutput(system_name, scada_taglist, tag_lookup): 
 
     _, input_dir, output_dir, _ = f.getDirectories(dir)
 
-    # Get system name
-    system_name = f.getSystemName(input_filename)
-    # print(input_filename)
-    
     # Create SCADA output file
     scada_output_name = "SCADA_tags.csv"
     scada_output_file = f.createFile(scada_output_name, system_name)
@@ -53,7 +50,7 @@ def createSCADAoutput(input_filename, scada_taglist, tag_lookup):
         # print(address)
 
         # Convert to PLC Address and then lookup new address
-        plc_address = p.scadaToPlcAddress(address)
+        plc_address = util.scadaToPlcAddress(address)
         # print(plc_address)
 
         # Lookup new address in tag_lookup

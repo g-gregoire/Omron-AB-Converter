@@ -44,13 +44,13 @@ def createFile(filename="code.txt", input_filename="system.txt"):
     file = open(filename,"w") 
     return file
 
-def createTagFile(name="tags", filetype="CSV", system_ref="IDH"):
+def create_plc_tag_import_file(system_name="IDH"):
 
     # Set output dirt
     os.chdir(output_dir)
 
-    system_name = getSystemName(system_ref)
-    filename = system_name + "_" + name + "." + filetype
+    system_name = getSystemName(system_name)
+    filename = system_name + "_PLC_tag_import.csv"
 
     # Test open and write a file
     # Delete and then open a file for writing 
@@ -67,11 +67,11 @@ def createTagFile(name="tags", filetype="CSV", system_ref="IDH"):
 
     return file
 
-def createExcel(tagList:list, output_filename, system_ref="IDH"):
+# Create a lookup table for PLC, HMI tags based on taglist
+def createLookupTable(tagList:list, output_filename, system_name):
     # Set output dir
     os.chdir(output_dir)
-    system_name = getSystemName(system_ref)
-    filename = system_name + "_" + output_filename
+    filename = system_name + "_lookup_table.csv"
 
     # Delete if already exists
     try: os.remove(filename)
