@@ -70,12 +70,12 @@ def typeHandler(tag_detailed):
     # Handle unknown types based on address formation.
     else:
         # If it's a full number (ie. 120), then it's a DINT, if it has a '.' then it's a BOOL
-        if isinstance(number, int):
-            # print("Address is numeric")
-            return "DINT"
-        if isinstance(number, float):
+        if number.find(".") >= 0:
             # print("Address is decimal")
             return "BOOL"
+        elif number.isnumeric():
+            # print("Address is numeric")
+            return "DINT"
     
     # If nothing caught, return "BOOL"
     return "BOOL"
