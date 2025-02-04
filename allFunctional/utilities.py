@@ -47,6 +47,8 @@ def typeHandler(tag_detailed):
     number = tag_detailed["number"]
     tag_type = tag_detailed["tag_type"]
 
+    # print(address)
+
     # Handle timer (TIM) tags before all else
     if prefix == "T":
         return "TIMER"
@@ -56,19 +58,25 @@ def typeHandler(tag_detailed):
 
     # Handle known types
     if tag_type != "":
+        # print("Known type: ", tag_type)
+        # print(tag_detailed)
         # Channel type is a REAL
-        if tag_type == "CHANNEL":
+        if tag_type == "CHANNEL" or tag_type == "NUMBER" or tag_type == "DWORD" or tag_type == "UINT"\
+            or tag_type == "UDINT" or tag_type == "DINT":
             return "REAL"
         if tag_type == "BOOL":
             return tag_type
-        if tag_type == "INT" or tag_type == "DINT" or tag_type == "WORD" or tag_type == "DWORD" or\
-            tag_type == "NUMBER" or tag_type == "UDINT" or tag_type == "UINT":
+        if tag_type == "INT" or tag_type == "WORD":
             return "DINT"
         else:
             return "DINT"
         
     # Handle unknown types based on address formation.
     else:
+        # print("No defined type")
+        # Set all remaining D type tags to REAL
+        if prefix == "D":
+            return "REAL"
         # If it's a full number (ie. 120), then it's a DINT, if it has a '.' then it's a BOOL
         if number.find(".") >= 0:
             # print("Address is decimal")
@@ -79,47 +87,6 @@ def typeHandler(tag_detailed):
     
     # If nothing caught, return "BOOL"
     return "BOOL"
-
-def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
-    
-    # 1. Convert PLC address to SCADA address
-    tagname = tag_detailed["tagname"]
-    tag_type = tag_detailed["tag_type"]
-    tag = []
-    # print(tagname, tagtype)
-    if tag_type == "BOOL":
-        # Handle timer (TIM) tags
-        if tagname.find("TIM") >= 0:
-            tagname = tagname.replace("TIM", "").replace("(bit)", "") + "_TMR"
-            tag.append(tagname)
-        # Handle counter (CNT) tags
-        elif tagname.find("CNT") >= 0:
-            tagname = tagname.replace("CNT", "").replace("(bit)", "") + "_CTR"
-            tag.append(tagname)
-        else:
-            try:
-                tag.append("IR" + tagname.split('.')[0] + "." + str(int(tagname.split('.')[1])))
-                tag.append("IR" + tagname)
-            except:
-                tag.append(tagname)
-    else:
-        tag.append(tagname)
-    # print(tag)
-
-    query = scada_taglist.query(f'Clean_Address == "{tag[0]}"')
-    if query.empty and len(tag) > 1 and tag[1] != None:
-        query = scada_taglist.query(f'Clean_Address == "{tag[1]}"')
-    if query.empty:
-        # print("Tag not found in SCADA")
-        return "", ""
-    # else:
-        # print("Tag found in SCADA")
-
-    scada_tagname = query["TAG"].to_string(index=False)
-    scada_description = query["DESCRIPTION"].to_string(index=False) 
-    
-    # print(scada_tagname, scada_description)
-    return scada_tagname, scada_description
 
 def scadaToPlcAddress(scada_address:str):
     # Convert SCADA address to PLC address
@@ -137,7 +104,6 @@ def scadaToPlcAddress(scada_address:str):
         return scada_address.replace("CIO", "")
     else:
         return scada_address
- 
 
 def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", system_name=""):
     # print(address, symbol, description, scada_tagname, scada_description)
@@ -221,3 +187,93 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
 
     # print(tagname, tag_description)
     return tagname, tag_description
+
+def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
+    
+    # 1. Convert PLC address to SCADA address
+    tagname = tag_detailed["tagname"]
+    tag_type = tag_detailed["tag_type"]
+    tag = []
+    # print(tagname, tagtype)
+    if tag_type == "BOOL":
+        # Handle timer (TIM) tags
+        if tagname.find("TIM") >= 0:
+            tagname = tagname.replace("TIM", "").replace("(bit)", "") + "_TMR"
+            tag.append(tagname)
+        # Handle counter (CNT) tags
+        elif tagname.find("CNT") >= 0:
+            tagname = tagname.replace("CNT", "").replace("(bit)", "") + "_CTR"
+            tag.append(tagname)
+        else:
+            try:
+                tag.append("IR" + tagname.split('.')[0] + "." + str(int(tagname.split('.')[1])))
+                tag.append("IR" + tagname)
+            except:
+                tag.append(tagname)
+    else:
+        tag.append(tagname)
+    # print(tag)
+
+    query = scada_taglist.query(f'Clean_Address == "{tag[0]}"')
+    if query.empty and len(tag) > 1 and tag[1] != None:
+        query = scada_taglist.query(f'Clean_Address == "{tag[1]}"')
+    if query.empty:
+        # print("Tag not found in SCADA")
+        return "", ""
+    # else:
+        # print("Tag found in SCADA")
+
+    scada_tagname = query["TAG"].to_string(index=False)
+    scada_description = query["DESCRIPTION"].to_string(index=False) 
+    
+    # print(scada_tagname, scada_description)
+    return scada_tagname, scada_description
+
+def check_for_aliases(taglist):
+    for tag in taglist:
+        prefix = tag["prefix"]
+        address = tag["address"]
+        number = tag["number"]
+        # print(address)
+
+        whole_number = get_whole_number(number)
+
+        # if another tag exists with the same prefix & number, but different address, add an alias
+        for tag2 in taglist:
+            whole_number2 = get_whole_number(tag2["number"])
+            prefix2 = tag2["prefix"]
+            if prefix == prefix2 and whole_number == whole_number2 and tag2["address"] != address:
+                if prefix == "D":
+                    print("Alias found: ", tag2["address"], "and ", address)
+                tag["alias"] = get_alias(tag)
+                break
+        
+
+def get_whole_number(number:str):
+    # Get integer value of tag number. ie. 1.01, 1.0 and 1 should all return 1
+    try: whole_number = int(number)
+    except: whole_number = int(number.split(".")[0])
+
+    return str(whole_number)
+
+def get_alias(tag):
+    prefix = tag["prefix"]
+    address = tag["address"]
+    number = tag["number"]
+
+    # Check if decimal value or not
+    if number.find(".") >= 0:
+        int_number = number.split(".")[0]
+        bit_number = number.split(".")[1]
+    else:
+        int_number = number
+        bit_number = None
+    
+    # Add alias to tag
+    if bit_number:
+        alias = f"{prefix}_array[{int_number}].{bit_number}"
+    else:
+        alias = f"{prefix}_array[{int_number}]"
+
+    # print(alias)
+    return alias

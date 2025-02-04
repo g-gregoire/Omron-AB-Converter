@@ -5,9 +5,6 @@ import pandas as pd
 
 import pprint as pp
 import utilities as util
-import file_functions as f
-
-
 
 dir = os.getcwd()
   
@@ -35,10 +32,11 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         # print(rowindex)
         
         address = row["Address"]
-        tag_detailed = util.expandTag(address)
+        detailed_address = util.expandTag(address)
 
         try: query = global_symbols.query(f'Address == "{address}"')
         except: query = global_symbols.query(f'Address == {address}')
+        # print(address)
 
         if query.empty:
             # print("Tag does not have symbol or description")
@@ -46,6 +44,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             description = ""
             tag_type = ""
         else:
+            # print(query)
             # print("Symbol or Description found")
             # only take the first result
             symbol = query["Symbol"].iloc[0]
@@ -53,29 +52,30 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             tag_type = query["Type"].iloc[0]
             # print(symbol, description, tag_type)
 
-        tag_detailed["tagname"] =  str(symbol)
-        tag_detailed["description"] = description
-        tag_detailed["tag_type"] = tag_type
-        tag_detailed["Source"] = "PLC"
+        detailed_address["tagname"] =  str(symbol)
+        detailed_address["description"] = description
+        detailed_address["tag_type"] = tag_type
+        detailed_address["source"] = "PLC"
+        detailed_address["alias"] = ""
 
         # break
         # Try to determine tag_type of tag
-        tag_detailed["tag_type"] = util.typeHandler(tag_detailed)
-        # print(tag_detailed)
+        detailed_address["tag_type"] = util.typeHandler(detailed_address)
+        # print(detailed_address)
 
         # Convert to scada name then search for Scada tagname
-        scada_tagname, scada_desc = util.checkForScadaTags(scada_taglist, tag_detailed)
+        scada_tagname, scada_desc = util.checkForScadaTags(scada_taglist, detailed_address)
 
         # Create tagname and description
-        tagname, tag_description = util.nameCreator(tag_detailed, scada_tagname, scada_desc, system_name)
+        tagname, tag_description = util.nameCreator(detailed_address, scada_tagname, scada_desc, system_name)
 
-        # Assign tagname and description to tag_detailed, as well as empty SCADA_tagname
-        tag_detailed["tagname"] = tagname
-        tag_detailed["description"] = tag_description
-        tag_detailed["SCADA_tagname"] = []
+        # Assign tagname and description to detailed_address, as well as empty SCADA_tagname
+        detailed_address["tagname"] = tagname
+        detailed_address["description"] = tag_description
+        detailed_address["SCADA_tagname"] = []
         
         # Before appending, check if tag already exists in taglist
-        query = [tag for tag in taglist if tag["real_address"] == tag_detailed["real_address"]]
+        query = [tag for tag in taglist if tag["real_address"] == detailed_address["real_address"]]
         if query:
             # If tag already exists, take the longest tagname and description
             if len(tagname) > len(taglist[taglist.index(query[0])]["tagname"]):
@@ -84,7 +84,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
                 taglist[taglist.index(query[0])]["description"] = tag_description
         else:
             # Otherwise, append the tag to the list
-            taglist.append(tag_detailed)
+            taglist.append(detailed_address)
         
         # break # Break to only run first one
         # if rowindex > 250: break # Break to only run first ten
@@ -108,7 +108,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             # print("Tag already exists")
             # Tag has already been added, add it to the SCADA_Tag list
             query[0]["SCADA_tagname"].append(row["TAG"])
-            query[0]["Source"] = "BOTH"
+            query[0]["source"] = "BOTH"
             # print(query[0]["address"])
             
         else:
@@ -120,7 +120,8 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             # detailed_address["description"] = '"' + row["DESCRIPTION"] + '"'
             detailed_address["SCADA_tagname"] = [row["TAG"]]
             detailed_address["tag_type"] = ""
-            detailed_address["Source"] = "SCADA"
+            detailed_address["source"] = "SCADA"
+            detailed_address["alias"] = ""
             # print(tagname, tag_description, tagtype)
             
             detailed_address["tag_type"] = util.typeHandler(detailed_address)
@@ -140,10 +141,11 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
 
         # Order list by address
         # taglist = dict(sorted(taglist.items()))
+
+    # Lastly go through the taglist and check for aliases
+    util.check_for_aliases(taglist)
     
     if VIEW_TAGS:
         pp.pprint(taglist)
 
     return taglist
-
-#%% Execute code

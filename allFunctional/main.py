@@ -14,7 +14,7 @@ logic_output_filename = "output.L5X"
 
 # CONSTANTS FOR TAG BUILDER FUNCTIONALITY
 CREATE_TAGS = True
-VIEW_TAGS = True
+VIEW_TAGS = False
 CREATE_LOOKUP = True
 CONVERT_SCADA_TAGS = False
 
