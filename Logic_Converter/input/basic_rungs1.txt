@@ -1,5 +1,0 @@
-      LD P_On
-      CMP(20) TIM235 #3000
-      AND P_LT
-      OUT HR90.00
-      ^^^
