@@ -53,11 +53,13 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             tag_type = query["Type"].iloc[0]
             # print(symbol, description, tag_type)
 
+        # Set default values to be used in NameCreator
         detailed_address["tagname"] =  str(symbol)
         detailed_address["description"] = description
         detailed_address["tag_type"] = tag_type
         detailed_address["source"] = "PLC"
         detailed_address["alias"] = ""
+        detailed_address["parent"] = ""
 
         # break
         # Try to determine tag_type of tag
@@ -68,13 +70,15 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         scada_tagname, scada_desc = util.checkForScadaTags(scada_taglist, detailed_address)
 
         # Create tagname and description
-        tagname, tag_description = util.nameCreator(detailed_address, scada_tagname, scada_desc, system_name)
+        tagname, tag_description, parent = util.nameCreator(detailed_address, scada_tagname, scada_desc, system_name)
 
         # Assign tagname and description to detailed_address, as well as empty SCADA_tagname
         detailed_address["tagname"] = tagname
         detailed_address["description"] = tag_description
+        if parent:
+            detailed_address["parent"] = parent
         detailed_address["SCADA_tagname"] = []
-        
+
         # Before appending, check if tag already exists in taglist
         query = [tag for tag in taglist if tag["real_address"] == detailed_address["real_address"]]
         if query:
@@ -97,7 +101,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
 
         address = row["Clean_Address"]
         original_address = address
-        type = row["Type"]
+        tag_type = row["Type"]
         # print(address)
 
         # Convert tag address to PLC address
@@ -124,6 +128,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             detailed_address["tag_type"] = ""
             detailed_address["source"] = "SCADA"
             detailed_address["alias"] = ""
+            detailed_address["parent"] = ""
             # print(tagname, tag_description, tagtype)
             
             detailed_address["tag_type"] = util.typeHandler(detailed_address)
@@ -145,9 +150,10 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         # taglist = dict(sorted(taglist.items()))
 
     # Lastly go through the taglist and check for aliases
-    util.check_for_aliases(taglist, system_name)
+    taglist = util.check_for_aliases(taglist, system_name)
     
     if VIEW_TAGS:
+        print("Taglist:")
         pp.pprint(taglist)
 
     return taglist

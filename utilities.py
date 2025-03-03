@@ -113,7 +113,9 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
     description = tag_detailed["description"]
     address = tag_detailed["address"]
     tag_type = tag_detailed["tag_type"]
+    parent = tag_detailed["parent"]
 
+    # TAGNAME
     if scada_tagname != "": # Use symbol if it exists already
         # print(1)
         tagname = scada_tagname.upper()
@@ -137,13 +139,21 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
         tagname = address.replace("CNT", "C").replace("(bit)", "")
     else: # If none exist, create tagname from address
         # print(5)
-        split = address.split(".")
-        tagname = system_name + "_ADDR_"
-        for word in split:
-            if word == split[-1]: tagname += word
-            else: tagname = tagname + word + "_"
+        tagname = system_name + "_ADDR_" + address
+        split = address.split(".") # Split address by period
+        if len(split) > 1:
+            parent_tag = split[0]
+            parent = system_name + "_ADDR_" + parent_tag
+        # Previously created new tag for each bit in a dint, now just add the dint to reduce tag count
+        # for word in split:
+        #     if word == split[-1]: tagname += word
+        #     else: tagname = tagname + word + "_"
+        # tagname += split[0] 
+
+
         # print(tagname)
 
+    # DESCRIPTION
     # Determine tag description to use
     if scada_description != "": # Use SCADA description if it exists
         tag_description = scada_description
@@ -186,7 +196,7 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
         tag_description = '"' + tag_description + '"'
 
     # print(tagname, tag_description)
-    return tagname, tag_description
+    return tagname, tag_description, parent
 
 def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
     
@@ -245,6 +255,8 @@ def check_for_aliases(taglist, system_name):
             if prefix == prefix2 and whole_number == whole_number2 and tag2["address"] != address:
                 tag["alias"] = get_alias(tag, system_name)
                 break
+    
+    return taglist
         
 
 def get_whole_number(number:str):

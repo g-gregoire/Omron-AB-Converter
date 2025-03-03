@@ -72,6 +72,7 @@ def tagConversion(system_name, tag_info, tag_output_filename, CREATE_TAGS = True
 
     # Create file to be used for tag import
     if CREATE_TAGS:
+        print("Creating tags")
         # Create tag output file
         tag_import_file = ff.create_plc_tag_import_file(sys_name_short)
         # Parse input file for tag information
@@ -80,7 +81,18 @@ def tagConversion(system_name, tag_info, tag_output_filename, CREATE_TAGS = True
         # Create tags from List
         # tag_import_file = rung.createTags(tagList, tag_import_file, output_filename)
         for tag in tagList:
-            tag_import_file = ff.addTag(tag['tagname'], tag['description'] , tag['tag_type'], tag_import_file)
+            # Check if tag has a parent
+            if tag['parent'] != "":
+                # Then check if parent already exists in tag list
+                query = [parent for parent in tagList if parent['tagname'] == tag['parent']]
+                if len(query) == 0:
+                    # If parent does not exist, create a parent tag
+                    tag["tagname"] = tag["parent"]
+                    tag["tag_type"] = "DINT"
+                    tag_import_file = ff.addTag(tag, tag_import_file)
+                else: pass
+            else:
+                tag_import_file = ff.addTag(tag, tag_import_file)
             # print(tag['symbol'], tag['description'], tag['tag_type'])
         # tag_import_file.close()
 

@@ -175,14 +175,17 @@ def addRung(file, r_num, logic, comment=None):
 
     return file, r_num
 
-def addTag(tag, desc, type, file):
+def addTag(full_tag, file):
     # print(tag, desc, type)
 
-    # tag = tag.replace("_","")
-    # desc = desc.replace("_","")
-    # type = type.replace("_","")
-    
-    if type == "REAL":
+    tag = full_tag["tagname"]
+    desc = full_tag["description"]
+    type = full_tag["tag_type"]
+    alias = full_tag["alias"]
+
+    if alias != "":
+        text = rt.new_tag_alias.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.base_tag, alias)
+    elif type == "REAL":
         text = rt.new_tag_float.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
     elif type == "TIMER":
         text = rt.new_tag_timer.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
