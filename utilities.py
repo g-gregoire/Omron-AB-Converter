@@ -139,7 +139,7 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
         tagname = address.replace("CNT", "C").replace("(bit)", "")
     else: # If none exist, create tagname from address
         # print(5)
-        tagname = system_name + "_ADDR_" + address
+        tagname = "ADDR_" + address
         split = address.split(".") # Split address by period
         if len(split) > 1:
             parent_tag = split[0]
@@ -150,7 +150,7 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
         #     else: tagname = tagname + word + "_"
         # tagname += split[0] 
 
-
+    tagname = system_name + "_" + tagname
         # print(tagname)
 
     # DESCRIPTION

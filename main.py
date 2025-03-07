@@ -5,6 +5,7 @@ import functions as f
 system_name = ["Extractor", "EXT"]
 tag_info_filename = "tag_info.xlsx"
 logic_input_filename = "Extractor.txt"
+scada_tag_export_filename = "EXT_PLC_SCADA_TAGS.xlsx"
 # logic_input_filename = "Sterilizer_no_symbols.txt"
 # logic_input_filename = "IDH_no_symbols.txt"
 # logic_input_filename = "basic_rungs1.txt"
@@ -16,7 +17,7 @@ logic_output_filename = "output.L5X"
 CREATE_TAGS = True
 VIEW_TAGS = False
 CREATE_LOOKUP = True
-CONVERT_SCADA_TAGS = False
+CONVERT_SCADA_TAGS = True
 
 # CONSTANTS FOR CONVERSION FUNCTIONALITY
 CONVERT = False # Perform conversion
@@ -30,7 +31,7 @@ tag_info, plc_logic_file = f.getFileContents(tag_info_filename, logic_input_file
 
 # convert tags from input files and create lookup file for logic conversions
 if CREATE_TAGS:
-    tag_lookup, tag_import_file = f.tagConversion(system_name, tag_info, tag_output_filename, CREATE_TAGS, VIEW_TAGS, CREATE_LOOKUP, CONVERT_SCADA_TAGS)
+    tag_lookup, tag_import_file = f.tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_filename, CREATE_TAGS, VIEW_TAGS, CREATE_LOOKUP, CONVERT_SCADA_TAGS)
 
 # Convert logic file to converted output format
 if CONVERT:

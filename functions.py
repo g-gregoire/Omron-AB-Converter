@@ -61,7 +61,7 @@ def getFileContents(tag_info_filename, logic_input_filename, VIEW_TAGS=False):
     return plc_taglist, plc_logic_file
 
 
-def tagConversion(system_name, tag_info, tag_output_filename, CREATE_TAGS = True, VIEW_TAGS=False, CREATE_LOOKUP = True, CONVERT_SCADA_TAGS = True):
+def tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_filename, CREATE_TAGS = True, VIEW_TAGS=False, CREATE_LOOKUP = True, CONVERT_SCADA_TAGS = True):
 
     sys_name = system_name[0]
     sys_name_short = system_name[1]
@@ -100,13 +100,21 @@ def tagConversion(system_name, tag_info, tag_output_filename, CREATE_TAGS = True
             # Create General Lookup file for PLC and SCADA tags
             tag_lookup = ff.createLookupTable(tagList, tag_output_filename, sys_name_short)
             # tag_lookup = pd.DataFrame(tagList)
+
+            if CONVERT_SCADA_TAGS:
+                # Create Scada tag lookup file
+                scada_lookup = tf.createSCADAoutput(sys_name_short, scada_taglist, tag_lookup)
+
+                # Separate SCADA export into multiple tables
+                scada_subtables = tf.extractScadaTags(scada_tag_export_filename)
+                # Update subtables with new tag names and plc addresses
+                updated_subtables = tf.updateScadaTags(scada_subtables, scada_lookup)
+                # Recombine subtables and save to file
+                tf.regroupScadaTables(sys_name_short, updated_subtables)
+
         else:
             tag_lookup = None
 
-
-        if CONVERT_SCADA_TAGS:
-            # Create Excel file for tag import
-            scada_file = tf.createSCADAoutput(sys_name_short, scada_taglist, tag_lookup)
 
     print("Tag conversion complete")
     

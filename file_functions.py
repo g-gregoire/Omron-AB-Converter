@@ -29,7 +29,7 @@ def getSystemName(filename:str):
     # print(system_name)
     return system_name
 
-def createFile(filename="code.txt", input_filename="system.txt"):
+def createFile(filename="code.txt", input_filename=""):
     # Set output dir
     os.chdir(output_dir)
 
@@ -38,8 +38,11 @@ def createFile(filename="code.txt", input_filename="system.txt"):
     try: os.remove(filename)
     except: pass
 
-    systemName = getSystemName(input_filename)
-    filename = systemName + "_" + filename
+    if input_filename != "":
+        systemName = getSystemName(input_filename)
+        filename = systemName + "_" + filename
+    else:
+        filename = filename
     
     file = open(filename,"w") 
     return file
