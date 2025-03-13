@@ -1,0 +1,255 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      '  Add V-4003 & V4006    KA Mar-20-2007
+      LD PRT1_WATER_REQ
+      ANDNOT PRT2_WATER_IND
+      ANDNOT PRT3_WATER_IND
+      ANDNOT PRT4_WATER_IND
+      SET PRT1_WATER_IND
+      ^^^
+      LD PRT3_WATER_REQ
+      ANDNOT PRT1_WATER_IND
+      ANDNOT PRT2_WATER_IND
+      ANDNOT PRT4_WATER_IND
+      SET PRT3_WATER_IND
+      ^^^
+      LD PRT2_WATER_REQ
+      ANDNOT PRT1_WATER_IND
+      ANDNOT PRT3_WATER_IND
+      ANDNOT PRT4_WATER_IND
+      SET PRT2_WATER_IND
+      ^^^
+      LD PRT4_WATER_REQ
+      ANDNOT PRT1_WATER_IND
+      ANDNOT PRT2_WATER_IND
+      ANDNOT PRT3_WATER_IND
+      SET PRT4_WATER_IND
+      ^^^
+      '  Add V4004 & V4005     KA Mar-20-2007
+      LD PRT1_DRAIN_REQ
+      LD<(310) PRT2_STEP #100
+      OR>=(325) PRT2_STEP #110
+      ANDLD
+      LD<(310) PRT3_STEP #100
+      OR>=(325) PRT3_STEP #110
+      ANDLD
+      LD<(310) PRT4_STEP #100
+      OR>=(325) PRT4_STEP #110
+      ANDLD
+      ANDNOT PRT2_DRAIN_IND
+      ANDNOT PRT3_DRAIN_IND
+      ANDNOT PRT4_DRAIN_IND
+      !SET PRT1_DRAIN_IND
+      ^^^
+      LD PRT3_DRAIN_REQ
+      LD<(310) PRT1_STEP #100
+      OR>=(325) PRT1_STEP #110
+      ANDLD
+      LD<(310) PRT2_STEP #100
+      OR>=(325) PRT2_STEP #110
+      ANDLD
+      LD<(310) PRT4_STEP #100
+      OR>=(325) PRT4_STEP #110
+      ANDLD
+      ANDNOT PRT1_DRAIN_IND
+      ANDNOT PRT2_DRAIN_IND
+      ANDNOT PRT4_DRAIN_IND
+      !SET PRT3_DRAIN_IND
+      ^^^
+      LD PRT2_DRAIN_REQ
+      LD<(310) PRT1_STEP #100
+      OR>=(325) PRT1_STEP #110
+      ANDLD
+      LD<(310) PRT3_STEP #100
+      OR>=(325) PRT3_STEP #110
+      ANDLD
+      LD<(310) PRT4_STEP #100
+      OR>=(325) PRT4_STEP #110
+      OR=(300) PRT2_STEP #100
+      ANDLD
+      ANDNOT PRT1_DRAIN_IND
+      ANDNOT PRT3_DRAIN_IND
+      ANDNOT PRT4_DRAIN_IND
+      !SET PRT2_DRAIN_IND
+      ^^^
+      LD PRT4_DRAIN_REQ
+      LD<(310) PRT1_STEP #100
+      OR>=(325) PRT1_STEP #110
+      ANDLD
+      LD<(310) PRT2_STEP #100
+      OR>=(325) PRT2_STEP #110
+      ANDLD
+      LD<(310) PRT3_STEP #100
+      OR>=(325) PRT3_STEP #110
+      ANDLD
+      ANDNOT PRT1_DRAIN_IND
+      ANDNOT PRT2_DRAIN_IND
+      ANDNOT PRT3_DRAIN_IND
+      !SET PRT4_DRAIN_IND
+      ^^^
+      '  Acid Request
+      LD PRT1_ACID_REQ
+      ANDNOT PRT2_ACID_IND
+      ANDNOT PRT3_ACID_IND
+      ANDNOT PRT4_ACID_IND
+      SET PRT1_ACID_IND
+      ^^^
+      LD PRT2_ACID_REQ
+      ANDNOT PRT1_ACID_IND
+      ANDNOT PRT3_ACID_IND
+      ANDNOT PRT4_ACID_IND
+      SET PRT2_ACID_IND
+      ^^^
+      LD PRT3_ACID_REQ
+      ANDNOT PRT1_ACID_IND
+      ANDNOT PRT2_ACID_IND
+      ANDNOT PRT4_ACID_IND
+      SET PRT3_ACID_IND
+      ^^^
+      LD PRT4_ACID_REQ
+      ANDNOT PRT1_ACID_IND
+      ANDNOT PRT2_ACID_IND
+      ANDNOT PRT3_ACID_IND
+      SET PRT4_ACID_IND
+      ^^^
+      '  Caustic Request
+      LD PRT1_CAUSTIC_REQ
+      ANDNOT PRT2_CAUSTIC_IND
+      ANDNOT PRT3_CAUSTIC_IND
+      ANDNOT PRT4_CAUSTIC_IND
+      ANDNOT CAUSTIC_IND
+      SET PRT1_CAUSTIC_IND
+      ^^^
+      LD PRT2_CAUSTIC_REQ
+      ANDNOT PRT1_CAUSTIC_IND
+      ANDNOT PRT3_CAUSTIC_IND
+      ANDNOT PRT4_CAUSTIC_IND
+      ANDNOT CAUSTIC_IND
+      SET PRT2_CAUSTIC_IND
+      ^^^
+      LD PRT3_CAUSTIC_REQ
+      ANDNOT PRT1_CAUSTIC_IND
+      ANDNOT PRT2_CAUSTIC_IND
+      ANDNOT PRT4_CAUSTIC_IND
+      ANDNOT CAUSTIC_IND
+      SET PRT3_CAUSTIC_IND
+      ^^^
+      LD PRT4_CAUSTIC_REQ
+      ANDNOT PRT1_CAUSTIC_IND
+      ANDNOT PRT2_CAUSTIC_IND
+      ANDNOT PRT3_CAUSTIC_IND
+      ANDNOT CAUSTIC_IND
+      SET PRT4_CAUSTIC_IND
+      ^^^
+      '  PRT Level Check During Dropping to Ext
+      LD>=(325) PRT1_STEP #220
+      AND<=(315) PRT1_STEP #230
+      AND>=(325) LIT_1002_AI #100
+      OUT W18.12
+      ^^^
+      LD>=(325) PRT2_STEP #220
+      AND<=(315) PRT2_STEP #230
+      AND>=(325) LIT_2002_AI #100
+      OUT W18.13
+      ^^^
+      LD>=(325) PRT3_STEP #220
+      AND<=(315) PRT3_STEP #230
+      AND>=(325) LIT_3002_AI #100
+      OUT W18.14
+      ^^^
+      LD>=(325) PRT4_STEP #220
+      AND<=(315) PRT4_STEP #230
+      AND>=(325) LIT_4002_AI #100
+      OUT W18.15
+      ^^^
+      '  Monthly Totalizer for Extra PRT\nPost Washes
+      LD ON
+      OUT TR0
+      AND>=(325) PRT1_STEP #154
+      AND<=(315) PRT1_STEP #158
+      @++B(594) W30
+      LD TR0
+      AND=(300) PRT2_STEP #154
+      AND<=(315) PRT2_STEP #158
+      @++B(594) W31
+      LD TR0
+      AND=(300) PRT3_STEP #154
+      AND<=(315) PRT3_STEP #158
+      @++B(594) W32
+      LD TR0
+      AND=(300) PRT4_STEP #154
+      AND<=(315) PRT4_STEP #158
+      @++B(594) W33
+      ^^^
+      LD=(300) D273 #1
+      @XFER(070) #4 W30 W34
+      @BSET(071) #0 W30 W33
+      ^^^
+      LD C0385
+      SET W22.11
+      ^^^
+      LD W17.00
+      AND _1_SEC_PULSE
+      ANDNOT W22.11
+      @LD W22.13
+      CNT 0385 #10
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+      PRT1_WATER_REQ	BOOL	H101.06	PRT1 Water Request		0	
+      PRT2_WATER_IND	BOOL	H201.07	PRT2 Water Indicator		0	
+      PRT3_WATER_IND	BOOL	H301.07	PRT3 Water Indicator		0	
+      PRT4_WATER_IND	BOOL	H501.07	PRT4 Water Indicator		0	
+      PRT1_WATER_IND	BOOL	H101.07	PRT1 Water Indicator		0	
+      PRT3_WATER_REQ	BOOL	H301.06	PRT3 Water Request		0	
+      PRT2_WATER_REQ	BOOL	H201.06	PRT2 Water Request		0	
+      PRT4_WATER_REQ	BOOL	H501.06	PRT4 Water Request		0	
+      PRT1_DRAIN_REQ	BOOL	H101.08	PRT1 Drain Request		0	
+      PRT2_STEP	WORD	D32200	Step Word (Counter)		0	
+      PRT3_STEP	WORD	D32300	Step Word (Counter)		0	
+      PRT4_STEP	WORD	D32500	Step Word (Counter)		0	
+      PRT2_DRAIN_IND	BOOL	H201.09	PRT2 Drain Indicator		0	
+      PRT3_DRAIN_IND	BOOL	H301.09	PRT3 Drain Indicator		0	
+      PRT4_DRAIN_IND	BOOL	H501.09	PRT4 Drain Indicator		0	
+      PRT1_DRAIN_IND	BOOL	H101.09	PRT1 Drain Indicator		0	
+      PRT3_DRAIN_REQ	BOOL	H301.08	PRT3 Drain Request		0	
+      PRT1_STEP	WORD	D32100	PRT1 STEP NUMBER		0	
+      PRT2_DRAIN_REQ	BOOL	H201.08	PRT2 Drain Request		0	
+      PRT4_DRAIN_REQ	BOOL	H501.08	PRT4 Drain Request		0	
+      PRT1_ACID_REQ	BOOL	H101.10	PRT1 Acid Indicator		0	
+      PRT2_ACID_IND	BOOL	H201.11	PRT2 Acid Indicator		0	
+      PRT3_ACID_IND	BOOL	H301.11	PRT3 Acid Indicator		0	
+      PRT4_ACID_IND	BOOL	H501.11	PRT4 Acid Indicator		0	
+      PRT1_ACID_IND	BOOL	H101.11	PRT1 Acid Indicator		0	
+      PRT2_ACID_REQ	BOOL	H201.10	PRT2 Acid Indicator		0	
+      PRT3_ACID_REQ	BOOL	H301.10	PRT3 Acid Indicator		0	
+      PRT4_ACID_REQ	BOOL	H501.10	PRT4 Acid Indicator		0	
+      PRT1_CAUSTIC_REQ	BOOL	H108.08	PRT1 Caustic Request		0	
+      PRT2_CAUSTIC_IND	BOOL	H208.09	PRT2 Caustic Indicator		0	
+      PRT3_CAUSTIC_IND	BOOL	H308.09	PRT3 Caustic Indicator		0	
+      PRT4_CAUSTIC_IND	BOOL	H508.09	PRT4 Caustic Indicator		0	
+      CAUSTIC_IND	BOOL	H357.15	Caustic General Indicator		0	
+      PRT1_CAUSTIC_IND	BOOL	H108.09	PRT1 Caustic Indicator		0	
+      PRT2_CAUSTIC_REQ	BOOL	H208.08	PRT2 Caustic Request		0	
+      PRT3_CAUSTIC_REQ	BOOL	H308.08	PRT3 Caustic Request		0	
+      PRT4_CAUSTIC_REQ	BOOL	H508.08	PRT4 Caustic Request		0	
+      LIT_1002_AI	CHANNEL	D32104	PRT1 Level Transmitter		0	
+      	BOOL	W18.12	PRT#1 > 10%		0	
+      LIT_2002_AI	CHANNEL	D32204	PRT2 Level Transmitter		0	
+      	BOOL	W18.13	PRT#2 > 10%		0	
+      LIT_3002_AI	CHANNEL	D32304	PRT3 Level Transmitter		0	
+      	BOOL	W18.14	PRT#3 > 10%		0	
+      LIT_4002_AI	CHANNEL	D32504	PRT4 Level Transmitter		0	
+      	BOOL	W18.15	PRT#4 > 10%		0	
+      ON	BOOL	CF113	System Normally On Flag		0	
+      	CHANNEL	D273	Day		0	
+      	BOOL	W17.00	One or more PRT's Draining		0	
+      _1_SEC_PULSE	BOOL	CF102	System 1.0 second clock pulse bit		0	
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

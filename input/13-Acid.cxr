@@ -1,0 +1,1346 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      LD PRT1_ACID_IND
+      AND V1010_ZH
+      LD PRT2_ACID_IND
+      AND V2010_ZH
+      ORLD
+      LD PRT3_ACID_IND
+      AND V3010_ZH
+      ORLD
+      LD PRT4_ACID_IND
+      AND V4010_ZH
+      ORLD
+      OUT ACID_RUNNING
+      ^^^
+      LD ON
+      MOV(021) FIT_121_AI LIT_120_AI_NEW
+      ^^^
+      @LD PRT1_ACID_IND
+      @OR PRT2_ACID_IND
+      @OR PRT3_ACID_IND
+      @OR PRT4_ACID_IND
+      BSET(071) #0 LIT_120_AI_DIFF ACID_TOT_CALC
+      MOV(021) FIT_121_AI LIT_120_AI_IN
+      MOV(021) FIT_121_AI LIT_120_AI_OLD
+      MOVL(498) #0 D32650
+      ^^^
+      LD<(310) LIT_120_AI_NEW LIT_120_AI_OLD
+      OUT ACID_UPDATE
+      ^^^
+      LD ACID_RUNNING
+      AND ACID_UPDATE
+      @AND _1_SEC_PULSE
+      -B(414) LIT_120_AI_OLD LIT_120_AI_NEW LIT_120_AI_DIFF
+      MOV(021) LIT_120_AI_NEW LIT_120_AI_OLD
+      *B(424) #60 ACID_TOT_CALC ACID_FLOW_CALC
+      ^^^
+      LDNOT ACID_RUNNING
+      OR ACID_PAUSE_ALM
+      MOV(021) #0 ACID_FLOW_CALC
+      ^^^
+      LD ON
+      OUT TR0
+      AND ACID_RUNNING
+      ANDNOT ACID_PAUSE_ALM
+      AND>=(325) FIT_121_AI 5
+      @AND _1_SEC_PULSE
+      +CL(403) D32650 D32652 D32650
+      LD TR0
+      /UL(433) D32650 #6 D32654
+      BCDL(059) D32654 ACID_TOT_CALC
+      ^^^
+      LD ON
+      OUT TR0
+      AND ACID_RUNNING
+      ANDNOT ACID_PAUSE_ALM
+      AND>=(325) FIT_121_AI 5
+      @AND _1_SEC_PULSE
+      +CL(403) D32426 D32652 D32426
+      LD TR0
+      /UL(433) D32426 &600 D32428
+      BCDL(059) D32428 D32573
+      ^^^
+      LD<(310) D32570 D32572
+      SET H353.08
+      SET H353.09
+      ^^^
+      LD>=(325) D32570 D32571
+      RSET H353.08
+      RSET H353.09
+      ^^^
+      %LD H354.10
+      OUT TR0
+      AND H353.08
+      SET H354.08
+      LD TR0
+      ANDNOT H353.08
+      RSET H354.08
+      LD TR0
+      AND H353.09
+      SET H354.09
+      LD TR0
+      ANDNOT H353.09
+      RSET H354.09
+      ^^^
+      LD ON
+      LD H354.08
+      ANDNOT H354.10
+      LD H353.08
+      AND H354.10
+      ORLD
+      ANDLD
+      OUT PRT_FEED_WATER_IND
+      ^^^
+      LD ON
+      LD H354.09
+      ANDNOT H354.10
+      LD H353.09
+      AND H354.10
+      ORLD
+      ANDLD
+      OUT PRT_WASH_FEED_WATER
+      ^^^
+      LD ACID_RUNNING
+      TIM 3154 #20
+      ^^^
+      LD ON
+      BCD(024) D31460 D31461
+      ^^^
+      LD ACID_RUNNING
+      AND PRT1_ACID_IND
+      AND>=(325) ACID_TOT_CALC PRT1_AD_SP
+      AND T3154
+      AND P120_MC
+      SET ACID_PRT1_DONE
+      ^^^
+      LD ACID_RUNNING
+      AND PRT2_ACID_IND
+      AND>(320) ACID_TOT_CALC PRT2_AD_SP
+      AND T3154
+      AND P120_MC
+      SET ACID_PRT2_DONE
+      ^^^
+      LD ACID_RUNNING
+      AND PRT3_ACID_IND
+      AND>=(325) ACID_TOT_CALC PRT3_AD_SP
+      AND T3154
+      AND P120_MC
+      SET ACID_PRT3_DONE
+      ^^^
+      LD ACID_RUNNING
+      AND PRT4_ACID_IND
+      AND>=(325) ACID_TOT_CALC PRT4_AD_SP
+      AND T3154
+      AND P120_MC
+      SET ACID_PRT4_DONE
+      ^^^
+      LD ON
+      OUT TR0
+      AND>(320) PRT1_STEP #45
+      AND<(310) PRT1_STEP #66
+      @AND _1_SEC_PULSE
+      +C(402) PRT1_WATER_TOTAL PRT_ACID_WATER_SCL PRT1_WATER_TOTAL
+      LD TR0
+      AND>(320) PRT2_STEP #45
+      AND<(310) PRT2_STEP #66
+      @AND _1_SEC_PULSE
+      +C(402) PRT2_WATER_TOTAL PRT_ACID_WATER_SCL PRT2_WATER_TOTAL
+      LD TR0
+      AND>(320) PRT3_STEP #45
+      AND<(310) PRT3_STEP #66
+      @AND _1_SEC_PULSE
+      +C(402) PRT3_WATER_TOTAL PRT_ACID_WATER_SCL PRT3_WATER_TOTAL
+      LD TR0
+      AND>(320) PRT4_STEP #45
+      AND<(310) PRT4_STEP #66
+      @AND _1_SEC_PULSE
+      +C(402) PRT4_WATER_TOTAL PRT_ACID_WATER_SCL PRT4_WATER_TOTAL
+      ^^^
+      LD ON
+      OUT TR0
+      AND>(320) PRT1_STEP #45
+      AND<(310) PRT1_STEP #66
+      MOVL(498) PRT1_WATER_TOTAL PRT1_ACID_WTOT
+      LD TR0
+      AND>(320) PRT2_STEP #45
+      AND<(310) PRT2_STEP #66
+      MOVL(498) PRT2_WATER_TOTAL PRT2_ACID_WTOT
+      LD TR0
+      AND>(320) PRT3_STEP #45
+      AND<(310) PRT3_STEP #66
+      MOVL(498) PRT3_WATER_TOTAL PRT3_ACID_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #45
+      AND<(310) PRT4_STEP #66
+      MOVL(498) PRT4_WATER_TOTAL PRT4_ACID_WTOT
+      ^^^
+      LD ACID_RUNNING
+      ANDNOT ACID_RESUME
+      OUT TR0
+      AND<(310) FIT_121_AI LIT_120_LOW_SP
+      AND P120_MC
+      TIM 3151 #170
+      LD TR0
+      AND LT_120_ALML_TIM
+      OUT LT_120_ALML
+      ^^^
+      LD ACID_RUNNING
+      OUT TR0
+      AND>(320) FIT_121_AI LIT_120_HIGH_SP
+      AND P_Off
+      TIM 3150 #100
+      LD TR0
+      AND LT_120_ALMH_TIM
+      OUT LT_120_ALMH
+      ^^^
+      LD ACID_RUNNING
+      ANDNOT ACID_RESUME
+      LD PRT_FEED_WATER_IND
+      AND V121_ZH
+      LDNOT PRT_FEED_WATER_IND
+      AND PRT_RECLAIM_PUMP
+      ANDNOT V121_ZH
+      ORLD
+      ANDLD
+      OUT TR0
+      AND<(310) FIT_120_AI FIT_120_LOW_SP
+      TIM 3153 #100
+      LD TR0
+      AND FIT_120_ALML_TIM
+      OUT FIT_120_ALML
+      ^^^
+      LD ACID_RUNNING
+      OUT TR0
+      AND>(320) FIT_120_AI FIT_120_HIGH_SP
+      TIM 3152 #100
+      LD TR0
+      AND FIT_120_ALMH_TIM
+      OUT FIT_120_ALMH
+      ^^^
+      LD ACID_RUNNING
+      AND>=(325) LIT_120_AI_NEW LIT_120_AI_OLD
+      TIM 3155 #100
+      ^^^
+      LD LT_120_ALML
+      OR FIT_120_ALML
+      SET ACID_PAUSE_ALM
+      ^^^
+      LD ACID_RESUME
+      RSET ACID_PAUSE_ALM
+      RSET ACID_RESUME
+      ^^^
+      LD V120_AUTO_CMD
+      ANDNOT V120_MANUAL
+      LD V120_MANUAL
+      AND V120_HMI_CMD
+      ORLD
+      OUT V120_ZC
+      ^^^
+      LD V121_AUTO_CMD
+      ANDNOT V121_MANUAL
+      ANDNOT ACID_PAUSE_ALM
+      LD V121_MANUAL
+      AND V121_HMI_CMD
+      ORLD
+      OUT V121_ZC
+      ^^^
+      LD V110_AUTO_CMD
+      ANDNOT V110_MANUAL
+      LD V110_MANUAL
+      AND V110_HMI_CMD
+      ORLD
+      ANDNOT LS_LH110_CAUSTIC
+      ANDNOT V115_ZH
+      ANDNOT V105_ZH
+      OUT V110_ZC
+      OUT 3204.12
+      ^^^
+      LD V115_AUTO_CMD
+      ANDNOT V115_MANUAL
+      LD V115_MANUAL
+      AND V115_HMI_CMD
+      ORLD
+      ANDNOT LS_LH120_CAUSTIC
+      ANDNOT V110_ZH
+      ANDNOT V105_ZH
+      OUT V115_ZC
+      ^^^
+      LD P120_AUTO_CMD
+      ANDNOT P120_MANUAL
+      ANDNOT ACID_PAUSE_ALM
+      LD P120_MANUAL
+      AND P120_HMI_CMD
+      ORLD
+      OUT P120_MC
+      ^^^
+      LD P100_AUTO_CMD
+      ANDNOT P100_MANUAL
+      LD P100_MANUAL
+      AND P100_HMI_CMD
+      ORLD
+      OUT P100_MC
+      OUT 3204.13
+      ^^^
+      LD P110_AUTO_CMD
+      ANDNOT P110_MANUAL
+      LD P110_MANUAL
+      AND P110_HMI_CMD
+      ORLD
+      OUT P110_MC
+      OUT 3204.11
+      ^^^
+      LD H354.14
+      OUT TK_100
+      ^^^
+      LD>=(325) PRT1_STEP #46
+      AND<=(315) PRT1_STEP #63
+      LDNOT PRT_WASH_FEED_WATER
+      AND PRT1_AUX_WT_FEED_REQ
+      ORLD
+      AND V1010_ZH
+      LD>=(325) PRT2_STEP #46
+      AND<=(315) PRT2_STEP #63
+      LDNOT PRT_WASH_FEED_WATER
+      AND PRT2_AUX_WT_FEED_REQ
+      ORLD
+      AND V2010_ZH
+      ORLD
+      LD>=(325) PRT3_STEP #46
+      AND<=(315) PRT3_STEP #63
+      LDNOT PRT_WASH_FEED_WATER
+      AND PRT3_AUX_WT_FEED_REQ
+      ORLD
+      AND V3010_ZH
+      ORLD
+      LD>=(325) PRT4_STEP #46
+      AND<=(315) PRT4_STEP #63
+      LDNOT PRT_WASH_FEED_WATER
+      AND PRT4_AUX_WT_FEED_REQ
+      ORLD
+      AND V4010_ZH
+      ORLD
+      ANDNOT ACID_PAUSE_ALM
+      OUT TR0
+      AND PRT_FEED_WATER_IND
+      OUT V121_AUTO_CMD
+      LD TR0
+      ANDNOT PRT_FEED_WATER_IND
+      OUT PRT_RECLAIM_PUMP
+      ^^^
+      LD ACID_RUNNING
+      LD PRT_FEED_WATER_IND
+      AND V121_ZH
+      LDNOT PRT_FEED_WATER_IND
+      ANDNOT V121_ZH
+      ORLD
+      ANDLD
+      AND>(320) FIT_120_AI &50
+      OUT TR0
+      AND T0091
+      OUT TR1
+      AND V120A_OUT_ZH
+      OUT P120_AUTO_CMD
+      LD TR1
+      OUT V120A_OUT_ZC
+      LD TR0
+      TIM 0091 #1200
+      ^^^
+      LD ON
+      LD>=(325) PRT1_STEP #44
+      AND<=(315) PRT1_STEP #46
+      LD>=(325) PRT2_STEP #44
+      AND<=(315) PRT2_STEP #46
+      ORLD
+      LD>=(325) PRT3_STEP #44
+      AND<=(315) PRT3_STEP #46
+      ORLD
+      LD>=(325) PRT4_STEP #44
+      AND<=(315) PRT4_STEP #46
+      ORLD
+      ANDLD
+      ANDNOT ACID_RUNNING
+      OUT TR0
+      AND<(310) FIT_121_AI #4900
+      AND P_Off
+      OUT ACID_FILLING
+      LD TR0
+      MOV(021) 0 ACID_TOT_CALC
+      MOVL(498) #0 D32650
+      ^^^
+      LD P_Off
+      LD>=(325) PRT1_STEP #44
+      AND<=(315) PRT1_STEP #46
+      LD>=(325) PRT2_STEP #44
+      AND<=(315) PRT2_STEP #46
+      ORLD
+      LD>=(325) PRT3_STEP #44
+      AND<=(315) PRT3_STEP #46
+      ORLD
+      LD>=(325) PRT4_STEP #44
+      AND<=(315) PRT4_STEP #46
+      ORLD
+      ANDLD
+      ANDNOT ACID_RUNNING
+      LD ACID_FILLING
+      LD V120_AUTO_CMD
+      AND<(310) FIT_121_AI #5000
+      ORLD
+      ANDLD
+      OUT V120_AUTO_CMD
+      ^^^
+      '  Caustic Sequence
+      LD CAUSTIC_AREA2_IND
+      LD CAUSTIC_AREA4_IND
+      AND V115_ZH
+      ORLD
+      LD CAUSTIC_AREA7_IND
+      AND V110_ZH
+      ORLD
+      LD CAUSTIC_AREA8_IND
+      AND V105_ZH
+      ORLD
+      OUT TR0
+      SET CAUSTIC_IND
+      @MOV(021) #0 CAUSTIC_TOT
+      AND CAUSTIC_AREA2_IND
+      @MOV(021) #0 CAUSTIC_TOTAL_AREA2
+      LD TR0
+      AND CAUSTIC_AREA8_IND
+      @MOV(021) #0 CAUSTIC_TOTAL_AREA8
+      LD TR0
+      AND CAUSTIC_AREA4_IND
+      @MOV(021) #0 CAUSTIC_TOTAL_AREA4
+      ^^^
+      '  Caustic Totalizer
+      LD CAUSTIC_IND
+      @AND _1_SEC_PULSE
+      OUT TR0
+      +C(402) CAUSTIC_TOT FIT_100_AI CAUSTIC_TOT
+      +L(401) CAUSTIC_TOTAL_MAIN D32600 CAUSTIC_TOTAL_MAIN
+      AND CAUSTIC_AREA2_IND
+      +C(402) CAUSTIC_TOTAL_AREA2 FIT_1010_AI CAUSTIC_TOTAL_AREA2
+      LD TR0
+      AND CAUSTIC_AREA8_IND
+      +C(402) CAUSTIC_TOTAL_AREA8 D32600 CAUSTIC_TOTAL_AREA8
+      ^^^
+      LD CAUSTIC_IND
+      OUT P100_AUTO_CMD
+      ^^^
+      LD CAUSTIC_AREA1_IND
+      OR CAUSTIC_AREA3_IND
+      OR CAUSTIC_AREA5_IND
+      OR CAUSTIC_AREA6_IND
+      SET DT_CAUSTIC_IND
+      @MOV(021) #0 DT_CAUSTIC_TOT
+      ^^^
+      '  Day Tank Caustic Totalizer
+      LD DT_CAUSTIC_IND
+      @AND _1_SEC_PULSE
+      +C(402) DT_CAUSTIC_TOT FIT_110 DT_CAUSTIC_TOT
+      ^^^
+      LD DT_CAUSTIC_IND
+      OUT P110_AUTO_CMD
+      ^^^
+      LD>=(325) LIT_100_AI #9800
+      ANDNOT ON
+      OR LS_LH100_CAUSTIC
+      OUT H354.14
+      ^^^
+      LD CAUSTIC_IND
+      LD>=(325) CAUSTIC_TOT CAUSTIC_TOT_SP
+      ANDNOT CAUSTIC_AREA2_IND
+      LD>=(325) CAUSTIC_TOTAL_AREA2 CAUSTIC_TOT_SP
+      AND CAUSTIC_AREA2_IND
+      ORLD
+      ANDNOT CAUSTIC_AREA7_IND
+      ANDNOT CAUSTIC_AREA4_IND
+      ANDNOT CAUSTIC_AREA8_IND
+      LD CAUSTIC_AREA4_STOP_PB
+      OR LS_LH120_CAUSTIC
+      AND CAUSTIC_AREA4_IND
+      ORLD
+      LD CAUSTIC_AREA7_STOP_PB
+      OR LS_LH110_CAUSTIC
+      AND CAUSTIC_AREA7_IND
+      ORLD
+      LD CAUSTIC_AREA8_STOP_PB
+      AND CAUSTIC_AREA8_IND
+      ORLD
+      ANDLD
+      @OR CAUSTIC_STOP_PB
+      MOV(021) 0 CAUSTIC_TOT_SP
+      RSET CAUSTIC_AREA2_IND
+      RSET CAUSTIC_AREA4_IND
+      RSET CAUSTIC_AREA7_IND
+      RSET CAUSTIC_AREA8_IND
+      RSET CAUSTIC_IND
+      ^^^
+      LD DT_CAUSTIC_IND
+      AND>=(325) DT_CAUSTIC_TOT DT_CAUSTIC_TOT_SP
+      OR DT_CAUSTIC_STOP_PB
+      MOV(021) 0 DT_CAUSTIC_TOT_SP
+      MOV(021) 0 D32455
+      RSET CAUSTIC_AREA1_IND
+      RSET CAUSTIC_AREA3_IND
+      RSET CAUSTIC_AREA5_IND
+      RSET CAUSTIC_AREA6_IND
+      RSET DT_CAUSTIC_IND
+      TIM 3156 #50
+      AND T3156
+      RSET DT_CAUSTIC_STOP_PB
+      ^^^
+      '  Caustic Area1 \nEXT
+      LD CAUSTIC_AREA1_START_PB
+      ANDNOT CAUSTIC_AREA3_IND
+      ANDNOT CAUSTIC_AREA5_IND
+      ANDNOT CAUSTIC_AREA6_IND
+      LD V1013_ZH
+      OR V2013_ZH
+      OR V3013_ZH
+      OR V4013_ZH
+      ANDLD
+      AND>(320) DT_CAUSTIC_TOT_SP #1
+      SET CAUSTIC_AREA1_IND
+      ^^^
+      LD DT_CAUSTIC_IND
+      AND CAUSTIC_AREA1_IND
+      @AND _1_SEC_PULSE
+      +L(401) CAUSTIC_TOTAL_M__AREA1 FIT_110 CAUSTIC_TOTAL_M__AREA1
+      ^^^
+      LD 326.12
+      AND 326.13
+      OUT SV30_25B
+      OUT W22.03
+      ^^^
+      LD SV30_25B
+      OR SV30_45B
+      OUT AutoJet_EXT_Isolation
+      ^^^
+      LD 326.14
+      AND 326.15
+      OUT SV30_45B
+      OUT W22.04
+      ^^^
+      '  Caustic Area 2\nPRT
+      LD CAUSTIC_AREA2_START_PB
+      OR PRT1_CAUSTIC_IND
+      OR PRT2_CAUSTIC_IND
+      OR PRT3_CAUSTIC_IND
+      OR PRT4_CAUSTIC_IND
+      ANDNOT CAUSTIC_AREA4_IND
+      ANDNOT CAUSTIC_AREA7_IND
+      ANDNOT CAUSTIC_AREA8_IND
+      LD V1011_ZH
+      OR V2011_ZH
+      OR V3011_ZH
+      OR V4011_ZH
+      ANDLD
+      AND>(320) CAUSTIC_TOT_SP #1
+      SET CAUSTIC_AREA2_IND
+      ^^^
+      LD CAUSTIC_IND
+      AND CAUSTIC_AREA2_IND
+      @AND _1_SEC_PULSE
+      +L(401) CAUSTIC_TOTAL_M__AREA2 D32600 CAUSTIC_TOTAL_M__AREA2
+      ^^^
+      '  Caustic Area 3\nCentrifuge
+      LD CAUSTIC_AREA3_START_PB
+      ANDNOT CAUSTIC_AREA1_IND
+      ANDNOT CAUSTIC_AREA5_IND
+      ANDNOT CAUSTIC_AREA6_IND
+      AND V104_ZH
+      AND>(320) DT_CAUSTIC_TOT_SP #1
+      SET CAUSTIC_AREA3_IND
+      ^^^
+      LD DT_CAUSTIC_IND
+      AND CAUSTIC_AREA3_IND
+      @AND _1_SEC_PULSE
+      +L(401) CAUSTIC_TOTAL_M__AREA3 FIT_110 CAUSTIC_TOTAL_M__AREA3
+      ^^^
+      '  Caustic Area 4\nDEMIN
+      LD CAUSTIC_AREA4_START_PB
+      ANDNOT CAUSTIC_AREA2_IND
+      ANDNOT CAUSTIC_AREA7_IND
+      ANDNOT CAUSTIC_AREA8_IND
+      SET CAUSTIC_AREA4_IND
+      ^^^
+      LD CAUSTIC_IND
+      AND CAUSTIC_AREA4_IND
+      @AND _1_SEC_PULSE
+      +L(401) CAUSTIC_TOTAL_M__AREA4 D32600 CAUSTIC_TOTAL_M__AREA4
+      ^^^
+      LDNOT CAUSTIC_IND
+      ANDNOT LS_LH120_CAUSTIC
+      AND LS120_ON
+      AND>(320) LIT_100_AI #1050
+      OUT TR0
+      AND T3164
+      OUT CAUSTIC_AREA4_START_PB
+      LD TR0
+      TIM 3164 #200
+      ^^^
+      LDNOT LS120_ON
+      LD<(310) LIT_100_AI #1030
+      LD<(310) LIT_100_AI #990
+      OR CAUSTIC_AREA4_STOP_PB
+      ANDLD
+      ORLD
+      OR LS_LH120_CAUSTIC
+      OR PRT1_CAUSTIC_IND
+      OR PRT2_CAUSTIC_IND
+      OR PRT3_CAUSTIC_IND
+      OR PRT4_CAUSTIC_IND
+      AND CAUSTIC_AREA4_IND
+      OUT CAUSTIC_AREA4_STOP_PB
+      ^^^
+      LD CAUSTIC_AREA4_IND
+      OUT V115_AUTO_CMD
+      ^^^
+      LD V115_ZH
+      ANDNOT 3204.10
+      TIM 0093 #200
+      AND T0093
+      OUT M5_SPARE7
+      ^^^
+      '  Caustic Area 5\nCHP
+      LD CAUSTIC_AREA5_START_PB
+      ANDNOT CAUSTIC_AREA1_IND
+      ANDNOT CAUSTIC_AREA3_IND
+      ANDNOT CAUSTIC_AREA6_IND
+      AND P_Off
+      AND>(320) DT_CAUSTIC_TOT_SP #1
+      SET CAUSTIC_AREA5_IND
+      ^^^
+      LD DT_CAUSTIC_IND
+      AND CAUSTIC_AREA5_IND
+      @AND _1_SEC_PULSE
+      +L(401) CAUSTIC_TOTAL_M__AREA5 FIT_110 CAUSTIC_TOTAL_M__AREA5
+      ^^^
+      '  Caustic Area 6\nAJET
+      LD CAUSTIC_AREA6_START_PB
+      ANDNOT CAUSTIC_AREA1_IND
+      ANDNOT CAUSTIC_AREA3_IND
+      ANDNOT CAUSTIC_AREA5_IND
+      AND XV13_ZH
+      AND>(320) DT_CAUSTIC_TOT_SP #1
+      SET CAUSTIC_AREA6_IND
+      ^^^
+      LDNOT XV13_ZH
+      TIM 3166 #20
+      AND T3166
+      RSET H359.02
+      ^^^
+      LD XV13_ZH
+      %AND CAUSTIC_AREA6_IND
+      !SET H359.02
+      ^^^
+      LD DT_CAUSTIC_IND
+      AND CAUSTIC_AREA6_IND
+      AND XV13_ZH
+      @AND _1_SEC_PULSE
+      MOV(021) DT_CAUSTIC_TOT D32458
+      ^^^
+      LD DT_CAUSTIC_IND
+      AND CAUSTIC_AREA6_IND
+      @AND _1_SEC_PULSE
+      +L(401) CAUSTIC_TOTAL_M__AREA6 FIT_110 CAUSTIC_TOTAL_M__AREA6
+      ^^^
+      '  Caustic Area 7\nFill Dosing TK-110\n\nW23.00 is a Push-Button from SCADA used to Fill TK110 to a Desired S.P. While Filling TK100
+      LD W23.00
+      MOV(021) #8000 D32608
+      MOV(021) #8500 D32609
+      ^^^
+      '  Return TK110 Fill Level S.P. to Normal After TK100 is Filled
+      LDNOT W23.00
+      MOV(021) #2000 D32608
+      MOV(021) #3000 D32609
+      ^^^
+      '  Reset TK110 Fill Push-Button (SCADA) After TK110 Reaches Fill S.P.
+      LD>(320) D32609 #4000
+      AND>=(325) LIT_110_AI D32609
+      RSET W23.00
+      ^^^
+      LD CAUSTIC_AREA7_START_PB
+      ANDNOT CAUSTIC_AREA2_IND
+      ANDNOT CAUSTIC_AREA4_IND
+      ANDNOT CAUSTIC_AREA8_IND
+      SET CAUSTIC_AREA7_IND
+      ^^^
+      LD CAUSTIC_IND
+      AND CAUSTIC_AREA7_IND
+      @AND _1_SEC_PULSE
+      +L(401) CAUSTIC_TOTAL_M__AREA7 D32600 CAUSTIC_TOTAL_M__AREA7
+      ^^^
+      LD<=(315) LIT_110_AI D32608
+      ANDNOT CAUSTIC_IND
+      AND>(320) LIT_100_AI #1060
+      OUT TR0
+      AND T3161
+      ANDNOT LS_LH110_CAUSTIC
+      OUT CAUSTIC_AREA7_START_PB
+      LD TR0
+      TIM 3161 #900
+      ^^^
+      LDNOT H509.00
+      OR ON
+      AND>=(325) LIT_110_AI D32609
+      LD<(310) LIT_100_AI #1040
+      LD<(310) LIT_100_AI #1000
+      OR CAUSTIC_AREA7_STOP_PB
+      ANDLD
+      ORLD
+      OR LS_LH110_CAUSTIC
+      OR PRT1_CAUSTIC_IND
+      OR PRT2_CAUSTIC_IND
+      OR PRT3_CAUSTIC_IND
+      OR PRT4_CAUSTIC_IND
+      AND CAUSTIC_AREA7_IND
+      OUT CAUSTIC_AREA7_STOP_PB
+      ^^^
+      LD CAUSTIC_AREA7_IND
+      OUT V110_AUTO_CMD
+      ^^^
+      LD P_Off
+      AND P_1min
+      LD C0400
+      CNT 0400 #60
+      ^^^
+      LD C0400
+      LD>=(325) LIT_110_AI D500
+      AND C0401
+      CNT 0401 #6
+      ^^^
+      LD C0401
+      LD>=(325) LIT_110_AI D500
+      KEEP(011) H509.00
+      ^^^
+      LD C0400
+      +L(401) LIT_110_AI #100 D500
+      ^^^
+      '  Caustic Area 8  Water Fraction Tank
+      LD CAUSTIC_AREA8_START_PB
+      ANDNOT CAUSTIC_AREA2_IND
+      ANDNOT CAUSTIC_AREA4_IND
+      ANDNOT CAUSTIC_AREA7_IND
+      AND V105_ZH
+      AND>(320) CAUSTIC_TOT_SP #1
+      SET CAUSTIC_AREA8_IND
+      ^^^
+      LD CAUSTIC_IND
+      AND CAUSTIC_AREA8_IND
+      @AND _1_SEC_PULSE
+      +L(401) CAUSTIC_TOTAL_M__AREA8 D32600 CAUSTIC_TOTAL_M__AREA8
+      ^^^
+      LD CAUSTIC_IND
+      AND CAUSTIC_AREA8_IND
+      AND P100_MC
+      TIM 0017 #300
+      ^^^
+      LD CAUSTIC_IND
+      AND>=(325) CAUSTIC_TOTAL_AREA8 CAUSTIC_TOT_SP
+      LD<(310) LIT_100_AI #1040
+      LD<(310) LIT_100_AI #1000
+      OR CAUSTIC_AREA8_STOP_PB
+      ANDLD
+      ORLD
+      OR T0017
+      OR PRT1_CAUSTIC_IND
+      OR PRT2_CAUSTIC_IND
+      OR PRT3_CAUSTIC_IND
+      OR PRT4_CAUSTIC_IND
+      AND CAUSTIC_AREA8_IND
+      OUT CAUSTIC_AREA8_STOP_PB
+      !RSET V105_HMI_CMD
+      ^^^
+      LD ON
+      XFRB(062) D32197 A352 D32198
+      XFRB(062) D32187 A352 D32188
+      ^^^
+      '  Transfer Year : Month : Day : Hour : Minute : Second to DM's for use in later comparisons
+      LD ON
+      XFRB(062) #808 A353 D275
+      XFRB(062) #800 A353 D274
+      XFRB(062) #808 A352 D273
+      XFRB(062) #800 A352 D272
+      XFRB(062) #808 A351 D271
+      XFRB(062) #800 A351 D270
+      ^^^
+      '  HBLV LOGIC - FOR KENTARO TAMADA
+      %LD H16.00
+      OR H29.00
+      RSET H16.01
+      RSET H16.04
+      LD P_First_Cycle
+      ANDNOT H16.00
+      ORLD
+      BSET(071) #7200 H21 H22
+      ^^^
+      %LD H17.00
+      OR H29.00
+      RSET H17.01
+      RSET H17.04
+      LD P_First_Cycle
+      ANDNOT H17.00
+      ORLD
+      BSET(071) #7200 H23 H24
+      ^^^
+      %LD H18.00
+      OR H29.00
+      RSET H18.01
+      RSET H18.04
+      LD P_First_Cycle
+      ANDNOT H18.00
+      ORLD
+      BSET(071) #7200 H25 H26
+      ^^^
+      %LD H19.00
+      OR H29.00
+      RSET H19.01
+      RSET H19.04
+      LD P_First_Cycle
+      ANDNOT H19.00
+      ORLD
+      BSET(071) #7200 H27 H28
+      ^^^
+      LD H29.00
+      TIM 0018 #20
+      AND T0018
+      RSET H29.00
+      ^^^
+      LD=(300) PRT1_STEP #300
+      @AND H16.00
+      ANDNOT H16.01
+      SET H16.01
+      ^^^
+      LD=(300) PRT1_STEP #300
+      AND H16.01
+      !MOV(021) #1B58 PRT1_ACID_WATER_SP
+      !MOV(021) #2400 D32119
+      SET H16.02
+      ^^^
+      LD=(300) PRT2_STEP #300
+      @AND H17.00
+      ANDNOT H17.01
+      SET H17.01
+      ^^^
+      LD=(300) PRT2_STEP #300
+      AND H17.01
+      !MOV(021) #1B58 PRT2_ACID_WATER_SP
+      !MOV(021) #2400 D32219
+      SET H17.02
+      ^^^
+      LD=(300) PRT3_STEP #300
+      @AND H18.00
+      ANDNOT H18.01
+      SET H18.01
+      ^^^
+      LD=(300) PRT3_STEP #300
+      AND H18.01
+      !MOV(021) #1B58 PRT3_ACID_WATER_SP
+      !MOV(021) #2400 D32319
+      SET H18.02
+      ^^^
+      LD=(300) PRT4_STEP #300
+      @AND H19.00
+      ANDNOT H19.01
+      SET H19.01
+      ^^^
+      LD=(300) PRT4_STEP #300
+      AND H19.01
+      !MOV(021) #1B58 PRT4_ACID_WATER_SP
+      !MOV(021) #2400 D32519
+      SET H19.02
+      ^^^
+      LD H19.00
+      AND H19.01
+      OUT TR0
+      AND=(300) PRT4_STEP #67
+      ANDNOT T0293
+      BSET(071) #600 H27 H28
+      LD TR0
+      AND=(300) PRT4_STEP #246
+      ANDNOT T0297
+      !MOV(021) #61A8 PRT4_ACID_WATER_SP
+      !MOV(021) D32505 D32519
+      ^^^
+      LD H18.00
+      AND H18.01
+      OUT TR0
+      AND=(300) PRT3_STEP #67
+      ANDNOT T0292
+      BSET(071) #600 H25 H26
+      LD TR0
+      AND=(300) PRT3_STEP #246
+      ANDNOT T0296
+      !MOV(021) #61A8 PRT3_ACID_WATER_SP
+      !MOV(021) D32305 D32319
+      ^^^
+      LD H17.00
+      AND H17.01
+      OUT TR0
+      AND=(300) PRT2_STEP #67
+      ANDNOT T0291
+      BSET(071) #600 H23 H24
+      LD TR0
+      AND=(300) PRT2_STEP #246
+      ANDNOT T0295
+      !MOV(021) #61A8 PRT2_ACID_WATER_SP
+      !MOV(021) D32205 D32219
+      ^^^
+      LD H16.00
+      AND H16.01
+      OUT TR0
+      AND=(300) PRT1_STEP #67
+      ANDNOT T0290
+      BSET(071) #600 H21 H22
+      LD TR0
+      AND=(300) PRT1_STEP #246
+      ANDNOT T0294
+      !MOV(021) #61A8 PRT1_ACID_WATER_SP
+      !MOV(021) D32105 D32119
+      ^^^
+      '  Reset Monthly Totalizers
+      LD=(300) D32198 #1
+      @MOVL(498) #0 CAUSTIC_TOTAL_MAIN
+      @MOVL(498) #0 CAUSTIC_TOTAL_M__AREA1
+      @MOVL(498) #0 CAUSTIC_TOTAL_M__AREA2
+      @MOVL(498) #0 CAUSTIC_TOTAL_M__AREA3
+      @MOVL(498) #0 CAUSTIC_TOTAL_M__AREA4
+      @MOVL(498) #0 CAUSTIC_TOTAL_M__AREA5
+      @MOVL(498) #0 CAUSTIC_TOTAL_M__AREA6
+      @MOVL(498) #0 CAUSTIC_TOTAL_M__AREA7
+      @MOVL(498) #0 CAUSTIC_TOTAL_M__AREA8
+      @MOVL(498) #0 DT_CAUSTIC_TOTAL_M
+      @MOVL(498) #0 D32426
+      ^^^
+      '  RESET Caustic START P.B Area 2, 4, 8
+      LD CAUSTIC_IND
+      RSET CAUSTIC_AREA2_START_PB
+      RSET CAUSTIC_AREA4_START_PB
+      RSET CAUSTIC_AREA8_START_PB
+      ^^^
+      '  RESET Caustic START P.B Area 1, 3, 5, 6
+      LD DT_CAUSTIC_IND
+      RSET CAUSTIC_AREA1_START_PB
+      RSET CAUSTIC_AREA3_START_PB
+      RSET CAUSTIC_AREA5_START_PB
+      RSET CAUSTIC_AREA6_START_PB
+      ^^^
+      LD P100_MC
+      OUT TR0
+      ANDNOT P100_MN
+      TIM 3160 #100
+      LD TR0
+      AND T3160
+      OUT P100_RUNFL
+      ^^^
+      LD P110_MC
+      OUT TR0
+      ANDNOT P110_MN
+      TIM 3165 #100
+      LD TR0
+      AND T3165
+      OUT P110_RUNFL
+      ^^^
+      LD<=(315) LIT_100_AI #1500
+      AND=(300) D32188 #14
+      AND=(300) D271 #0
+      OUT CAUSTIC_ORDER
+      ^^^
+      LD ON
+      OUT TR0
+      AND=(300) D32188 #11
+      SET SCRUBBER_CHECK_LIST
+      LD TR0
+      AND SCRUBBER_LIST_DONE
+      RSET SCRUBBER_CHECK_LIST
+      LD TR0
+      AND=(300) D32188 #12
+      RSET SCRUBBER_LIST_DONE
+      ^^^
+      LD ON
+      OUT TR0
+      AND=(300) D32188 #8
+      SET BOD_SAMLPE
+      LD TR0
+      AND BOD_SAMLPE_DONE
+      RSET BOD_SAMLPE
+      LD TR0
+      AND=(300) D32188 #9
+      RSET BOD_SAMLPE_DONE
+      ^^^
+      LD PRT1_CAUSTIC_REQ
+      OR PRT2_CAUSTIC_REQ
+      OR PRT3_CAUSTIC_REQ
+      OR PRT4_CAUSTIC_REQ
+      RSET CAUSTIC_AREA7_IND
+      RSET CAUSTIC_AREA4_IND
+      RSET CAUSTIC_AREA8_IND
+      ^^^
+      LD V105_AUTO_CMD
+      ANDNOT V105_MANUAL
+      LD V105_MANUAL
+      AND V105_HMI_CMD
+      ORLD
+      ANDNOT V1011_ZH
+      ANDNOT V2011_ZH
+      ANDNOT V3011_ZH
+      ANDNOT V4011_ZH
+      ANDNOT V115_ZH
+      ANDNOT V110_ZH
+      OUT V105
+      ^^^
+      LD H356.15
+      ANDNOT T3163
+      OUT TR0
+      TIM 3167 #3000
+      AND T3167
+      TIM 3162 #1800
+      LD TR0
+      AND T3167
+      ANDNOT T3162
+      OUT SPRAY_BALL_AUTO_CMD
+      ^^^
+      LD H356.15
+      TIM 3163 #9000
+      ANDNOT T3163
+      OUT DRAIN_VALVE_AUTO_CMD
+      ^^^
+      LD T3163
+      OR P_First_Cycle
+      RSET H356.15
+      ^^^
+      LD SPRAY_BALL_AUTO_CMD
+      ANDNOT SPRAY_BALL_MANUAL
+      LD SPRAY_BALL_MANUAL
+      AND SPRAY_BALL_HMI_CMD
+      ORLD
+      OUT Spray_Ball_WFT
+      ^^^
+      LD DRAIN_VALVE_AUTO_CMD
+      ANDNOT DRAIN_VALVE_MANUAL
+      LD DRAIN_VALVE_MANUAL
+      AND DRAIN_VALVE_HMI_CMD
+      ORLD
+      OUT Drain_Valve_WFT
+      ^^^
+      LD P100_MC
+      AND V105_ZH
+      LD V110_ZH
+      OR V115_ZH
+      OR V1011_ZH
+      OR V2011_ZH
+      OR V3011_ZH
+      OR V4011_ZH
+      ANDLD
+      OUT W44.00
+      ^^^
+      LD P100_MC
+      AND V110_ZH
+      LD V105_ZH
+      OR V115_ZH
+      OR V1011_ZH
+      OR V2011_ZH
+      OR V3011_ZH
+      OR V4011_ZH
+      ANDLD
+      OUT W44.01
+      ^^^
+      LD P100_MC
+      AND V115_ZH
+      LD V110_ZH
+      OR V105_ZH
+      OR V1011_ZH
+      OR V2011_ZH
+      OR V3011_ZH
+      OR V4011_ZH
+      ANDLD
+      OUT W44.02
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+      PRT1_ACID_IND	BOOL	H101.11	PRT1 Acid Indicator		0	
+      V1010_ZH	BOOL	W1.14	PRT1 Acid Dosing Valve Opened		0	
+      PRT2_ACID_IND	BOOL	H201.11	PRT2 Acid Indicator		0	
+      V2010_ZH	BOOL	W3.14	PRT2 Acid Dosing Valve Opened		0	
+      PRT3_ACID_IND	BOOL	H301.11	PRT3 Acid Indicator		0	
+      V3010_ZH	BOOL	W11.14	PRT3 Acid Dosing Valve Opened		0	
+      PRT4_ACID_IND	BOOL	H501.11	PRT4 Acid Indicator		0	
+      V4010_ZH	BOOL	W14.14	PRT4 Acid Dosing Valve Opened		0	
+      ACID_RUNNING	BOOL	H350.02	Acid System Running		0	
+      ON	BOOL	CF113	System Normally On Flag		0	
+      FIT_121_AI	CHANNEL	D32400	Acid Day Tank Flow Meter		0	
+      LIT_120_AI_NEW	CHANNEL	D32402	New Level		0	
+      LIT_120_AI_DIFF	CHANNEL	D32404	Level Differential		0	
+      ACID_TOT_CALC	CHANNEL	D32408	Total Acid Calculated l		0	
+      LIT_120_AI_IN	CHANNEL	D32407	Acid Initial Tank Level		0	
+      LIT_120_AI_OLD	CHANNEL	D32403	Old Level		0	
+      	CHANNEL	D32650	FQI-121 BUCKET		0	
+      ACID_UPDATE	BOOL	H350.01	Acid Total Update		0	
+      _1_SEC_PULSE	BOOL	CF102	System 1.0 second clock pulse bit		0	
+      ACID_FLOW_CALC	CHANNEL	D32405	Total Acid Calculated l/s		0	
+      ACID_PAUSE_ALM	BOOL	H350.12	Acid Pause ALM		0	
+      	CHANNEL	D32652	FIT-121 DOUBLE		0	
+      	CHANNEL	D32654	FQI-121		0	
+      	CHANNEL	D32426	FQI-121 MONTH BUCKET		0	
+      	CHANNEL	D32428	FQI-121 MONTHLY		0	
+      	CHANNEL	D32573	ACID Monthly Total		0	
+      	CHANNEL	D32570	Reclaim TK105 Level		0	
+      	CHANNEL	D32572	Feed Start SP		0	
+      	BOOL	H353.08	Auto Acid Reclaim		0	
+      	BOOL	H353.09	Auto Batch Reclaim		0	
+      	CHANNEL	D32571	Feed Stop SP		0	
+      	BOOL	H354.10	Wash Man/Auto P.B.: 0 = Man		0	
+      	BOOL	H354.08	Acid Wash Water: 1 = City		0	
+      	BOOL	H354.09	Batch Wash Water: 1 = City		0	
+      PRT_FEED_WATER_IND	BOOL	H354.15	PRT Acid Wash Water Ind: 1 = City		0	
+      PRT_WASH_FEED_WATER	BOOL	H357.09	PRT Batch Wash Water Ind: 1 = City		0	
+      PRT1_AD_SP	CHANNEL	D32118	PRT1 Acid SP		0	
+      P120_MC	BOOL	W7.02	Acid Pump Control Signal		0	
+      ACID_PRT1_DONE	BOOL	H350.03	Acid Done		0	
+      PRT2_AD_SP	CHANNEL	D32218	PRT2 Acid SP		0	
+      ACID_PRT2_DONE	BOOL	H350.04	Acid Done		0	
+      PRT3_AD_SP	CHANNEL	D32318	PRT3 Acid SP		0	
+      ACID_PRT3_DONE	BOOL	H350.05	Acid Done		0	
+      PRT4_AD_SP	CHANNEL	D32518	PRT4 Acid SP		0	
+      ACID_PRT4_DONE	BOOL	H350.06	Acid Done		0	
+      PRT1_STEP	WORD	D32100	PRT1 STEP NUMBER		0	
+      PRT1_WATER_TOTAL	DWORD	D32108	PRT1 Total Water		0	
+      PRT_ACID_WATER_SCL	CHANNEL	D32610			0	
+      PRT2_STEP	WORD	D32200	Step Word (Counter)		0	
+      PRT2_WATER_TOTAL	DWORD	D32208	PRT2 Total Water		0	
+      PRT3_STEP	WORD	D32300	Step Word (Counter)		0	
+      PRT3_WATER_TOTAL	DWORD	D32308	PRT3 Total Water		0	
+      PRT4_STEP	WORD	D32500	Step Word (Counter)		0	
+      PRT4_WATER_TOTAL	DWORD	D32508	PRT4 Total Water		0	
+      PRT1_ACID_WTOT	DWORD	D32134	Acid Water Total		0	
+      PRT2_ACID_WTOT	DWORD	D32234	Acid Water Total		0	
+      PRT3_ACID_WTOT	DWORD	D32334	Acid Water Total		0	
+      PRT4_ACID_WTOT	DWORD	D32534	Acid Water Total		0	
+      ACID_RESUME	BOOL	H350.13	Acid Resume		0	
+      LIT_120_LOW_SP	CHANNEL	D32410	Low SP		0	
+      LT_120_ALML_TIM	BOOL	T3151	Low Level Time Delay		0	
+      LT_120_ALML	BOOL	H350.08	Acid Low Flow (No change on level)		0	
+      LIT_120_HIGH_SP	CHANNEL	D32411	High SP		0	
+      LT_120_ALMH_TIM	BOOL	T3150	High Level Time Delay		0	
+      LT_120_ALMH	BOOL	H350.07	Acid Level High		0	
+      V121_ZH	BOOL	W4.01	Acid D Water Valve Opened		0	
+      PRT_RECLAIM_PUMP	BOOL	H357.10	Reclaim Pump		0	
+      FIT_120_AI	CHANNEL	D32401	Acid Water Flow Meter		0	
+      FIT_120_LOW_SP	CHANNEL	D32412	Low SP		0	
+      FIT_120_ALML_TIM	BOOL	T3153	Low Flow Time Delay		0	
+      FIT_120_ALML	BOOL	H350.10	Acid Flow Low		0	
+      FIT_120_HIGH_SP	CHANNEL	D32413	High SP		0	
+      FIT_120_ALMH_TIM	BOOL	T3152	High Flow Time Delay		0	
+      FIT_120_ALMH	BOOL	H350.09	Acid Flow High		0	
+      V120_AUTO_CMD	BOOL	H354.00	Acid D Fill Valve AUTO CMD		0	
+      V120_MANUAL	BOOL	H352.00	Acid D Fill Valve 1=Manual 0=Auto		0	
+      V120_HMI_CMD	BOOL	H353.00	Acid D Fill Valve HMI CMD		0	
+      V120_ZC	BOOL	W7.00	Acid D Fill Valve Output		0	
+      V121_AUTO_CMD	BOOL	H354.01	Acid D Water Valve AUTO CMD		0	
+      V121_MANUAL	BOOL	H352.01	Acid D Water Valve 1=Manual 0=Auto		0	
+      V121_HMI_CMD	BOOL	H353.01	Acid D Water Valve HMI CMD		0	
+      V121_ZC	BOOL	W7.01	Acid D Water Valve Output		0	
+      V110_AUTO_CMD	BOOL	H354.12	Old Caustic Tank Fill AUTO CMD		0	
+      V110_MANUAL	BOOL	H352.12	Old Caustic Tank Fill 1=Manual 0=Auto		0	
+      V110_HMI_CMD	BOOL	H353.12	Old Caustic Tank Fill HMI CMD		0	
+      LS_LH110_CAUSTIC	BOOL	W4.11	Old Caustic Tank High Level		0	
+      V115_ZH	BOOL	W0.14	Demin Caustic Day Tank Fill Valve Opened		0	
+      V105_ZH	BOOL	W4.04	V105 Water Fraction Tank Caustic Valve Opened		0	
+      V110_ZC	BOOL	W7.12	Old Caustic Tank Fill Valve		0	
+      V115_AUTO_CMD	BOOL	H359.12	Demin Caustic Day Tank Fill Valve Auto CMD		0	
+      V115_MANUAL	BOOL	H352.10	Demin Caustic Tank Fill 1=Manual 0=Auto		0	
+      V115_HMI_CMD	BOOL	H353.10	Demin Caustic Tank Fill HMI CMD		0	
+      LS_LH120_CAUSTIC	BOOL	W0.13	Demin Caustic Day Tank Level High High		0	
+      V110_ZH	BOOL	W4.14	Old Caustic Tank Fill Valve		0	
+      V115_ZC	BOOL	W7.10	Demin Caustic Day Tank Fill Valve		0	
+      P120_AUTO_CMD	BOOL	H354.02	Acid Pump AUTO CMD		0	
+      P120_MANUAL	BOOL	H352.02	Acid Pump 1=Manual 0=Auto		0	
+      P120_HMI_CMD	BOOL	H353.02	Acid Pump HMI CMD		0	
+      P100_AUTO_CMD	BOOL	H354.13	Caustic Delivery Pump AUTO CMD		0	
+      P100_MANUAL	BOOL	H352.13	Caustic Delivery Pump 1=Manual 0=Auto		0	
+      P100_HMI_CMD	BOOL	H353.13	Caustic Delivery Pump HMI CMD		0	
+      P100_MC	BOOL	W7.13	Caustic Delivery Pump Running		0	
+      P110_AUTO_CMD	BOOL	H359.13	Day Tank Caustic Delivery Pump Auto CMD		0	
+      P110_MANUAL	BOOL	H352.11	Day Tank Caustic Delivery Pump 1=Manual 0-Auto		0	
+      P110_HMI_CMD	BOOL	H353.11	Day Tank Caustic Delivery Pump HMI CMD		0	
+      P110_MC	BOOL	W7.11	Day Tank Caustic Delivery Pump Running		0	
+      TK_100	BOOL	W7.14	High Level Audible Alarm		0	
+      PRT1_AUX_WT_FEED_REQ	BOOL	H357.11	Pretreatment 1 Requesting Auxiliary Water wash		0	
+      PRT2_AUX_WT_FEED_REQ	BOOL	H357.12	Pretreatment 2 Requesting Auxiliary Water wash		0	
+      PRT3_AUX_WT_FEED_REQ	BOOL	H357.13	Pretreatment 3 Requesting Auxiliary Water wash		0	
+      PRT4_AUX_WT_FEED_REQ	BOOL	H357.14	Pretreatment 4 Requesting Auxiliary Water wash		0	
+      	BOOL	T0091	Acid Pump 1min On Delay Timer		0	
+      V120A_OUT_ZH	BOOL	W4.03	Acid Dosing Pump Suction/Discharge Valve Opened		0	
+      V120A_OUT_ZC	BOOL	W7.07	Acid Dosing Pump Suction/Discharge Valve Output		0	
+      ACID_FILLING	BOOL	H350.14	Acid Filling		0	
+      CAUSTIC_AREA2_IND	BOOL	H357.01	Caustic IND Area 2 (Pretreatment)		0	
+      CAUSTIC_AREA4_IND	BOOL	H357.03	Caustic IND Area 4 (Demin)		0	
+      CAUSTIC_AREA7_IND	BOOL	H357.06	Caustic IND Area 7 (TK-110)		0	
+      CAUSTIC_AREA8_IND	BOOL	H357.07	Caustic IND Area 8 (Water Fraction Tank)		0	
+      CAUSTIC_IND	BOOL	H357.15	Caustic General Indicator		0	
+      CAUSTIC_TOT	CHANNEL	D32462	Caustic Total		0	
+      CAUSTIC_TOTAL_AREA2	DWORD	D32466	Caustic Total Area 2		0	
+      CAUSTIC_TOTAL_AREA8	DWORD	D32478	Caustic Total Area 2b (WF)		0	
+      CAUSTIC_TOTAL_AREA4	DWORD	D32470	Caustic Total Area		0	
+      FIT_100_AI	CHANNEL	D32414	Flow Meter Plant Caustic Supply		0	
+      CAUSTIC_TOTAL_MAIN	DWORD	D32464	Total Caustic Pumped		0	
+      FIT_1010_AI	CHANNEL	D32415	Flow Meter Caustic Dosing		0	
+      CAUSTIC_AREA1_IND	BOOL	H357.00	Caustic IND Area 1 (Extractors)		0	
+      CAUSTIC_AREA3_IND	BOOL	H357.02	Caustic IND Area 3 (Centrifuge)		0	
+      CAUSTIC_AREA5_IND	BOOL	H357.04	Caustic IND Area 5 (Chopping)		0	
+      CAUSTIC_AREA6_IND	BOOL	H357.05	Caustic IND Area 6 (AutoJet)		0	
+      DT_CAUSTIC_IND	BOOL	H359.14	Day Tank Caustic General Indicator		0	
+      DT_CAUSTIC_TOT	CHANNEL	D32456	Day Tank Cautic Total		0	
+      FIT_110	CHANNEL	D32419	Caustic to EFF Flow Meter		0	
+      LIT_100_AI	CHANNEL	D32417	New Caustic Level		0	
+      LS_LH100_CAUSTIC	BOOL	W4.12	New Caustic Tank High Level		0	
+      CAUSTIC_TOT_SP	CHANNEL	D32460	Caustic SP liters		0	
+      CAUSTIC_AREA4_STOP_PB	BOOL	H358.03	Caustic STOP PB Area 4		0	
+      CAUSTIC_AREA7_STOP_PB	BOOL	H358.06	Caustic STOP PB Area 7		0	
+      CAUSTIC_AREA8_STOP_PB	BOOL	H358.07	Caustic STOP PB Area 8		0	
+      CAUSTIC_STOP_PB	BOOL	H358.15	Caustic STOP PB Area 9		0	
+      DT_CAUSTIC_TOT_SP	UINT	D32454	Day Tank Caustic Total SP		0	
+      DT_CAUSTIC_STOP_PB	BOOL	H359.15	Day Tank Caustic Stop PB		0	
+      CAUSTIC_AREA1_START_PB	BOOL	H356.00	Caustic Start PB Area 1		0	
+      V1013_ZH	BOOL	W0.08	Caustic Dosing Valve for EXT1		0	
+      V2013_ZH	BOOL	W2.08	Caustic Dosing Valve for EXT2		0	
+      V3013_ZH	BOOL	W10.08	Caustic Dosing Valve for EXT3		0	
+      V4013_ZH	BOOL	W13.08	Caustic Dosing Valve for EXT4		0	
+      CAUSTIC_TOTAL_M__AREA1	DWORD	D32482	Caustic Monthly Total		0	
+      	BOOL	326.12	SV30-25B_AM		0	
+      	BOOL	326.13	SV30-25B_M		0	
+      SV30_25B	BOOL	6.01	Ext. 1/2 to Drum #2		0	
+      	BOOL	W22.03	SV30_25B to Cent PLC		0	
+      SV30_45B	BOOL	6.03	Ext. 3/4 to Drum #2		0	
+      AutoJet_EXT_Isolation	BOOL	6.02	AutoJet EXT Isolation Valve		0	
+      	BOOL	326.14	SV30-45B_AM		0	
+      	BOOL	326.15	SV30-45B_M		0	
+      	BOOL	W22.04	SV30-45B to Cent PLC		0	
+      CAUSTIC_AREA2_START_PB	BOOL	H356.01	Caustic Start PB Area 2		0	
+      PRT1_CAUSTIC_IND	BOOL	H108.09	PRT1 Caustic Indicator		0	
+      PRT2_CAUSTIC_IND	BOOL	H208.09	PRT2 Caustic Indicator		0	
+      PRT3_CAUSTIC_IND	BOOL	H308.09	PRT3 Caustic Indicator		0	
+      PRT4_CAUSTIC_IND	BOOL	H508.09	PRT4 Caustic Indicator		0	
+      V1011_ZH	BOOL	W0.06	Caustic Dosing Valve for PRT1		0	
+      V2011_ZH	BOOL	W2.06	Caustic Dosing Valve for PRT2		0	
+      V3011_ZH	BOOL	W10.06	Caustic Dosing Valve for PRT3		0	
+      V4011_ZH	BOOL	W13.06	Caustic Dosing Valve for PRT4		0	
+      CAUSTIC_TOTAL_M__AREA2	DWORD	D32484	Caustic Monthly Total		0	
+      CAUSTIC_AREA3_START_PB	BOOL	H356.02	Caustic Start PB Area 3		0	
+      V104_ZH	BOOL	400.01	V104 Centrifuge Caustic Valve Opened		0	
+      CAUSTIC_TOTAL_M__AREA3	DWORD	D32486	Caustic Monthly Total		0	
+      CAUSTIC_AREA4_START_PB	BOOL	H356.03	Caustic Start PB Area 4		0	
+      CAUSTIC_TOTAL_M__AREA4	DWORD	D32488	Caustic Monthly Total		0	
+      LS120_ON	BOOL	W0.12	Demin Caustic Day Tank Request for Caustic		0	
+      M5_SPARE7	BOOL	W7.09	Demin Caustic Fill Valve Open w/o CMD		0	
+      CAUSTIC_AREA5_START_PB	BOOL	H356.04	Caustic Start PB Area 5		0	
+      CAUSTIC_TOTAL_M__AREA5	DWORD	D32490	Caustic Monthly Total		0	
+      CAUSTIC_AREA6_START_PB	BOOL	H356.05	Caustic Start PB Area 6		0	
+      XV13_ZH	BOOL	W16.05	XV13 OPEN  CAUSTIC TO PRECOAT TK VLV		0	
+      	BOOL	H359.02	Auto Close XV13 (AJ PLC)		0	
+      CAUSTIC_TOTAL_M__AREA6	DWORD	D32492	Caustic Monthly Total		0	
+      	BOOL	W23.00	LIT110 FILL PB (SCADA)		0	
+      LIT_110_AI	CHANNEL	D32418	Old Caustic Level		0	
+      CAUSTIC_AREA7_START_PB	BOOL	H356.06	Caustic Start PB Area 7		0	
+      CAUSTIC_TOTAL_M__AREA7	DWORD	D32494	Caustic Monthly Total		0	
+      	BOOL	H509.00	Deactivates 25% fill stop for old caustic day tank		0	
+      	BOOL	C0400	1 hour counter		0	
+      	CHANNEL	D500	Caustic level plus 1%, target to fill with new caustic		0	
+      	BOOL	C0401	6 hour counter		0	
+      CAUSTIC_AREA8_START_PB	BOOL	H356.07	Caustic Start PB Area 8		0	
+      CAUSTIC_TOTAL_M__AREA8	DWORD	D32496	Caustic Monthly Total		0	
+      	BOOL	T0017	Max Caustic Run Time to WF Tank		0	
+      V105_HMI_CMD	BOOL	H353.05	Water Fraction Caustic Valve HMI CMD		0	
+      	CHANNEL	D32197	Xfer		0	
+      	CHANNEL	A352	 		0	
+      	CHANNEL	D32198	Day of the Month		0	
+      	CHANNEL	D32187	Xfer		0	
+      	CHANNEL	D32188	Hour of the Day		0	
+      	CHANNEL	D275	Year		0	
+      	CHANNEL	D274	Month		0	
+      	CHANNEL	D273	Day		0	
+      	CHANNEL	D272	Hour		0	
+      	CHANNEL	D271	Minute		0	
+      	CHANNEL	D270	Second		0	
+      	BOOL	H16.00	PRT#1 HBLV ON/OFF P.B.		0	
+      	BOOL	H29.00	Manual Reset		0	
+      	BOOL	H16.01	PRT#1 HBLV ENABLE		0	
+      	BOOL	H16.04	PRT#1 HBLV COMPLETE		0	
+      	CHANNEL	H21	EXT1 3rd Cook Counter		0	
+      	CHANNEL	H22	EXT1 4th Cook Counter		0	
+      	BOOL	H17.00	PRT#2 HBLV ON/OFF P.B.		0	
+      	BOOL	H17.01	PRT#2 HBLV ENABLE		0	
+      	BOOL	H17.04	PRT#2 HBLV COMPLETE		0	
+      	CHANNEL	H23	EXT2 3rd Cook Counter		0	
+      	CHANNEL	H24	EXT2 4th Cook Counter		0	
+      	BOOL	H18.00	PRT#3 HBLV ON/OFF P.B.		0	
+      	BOOL	H18.01	PRT#3 HBLV ENABLE		0	
+      	BOOL	H18.04	PRT#3 HBLV COMPLETE		0	
+      	CHANNEL	H25	EXT3 3rd Cook Counter		0	
+      	CHANNEL	H26	EXT3 4th Cook Counter		0	
+      	BOOL	H19.00	PRT#4 HBLV ON/OFF P.B.		0	
+      	BOOL	H19.01	PRT#4 HBLV ENABLE		0	
+      	BOOL	H19.04	PRT#4 HBLV COMPLETE		0	
+      	CHANNEL	H27	EXT4 3rd Cook Counter		0	
+      	CHANNEL	H28	EXT4 4th Cook Counter		0	
+      PRT1_ACID_WATER_SP	DWORD	D32120	PRT1Water SP		0	
+      	CHANNEL	D32119	PRT1 ACID SP SCADA		0	
+      	BOOL	H16.02	EXT#1 DRAIN VALVE OVERRIDE		0	
+      PRT2_ACID_WATER_SP	DWORD	D32220	PRT2 Water SP		0	
+      	CHANNEL	D32219	PRT2 ACID SP SCADA		0	
+      	BOOL	H17.02	EXT#2 Drain Valve Override		0	
+      PRT3_ACID_WATER_SP	DWORD	D32320	PRT3Water SP		0	
+      	CHANNEL	D32319	PRT3 ACID SP SCADA		0	
+      	BOOL	H18.02	EXT#3 Drain Valve Override		0	
+      PRT4_ACID_WATER_SP	DWORD	D32520	PRT4Water SP		0	
+      	CHANNEL	D32519	PRT4 ACID SP SCADA		0	
+      	BOOL	H19.02	EXT#4 Drain Valve Override		0	
+      	BOOL	T0293	PRT#4 Step Delay		0	
+      	CHANNEL	D32505	PRT4 Previous Acid SP		0	
+      	BOOL	T0292	PRT#3 Step Delay		0	
+      	CHANNEL	D32305	PRT3 Previous Acid SP		0	
+      	BOOL	T0291	PRT#2 Step Delay		0	
+      	CHANNEL	D32205	PRT2 Previous Acid SP		0	
+      	BOOL	T0290	PRT#1 Step Delay		0	
+      	CHANNEL	D32105	PRT1 Previous Acid SP		0	
+      DT_CAUSTIC_TOTAL_M	DINT	D32606	Day Tank Caustic Monthly Total		0	
+      P100_MN	BOOL	W4.15	Caustic Delivery Pump Running		0	
+      P100_RUNFL	BOOL	H358.10	P100 "Caustic Delivery Pump"  Run Fault		0	
+      P110_MN	BOOL	W0.15	New Caustic Day Tank Delivery Pump Running		0	
+      P110_RUNFL	BOOL	H359.10	P110 New Caustic Day Tank Delivery Pump Run Fault		0	
+      CAUSTIC_ORDER	BOOL	H358.11	Order Caustic		0	
+      SCRUBBER_CHECK_LIST	BOOL	H358.12	Scrubber Check List 		0	
+      SCRUBBER_LIST_DONE	BOOL	H358.09	Scrubber Check List Done		0	
+      BOD_SAMLPE	BOOL	H358.13	BOD Sample to be Taken		0	
+      BOD_SAMLPE_DONE	BOOL	H358.14	BOD Sample Taken		0	
+      PRT1_CAUSTIC_REQ	BOOL	H108.08	PRT1 Caustic Request		0	
+      PRT2_CAUSTIC_REQ	BOOL	H208.08	PRT2 Caustic Request		0	
+      PRT3_CAUSTIC_REQ	BOOL	H308.08	PRT3 Caustic Request		0	
+      PRT4_CAUSTIC_REQ	BOOL	H508.08	PRT4 Caustic Request		0	
+      V105_AUTO_CMD	BOOL	H354.05	Water Fraction Caustic Valve AUTO CMD		0	
+      V105_MANUAL	BOOL	H352.05	Water Fraction Caustic Valve 1=Manual 0=Auto		0	
+      V105	BOOL	W7.03	Water Fraction Tank Caustic Valve Output		0	
+      	BOOL	H356.15	Water Fraction Spray PB		0	
+      	BOOL	T3163	Water Fraction Drain Timer		0	
+      	BOOL	T3162	Water Fraction Spray Timer		0	
+      SPRAY_BALL_AUTO_CMD	BOOL	H354.06	Water Fraction Spray Ball AUTO CMD		0	
+      DRAIN_VALVE_AUTO_CMD	BOOL	H354.07	Water Fraction Drain Valve AUTO CMD		0	
+      SPRAY_BALL_MANUAL	BOOL	H352.06	Water Fraction Spray Ball 1=Manual 0=Auto		0	
+      SPRAY_BALL_HMI_CMD	BOOL	H353.06	Water Fraction Spray Ball HMI CMD		0	
+      Spray_Ball_WFT	BOOL	W7.04	Water Fraction Tank Spray Ball Output 		0	
+      DRAIN_VALVE_MANUAL	BOOL	H352.07	Water Fraction Drain Valve 1=Manual 0=Auto		0	
+      DRAIN_VALVE_HMI_CMD	BOOL	H353.07	Water Fraction Drain Valve HMI CMD		0	
+      Drain_Valve_WFT	BOOL	W7.05	Water Fraction Tank Drain Valve Output 		0	
+      	BOOL	W44.00	Caustic Valve Alarm #0		0	
+      	BOOL	W44.01	Caustic Valve Alarm #1		0	
+      	BOOL	W44.02	Caustic Valve Alarm #2		0	
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

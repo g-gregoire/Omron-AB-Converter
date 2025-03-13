@@ -28,7 +28,7 @@
       ^^^
       '  UFHT #1 Level From EVAP PLC via SCADA
       LD ON
-      CMP(020) D82 &94
+      CMP(020) D82 &91
       AND P_GE
       TIM 0046 #50
       AND T0046
@@ -2313,6 +2313,7 @@
       ANDLD
       ORLD
       ANDNOT ST2HL
+      ANDNOT 414.01
       ANDNOT 328.06
       OUT _2DRPVLV
       ^^^
@@ -3330,6 +3331,7 @@
       ANDLD
       ORLD
       ANDNOT ST3HL
+      ANDNOT 414.02
       ANDNOT ON_OFF3
       OUT _3DRPVLV
       ^^^
@@ -4608,6 +4610,7 @@
       ANDLD
       ORLD
       ANDNOT 47.13
+      ANDNOT 414.03
       ANDNOT 328.08
       OUT _4DRPVLV
       ^^^
@@ -5202,7 +5205,7 @@
       ^^^
       '  STK #2 Level Interlock with EXT Drop Valves
       LD ON
-      CMP(020) SETTNK2LVL #90
+      CMP(020) SETTNK2LVL #96
       AND GREATER_THAN
       TIM 0371 #50
       AND T0371
@@ -5221,7 +5224,7 @@
       ^^^
       '  STK #3 Level Interlock with EXT Drop Valves
       LD ON
-      CMP(020) SETTNK3LVL #90
+      CMP(020) SETTNK3LVL #96
       AND GREATER_THAN
       TIM 0372 #50
       AND T0372
@@ -5240,7 +5243,7 @@
       ^^^
       '  STK #4 Level Interlock with EXT Drop Valves
       LD ON
-      CMP(020) SETTNK4LVL #90
+      CMP(020) SETTNK4LVL #91
       AND GREATER_THAN
       TIM 0373 #50
       AND T0373

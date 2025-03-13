@@ -1,0 +1,2908 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      '   ****************Pretreatment Sequence Initiation****************
+      LD=(300) PRT4_STEP #0
+      OUT TR0
+      @AND PRT4_DROP_START
+      LD<=(315) LIT_4002_AI PRT4_EMPTY_SP
+      OR ON
+      ANDLD
+      MOV(021) #1 PRT4_STEP
+      LD TR0
+      @MOV(021) #0 PRT4_AD_SP
+      @MOV(021) #0 PRT4_POSTWI_CAUSTIC_SP
+      @MOV(021) #0 PRT4_POSTWII_CAUSTIC_SP
+      @MOV(021) #0 PRT4_POSTWIII_CAUSTIC_SP
+      @RSET PRT4_POSTWI_CAUSTIC_ENABLE
+      @RSET PRT4_POSTWII_CAUSTIC_ENABLE
+      @SET PRT4_POSTWIII_CAUSTIC_ENABLE
+      @SET PRT4_POSTWII_SKIP
+      AND W22.09
+      @SET PRT4_PREWASH_SKIP
+      ^^^
+      '  Step 1\n*****************Dropping*****************
+      LD=(300) PRT4_STEP #1
+      OUT TR0
+      ANDNOT W27.00
+      ANDNOT PRT4_DROP_SKIP
+      LD<=(315) LIT_4002_AI PRT4_EMPTY_SP
+      @OR PRT4_ADVANCE
+      ANDLD
+      AND=L(301) PRT4_AD_TOTAL #0
+      MOV(021) #2 PRT4_STEP
+      LD TR0
+      AND PRT4_DROP_SKIP
+      AND W27.00
+      MOV(021) #17 PRT4_STEP
+      LD TR0
+      MOV(021) #0 PRT4_AD_TOTAL
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 2
+      LD=(300) PRT4_STEP #2
+      LD V4004_ZH
+      OR V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #3 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 3
+      LD=(300) PRT4_STEP #3
+      LD V4002_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #4 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 4
+      LD=(300) PRT4_STEP #4
+      LD<=(315) LIT_4001_AI RHT4_EMPTY_SP
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #5 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 5
+      LD=(300) PRT4_STEP #5
+      MOV(021) #6 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 6
+      LD=(300) PRT4_STEP #6
+      LD V4002_ZH
+      AND V4008_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #7 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 7
+      LD=(300) PRT4_STEP #7
+      MOV(021) #8 PRT4_STEP
+      ^^^
+      '  Step 8
+      LD=(300) PRT4_STEP #8
+      MOV(021) #9 PRT4_STEP
+      ^^^
+      '  Step 9
+      LD=(300) PRT4_STEP #9
+      OUT TR0
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #10 PRT4_STEP
+      LD TR0
+      MOV(021) PRT4_DROPWASHTIME_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 10
+      LD=(300) PRT4_STEP #10
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #11 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 11
+      LD=(300) PRT4_STEP #11
+      MOV(021) #12 PRT4_STEP
+      ^^^
+      '  Step 12
+      LD=(300) PRT4_STEP #12
+      MOV(021) #13 PRT4_STEP
+      ^^^
+      '  Step 13
+      LD=(300) PRT4_STEP #13
+      MOV(021) #14 PRT4_STEP
+      ^^^
+      '  Step 14
+      LD=(300) PRT4_STEP #14
+      LD V4002_ZL
+      ANDNOT V4008_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      MOV(021) #15 PRT4_STEP
+      LD TR0
+      RSET PRT4_ADVANCE
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      ^^^
+      '  Step 15
+      LD=(300) PRT4_STEP #15
+      MOV(021) #16 PRT4_STEP
+      ^^^
+      '  Step 16
+      LD=(300) PRT4_STEP #16
+      MOV(021) #17 PRT4_STEP
+      ^^^
+      '  Step 17\n*****************PreWash*****************
+      LD=(300) PRT4_STEP #17
+      OUT TR0
+      ANDNOT PRT4_PREWASH_SKIP
+      LDNOT PRT4_PREWASH_AUTO
+      AND PRT4_PREWASH_START
+      OR PRT4_PREWASH_AUTO
+      ANDLD
+      MOV(021) #18 PRT4_STEP
+      LD TR0
+      AND PRT4_PREWASH_SKIP
+      MOV(021) #45 PRT4_STEP
+      ^^^
+      '  Step 18
+      LD=(300) PRT4_STEP #18
+      OUT TR0
+      AND PRT4_WATER_IND
+      ANDNOT V4004_ZH
+      ANDNOT V4005_ZH
+      MOV(021) #19 PRT4_STEP
+      LD TR0
+      SET PRT4_WATER_REQ
+      ^^^
+      '  Step 19
+      LD=(300) PRT4_STEP #19
+      OUT TR0
+      LD PRT_WASH_FEED_WATER
+      LD V4003_ZH
+      OR V4006_ZH
+      OR>=(325) FIT2_2000_AI #200
+      ANDLD
+      LDNOT PRT_WASH_FEED_WATER
+      LD V4010_ZH
+      OR>=(325) FIT_120_AI #200
+      ANDLD
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #20 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      '  Step 20
+      LD=(300) PRT4_STEP #20
+      MOV(021) #21 PRT4_STEP
+      ^^^
+      '  Step 21
+      LD=(300) PRT4_STEP #21
+      MOV(021) #22 PRT4_STEP
+      ^^^
+      '  Step 22
+      LD=(300) PRT4_STEP #22
+      LD>=(325) PRT4_WATER_TOTAL PRT4_PREWASH_WATER_SP
+      OR>=(325) LIT_4002_AI #9050
+      @OR LS_PRETK4_HL
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #23 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 23
+      LD=(300) PRT4_STEP #23
+      MOV(021) #24 PRT4_STEP
+      ^^^
+      '  Step 24
+      LD=(300) PRT4_STEP #24
+      MOV(021) #25 PRT4_STEP
+      ^^^
+      '  Step 25
+      LD=(300) PRT4_STEP #25
+      MOV(021) #26 PRT4_STEP
+      ^^^
+      '  Step 26
+      LD=(300) PRT4_STEP #26
+      LD PRT_WASH_FEED_WATER
+      ANDNOT V4003_ZH
+      ANDNOT V4006_ZH
+      LDNOT PRT_WASH_FEED_WATER
+      ANDNOT V4010_ZH
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      MOV(021) #27 PRT4_STEP
+      LD TR0
+      RSET PRT4_ADVANCE
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      ^^^
+      '  Step 27
+      LD=(300) PRT4_STEP #27
+      MOV(021) #28 PRT4_STEP
+      ^^^
+      '  Step 28
+      LD=(300) PRT4_STEP #28
+      MOV(021) #29 PRT4_STEP
+      ^^^
+      '  Step 29
+      LD=(300) PRT4_STEP #29
+      MOV(021) #30 PRT4_STEP
+      ^^^
+      '  Step 30
+      LD=(300) PRT4_STEP #30
+      MOV(021) #31 PRT4_STEP
+      ^^^
+      '  Step\nPreWash Agitating
+      LD=(300) PRT4_STEP #31
+      OUT TR0
+      LD M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR1
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #32 PRT4_STEP
+      LD TR1
+      RSET PRT4_ADVANCE
+      MOV(021) PRT4_PREWASH_AGT_SP PRT4_SEQ_TIM_PRE
+      LD TR0
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 32
+      LD=(300) PRT4_STEP #32
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #33 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 33
+      LD=(300) PRT4_STEP #33
+      OUT TR0
+      LD PRT4_DRAIN_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #34 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      SET PRT4_DRAIN_REQ
+      ^^^
+      '  Step 34
+      LD=(300) PRT4_STEP #34
+      MOV(021) #35 PRT4_STEP
+      ^^^
+      '  Step 35\nPreWash Draining
+      LD=(300) PRT4_STEP #35
+      LD V4004_ZH
+      OR V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #36 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 36
+      LD=(300) PRT4_STEP #36
+      MOV(021) #37 PRT4_STEP
+      ^^^
+      '  Step 37
+      LD=(300) PRT4_STEP #37
+      MOV(021) #38 PRT4_STEP
+      ^^^
+      '  Step 38
+      LD=(300) PRT4_STEP #38
+      OUT TR0
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #39 PRT4_STEP
+      LD TR0
+      MOV(021) PRT4_PREWASH_DRAIN_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 39
+      LD=(300) PRT4_STEP #39
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #40 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 40
+      LD=(300) PRT4_STEP #40
+      MOV(021) #41 PRT4_STEP
+      ^^^
+      '  Step 41
+      LD=(300) PRT4_STEP #41
+      LDNOT M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #42 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 42
+      LD=(300) PRT4_STEP #42
+      MOV(021) #43 PRT4_STEP
+      ^^^
+      '  Step 43
+      LD=(300) PRT4_STEP #43
+      LDNOT V4004_ZH
+      ANDNOT V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #44 PRT4_STEP
+      RSET PRT4_ADVANCE
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      MOV(021) PRT4_AD_SP D32505
+      ^^^
+      '  Step 44
+      LD=(300) PRT4_STEP #44
+      OUT TR0
+      AND=(300) PRT4_AD_TOTAL #0
+      AND=(300) PRT4_WATER_TOTAL #0
+      MOV(021) #45 PRT4_STEP
+      LD TR0
+      MOVL(498) #0 PRT4_AD_TOTAL
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      RSET ACID_PRT4_DONE
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      RSET PRT4_WATER_REQ
+      ^^^
+      '  Step 45\n*****************Acid Wash*****************
+      LD=(300) PRT4_STEP #45
+      OUT TR0
+      LDNOT PRT4_ACID_SKIP
+      ANDNOT PRT4_ACID_AUTO
+      AND PRT4_ACID_START
+      OR PRT4_ACID_AUTO
+      OR ON
+      ANDLD
+      AND>(320) PRT4_AD_SP #500
+      MOV(021) #46 PRT4_STEP
+      LD TR0
+      AND PRT4_ACID_SKIP
+      MOV(021) #110 PRT4_STEP
+      ^^^
+      '  Step 46
+      LD=(300) PRT4_STEP #46
+      LD>=(325) FIT_121_AI PRT4_AD_SP
+      OR ON
+      @OR PRT4_ADVANCE
+      LD PRT4_WATER_IND
+      AND PRT4_ACID_IND
+      ORLD
+      ANDLD
+      OUT TR0
+      AND PRT4_WATER_IND
+      AND PRT4_ACID_IND
+      MOV(021) #47 PRT4_STEP
+      LD TR0
+      RSET PRT4_ADVANCE
+      SET PRT4_WATER_REQ
+      SET PRT4_ACID_REQ
+      ^^^
+      '  Step 47
+      LD=(300) PRT4_STEP #47
+      MOV(021) #48 PRT4_STEP
+      ^^^
+      '  Step 48
+      LD=(300) PRT4_STEP #48
+      MOV(021) #49 PRT4_STEP
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      '  Step 49
+      LD=(300) PRT4_STEP #49
+      MOV(021) #50 PRT4_STEP
+      ^^^
+      '  Step 50
+      LD=(300) PRT4_STEP #50
+      MOV(021) #51 PRT4_STEP
+      ^^^
+      '  Step 51
+      LD=(300) PRT4_STEP #51
+      MOV(021) #52 PRT4_STEP
+      ^^^
+      '  Step 52
+      LD=(300) PRT4_STEP #52
+      LD V4010_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #53 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 53
+      LD=(300) PRT4_STEP #53
+      MOV(021) #54 PRT4_STEP
+      ^^^
+      '  Step 54
+      LD=(300) PRT4_STEP #54
+      MOV(021) #55 PRT4_STEP
+      ^^^
+      '  Step 55
+      LD=(300) PRT4_STEP #55
+      MOV(021) #56 PRT4_STEP
+      ^^^
+      '  Step 56
+      LD=(300) PRT4_STEP #56
+      MOV(021) #57 PRT4_STEP
+      ^^^
+      '  Step 57
+      LD=(300) PRT4_STEP #57
+      MOV(021) #58 PRT4_STEP
+      ^^^
+      '  Step 58
+      LD=(300) PRT4_STEP #58
+      LD ACID_PRT4_DONE
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #59 PRT4_STEP
+      RSET PRT4_ADVANCE
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      ^^^
+      '  Step 59
+      LD=(300) PRT4_STEP #59
+      MOV(021) #60 PRT4_STEP
+      ^^^
+      '  Step 60
+      LD=(300) PRT4_STEP #60
+      MOV(021) #61 PRT4_STEP
+      ^^^
+      '  Step 61
+      LD=(300) PRT4_STEP #61
+      MOV(021) #62 PRT4_STEP
+      ^^^
+      '  Step 62
+      LD=(300) PRT4_STEP #62
+      MOV(021) #63 PRT4_STEP
+      ^^^
+      '  Step 63
+      LD=(300) PRT4_STEP #63
+      LD>=(325) PRT4_WATER_TOTAL PRT4_ACID_WATER_SP
+      OR>=(325) LIT_4002_AI #9100
+      @OR LS_PRETK4_HL
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #64 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 64
+      LD=(300) PRT4_STEP #64
+      MOV(021) #65 PRT4_STEP
+      ^^^
+      '  Step 65
+      LD=(300) PRT4_STEP #65
+      LDNOT V4010_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #66 PRT4_STEP
+      RSET PRT4_ADVANCE
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      ^^^
+      '  Step 66
+      LD=(300) PRT4_STEP #66
+      MOV(021) #67 PRT4_STEP
+      ^^^
+      '  Step 67
+      LD=(300) PRT4_STEP #67
+      OUT TR0
+      ANDNOT H19.01
+      MOV(021) #97 PRT4_STEP
+      LD TR0
+      AND H19.01
+      TIM 0293 #200
+      AND T0293
+      !RSET H19.02
+      ANDNOT V4007_ZC
+      AND V4007_ZL
+      MOV(021) #245 PRT4_STEP
+      ^^^
+      '  Step 68
+      LD=(300) PRT4_STEP #68
+      MOV(021) #69 PRT4_STEP
+      ^^^
+      '  Step 69
+      LD=(300) PRT4_STEP #69
+      MOV(021) #70 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #70
+      MOV(021) #71 PRT4_STEP
+      ^^^
+      '  Step 71
+      LD=(300) PRT4_STEP #71
+      MOV(021) #72 PRT4_STEP
+      ^^^
+      '  Step 72
+      LD=(300) PRT4_STEP #72
+      MOV(021) #73 PRT4_STEP
+      ^^^
+      '  Step 73
+      LD=(300) PRT4_STEP #73
+      MOV(021) #74 PRT4_STEP
+      ^^^
+      '  Step 74
+      LD=(300) PRT4_STEP #74
+      MOV(021) #75 PRT4_STEP
+      ^^^
+      '  Step 75
+      LD=(300) PRT4_STEP #75
+      MOV(021) #76 PRT4_STEP
+      ^^^
+      '  Step 76
+      LD=(300) PRT4_STEP #76
+      MOV(021) #77 PRT4_STEP
+      ^^^
+      '  Step 78
+      LD=(300) PRT4_STEP #77
+      MOV(021) #78 PRT4_STEP
+      ^^^
+      '  Step 79
+      LD=(300) PRT4_STEP #78
+      MOV(021) #79 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #79
+      MOV(021) #80 PRT4_STEP
+      ^^^
+      '  Step 80
+      LD=(300) PRT4_STEP #80
+      MOV(021) #81 PRT4_STEP
+      ^^^
+      '  Step 81
+      LD=(300) PRT4_STEP #81
+      MOV(021) #82 PRT4_STEP
+      ^^^
+      '  Step 82
+      LD=(300) PRT4_STEP #82
+      MOV(021) #83 PRT4_STEP
+      ^^^
+      '  Step 83
+      LD=(300) PRT4_STEP #83
+      MOV(021) #84 PRT4_STEP
+      ^^^
+      '  Step 84
+      LD=(300) PRT4_STEP #84
+      MOV(021) #85 PRT4_STEP
+      ^^^
+      '  Step 85
+      LD=(300) PRT4_STEP #85
+      MOV(021) #86 PRT4_STEP
+      ^^^
+      '  Step 86
+      LD=(300) PRT4_STEP #86
+      MOV(021) #87 PRT4_STEP
+      ^^^
+      '  Step 87
+      LD=(300) PRT4_STEP #87
+      MOV(021) #88 PRT4_STEP
+      ^^^
+      '  Step 88
+      LD=(300) PRT4_STEP #88
+      MOV(021) #89 PRT4_STEP
+      ^^^
+      '  Step 89
+      LD=(300) PRT4_STEP #89
+      MOV(021) #90 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #90
+      MOV(021) #91 PRT4_STEP
+      ^^^
+      '  Step 91
+      LD=(300) PRT4_STEP #91
+      MOV(021) #92 PRT4_STEP
+      ^^^
+      '  Step 92
+      LD=(300) PRT4_STEP #92
+      MOV(021) #93 PRT4_STEP
+      ^^^
+      '  Step 93
+      LD=(300) PRT4_STEP #93
+      MOV(021) #94 PRT4_STEP
+      ^^^
+      '  Step 94
+      LD=(300) PRT4_STEP #94
+      MOV(021) #95 PRT4_STEP
+      ^^^
+      '  Step 95
+      LD=(300) PRT4_STEP #95
+      MOV(021) #96 PRT4_STEP
+      ^^^
+      '  Step 96
+      LD=(300) PRT4_STEP #96
+      MOV(021) #97 PRT4_STEP
+      ^^^
+      '  Step 97
+      LD=(300) PRT4_STEP #97
+      LD M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #98 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 98
+      LD=(300) PRT4_STEP #98
+      OUT TR0
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #99 PRT4_STEP
+      LD TR0
+      MOV(021) PRT4_ACID_AGT_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 99
+      LD=(300) PRT4_STEP #99
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #100 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 100
+      LD=(300) PRT4_STEP #100
+      OUT TR0
+      LD PRT4_DRAIN_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #101 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      LD<(310) PRT2_STEP #100
+      OR>=(325) PRT2_STEP #110
+      ANDLD
+      SET PRT4_DRAIN_REQ
+      ^^^
+      '  Step 101
+      LD=(300) PRT4_STEP #101
+      OUT TR0
+      LD V4004_ZH
+      OR V4005_ZH
+      AND=(300) PRT4_ACID_DRAIN_SP PRT4_SEQ_TIM_PRE
+      ANDNOT PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #102 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      MOV(021) PRT4_ACID_DRAIN_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 102
+      LD=(300) PRT4_STEP #102
+      MOV(021) #103 PRT4_STEP
+      ^^^
+      '  Step 103
+      LD=(300) PRT4_STEP #103
+      MOV(021) #104 PRT4_STEP
+      ^^^
+      '  Step 104
+      LD=(300) PRT4_STEP #104
+      MOV(021) #105 PRT4_STEP
+      ^^^
+      '  Step 105
+      LD=(300) PRT4_STEP #105
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #106 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 106
+      LD=(300) PRT4_STEP #106
+      MOV(021) #107 PRT4_STEP
+      ^^^
+      '  Step 107
+      LD=(300) PRT4_STEP #107
+      LDNOT M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #108 PRT4_STEP
+      ^^^
+      '  Step 108
+      LD=(300) PRT4_STEP #108
+      MOV(021) #109 PRT4_STEP
+      ^^^
+      '  Step 109
+      LD=(300) PRT4_STEP #109
+      OUT TR0
+      LDNOT V4004_ZH
+      ANDNOT V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #110 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET ACID_PRT4_DONE
+      ^^^
+      '  Step 110\n******************************************PostWash I******************************************
+      LD=(300) PRT4_STEP #110
+      OUT TR0
+      ANDNOT PRT4_POSTWI_SKIP
+      LDNOT PRT4_POSTWI_AUTO
+      AND PRT4_POSTWI_START
+      OR PRT4_POSTWI_AUTO
+      ANDLD
+      LD PRT4_POSTWI_CAUSTIC_ENABLE
+      AND>(320) PRT4_POSTWI_CAUSTIC_SP #0
+      ORNOT PRT4_POSTWI_CAUSTIC_ENABLE
+      ANDLD
+      MOV(021) #111 PRT4_STEP
+      LD TR0
+      AND PRT4_POSTWI_SKIP
+      MOV(021) #146 PRT4_STEP
+      LD TR0
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      '  Step 111
+      LD=(300) PRT4_STEP #111
+      OUT TR0
+      AND PRT4_WATER_IND
+      MOV(021) #112 PRT4_STEP
+      MOV(021) #0 CAUSTIC_TOTAL_AREA2
+      LD TR0
+      SET PRT4_WATER_REQ
+      ^^^
+      '  Step 112
+      LD=(300) PRT4_STEP #112
+      LD PRT_WASH_FEED_WATER
+      LD V4003_ZH
+      OR V4006_ZH
+      OR>=(325) FIT2_2000_AI #200
+      ANDLD
+      LDNOT PRT_WASH_FEED_WATER
+      LD V4010_ZH
+      OR>=(325) FIT_120_AI #200
+      ANDLD
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #113 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 113
+      LD=(300) PRT4_STEP #113
+      OUT TR0
+      AND PRT4_POSTWI_CAUSTIC_ENABLE
+      LD>=(325) PRT4_WATER_TOTAL &12000
+      @OR PRT4_ADVANCE
+      OR PRT4_CAUSTIC_REQ
+      ANDLD
+      OUT TR1
+      AND PRT4_CAUSTIC_IND
+      MOV(021) #114 PRT4_STEP
+      BIN(023) PRT4_POSTWI_CAUSTIC_SP CAUSTIC_TOT_SP
+      LD TR1
+      RSET PRT4_ADVANCE
+      SET PRT4_CAUSTIC_REQ
+      LD TR0
+      ANDNOT PRT4_POSTWI_CAUSTIC_ENABLE
+      MOV(021) #117 PRT4_STEP
+      ^^^
+      '  Step 114
+      LD=(300) PRT4_STEP #114
+      LD V4011_ZH
+      AND CAUSTIC_AREA2_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #115 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 115
+      LD=(300) PRT4_STEP #115
+      LDNOT CAUSTIC_AREA2_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #116 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 116
+      LD=(300) PRT4_STEP #116
+      LDNOT V4011_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #117 PRT4_STEP
+      RSET PRT4_ADVANCE
+      RSET PRT4_CAUSTIC_REQ
+      RSET PRT4_CAUSTIC_IND
+      ^^^
+      '  Step 117
+      LD=(300) PRT4_STEP #117
+      LD>=(325) PRT4_WATER_TOTAL PRT4_POSTWI_WATER_SP
+      OR>=(325) LIT_4002_AI #9100
+      @OR LS_PRETK4_HL
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #118 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 118
+      LD=(300) PRT4_STEP #118
+      MOV(021) #119 PRT4_STEP
+      ^^^
+      '  Step 119
+      LD=(300) PRT4_STEP #119
+      MOV(021) #120 PRT4_STEP
+      ^^^
+      '  Step 120
+      LD=(300) PRT4_STEP #120
+      MOV(021) #121 PRT4_STEP
+      ^^^
+      '  Step 121
+      LD=(300) PRT4_STEP #121
+      OUT TR0
+      LD PRT_WASH_FEED_WATER
+      ANDNOT V4003_ZH
+      ANDNOT V4006_ZH
+      LDNOT PRT_WASH_FEED_WATER
+      ANDNOT V4010_ZH
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #122 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      ^^^
+      '  Step 122
+      LD=(300) PRT4_STEP #122
+      MOV(021) #123 PRT4_STEP
+      ^^^
+      '  Step 123
+      LD=(300) PRT4_STEP #123
+      MOV(021) #124 PRT4_STEP
+      ^^^
+      '  Step 124
+      LD=(300) PRT4_STEP #124
+      MOV(021) #125 PRT4_STEP
+      ^^^
+      '  Step 125
+      LD=(300) PRT4_STEP #125
+      OUT TR0
+      LD M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR1
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #126 PRT4_STEP
+      LD TR1
+      MOV(021) PRT4_POSTWI_AGT_SP PRT4_SEQ_TIM_PRE
+      RSET PRT4_ADVANCE
+      LD TR0
+      CNR(545) C4000 C4000
+      AND<(310) PRT4_WATER_TOTAL &15000
+      !RSET PRT4_POSTWII_SKIP
+      ^^^
+      '  Step 126
+      LD=(300) PRT4_STEP #126
+      MOV(021) #127 PRT4_STEP
+      ^^^
+      '  Step 127
+      LD=(300) PRT4_STEP #127
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #128 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 128
+      LD=(300) PRT4_STEP #128
+      MOV(021) #129 PRT4_STEP
+      ^^^
+      '  Step 129
+      LD=(300) PRT4_STEP #129
+      OUT TR0
+      LD PRT4_DRAIN_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #130 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      SET PRT4_DRAIN_REQ
+      ^^^
+      '  Step 130
+      LD=(300) PRT4_STEP #130
+      LD V4004_ZH
+      OR V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #131 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 131
+      LD=(300) PRT4_STEP #131
+      MOV(021) #132 PRT4_STEP
+      ^^^
+      '  Step 132
+      LD=(300) PRT4_STEP #132
+      MOV(021) #133 PRT4_STEP
+      ^^^
+      '  Step 133
+      LD=(300) PRT4_STEP #133
+      OUT TR0
+      LD=(300) PRT4_POSTWI_DRAIN_SP PRT4_SEQ_TIM_PRE
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR1
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #134 PRT4_STEP
+      LD TR1
+      RSET PRT4_ADVANCE
+      LD TR0
+      MOV(021) PRT4_POSTWI_DRAIN_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 134
+      LD=(300) PRT4_STEP #134
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #135 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 135
+      LD=(300) PRT4_STEP #135
+      MOV(021) #136 PRT4_STEP
+      ^^^
+      '  Step 136
+      LD=(300) PRT4_STEP #136
+      MOV(021) #137 PRT4_STEP
+      ^^^
+      '  Step 137
+      LD=(300) PRT4_STEP #137
+      MOV(021) #138 PRT4_STEP
+      ^^^
+      '  Step 138
+      LD=(300) PRT4_STEP #138
+      OUT TR0
+      LDNOT V4004_ZH
+      ANDNOT V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #139 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET W22.00
+      ^^^
+      '  Step 139
+      LD=(300) PRT4_STEP #139
+      MOV(021) #140 PRT4_STEP
+      ^^^
+      '  Step 140
+      LD=(300) PRT4_STEP #140
+      MOV(021) #141 PRT4_STEP
+      ^^^
+      '  Step 141
+      LD=(300) PRT4_STEP #141
+      MOV(021) #142 PRT4_STEP
+      ^^^
+      '  Step 142
+      LD=(300) PRT4_STEP #142
+      MOV(021) #143 PRT4_STEP
+      ^^^
+      '  Step 143
+      LD=(300) PRT4_STEP #143
+      MOV(021) #144 PRT4_STEP
+      ^^^
+      '  Step 144
+      LD=(300) PRT4_STEP #144
+      MOV(021) #145 PRT4_STEP
+      ^^^
+      '  Step 145
+      LD=(300) PRT4_STEP #145
+      MOV(021) #146 PRT4_STEP
+      ^^^
+      '  Step 146 --Skip 2nd PostWash
+      LD=(300) PRT4_STEP #146
+      MOV(021) #147 PRT4_STEP
+      ^^^
+      '  Step 147\n******************************************PostWash II******************************************
+      LD=(300) PRT4_STEP #147
+      OUT TR0
+      ANDNOT PRT4_POSTWII_SKIP
+      LDNOT PRT4_POSTWII_AUTO
+      AND PRT4_POSTWII_START
+      OR PRT4_POSTWII_AUTO
+      ANDLD
+      LD PRT4_POSTWII_CAUSTIC_ENABLE
+      AND>(320) PRT4_POSTWII_CAUSTIC_SP #0
+      ORNOT PRT4_POSTWII_CAUSTIC_ENABLE
+      ANDLD
+      MOV(021) #148 PRT4_STEP
+      LD TR0
+      AND PRT4_POSTWII_SKIP
+      MOV(021) #180 PRT4_STEP
+      LD TR0
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      '  Step 148
+      LD=(300) PRT4_STEP #148
+      OUT TR0
+      AND PRT4_WATER_IND
+      MOV(021) #149 PRT4_STEP
+      MOV(021) #0 CAUSTIC_TOTAL_AREA2
+      LD TR0
+      SET PRT4_WATER_REQ
+      ^^^
+      '  Step 149
+      LD=(300) PRT4_STEP #149
+      LD PRT_WASH_FEED_WATER
+      LD V4003_ZH
+      OR V4006_ZH
+      OR>=(325) FIT2_2000_AI #200
+      ANDLD
+      LDNOT PRT_WASH_FEED_WATER
+      LD V4010_ZH
+      OR>=(325) FIT_120_AI #200
+      ANDLD
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #150 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 150
+      LD=(300) PRT4_STEP #150
+      OUT TR0
+      AND PRT4_POSTWII_CAUSTIC_ENABLE
+      LD>=(325) PRT4_WATER_TOTAL &12000
+      @OR PRT4_ADVANCE
+      OR PRT4_CAUSTIC_REQ
+      ANDLD
+      OUT TR1
+      AND PRT4_CAUSTIC_IND
+      MOV(021) #151 PRT4_STEP
+      BIN(023) PRT4_POSTWII_CAUSTIC_SP CAUSTIC_TOT_SP
+      LD TR1
+      RSET PRT4_ADVANCE
+      SET PRT4_CAUSTIC_REQ
+      LD TR0
+      ANDNOT PRT4_POSTWII_CAUSTIC_ENABLE
+      MOV(021) #154 PRT4_STEP
+      ^^^
+      '  Step 152
+      LD=(300) PRT4_STEP #151
+      LD V4011_ZH
+      AND CAUSTIC_AREA2_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #152 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 153
+      LD=(300) PRT4_STEP #152
+      LDNOT CAUSTIC_AREA2_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #153 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 153
+      LD=(300) PRT4_STEP #153
+      LDNOT V4011_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #154 PRT4_STEP
+      RSET PRT4_ADVANCE
+      RSET PRT4_CAUSTIC_REQ
+      RSET PRT4_CAUSTIC_IND
+      ^^^
+      '  Step 154
+      LD=(300) PRT4_STEP #154
+      LD>=(325) PRT4_WATER_TOTAL PRT4_POSTWII_WATER_SP
+      OR>=(325) LIT_4002_AI #9100
+      @OR LS_PRETK4_HL
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #155 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 155
+      LD=(300) PRT4_STEP #155
+      MOV(021) #156 PRT4_STEP
+      ^^^
+      '  Step 156
+      LD=(300) PRT4_STEP #156
+      MOV(021) #157 PRT4_STEP
+      ^^^
+      '  Step 157
+      LD=(300) PRT4_STEP #157
+      MOV(021) #158 PRT4_STEP
+      ^^^
+      '  Step 158
+      LD=(300) PRT4_STEP #158
+      OUT TR0
+      LD PRT_WASH_FEED_WATER
+      ANDNOT V4003_ZH
+      ANDNOT V4006_ZH
+      LDNOT PRT_WASH_FEED_WATER
+      ANDNOT V4010_ZH
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #159 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      ^^^
+      '  Step 159
+      LD=(300) PRT4_STEP #159
+      MOV(021) #160 PRT4_STEP
+      ^^^
+      '  Step 160
+      LD=(300) PRT4_STEP #160
+      MOV(021) #161 PRT4_STEP
+      ^^^
+      '  Step 161
+      LD=(300) PRT4_STEP #161
+      MOV(021) #162 PRT4_STEP
+      ^^^
+      '  Step 162
+      LD=(300) PRT4_STEP #162
+      OUT TR0
+      LD M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR1
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #163 PRT4_STEP
+      LD TR1
+      RSET PRT4_ADVANCE
+      LD TR0
+      MOV(021) PRT4_POSTWII_AGT_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 163
+      LD=(300) PRT4_STEP #163
+      MOV(021) #164 PRT4_STEP
+      ^^^
+      '  Step 164
+      LD=(300) PRT4_STEP #164
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #165 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 165
+      LD=(300) PRT4_STEP #165
+      MOV(021) #166 PRT4_STEP
+      ^^^
+      '  Step 166
+      LD=(300) PRT4_STEP #166
+      OUT TR0
+      LD PRT4_DRAIN_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #167 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      SET PRT4_DRAIN_REQ
+      ^^^
+      '  Step 167
+      LD=(300) PRT4_STEP #167
+      LD V4004_ZH
+      OR V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #168 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 168
+      LD=(300) PRT4_STEP #168
+      MOV(021) #169 PRT4_STEP
+      ^^^
+      '  Step 169
+      LD=(300) PRT4_STEP #169
+      MOV(021) #170 PRT4_STEP
+      ^^^
+      '  Step 170
+      LD=(300) PRT4_STEP #170
+      OUT TR0
+      LD=(300) PRT4_POSTWII_DRAIN_SP PRT4_SEQ_TIM_PRE
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR1
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #171 PRT4_STEP
+      LD TR1
+      RSET PRT4_ADVANCE
+      LD TR0
+      MOV(021) PRT4_POSTWII_DRAIN_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step 171
+      LD=(300) PRT4_STEP #171
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #172 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 172
+      LD=(300) PRT4_STEP #172
+      MOV(021) #173 PRT4_STEP
+      ^^^
+      '  Step 173
+      LD=(300) PRT4_STEP #173
+      MOV(021) #174 PRT4_STEP
+      ^^^
+      '  Step 174
+      LD=(300) PRT4_STEP #174
+      MOV(021) #175 PRT4_STEP
+      ^^^
+      '  Step 175
+      LD=(300) PRT4_STEP #175
+      OUT TR0
+      LDNOT V4004_ZH
+      ANDNOT V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #176 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      ^^^
+      '  Step 176
+      LD=(300) PRT4_STEP #176
+      MOV(021) #177 PRT4_STEP
+      ^^^
+      '  Step 177
+      LD=(300) PRT4_STEP #177
+      MOV(021) #178 PRT4_STEP
+      ^^^
+      '  Step 178
+      LD=(300) PRT4_STEP #178
+      MOV(021) #179 PRT4_STEP
+      ^^^
+      '  Step 179
+      LD=(300) PRT4_STEP #179
+      MOV(021) #180 PRT4_STEP
+      ^^^
+      '  Step 180 \n**********************PostWash III**********************
+      LD=(300) PRT4_STEP #180
+      OUT TR0
+      ANDNOT PRT4_POSTWIII_SKIP
+      LDNOT PRT4_POSTWIII_AUTO
+      AND PRT4_POSTWIII_START
+      OR PRT4_POSTWIII_AUTO
+      ANDLD
+      LD PRT4_POSTWIII_CAUSTIC_ENABLE
+      AND>(320) PRT4_POSTWIII_CAUSTIC_SP #0
+      ORNOT PRT4_POSTWIII_CAUSTIC_ENABLE
+      ANDLD
+      MOV(021) #181 PRT4_STEP
+      LD TR0
+      AND PRT4_POSTWIII_SKIP
+      MOV(021) #200 PRT4_STEP
+      LD TR0
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #181
+      OUT TR0
+      AND PRT4_WATER_IND
+      MOV(021) #182 PRT4_STEP
+      MOV(021) #0 CAUSTIC_TOTAL_AREA2
+      LD TR0
+      SET PRT4_WATER_REQ
+      ^^^
+      '  Step 182
+      LD=(300) PRT4_STEP #182
+      LD PRT_WASH_FEED_WATER
+      LD V4003_ZH
+      OR V4006_ZH
+      OR>=(325) FIT2_2000_AI #200
+      ANDLD
+      LDNOT PRT_WASH_FEED_WATER
+      LD V4010_ZH
+      OR>=(325) FIT_120_AI #200
+      ANDLD
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #183 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 183
+      LD=(300) PRT4_STEP #183
+      OUT TR0
+      AND PRT4_POSTWIII_CAUSTIC_ENABLE
+      LD>=(325) PRT4_WATER_TOTAL &1000
+      @OR PRT4_ADVANCE
+      OR PRT4_CAUSTIC_REQ
+      ANDLD
+      OUT TR1
+      AND PRT4_CAUSTIC_IND
+      MOV(021) #184 PRT4_STEP
+      BIN(023) PRT4_POSTWIII_CAUSTIC_SP CAUSTIC_TOT_SP
+      LD TR1
+      RSET PRT4_ADVANCE
+      SET PRT4_CAUSTIC_REQ
+      LD TR0
+      ANDNOT PRT4_POSTWIII_CAUSTIC_ENABLE
+      MOV(021) #187 PRT4_STEP
+      ^^^
+      '  Step 184
+      LD=(300) PRT4_STEP #184
+      LD V4011_ZH
+      AND CAUSTIC_AREA2_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #185 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 185
+      LD=(300) PRT4_STEP #185
+      LDNOT CAUSTIC_AREA2_IND
+      @OR PRT4_ADVANCE
+      OR>=(325) LIT_4002_AI #9100
+      OR>=(325) PRT4_WATER_TOTAL &25000
+      @OR LS_PRETK4_HL
+      ANDLD
+      MOV(021) #186 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 186
+      LD=(300) PRT4_STEP #186
+      LDNOT V4011_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #187 PRT4_STEP
+      RSET PRT4_ADVANCE
+      RSET PRT4_CAUSTIC_REQ
+      RSET PRT4_CAUSTIC_IND
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #187
+      LD>=(325) PRT4_WATER_TOTAL PRT4_POSTWIII_WATER_SP
+      OR>=(325) LIT_4002_AI #9100
+      @OR LS_PRETK4_HL
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #188 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #188
+      OUT TR0
+      LD PRT_WASH_FEED_WATER
+      ANDNOT V4003_ZH
+      ANDNOT V4006_ZH
+      LDNOT PRT_WASH_FEED_WATER
+      ANDNOT V4010_ZH
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #189 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #189
+      MOV(021) #190 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #190
+      OUT TR0
+      LD M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR1
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #191 PRT4_STEP
+      LD TR1
+      RSET PRT4_ADVANCE
+      LD TR0
+      MOV(021) PRT4_POSTWIII_AGT_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #191
+      MOV(021) #192 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #192
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #193 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 193
+      LD=(300) PRT4_STEP #193
+      OUT TR0
+      LD PRT4_DRAIN_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #194 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      SET PRT4_DRAIN_REQ
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #194
+      LD V4004_ZH
+      OR V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #195 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step 195
+      LD=(300) PRT4_STEP #195
+      OUT TR0
+      LD=(300) PRT4_POSTWIII_DRAIN_SP PRT4_SEQ_TIM_PRE
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR1
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #196 PRT4_STEP
+      LD TR1
+      RSET PRT4_ADVANCE
+      LD TR0
+      MOV(021) PRT4_POSTWIII_DRAIN_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #196
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #197 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #197
+      MOV(021) #198 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #198
+      OUT TR0
+      LDNOT V4004_ZH
+      ANDNOT V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #199 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #199
+      MOV(021) #200 PRT4_STEP
+      ^^^
+      '  Step 200\n**********************PostWash 4**********************
+      LD=(300) PRT4_STEP #200
+      OUT TR0
+      ANDNOT PRT4_POSTW4_SKIP
+      LDNOT PRT4_POSTW4_AUTO
+      AND PRT4_POSTW4_START
+      OR PRT4_POSTW4_AUTO
+      ANDLD
+      MOV(021) #201 PRT4_STEP
+      LD TR0
+      AND PRT4_POSTW4_SKIP
+      MOV(021) #220 PRT4_STEP
+      LD TR0
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #201
+      OUT TR0
+      AND PRT4_WATER_IND
+      MOV(021) #202 PRT4_STEP
+      LD TR0
+      SET PRT4_WATER_REQ
+      ^^^
+      '  Step 202
+      LD=(300) PRT4_STEP #202
+      LD PRT_WASH_FEED_WATER
+      LD V4003_ZH
+      OR V4006_ZH
+      OR>=(325) FIT2_2000_AI #200
+      ANDLD
+      LDNOT PRT_WASH_FEED_WATER
+      LD V4010_ZH
+      OR>=(325) FIT_120_AI #200
+      ANDLD
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #203 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #203
+      MOV(021) #204 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #204
+      MOV(021) #205 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #205
+      MOV(021) #206 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #206
+      MOV(021) #207 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #207
+      LD>=(325) PRT4_WATER_TOTAL PRT4_POSTW4_WATER_SP
+      OR>=(325) LIT_4002_AI #9000
+      @OR LS_PRETK4_HL
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #208 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #208
+      OUT TR0
+      LD PRT_WASH_FEED_WATER
+      ANDNOT V4003_ZH
+      ANDNOT V4006_ZH
+      LDNOT PRT_WASH_FEED_WATER
+      ANDNOT V4010_ZH
+      ORLD
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #209 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #209
+      MOV(021) #210 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #210
+      OUT TR0
+      LD M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      OUT TR1
+      ANDNOT PRT4_SEQ_TIM_DN
+      MOV(021) #211 PRT4_STEP
+      LD TR1
+      RSET PRT4_ADVANCE
+      LD TR0
+      MOV(021) PRT4_POSTW4_AGT_SP PRT4_SEQ_TIM_PRE
+      CNR(545) C4000 C4000
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #211
+      MOV(021) #212 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #212
+      LD PRT4_SEQ_TIM_DN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #213 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #213
+      OUT TR0
+      LD PRT4_DRAIN_IND
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #214 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      SET PRT4_DRAIN_REQ
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #214
+      LD V4004_ZH
+      OR V4005_ZH
+      OR<=(315) LIT_4002_AI #7500
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #215 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #215
+      MOV(021) #216 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #216
+      LD<=(315) LIT_4002_AI #6500
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #217 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #217
+      MOV(021) #218 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #218
+      OUT TR0
+      LDNOT V4004_ZH
+      ANDNOT V4005_ZH
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #219 PRT4_STEP
+      RSET PRT4_ADVANCE
+      LD TR0
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #219
+      MOV(021) #220 PRT4_STEP
+      ^^^
+      '  Step 220\n**********************************Pretreatment: Rind  Drop to Extractor**********************************
+      LD=(300) PRT4_STEP #220
+      OUT TR0
+      ANDNOT PRT4_DROP_EXT_SKIP
+      ANDNOT W8.03
+      ANDNOT _4FILL1STRT
+      ANDNOT SV30_40S
+      AND SV30_40D
+      ANDNOT 403.03
+      ANDNOT 403.05
+      AND W17.12
+      ANDNOT PRT4_DROP_EXT_AUTO
+      AND T0354
+      AND PRT4_DROP_EXT_START
+      MOV(021) #221 PRT4_STEP
+      LD TR0
+      AND PRT4_DROP_EXT_SKIP
+      MOV(021) #300 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #221
+      MOV(021) #222 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #222
+      LD SV30_40D
+      AND M4000_MN
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #223 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #223
+      MOV(021) #224 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #224
+      TIM 0406 #1800
+      LD V4007_ZH
+      AND T0406
+      @OR PRT4_ADVANCE
+      ANDLD
+      MOV(021) #225 PRT4_STEP
+      RSET PRT4_ADVANCE
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #225
+      MOV(021) #226 PRT4_STEP
+      ^^^
+      LD=(300) PRT4_STEP #226
+      TIM 0407 #3600
+      AND T0407
+      MOV(021) #227 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #227
+      TIM 0411 #300
+      AND T0411
+      MOV(021) #228 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #228
+      TIM 0415 #150
+      AND T0415
+      MOV(021) #229 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #229
+      MOV(021) #230 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #229
+      OR=(300) PRT4_STEP #230
+      LD PRT4_DROP_EXT_SKIP
+      OR PRT4_DROP_EXT_STOP
+      ANDLD
+      MOV(021) #231 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #231
+      ANDNOT V4007_ZH
+      MOV(021) #232 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #232
+      MOV(021) #233 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #233
+      MOV(021) #234 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #234
+      MOV(021) #235 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #235
+      MOV(021) #236 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #236
+      MOV(021) #237 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #237
+      MOV(021) #238 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #238
+      MOV(021) #239 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #239
+      MOV(021) #240 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #240
+      MOV(021) #241 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #241
+      MOV(021) #242 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #242
+      MOV(021) #243 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #243
+      MOV(021) #244 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #244
+      MOV(021) #245 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #245
+      MOV(021) #246 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #246
+      OUT TR0
+      ANDNOT H19.01
+      MOV(021) #247 PRT4_STEP
+      LD TR0
+      AND H19.01
+      TIM 0297 #100
+      AND T0297
+      MOV(021) #247 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #247
+      MOV(021) #248 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #248
+      OUT TR0
+      ANDNOT H19.01
+      MOV(021) #249 PRT4_STEP
+      LD TR0
+      AND H19.01
+      RSET H19.01
+      MOV(021) #249 PRT4_STEP
+      ^^^
+      '  Step 250\nLast Step
+      LD=(300) PRT4_STEP #249
+      MOV(021) #250 PRT4_STEP
+      ^^^
+      '  Step
+      LD=(300) PRT4_STEP #250
+      MOV(021) #300 PRT4_STEP
+      ^^^
+      '  Reset PRT Timers
+      LD>=(325) PRT4_STEP #0
+      AND<=(315) PRT4_STEP #4
+      OUT PRT4_TIM_RESET
+      ^^^
+      '   ******************************Skip Sequence Management******************************
+      LD>(320) PRT4_STEP #0
+      AND<(310) PRT4_STEP #17
+      AND PRT4_DROP_SKIP
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      ANDNOT PRT4_DRAIN_REQ
+      ANDNOT PRT4_DRAIN_IND
+      ANDNOT PRT4_ACID_REQ
+      ANDNOT PRT4_ACID_IND
+      MOV(021) #17 PRT4_STEP
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      LD>(320) PRT4_STEP #17
+      AND<(310) PRT4_STEP #44
+      AND PRT4_PREWASH_SKIP
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      ANDNOT PRT4_DRAIN_REQ
+      ANDNOT PRT4_DRAIN_IND
+      ANDNOT PRT4_ACID_REQ
+      ANDNOT PRT4_ACID_IND
+      MOV(021) #44 PRT4_STEP
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      LD>(320) PRT4_STEP #45
+      AND<(310) PRT4_STEP #109
+      AND PRT4_ACID_SKIP
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      ANDNOT PRT4_DRAIN_REQ
+      ANDNOT PRT4_DRAIN_IND
+      ANDNOT PRT4_ACID_REQ
+      ANDNOT PRT4_ACID_IND
+      ANDNOT ACID_PRT4_DONE
+      MOV(021) #110 PRT4_STEP
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      RSET ACID_PRT4_DONE
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      LD>(320) PRT4_STEP #110
+      AND<(310) PRT4_STEP #146
+      AND PRT4_POSTWI_SKIP
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      ANDNOT PRT4_DRAIN_REQ
+      ANDNOT PRT4_DRAIN_IND
+      ANDNOT PRT4_ACID_REQ
+      ANDNOT PRT4_ACID_IND
+      ANDNOT PRT4_CAUSTIC_REQ
+      ANDNOT PRT4_CAUSTIC_IND
+      MOV(021) #147 PRT4_STEP
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      AND PRT4_CAUSTIC_IND
+      RSET CAUSTIC_AREA2_IND
+      MOV(021) 0 CAUSTIC_TOT_SP
+      RSET CAUSTIC_IND
+      LD TR0
+      RSET PRT4_CAUSTIC_REQ
+      RSET PRT4_CAUSTIC_IND
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      LD>(320) PRT4_STEP #147
+      AND<(310) PRT4_STEP #179
+      AND PRT4_POSTWII_SKIP
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      ANDNOT PRT4_DRAIN_REQ
+      ANDNOT PRT4_DRAIN_IND
+      ANDNOT PRT4_ACID_REQ
+      ANDNOT PRT4_ACID_IND
+      ANDNOT PRT4_CAUSTIC_REQ
+      ANDNOT PRT4_CAUSTIC_IND
+      MOV(021) #180 PRT4_STEP
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      AND PRT4_CAUSTIC_IND
+      RSET CAUSTIC_AREA2_IND
+      MOV(021) 0 CAUSTIC_TOT_SP
+      RSET CAUSTIC_IND
+      LD TR0
+      RSET PRT4_CAUSTIC_REQ
+      RSET PRT4_CAUSTIC_IND
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      LD>(320) PRT4_STEP #180
+      AND<(310) PRT4_STEP #199
+      AND PRT4_POSTWIII_SKIP
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      ANDNOT PRT4_DRAIN_REQ
+      ANDNOT PRT4_DRAIN_IND
+      ANDNOT PRT4_ACID_REQ
+      ANDNOT PRT4_ACID_IND
+      ANDNOT PRT4_CAUSTIC_REQ
+      ANDNOT PRT4_CAUSTIC_IND
+      MOV(021) #200 PRT4_STEP
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      AND PRT4_CAUSTIC_IND
+      RSET CAUSTIC_AREA2_IND
+      MOV(021) 0 CAUSTIC_TOT_SP
+      RSET CAUSTIC_IND
+      LD TR0
+      RSET PRT4_CAUSTIC_REQ
+      RSET PRT4_CAUSTIC_IND
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      LD>(320) PRT4_STEP #200
+      AND<(310) PRT4_STEP #219
+      AND PRT4_POSTW4_SKIP
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      ANDNOT PRT4_DRAIN_REQ
+      ANDNOT PRT4_DRAIN_IND
+      ANDNOT PRT4_ACID_REQ
+      ANDNOT PRT4_ACID_IND
+      ANDNOT PRT4_CAUSTIC_REQ
+      ANDNOT PRT4_CAUSTIC_IND
+      MOV(021) #220 PRT4_STEP
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      AND PRT4_CAUSTIC_IND
+      RSET CAUSTIC_AREA2_IND
+      MOV(021) 0 CAUSTIC_TOT_SP
+      RSET CAUSTIC_IND
+      LD TR0
+      RSET PRT4_CAUSTIC_REQ
+      RSET PRT4_CAUSTIC_IND
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      LD>(320) PRT4_STEP #220
+      AND<(310) PRT4_STEP #250
+      AND PRT4_DROP_EXT_SKIP
+      OUT TR0
+      ANDNOT PRT4_WATER_REQ
+      ANDNOT PRT4_WATER_IND
+      ANDNOT PRT4_DRAIN_REQ
+      ANDNOT PRT4_DRAIN_IND
+      ANDNOT PRT4_ACID_REQ
+      ANDNOT PRT4_ACID_IND
+      MOV(021) #300 PRT4_STEP
+      LD TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      MOVL(498) #0 PRT4_WATER_TOTAL
+      ^^^
+      LD=(300) PRT4_STEP #0
+      OR=(300) PRT4_STEP #300
+      OUT TR0
+      RSET PRT4_WATER_REQ
+      RSET PRT4_WATER_IND
+      RSET PRT4_DRAIN_REQ
+      RSET PRT4_DRAIN_IND
+      RSET PRT4_ACID_REQ
+      RSET PRT4_ACID_IND
+      RSET ACID_PRT4_DONE
+      AND PRT4_CAUSTIC_IND
+      RSET CAUSTIC_AREA2_IND
+      MOV(021) 0 CAUSTIC_TOT_SP
+      RSET CAUSTIC_IND
+      LD TR0
+      RSET PRT4_CAUSTIC_REQ
+      RSET PRT4_CAUSTIC_IND
+      ^^^
+      '  Advance Request From HMI
+      @LD PRT4_ADVANCE_REQ
+      SET PRT4_ADVANCE_ACT_TIM
+      AND=(300) T3025 #100
+      SET PRT4_ADVANCE
+      CNR(545) C4000 C4000
+      ^^^
+      LD PRT4_ADVANCE_ACT_TIM
+      TIM 4025 #100
+      AND PRT4_ADVANCE_TIM
+      RSET PRT4_ADVANCE_ACT_TIM
+      RSET PRT4_ADVANCE_REQ
+      ^^^
+      '  Sequence General Timer
+      LD>(320) PRT4_SEQ_TIM_PRE #0
+      OUT PRT4_SEQ_TIM_EN
+      ^^^
+      LD PRT4_SEQ_TIM_EN
+      ANDNOT PRT4_1M_TIME
+      TIM 4030 #600
+      ^^^
+      '  Test Retentive Timer - To Pause Step Time During PRT Drain While TK1 HI Level\n---  NOT USED  ---
+      LD PRT4_SEQ_TIM_EN
+      ANDNOT PRT4_1M_TIME_RETENTIVE
+      ANDNOT 403.02
+      LD PRT4_1M_TIME_RETENTIVE
+      ORNOT PRT3_SEQ_TIM_EN
+      TTIM(087) 4031 #600
+      ^^^
+      LD PRT4_SEQ_TIM_EN
+      AND PRT4_1M_TIME
+      ANDNOT W17.08
+      ANDNOT W18.11
+      ANDNOT 403.05
+      LD P_Off
+      CNT 4000 PRT4_SEQ_TIM_PRE
+      ^^^
+      @LD PRT4_SEQ_TIM_DN
+      MOV(021) #0 PRT4_SEQ_TIM_PRE
+      ^^^
+      LD PRT4_SEQ_TIM_EN
+      MOV(021) C4000 PRT4_TIM_RMG
+      ^^^
+      '  Water Totalizer
+      LD<(310) PRT4_STEP #45
+      OR>(320) PRT4_STEP #110
+      AND PRT_WASH_FEED_WATER
+      AND PRT4_WATER_IND
+      OUT TR0
+      @AND _1_SEC_PULSE
+      +C(402) PRT4_WATER_TOTAL FIT2_2000_AI PRT4_WATER_TOTAL
+      LD TR0
+      AND>(320) PRT4_STEP #17
+      AND<(310) PRT4_STEP #44
+      MOVL(498) PRT4_WATER_TOTAL PRT4_PREWASH_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #110
+      AND<(310) PRT4_STEP #146
+      MOVL(498) PRT4_WATER_TOTAL PRT4_POSTWI_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #147
+      AND<(310) PRT4_STEP #179
+      MOVL(498) PRT4_WATER_TOTAL PRT4_POSTWII_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #180
+      AND<(310) PRT4_STEP #199
+      MOVL(498) PRT4_WATER_TOTAL PRT4_POSTWIII_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #200
+      AND<(310) PRT4_STEP #219
+      MOVL(498) PRT4_WATER_TOTAL PRT4_POSTW4_WTOT
+      ^^^
+      LD<(310) PRT4_STEP #45
+      OR>(320) PRT4_STEP #110
+      ANDNOT PRT_WASH_FEED_WATER
+      AND PRT4_WATER_IND
+      OUT TR0
+      @AND _1_SEC_PULSE
+      +C(402) PRT4_WATER_TOTAL PRT_ACID_WATER_SCL PRT4_WATER_TOTAL
+      LD TR0
+      AND>(320) PRT4_STEP #17
+      AND<(310) PRT4_STEP #44
+      MOVL(498) PRT4_WATER_TOTAL PRT4_PREWASH_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #110
+      AND<(310) PRT4_STEP #146
+      MOVL(498) PRT4_WATER_TOTAL PRT4_POSTWI_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #147
+      AND<(310) PRT4_STEP #179
+      MOVL(498) PRT4_WATER_TOTAL PRT4_POSTWII_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #180
+      AND<(310) PRT4_STEP #199
+      MOVL(498) PRT4_WATER_TOTAL PRT4_POSTWIII_WTOT
+      LD TR0
+      AND>(320) PRT4_STEP #200
+      AND<(310) PRT4_STEP #219
+      MOVL(498) PRT4_WATER_TOTAL PRT4_POSTW4_WTOT
+      ^^^
+      '  Caustic Totalizer
+      LD PRT4_CAUSTIC_IND
+      OUT TR0
+      AND>(320) PRT4_STEP #114
+      AND<(310) PRT4_STEP #117
+      MOV(021) CAUSTIC_TOTAL_AREA2 PRT4_POSTWI_CAUSTIC_TOTAL
+      LD TR0
+      AND>(320) PRT4_STEP #151
+      AND<(310) PRT4_STEP #154
+      MOV(021) CAUSTIC_TOTAL_AREA2 PRT4_POSTWII_CAUSTIC_TOTAL
+      LD TR0
+      AND>(320) PRT4_STEP #184
+      AND<(310) PRT4_STEP #187
+      MOV(021) CAUSTIC_TOTAL_AREA2 PRT4_POSTWIII_CAUSTIC_TOTAL
+      ^^^
+      '  Acid Total
+      LD PRT4_ACID_IND
+      AND>(320) PRT4_STEP #45
+      AND<(310) PRT4_STEP #109
+      MOVL(498) ACID_TOT_CALC PRT4_AD_TOTAL
+      ^^^
+      '  Reset Totals
+      LD>(320) PRT4_STEP #1
+      @MOVL(498) #0 PRT4_AD_TOTAL
+      @MOVL(498) #0 PRT4_WATER_TOTAL
+      @MOVL(498) #0 PRT4_ACID_WTOT
+      @MOVL(498) #0 PRT4_PREWASH_WTOT
+      @MOVL(498) #0 PRT4_POSTWI_WTOT
+      @MOVL(498) #0 PRT4_POSTWII_WTOT
+      @MOVL(498) #0 PRT4_POSTWIII_WTOT
+      @MOVL(498) #0 PRT4_POSTW4_WTOT
+      @MOV(021) #0 PRT4_POSTWI_CAUSTIC_TOTAL
+      @MOV(021) #0 PRT4_POSTWII_CAUSTIC_TOTAL
+      @MOV(021) #0 PRT4_POSTWIII_CAUSTIC_TOTAL
+      ^^^
+      LD>(320) LIT_4001_AI #8500
+      TIM 4027 #100
+      AND LT_4001_ALML_TIM
+      OUT H502.10
+      ^^^
+      LD H502.11
+      AND H502.10
+      LD>(320) PowerPack_M1 #100
+      OR>(320) PowerPack_M2 #100
+      ANDLD
+      OUT H502.12
+      ^^^
+      '  Level Alarms
+      LD>(320) LIT_4001_AI LIT_4001_HIGH_SP
+      TIM 4026 #100
+      AND LT_4001_ALMH_TIM
+      OUT LT_4001_ALMH
+      ^^^
+      LD>(320) LIT_4002_AI LIT_4002_HIGH_SP
+      TIM 4028 #100
+      AND LT_4002_ALMH_TIM
+      OR LS_PRETK4_HL
+      OUT LT_4002_ALMH
+      ^^^
+      '  Choppers run time Alarm
+      LD ON
+      OUT TR0
+      AND>(320) PowerPack_M1 #2
+      OUT Chopper1_runing
+      LD TR0
+      AND>(320) PowerPack_M2 #2
+      OUT Chopper2_Running
+      ^^^
+      LD Chopper1_runing
+      OR Chopper2_Running
+      OUT TR0
+      TIM 4021 #9000
+      AND Chopers_Runtimes
+      TIM 4010 #9000
+      LD TR0
+      AND Chopper_timer2
+      OUT Choppers_RunTime_Alarm
+      ^^^
+      '  
+      ^^^
+      '  Reset Start Commands
+      LD PRT4_DROP_START
+      RSET PRT4_DROP_START
+      ^^^
+      LD PRT4_PREWASH_START
+      RSET PRT4_PREWASH_START
+      ^^^
+      LD PRT4_ACID_START
+      RSET PRT4_ACID_START
+      ^^^
+      LD PRT4_POSTWI_START
+      RSET PRT4_POSTWI_START
+      ^^^
+      LD PRT4_POSTWII_START
+      RSET PRT4_POSTWII_START
+      ^^^
+      LD PRT4_POSTWIII_START
+      RSET PRT4_POSTWIII_START
+      ^^^
+      LD PRT4_POSTW4_START
+      RSET PRT4_POSTW4_START
+      ^^^
+      LD PRT4_DROP_EXT_START
+      RSET PRT4_DROP_EXT_START
+      ^^^
+      LD PRT4_DROP_EXT_STOP
+      RSET PRT4_DROP_EXT_STOP
+      ^^^
+      LD M4000_AUTO_CMD
+      ANDNOT M4000_MANUAL
+      LD M4000_MANUAL
+      AND M4000_HMI_CMD
+      ORLD
+      OUT M4000_MC
+      ^^^
+      LD M4000
+      OUT TR0
+      ANDNOT M4000_MN
+      TIM 4036 #100
+      LD TR0
+      AND T4036
+      OUT M4000_RUNFL
+      ^^^
+      LD V4001_AUTO_CMD
+      ANDNOT V4001_MANUAL
+      LD V4001_MANUAL
+      AND V4001_HMI_CMD
+      ORLD
+      OUT V4001_ZC
+      ^^^
+      LDNOT W27.00
+      LD V4002_AUTO_CMD
+      ANDNOT V4002_MANUAL
+      LD V4002_MANUAL
+      AND V4002_HMI_CMD
+      AND<=(315) LIT_4002_AI #4500
+      ORLD
+      ANDLD
+      ANDNOT LT_4002_ALMH
+      AND<=(315) PRT4_STEP #17
+      LD V4002_MANUAL
+      AND V4002_HMI_CMD
+      AND W27.00
+      ORLD
+      ANDNOT V4007_ZC
+      AND V4007_ZL
+      OUT V4002_ZC
+      ^^^
+      LD V4003_AUTO_CMD
+      ANDNOT V4003_MANUAL
+      AND PRT4_WATER_IND
+      LD V4003_MANUAL
+      AND V4003_HMI_CMD
+      ORLD
+      ANDNOT LT_4002_ALMH
+      ANDNOT LS_PRETK4_HL
+      OUT V4003_ZC
+      ^^^
+      LD V4004_AUTO_CMD
+      ANDNOT V4004_MANUAL
+      LD V4004_MANUAL
+      AND V4004_HMI_CMD
+      ORLD
+      OUT V4004_ZC
+      ^^^
+      LD V4005_AUTO_CMD
+      ANDNOT V4005_MANUAL
+      LD V4005_MANUAL
+      AND V4005_HMI_CMD
+      ORLD
+      OUT V4005_ZC
+      ^^^
+      LD V4006_AUTO_CMD
+      ANDNOT V4006_MANUAL
+      LD PRT4_WATER_IND
+      LD=(300) PRT4_STEP #226
+      AND<=(315) LIT_4002_AI #3000
+      ORLD
+      ANDLD
+      LD V4006_MANUAL
+      AND V4006_HMI_CMD
+      OUT TR0
+      ANDNOT T4037
+      ORLD
+      ANDNOT LT_4002_ALMH
+      ANDNOT LS_PRETK4_HL
+      OUT V4006_ZC
+      LD TR0
+      AND>=(325) PRT4_STEP #224
+      AND<=(315) PRT4_STEP #230
+      TIM 4037 #1200
+      ^^^
+      LD V4007_AUTO_CMD
+      ANDNOT V4007_MANUAL
+      LD V4007_MANUAL
+      AND V4007_HMI_CMD
+      ORLD
+      ANDNOT _4FILL1STRT
+      LDNOT H19.01
+      AND SV30_40D
+      ANDNOT H19.02
+      LD H19.01
+      ANDNOT SV30_40D
+      AND H19.02
+      ORLD
+      ANDLD
+      ANDNOT SV30_40S
+      AND EXT4_CONE
+      ANDNOT W8.11
+      ANDNOT _4HGHLVL
+      ANDNOT 403.03
+      ANDNOT 403.05
+      AND W17.12
+      OUT V4007_ZC
+      ^^^
+      LD V4008_AUTO_CMD
+      ANDNOT PRT4_V4008_TON
+      ANDNOT V4008_MANUAL
+      LD V4008_MANUAL
+      AND V4008_HMI_CMD
+      OUT TR0
+      ANDNOT T3041
+      ORLD
+      ANDNOT LT_4001_ALMH
+      OUT V4008_ZC
+      LD TR0
+      TIM 3041 #1200
+      ^^^
+      LD V4010_AUTO_CMD
+      ANDNOT V4010_MANUAL
+      LD V4010_MANUAL
+      AND V4010_HMI_CMD
+      ORLD
+      ANDNOT LT_4002_ALMH
+      ANDNOT LS_PRETK4_HL
+      OUT V4010_ZC
+      ^^^
+      LD V4011_AUTO_CMD
+      ANDNOT V4011_MANUAL
+      LD V4011_MANUAL
+      AND V4011_HMI_CMD
+      ORLD
+      ANDNOT V1011_ZH
+      ANDNOT V2011_ZH
+      ANDNOT V3011_ZH
+      ANDNOT V4007_ZH
+      ANDNOT V110_ZH
+      ANDNOT V115_ZH
+      ANDNOT V105_ZH
+      OUT V4011_ZC
+      ^^^
+      LD V4012_AUTO_CMD
+      ANDNOT V4012_MANUAL
+      LD V4012_MANUAL
+      AND V4012_HMI_CMD
+      ORLD
+      OUT V4012_ZC
+      ^^^
+      LD V4013_AUTO_CMD
+      ANDNOT V4013_MANUAL
+      LD V4013_MANUAL
+      AND V4013_HMI_CMD
+      ORLD
+      ANDNOT _4FILL1STRT
+      ANDNOT V1013_ZH
+      ANDNOT V2013_ZH
+      ANDNOT V3013_ZH
+      ANDNOT XV13_ZH
+      ANDNOT V104_ZH
+      OUT V4013_ZC
+      ^^^
+      LD V4012_AUTO_CMD
+      ANDNOT V4012_MANUAL
+      LD V4012_MANUAL
+      AND V4012_HMI_CMD
+      ORLD
+      OUT V4012_ZC
+      ^^^
+      '  Auto
+      LD>=(325) PRT4_STEP #31
+      AND<=(315) PRT4_STEP #34
+      LD>=(325) PRT4_STEP #97
+      AND<=(315) PRT4_STEP #100
+      ORLD
+      LD>=(325) PRT4_STEP #125
+      AND<=(315) PRT4_STEP #128
+      ORLD
+      LD>=(325) PRT4_STEP #162
+      AND<=(315) PRT4_STEP #165
+      ORLD
+      LD>=(325) PRT4_STEP #190
+      AND<=(315) PRT4_STEP #192
+      ORLD
+      LD>=(325) PRT4_STEP #210
+      AND<=(315) PRT4_STEP #212
+      ORLD
+      LD>=(325) PRT4_STEP #221
+      AND<=(315) PRT4_STEP #224
+      ORLD
+      LD>=(325) PRT4_STEP #227
+      AND<=(315) PRT4_STEP #228
+      ANDNOT T0415
+      ORLD
+      OUT M4000_AUTO_CMD
+      ^^^
+      '  Auto
+      LD>=(325) LIT_4001_AI #7500
+      LD>=(325) LIT_4001_AI #7700
+      OR V4001_AUTO_CMD
+      ANDLD
+      OR PRT4_CHP_IND1
+      OR PRT4_CHP_IND
+      OUT V4001_AUTO_CMD
+      ^^^
+      '  Auto
+      LD>=(325) PRT4_STEP #3
+      AND<=(315) PRT4_STEP #13
+      OUT V4002_AUTO_CMD
+      ^^^
+      '  Auto
+      LD P_Off
+      OUT V4003_AUTO_CMD
+      ^^^
+      '  Auto
+      LD>=(325) PRT4_STEP #2
+      AND<(310) PRT4_STEP #18
+      LD>=(325) PRT4_STEP #35
+      AND<=(315) PRT4_STEP #42
+      ORLD
+      LD>=(325) PRT4_STEP #101
+      AND<=(315) PRT4_STEP #108
+      ORLD
+      LD>=(325) PRT4_STEP #130
+      AND<=(315) PRT4_STEP #137
+      ORLD
+      LD>=(325) PRT4_STEP #167
+      AND<=(315) PRT4_STEP #174
+      ORLD
+      LD>=(325) PRT4_STEP #194
+      AND<=(315) PRT4_STEP #197
+      ORLD
+      LD>=(325) PRT4_STEP #214
+      AND<=(315) PRT4_STEP #217
+      ORLD
+      OUT V4004_AUTO_CMD
+      ^^^
+      '  Auto
+      LD>=(325) PRT4_STEP #2
+      AND<(310) PRT4_STEP #18
+      LD>=(325) PRT4_STEP #35
+      AND<=(315) PRT4_STEP #42
+      ORLD
+      LD>=(325) PRT4_STEP #101
+      AND<=(315) PRT4_STEP #108
+      ORLD
+      LD>=(325) PRT4_STEP #130
+      AND<=(315) PRT4_STEP #137
+      ORLD
+      LD>=(325) PRT4_STEP #167
+      AND<=(315) PRT4_STEP #174
+      ORLD
+      LD>=(325) PRT4_STEP #194
+      AND<=(315) PRT4_STEP #197
+      ORLD
+      LD>=(325) PRT4_STEP #214
+      AND<=(315) PRT4_STEP #217
+      ORLD
+      OUT V4005_AUTO_CMD
+      ^^^
+      LD>(320) PRT4_STEP #1
+      AND<(310) PRT4_STEP #19
+      LD>(320) PRT4_STEP #34
+      AND<(310) PRT4_STEP #44
+      ORLD
+      LD>(320) PRT4_STEP #100
+      AND<(310) PRT4_STEP #110
+      ORLD
+      LD>(320) PRT4_STEP #129
+      AND<(310) PRT4_STEP #139
+      ORLD
+      LD>(320) PRT4_STEP #166
+      AND<(310) PRT4_STEP #176
+      ORLD
+      LD>(320) PRT4_STEP #193
+      AND<(310) PRT4_STEP #199
+      ORLD
+      LD>(320) PRT4_STEP #213
+      AND<(310) PRT4_STEP #219
+      ORLD
+      OUT TR0
+      AND V4004_MANUAL
+      AND V4005_MANUAL
+      ANDNOT V4004_ZC
+      ANDNOT V4005_ZC
+      OUT W18.11
+      LD TR0
+      ANDNOT V4004_MANUAL
+      ANDNOT V4005_MANUAL
+      LD V4004_MANUAL
+      AND V4005_MANUAL
+      ORLD
+      LD V4004_ZC
+      OR V4005_ZC
+      ANDLD
+      OUT W17.04
+      ^^^
+      LD>=(325) PRT4_STEP #19
+      AND<=(315) PRT4_STEP #25
+      LD>=(325) PRT4_STEP #112
+      AND<=(315) PRT4_STEP #120
+      ORLD
+      LD>=(325) PRT4_STEP #149
+      AND<=(315) PRT4_STEP #157
+      ORLD
+      LD>=(325) PRT4_STEP #182
+      AND<=(315) PRT4_STEP #187
+      ORLD
+      LD>=(325) PRT4_STEP #202
+      AND<=(315) PRT4_STEP #207
+      ORLD
+      AND PRT_WASH_FEED_WATER
+      OR=(300) PRT4_STEP #226
+      OUT V4006_AUTO_CMD
+      ^^^
+      '  Auto
+      LD>=(325) PRT4_STEP #19
+      AND<=(315) PRT4_STEP #25
+      LD>=(325) PRT4_STEP #112
+      AND<=(315) PRT4_STEP #120
+      ORLD
+      LD>=(325) PRT4_STEP #149
+      AND<=(315) PRT4_STEP #157
+      ORLD
+      LD>=(325) PRT4_STEP #182
+      AND<=(315) PRT4_STEP #187
+      ORLD
+      LD>=(325) PRT4_STEP #202
+      AND<=(315) PRT4_STEP #207
+      ORLD
+      ANDNOT PRT_WASH_FEED_WATER
+      OUT PRT4_AUX_WT_FEED_REQ
+      ^^^
+      '  Auto
+      LD=(300) PRT4_STEP #224
+      LD>=(325) PRT4_STEP #228
+      AND<=(315) PRT4_STEP #230
+      ORLD
+      LD>=(325) PRT4_STEP #44
+      AND<=(315) PRT4_STEP #67
+      ANDNOT T0293
+      AND H19.01
+      AND H19.02
+      ORLD
+      OUT V4007_AUTO_CMD
+      ^^^
+      '  Auto
+      LD>=(325) PRT4_STEP #6
+      AND<=(315) PRT4_STEP #13
+      OUT V4008_AUTO_CMD
+      ^^^
+      LD V4008_AUTO_CMD
+      ANDNOT PRT4_V4008_TOFF
+      TIM 4034 #300
+      AND PRT4_V4008_TON
+      TIM 4035 #50
+      ^^^
+      '  Auto
+      LD>=(325) PRT4_STEP #52
+      AND<=(315) PRT4_STEP #64
+      LDNOT PRT_WASH_FEED_WATER
+      AND PRT4_AUX_WT_FEED_REQ
+      ORLD
+      OUT V4010_AUTO_CMD
+      ^^^
+      '  Auto
+      LD>=(325) PRT4_STEP #114
+      AND<=(315) PRT4_STEP #115
+      LD>=(325) PRT4_STEP #151
+      AND<=(315) PRT4_STEP #152
+      ORLD
+      LD>=(325) PRT4_STEP #184
+      AND<=(315) PRT4_STEP #185
+      ORLD
+      OUT V4011_AUTO_CMD
+      ^^^
+      LD>=(325) PRT4_STEP #97
+      AND<=(315) PRT4_STEP #100
+      OUT TR0
+      AND<=(315) PRT4_TIM_RMG #300
+      AND>=(325) PRT4_TIM_RMG #240
+      OUT PRT4_1H_PH_A
+      LD TR0
+      AND<=(315) PRT4_TIM_RMG #15
+      OUT PRT4_6H_PH_A
+      ^^^
+      LD>=(325) PRT4_STEP #190
+      AND<=(315) PRT4_STEP #193
+      AND<=(315) PRT4_TIM_RMG #60
+      AND>=(325) PRT4_TIM_RMG #30
+      OUT V4001_FTC
+      ^^^
+      LD>=(325) PRT4_STEP #220
+      AND<=(315) PRT4_STEP #230
+      OUT SV30_40D_CMD
+      ^^^
+      LD>=(325) PRT4_STEP #221
+      AND<=(315) PRT4_STEP #226
+      OUT W21.08
+      ^^^
+      END(001)
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+      PRT4_STEP	WORD	D32500	Step Word (Counter)		0	
+      PRT4_DROP_START	BOOL	H500.01	Sequence Start		0	
+      LIT_4002_AI	CHANNEL	D32504	PRT4 Level Transmitter		0	
+      PRT4_EMPTY_SP	CHANNEL	D32510	Empty Level SP		0	
+      ON	BOOL	CF113	System Normally On Flag		0	
+      PRT4_AD_SP	CHANNEL	D32518	PRT4 Acid SP		0	
+      PRT4_POSTWI_CAUSTIC_SP	CHANNEL	D32560	PRT4 PostWI Caustic SP		0	
+      PRT4_POSTWII_CAUSTIC_SP	CHANNEL	D32561	PRT4 PostWII Caustic SP		0	
+      PRT4_POSTWIII_CAUSTIC_SP	CHANNEL	D32562	PRT4 PostWIII Caustic SP		0	
+      PRT4_POSTWI_CAUSTIC_ENABLE	BOOL	H508.04	PRT4 POSTWI Caustic Enable		0	
+      PRT4_POSTWII_CAUSTIC_ENABLE	BOOL	H508.05	PRT4 POSTWII Caustic Enable		0	
+      PRT4_POSTWIII_CAUSTIC_ENABLE	BOOL	H508.06	PRT4 POSTWIII Caustic Enable		0	
+      PRT4_POSTWII_SKIP	BOOL	H500.15	Sequence Skip		0	
+      PRT4_PREWASH_SKIP	BOOL	H500.06	Sequence Skip		0	
+      	BOOL	W27.00	CHOP TO PRT		0	
+      PRT4_DROP_SKIP	BOOL	H500.03	Sequence Skip		0	
+      PRT4_ADVANCE	BOOL	H500.00	PRT4 Advance Step		0	
+      PRT4_AD_TOTAL	DWORD	D32506	PRT4 Total Acid		0	
+      V4004_ZH	BOOL	W14.06	PRT4 Drain Valve Opened		0	
+      V4005_ZH	BOOL	W14.07	PRT4 Drain Valve Closed		0	
+      V4002_ZH	BOOL	W14.03	RHT4 Slide Gate Valve Opened		0	
+      LIT_4001_AI	CHANNEL	D32502	RHT4 Level Transmitter		0	
+      RHT4_EMPTY_SP	CHANNEL	D32511	Empty Level SP		0	
+      V4008_ZH	BOOL	W14.11	RHT4 Cold Water valve Opened		0	
+      PRT4_SEQ_TIM_DN	BOOL	C4000	Time Preset Done (Counter)		0	
+      PRT4_DROPWASHTIME_SP	CHANNEL	D32512	Time Preset 		0	
+      PRT4_SEQ_TIM_PRE	CHANNEL	D32501	Time Preset Value		0	
+      V4002_ZL	BOOL	W14.04	RHT4 Slide Gate Valve Closed		0	
+      PRT4_WATER_REQ	BOOL	H501.06	PRT4 Water Request		0	
+      PRT4_WATER_IND	BOOL	H501.07	PRT4 Water Indicator		0	
+      PRT4_PREWASH_AUTO	BOOL	H500.05	Sequence Auto		0	
+      PRT4_PREWASH_START	BOOL	H500.04	Sequence Start		0	
+      PRT_WASH_FEED_WATER	BOOL	H357.09	PRT Batch Wash Water Ind: 1 = City		0	
+      V4003_ZH	BOOL	W14.05	PRT4 Spray Ball Cold Water Valve  Opened		0	
+      V4006_ZH	BOOL	W14.08	PRT4 Cold Water Valve Opened		0	
+      FIT2_2000_AI	CHANNEL	D31237	Cold Water Flow Transmitter Scaled 0-100 For Tot.		0	
+      V4010_ZH	BOOL	W14.14	PRT4 Acid Dosing Valve Opened		0	
+      FIT_120_AI	CHANNEL	D32401	Acid Water Flow Meter		0	
+      PRT4_WATER_TOTAL	DWORD	D32508	PRT4 Total Water		0	
+      PRT4_PREWASH_WATER_SP	DWORD	D32514	Water Liters SP		0	
+      LS_PRETK4_HL	BOOL	W13.05	Pretreatment TK-4 Level Switch High		0	
+      M4000_MN	BOOL	W13.00	M4000 Auxiliary Contact (Agitator)		0	
+      PRT4_PREWASH_AGT_SP	CHANNEL	D32516	Time Preset 		0	
+      PRT4_DRAIN_IND	BOOL	H501.09	PRT4 Drain Indicator		0	
+      PRT4_DRAIN_REQ	BOOL	H501.08	PRT4 Drain Request		0	
+      PRT4_PREWASH_DRAIN_SP	CHANNEL	D32517	Time Preset 		0	
+      	CHANNEL	D32505	PRT4 Previous Acid SP		0	
+      ACID_PRT4_DONE	BOOL	H350.06	Acid Done		0	
+      PRT4_ACID_REQ	BOOL	H501.10	PRT4 Acid Indicator		0	
+      PRT4_ACID_IND	BOOL	H501.11	PRT4 Acid Indicator		0	
+      PRT4_ACID_SKIP	BOOL	H500.09	Sequence Skip		0	
+      PRT4_ACID_AUTO	BOOL	H500.08	Sequence Auto		0	
+      PRT4_ACID_START	BOOL	H500.07	Sequence Start		0	
+      FIT_121_AI	CHANNEL	D32400	Acid Day Tank Flow Meter		0	
+      PRT4_ACID_WATER_SP	DWORD	D32520	PRT4Water SP		0	
+      	BOOL	H19.01	PRT#4 HBLV ENABLE		0	
+      	BOOL	T0293	PRT#4 Step Delay		0	
+      	BOOL	H19.02	EXT#4 Drain Valve Override		0	
+      V4007_ZC	BOOL	W15.08	PRT4 Discharge Valve Output		0	
+      V4007_ZL	BOOL	W14.10	PRT4 Discharge Valve  Closed		0	
+      PRT4_ACID_AGT_SP	CHANNEL	D32550	Time Preset 		0	
+      PRT2_STEP	WORD	D32200	Step Word (Counter)		0	
+      PRT4_ACID_DRAIN_SP	CHANNEL	D32522	Acid Drain Preset		0	
+      PRT4_POSTWI_SKIP	BOOL	H500.12	Sequence Skip		0	
+      PRT4_POSTWI_AUTO	BOOL	H500.11	Sequence Auto		0	
+      PRT4_POSTWI_START	BOOL	H500.10	Sequence Start		0	
+      CAUSTIC_TOTAL_AREA2	DWORD	D32466	Caustic Total Area 2		0	
+      PRT4_CAUSTIC_REQ	BOOL	H508.08	PRT4 Caustic Request		0	
+      PRT4_CAUSTIC_IND	BOOL	H508.09	PRT4 Caustic Indicator		0	
+      CAUSTIC_TOT_SP	CHANNEL	D32460	Caustic SP liters		0	
+      V4011_ZH	BOOL	W13.06	Caustic Dosing Valve for PRT4		0	
+      CAUSTIC_AREA2_IND	BOOL	H357.01	Caustic IND Area 2 (Pretreatment)		0	
+      PRT4_POSTWI_WATER_SP	DWORD	D32526	PRT4 PostWI Water SP		0	
+      PRT4_POSTWI_AGT_SP	CHANNEL	D32546	Time Preset 		0	
+      PRT4_POSTWI_DRAIN_SP	CHANNEL	D32523	PostWI Drain Preset		0	
+      	BOOL	W22.00	PRT ACID DRAIN to EFF PLC		0	
+      PRT4_POSTWII_AUTO	BOOL	H500.14	Sequence Auto		0	
+      PRT4_POSTWII_START	BOOL	H500.13	Sequence Start		0	
+      PRT4_POSTWII_WATER_SP	DWORD	D32528	PRT4 PostWII Water SP		0	
+      PRT4_POSTWII_AGT_SP	CHANNEL	D32547	Time Preset 		0	
+      PRT4_POSTWII_DRAIN_SP	CHANNEL	D32524	PostWII Drain Preset		0	
+      PRT4_POSTWIII_SKIP	BOOL	H501.02	Sequence Skip		0	
+      PRT4_POSTWIII_AUTO	BOOL	H501.01	Sequence Auto		0	
+      PRT4_POSTWIII_START	BOOL	H501.00	Sequence Start		0	
+      PRT4_POSTWIII_WATER_SP	DWORD	D32530	PRT4 PostWIII Water SP		0	
+      PRT4_POSTWIII_AGT_SP	CHANNEL	D32548	Time Preset 		0	
+      PRT4_POSTWIII_DRAIN_SP	CHANNEL	D32525	PostWIII Drain Preset		0	
+      PRT4_POSTW4_SKIP	BOOL	H508.02	Sequence Skip		0	
+      PRT4_POSTW4_AUTO	BOOL	H508.01	Sequence Auto		0	
+      PRT4_POSTW4_START	BOOL	H508.00	Sequence Start		0	
+      PRT4_POSTW4_WATER_SP	DWORD	D32554	PRT4 PostW4 Water SP		0	
+      PRT4_POSTW4_AGT_SP	CHANNEL	D32558	Time Preset 		0	
+      PRT4_DROP_EXT_SKIP	BOOL	H501.05	Sequence Skip		0	
+      	BOOL	W8.03	EXT #4 HI LVL		0	
+      _4FILL1STRT	BOOL	H9.01	 		0	
+      SV30_40S	BOOL	45.00	Ext#4 Shovel out Valve		0	
+      SV30_40D	BOOL	45.03	Ext#4 Drain Valve Open		0	
+      	BOOL	403.03	EFF TK1 HI LEVEL		0	
+      	BOOL	403.05	DAF Trouble		0	
+      	BOOL	W17.12	Delay After TK1 Not HI Level		0	
+      PRT4_DROP_EXT_AUTO	BOOL	H501.04	Sequence Auto		0	
+      PRT4_DROP_EXT_START	BOOL	H501.03	Sequence Start		0	
+      V4007_ZH	BOOL	W14.09	PRT4 Discharge Valve Opened		0	
+      	BOOL	T0406	PRT4 Discharge Timer		0	
+      	BOOL	T0407	PRT4 Water Fill Timer		0	
+      	BOOL	T0411	PRT#4 Agitator Run Duration Timer		0	
+      PRT4_DROP_EXT_STOP	BOOL	H501.12	Sequence Stop		0	
+      PRT4_TIM_RESET	BOOL	H502.08	Pretreatment Timers Reset		0	
+      CAUSTIC_IND	BOOL	H357.15	Caustic General Indicator		0	
+      PRT4_ADVANCE_REQ	BOOL	H501.13	Sequence Step Advance Request		0	
+      PRT4_ADVANCE_ACT_TIM	BOOL	H501.14	Sequence Step Advance Request		0	
+      PRT4_ADVANCE_TIM	BOOL	T4025	Double Advance Timer Protection		0	
+      PRT4_SEQ_TIM_EN	BOOL	H501.15	Sequence Timer Enabled		0	
+      PRT4_1M_TIME	BOOL	T4030	PRT4 1M TIME		0	
+      PRT4_1M_TIME_RETENTIVE	BOOL	T4031	PRT4 1M TIME (Retentive)		0	
+      	BOOL	403.02	PRT Drain & TK1 HI Level/DAF Trouble		0	
+      PRT3_SEQ_TIM_EN	BOOL	H301.15	Sequence Timer Enabled		0	
+      	BOOL	W17.08	PRT4 Drain Counter STOP		0	
+      	BOOL	W18.11	Stop PRT4 Drain Time		0	
+      PRT4_TIM_RMG	CHANNEL	D32552	PRT4 Time Remaining		0	
+      _1_SEC_PULSE	BOOL	CF102	System 1.0 second clock pulse bit		0	
+      PRT4_PREWASH_WTOT	DWORD	D32532	PreWash Water Total		0	
+      PRT4_POSTWI_WTOT	DWORD	D32536	PostW I Water Total		0	
+      PRT4_POSTWII_WTOT	DWORD	D32538	PostW II Water Total		0	
+      PRT4_POSTWIII_WTOT	DWORD	D32540	PostW III Water Total		0	
+      PRT4_POSTW4_WTOT	DWORD	D32556	PRT4 PostW4 Water Total		0	
+      PRT_ACID_WATER_SCL	CHANNEL	D32610			0	
+      PRT4_POSTWI_CAUSTIC_TOTAL	CHANNEL	D32564	PRT4 PostWI Caustic Total		0	
+      PRT4_POSTWII_CAUSTIC_TOTAL	CHANNEL	D32565	PRT4 PostWII Caustic Total		0	
+      PRT4_POSTWIII_CAUSTIC_TOTAL	CHANNEL	D32566	PRT4 PostWIII Caustic Total		0	
+      ACID_TOT_CALC	CHANNEL	D32408	Total Acid Calculated l		0	
+      PRT4_ACID_WTOT	DWORD	D32534	Acid Water Total		0	
+      LT_4001_ALML_TIM	BOOL	T4027	RHT4 High level time delay		0	
+      	BOOL	H502.10	RHT4 High level		0	
+      	BOOL	H502.11	RHT 4 selected		0	
+      PowerPack_M1	CHANNEL	D980	Chopper powerpack motor #1 Amp reading to scada		0	
+      PowerPack_M2	CHANNEL	D981	Chopper powerpack motor #2 Amp reading to scada		0	
+      	BOOL	H502.12	RHT 4 Alarm while chopping		0	
+      LIT_4001_HIGH_SP	CHANNEL	D32543	High SP		0	
+      LT_4001_ALMH_TIM	BOOL	T4026	High Level Time Delay		0	
+      LT_4001_ALMH	BOOL	H502.00	Rind Level High		0	
+      LIT_4002_HIGH_SP	CHANNEL	D32545	High SP		0	
+      LT_4002_ALMH_TIM	BOOL	T4028	High Level Time Delay		0	
+      LT_4002_ALMH	BOOL	H502.02	PRT Level High		0	
+      Chopper1_runing	BOOL	W45.01	Chopper #1 Running		0	
+      Chopper2_Running	BOOL	W45.02	Chopper #2 Running		0	
+      Chopers_Runtimes	BOOL	T4021	Choppers run timer		0	
+      Chopper_timer2	BOOL	T4010	Choppert2		0	
+      Choppers_RunTime_Alarm	BOOL	W45.03	Choperers Running >30 min		0	
+      M4000_AUTO_CMD	BOOL	H505.00	M4000 AUTO CMD		0	
+      M4000_MANUAL	BOOL	H503.00	M4000 1=Manual 0=Auto		0	
+      M4000_HMI_CMD	BOOL	H504.00	M4000 HMI CMD		0	
+      M4000_MC	BOOL	W15.00	M4000 Output Contact (Agitator)		0	
+      M4000	BOOL	3200.00	M4000 Start = 1Stop =0		0	
+      M4000_RUNFL	BOOL	H506.00	M4000 Run Fault		0	
+      V4001_AUTO_CMD	BOOL	H505.02	RHT4 Drain Valve AUTO CMD		0	
+      V4001_MANUAL	BOOL	H503.02	RHT4 Drain Valve 1=Manual 0=Auto		0	
+      V4001_HMI_CMD	BOOL	H504.02	RHT4 Drain Valve HMI CMD		0	
+      V4001_ZC	BOOL	W15.02	RHT4 Drain Valve Output		0	
+      V4002_AUTO_CMD	BOOL	H505.03	RHT4 Slide Gate Valve AUTO CMD		0	
+      V4002_MANUAL	BOOL	H503.03	RHT4 Slide Gate Valve 1=Manual 0=Auto		0	
+      V4002_HMI_CMD	BOOL	H504.03	RHT4 Slide Gate Valve HMI CMD		0	
+      V4002_ZC	BOOL	W15.03	RHT4 Slide Gate Valve Output		0	
+      V4003_AUTO_CMD	BOOL	H505.04	PRT4 Spray Ball Cold Water Valve  AUTO CMD		0	
+      V4003_MANUAL	BOOL	H503.04	PRT4 Spray Ball Cold Water Valve  1=Manual 0=Auto		0	
+      V4003_HMI_CMD	BOOL	H504.04	PRT4 Spray Ball Cold Water Valve  HMI CMD		0	
+      V4003_ZC	BOOL	W15.04	PRT4 Spray Ball Cold Water Valve  Output		0	
+      V4004_AUTO_CMD	BOOL	H505.05	PRT4 Drain Valve AUTO CMD		0	
+      V4004_MANUAL	BOOL	H503.05	PRT4 Drain Valve 1=Manual 0=Auto		0	
+      V4004_HMI_CMD	BOOL	H504.05	PRT4 Drain Valve HMI CMD		0	
+      V4004_ZC	BOOL	W15.05	PRT4 Drain Valve Output		0	
+      V4005_AUTO_CMD	BOOL	H505.06	PRT4 Drain Valve AUTO CMD		0	
+      V4005_MANUAL	BOOL	H503.06	PRT4 Drain Valve 1=Manual 0=Auto		0	
+      V4005_HMI_CMD	BOOL	H504.06	PRT4 Drain Valve HMI CMD		0	
+      V4005_ZC	BOOL	W15.06	PRT4 Drain Valve Closed		0	
+      V4006_AUTO_CMD	BOOL	H505.07	PRT4 Cold Water Valve AUTO CMD		0	
+      V4006_MANUAL	BOOL	H503.07	PRT4 Cold Water Valve 1=Manual 0=Auto		0	
+      V4006_HMI_CMD	BOOL	H504.07	PRT4 Cold Water Valve HMI CMD		0	
+      V4006_ZC	BOOL	W15.07	PRT4 Cold Water Valve Output		0	
+      V4007_AUTO_CMD	BOOL	H505.08	PRT4 Discharge Valve AUTO CMD		0	
+      V4007_MANUAL	BOOL	H503.08	PRT4 Discharge Valve 1=Manual 0=Auto		0	
+      V4007_HMI_CMD	BOOL	H504.08	PRT4 Discharge Valve HMI CMD		0	
+      EXT4_CONE	BOOL	47.15	EXT-4 CONE closed		0	
+      	BOOL	W8.11	EXT #4 HIGH LEVEL on DROP		0	
+      _4HGHLVL	BOOL	47.00			0	
+      V4008_AUTO_CMD	BOOL	H505.09	RHT4 Cold Water valve AUTO CMD		0	
+      PRT4_V4008_TON	BOOL	T4034	Timer On		0	
+      V4008_MANUAL	BOOL	H503.09	RHT4 Cold Water valve 1=Manual 0=Auto		0	
+      V4008_HMI_CMD	BOOL	H504.09	RHT4 Cold Water valve HMI CMD		0	
+      V4008_ZC	BOOL	W15.09	RHT4 Cold Water valve Output		0	
+      V4010_AUTO_CMD	BOOL	H505.11	PRT4 Acid Dosing Valve AUTO CMD		0	
+      V4010_MANUAL	BOOL	H503.11	PRT4 Acid Dosing Valve 1=Manual 0=Auto		0	
+      V4010_HMI_CMD	BOOL	H504.11	PRT4 Acid Dosing Valve HMI CMD		0	
+      V4010_ZC	BOOL	W15.11	PRT4 Acid Dosing Valve Output		0	
+      V4011_AUTO_CMD	BOOL	H505.12	Caustic Dosing Valve for PRT4 AUTO CMD		0	
+      V4011_MANUAL	BOOL	H503.12	Caustic Dosing Valve for PRT4 1=Manual 0=Auto		0	
+      V4011_HMI_CMD	BOOL	H504.12	Caustic Dosing Valve for PRT4 HMI CMD		0	
+      V1011_ZH	BOOL	W0.06	Caustic Dosing Valve for PRT1		0	
+      V2011_ZH	BOOL	W2.06	Caustic Dosing Valve for PRT2		0	
+      V3011_ZH	BOOL	W10.06	Caustic Dosing Valve for PRT3		0	
+      V110_ZH	BOOL	W4.14	Old Caustic Tank Fill Valve		0	
+      V115_ZH	BOOL	W0.14	Demin Caustic Day Tank Fill Valve Opened		0	
+      V105_ZH	BOOL	W4.04	V105 Water Fraction Tank Caustic Valve Opened		0	
+      V4011_ZC	BOOL	W15.12	Caustic Dosing Valve for PRT4		0	
+      V4012_AUTO_CMD	BOOL	H505.13	Caustic Dosing Valve for RHT4 AUTO CMD		0	
+      V4012_MANUAL	BOOL	H503.13	Caustic Dosing Valve for RHT4 1=Manual 0=Auto		0	
+      V4012_HMI_CMD	BOOL	H504.13	Caustic Dosing Valve for RHT4 HMI CMD		0	
+      V4012_ZC	BOOL	W15.13	Caustic Dosing Valve for RHT4		0	
+      V4013_AUTO_CMD	BOOL	H505.14	Caustic Dosing Valve for EXT4 AUTO CMD		0	
+      V4013_MANUAL	BOOL	H503.14	Caustic Dosing Valve for EXT4 1=Manual 0=Auto		0	
+      V4013_HMI_CMD	BOOL	H504.14	Caustic Dosing Valve for EXT4 HMI CMD		0	
+      V1013_ZH	BOOL	W0.08	Caustic Dosing Valve for EXT1		0	
+      V2013_ZH	BOOL	W2.08	Caustic Dosing Valve for EXT2		0	
+      V3013_ZH	BOOL	W10.08	Caustic Dosing Valve for EXT3		0	
+      XV13_ZH	BOOL	W16.05	XV13 OPEN  CAUSTIC TO PRECOAT TK VLV		0	
+      V104_ZH	BOOL	400.01	V104 Centrifuge Caustic Valve Opened		0	
+      V4013_ZC	BOOL	W15.14	Caustic Dosing Valve for EXT4		0	
+      PRT4_CHP_IND1	BOOL	H502.07	Chopping Indication		0	
+      PRT4_CHP_IND	BOOL	W16.04	Chopping Indication		0	
+      	BOOL	W17.04	PRT4 Draining		0	
+      PRT4_AUX_WT_FEED_REQ	BOOL	H357.14	Pretreatment 4 Requesting Auxiliary Water wash		0	
+      PRT4_V4008_TOFF	BOOL	T4035	Timer Off		0	
+      PRT4_1H_PH_A	BOOL	H507.00	PRT4 1hour PH Check Alarm		0	
+      PRT4_6H_PH_A	BOOL	H507.01	PRT5 6hour PH Check Alarm		0	
+      V4001_FTC	BOOL	H507.02	PRT4 30min pH Check Alarm		0	
+      SV30_40D_CMD	BOOL	H410.12	SV30-40D 1=Open 0=Close		0	
+      	BOOL	W21.08	PRT4 Drop to EXT (for Cent PLC)		0	
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

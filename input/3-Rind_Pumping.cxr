@@ -1,0 +1,158 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      '  Drain Control\nDrainage System Control
+      LD SV30MINUS10D
+      LD _1HGHLVL
+      OR W8.00
+      ANDLD
+      OUT 480.12
+      ^^^
+      LD SV30MINUS20D
+      LD _2HGHLVL
+      OR W8.01
+      ANDLD
+      OUT 480.13
+      ^^^
+      LD SV30_30D
+      LD _3HGHLVL
+      OR W8.02
+      ANDLD
+      OUT 480.14
+      ^^^
+      LD SV30_40D
+      LD _4HGHLVL
+      OR W8.03
+      ANDLD
+      OUT TOTAUTOMAN
+      ^^^
+      '  Tank1_pump_auto\nto start the tank-1 water feed to the happoer
+      LD PRT_RECLAIM_PUMP
+      ANDNOT PRT_FEED_WATER_IND
+      ANDNOT V121_ZH
+      LD V1010_ZH
+      OR V2010_ZH
+      OR V3010_ZH
+      OR V4010_ZH
+      ANDLD
+      TIM 0090 #30
+      AND T0090
+      OUT TNK1PMPAUTO
+      ^^^
+      '  Extractor Drain Valves\nDrain Valve must be OPEN to drop PRT
+      LD 329.01
+      AND 328.01
+      AND EXT1_CONE
+      ANDNOT _1FILL1STRT
+      ANDNOT W17.09
+      OUT SV30MINUS10D
+      ^^^
+      LD 329.02
+      AND 328.02
+      AND EXT2_CONE
+      ANDNOT _2FILL1STRT
+      ANDNOT W17.09
+      OUT SV30MINUS20D
+      ^^^
+      LD scada_mode3
+      AND ON_OFF_3
+      AND EXT3_CONE
+      ANDNOT _3FILL1STRT
+      ANDNOT W17.09
+      OUT SV30_30D
+      ^^^
+      LD scada_mode_4
+      AND ON_OFF_4
+      AND EXT4_CONE
+      ANDNOT _4FILL1STRT
+      ANDNOT W17.09
+      OUT SV30_40D
+      ^^^
+      LD SV30MINUS10D
+      OR SV30MINUS20D
+      OR SV30_30D
+      OR SV30_40D
+      AND W22.00
+      OUT W22.10
+      ^^^
+      LD SV30MINUS10D
+      OR SV30MINUS20D
+      OR RPDRNEXT3
+      OR SV30_40D
+      LDNOT SV30MINUS10D
+      ANDNOT SV30MINUS20D
+      ANDNOT RPDRNEXT3
+      ANDNOT SV30_40D
+      KEEP(011) RPDRNPMP
+      ^^^
+      '  iFIX to PLC Number System Conversions
+      LD ON
+      BCD(024) D1436 D415
+      BCD(024) D1437 D416
+      BCD(024) D1438 D417
+      BCD(024) D1439 D418
+      ^^^
+      LD ON
+      BCD(024) D1450 RHT1_EMPTY_SP
+      BCD(024) D1451 RHT2_EMPTY_SP
+      BCD(024) D1452 RHT3_EMPTY_SP
+      BCD(024) D1453 RHT4_EMPTY_SP
+      CMP(020) D1456 #0
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+      SV30MINUS10D	BOOL	40.04	Ext#1 Water Drain Valve "durring Transfaring"		0	
+      _1HGHLVL	BOOL	42.00	EXT #1 High Level Switch		0	
+      	BOOL	W8.00	EXT #1 HI LVL		0	
+      SV30MINUS20D	BOOL	41.03	Ext#2 Water Drain Valve "durring Transfaring"		0	
+      _2HGHLVL	BOOL	43.00	 		0	
+      	BOOL	W8.01	EXT #2 HI LVL		0	
+      SV30_30D	BOOL	44.00	Ext#3 Water Drain Valve "durring Transfaring"		0	
+      _3HGHLVL	BOOL	46.00	 		0	
+      	BOOL	W8.02	EXT #3 HI LVL		0	
+      SV30_40D	BOOL	45.03	Ext#4 Drain Valve Open		0	
+      _4HGHLVL	BOOL	47.00			0	
+      	BOOL	W8.03	EXT #4 HI LVL		0	
+      TOTAUTOMAN	BOOL	480.15	 		0	
+      PRT_RECLAIM_PUMP	BOOL	H357.10	Reclaim Pump		0	
+      PRT_FEED_WATER_IND	BOOL	H354.15	PRT Acid Wash Water Ind: 1 = City		0	
+      V121_ZH	BOOL	W4.01	Acid D Water Valve Opened		0	
+      V1010_ZH	BOOL	W1.14	PRT1 Acid Dosing Valve Opened		0	
+      V2010_ZH	BOOL	W3.14	PRT2 Acid Dosing Valve Opened		0	
+      V3010_ZH	BOOL	W11.14	PRT3 Acid Dosing Valve Opened		0	
+      V4010_ZH	BOOL	W14.14	PRT4 Acid Dosing Valve Opened		0	
+      TNK1PMPAUTO	BOOL	6.05	PRT watre fill pump P121		0	
+      	BOOL	329.01	SCADA mode		0	
+      EXT1_CONE	BOOL	42.15	EXT-1 CONE closed		0	
+      _1FILL1STRT	BOOL	H0.01	Extractor 1 Start fill 1st Cook		0	
+      	BOOL	W17.09	EXT Drain Valve Interlock		0	
+      	BOOL	329.02	SCADA Mode		0	
+      EXT2_CONE	BOOL	43.15	EXT-2 CONE closed		0	
+      _2FILL1STRT	BOOL	H3.01	 		0	
+      scada_mode3	BOOL	329.03	Scada Mode		0	
+      ON_OFF_3	BOOL	328.03	Open or Close Ext#3 Water drain valve		0	
+      EXT3_CONE	BOOL	46.15	EXT-3 CONE closed		0	
+      _3FILL1STRT	BOOL	H6.01	 		0	
+      scada_mode_4	BOOL	329.04	Scada Mode		0	
+      ON_OFF_4	BOOL	328.04	Open or Close Ext#4 Water drain valve		0	
+      EXT4_CONE	BOOL	47.15	EXT-4 CONE closed		0	
+      _4FILL1STRT	BOOL	H9.01	 		0	
+      	BOOL	W22.00	PRT ACID DRAIN to EFF PLC		0	
+      	BOOL	W22.10	PRT ACID Drain &  EXT Drain		0	
+      RPDRNEXT3	BOOL	44.03	 		0	
+      RPDRNPMP	BOOL	40.01	Start Rind Transfer Drain Pump		0	
+      ON	BOOL	CF113	System Normally On Flag		0	
+      RHT1_EMPTY_SP	CHANNEL	D32111	Empty Level SP		0	
+      RHT2_EMPTY_SP	CHANNEL	D32211	Empty Level SP		0	
+      RHT3_EMPTY_SP	CHANNEL	D32311	Empty Level SP		0	
+      RHT4_EMPTY_SP	CHANNEL	D32511	Empty Level SP		0	
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+    <COMMENT>
+      DRUM ROOM TO EXTRACTOR RIND PUMPING AUTOMATION
+    </COMMENT>
+  </SECTION>
+</LIBRARY>

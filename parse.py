@@ -28,8 +28,8 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
     # address = "0.02" # Physical I/O (for digital truncation in SCADA, ie. 0.02 vs IR0.2)
 
     ### PLC TAGS ###
-    # Iterate through each row of the cross-ref list
     for rowindex, row in cross_ref.iterrows():
+    # Iterate through each row of the cross-ref list
         # print(rowindex)
         
         address = row["Address"]
@@ -95,18 +95,21 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         # if rowindex > 250: break # Break to only run first ten
 
     ### SCADA TAGS ###
-    # Now go through SCADA taglist to see if any tags are missing
     for rowindex, row in scada_taglist.iterrows():
+    # Now go through SCADA taglist to see if any tags are missing
         # break
 
         address = row["Clean_Address"]
         original_address = address
         tag_type = row["Type"]
+        scada_tagname = row["TAG"]
+        scada_description = row["DESCRIPTION"]
         # print(address)
 
         # Convert tag address to PLC address
         address = util.scadaToPlcAddress(address)
         detailed_address = util.expandTag(address)
+        tagname, tag_description, parent = util.nameCreator(detailed_address, scada_tagname, scada_description, system_name)
 
         # See if tag already exists in taglist, then add to SCADA_tagname column
         query = [tag for tag in taglist if tag["address"] == address]
@@ -121,8 +124,8 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             # If tag does not exist, create tag
             # print("Tag does not exist in list. Adding tag:")
             detailed_address["address"] = address
-            detailed_address["tagname"] = row["TAG"]
-            detailed_address["description"] = row["DESCRIPTION"]
+            detailed_address["tagname"] = tagname
+            detailed_address["description"] = tag_description
             # detailed_address["description"] = '"' + row["DESCRIPTION"] + '"'
             detailed_address["SCADA_tagname"] = [row["TAG"]]
             detailed_address["tag_type"] = ""
@@ -132,13 +135,6 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             # print(tagname, tag_description, tagtype)
             
             detailed_address["tag_type"] = util.typeHandler(detailed_address)
-
-             # Cannot have two underscores in a row
-            tagname = re.sub('_+', '_', tagname)
-            tagname = tagname.replace("-","_").replace("(","").replace(")","").replace(",","_").replace("/","")\
-                .replace(" ","_").replace("|","").replace("*","").replace("#","").replace("<","")\
-                .replace(">","").replace(":","").replace(";","").replace("=","").replace("+","")\
-                .replace("%","").replace("$","").replace("@","").replace("!","").replace("^","")
 
             # print("Appending: ", address, tagname, tag_description, tagtype)
             taglist.append(detailed_address)

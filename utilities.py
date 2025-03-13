@@ -1,6 +1,8 @@
 import re
 import pandas as pd
 
+TEST_TAG = "D32253"
+
 def expandTag(tag):
     """
     Extract tag into its components, including delimiting letters, suffix numbers, and type if clear
@@ -106,30 +108,46 @@ def scadaToPlcAddress(scada_address:str):
         return scada_address
 
 def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", system_name=""):
-    # print(address, symbol, description, scada_tagname, scada_description)
     # Determine tag name to use
 
-    symbol = tag_detailed["tagname"]
-    description = tag_detailed["description"]
     address = tag_detailed["address"]
-    tag_type = tag_detailed["tag_type"]
-    parent = tag_detailed["parent"]
+    try: plc_symbol = tag_detailed["tagname"]
+    except: plc_symbol = ""
+    try: plc_description = tag_detailed["description"]
+    except: plc_description = ""
+    try: tag_type = tag_detailed["tag_type"]
+    except: tag_type = ""
+    try: parent = tag_detailed["parent"]
+    except: parent = ""
+    
+    # if address == TEST_TAG: # Testing for specific tags
+    #     print("Add: ", address, "Tag: ", scada_tagname, "Desc: ", plc_description)
+
+    # if address == TEST_TAG: # Testing for specific tags
+    #     print(address, plc_symbol, plc_description, scada_tagname, scada_description)
 
     # TAGNAME
-    if scada_tagname != "": # Use symbol if it exists already
+    if plc_symbol != "" and scada_tagname != "": # If we have both, use plc_symbol
+        # print(2)
+        tagname = plc_symbol.upper()
+    elif scada_tagname == "" and plc_symbol != "": # If no SCADA tag, use plc_symbol (redundant)
+        # print(2)
+        tagname = plc_symbol.upper()
+    elif plc_symbol == "" and scada_tagname != "": # If only scada tag, use scada_tagname
         # print(1)
         tagname = scada_tagname.upper()
-    elif scada_tagname == "" and symbol != "": # If no SCADA tag, use symbol
-        # print(2)
-        tagname = symbol.upper()
-    elif scada_tagname == "" and symbol == "" and scada_description != "": # If only scada description, create tagname from description
+        suffix = tagname[-3:]
+        # Remove suffix if it is a scada _DO, _DI, _AO, _AI tag
+        if suffix == "_DI" or suffix == "_DO" or suffix == "_AI" or suffix == "_AO":
+            tagname = tagname[:-3]
+    elif scada_tagname == "" and plc_symbol == "" and scada_description != "": # If only scada description, create tagname from description
         # print(3)
         tagname = scada_description.upper().replace(".", "_").replace("/", "").replace("()", "").replace(")", "").split()[:4]
         tagname = "_".join(tagname)
-    elif scada_tagname == "" and symbol == "" and scada_description == "" and description != "": # If only description, create tagname from description
+    elif scada_tagname == "" and plc_symbol == "" and scada_description == "" and plc_description != "": # If only PLC description, create tagname from description
         # print(4)
         # print(len(description))
-        tagname = description.upper().replace(".", "_").replace("/", "").replace("()", "").replace(")", "").split()[:4]
+        tagname = plc_description.upper().replace(".", "_").replace("/", "").replace("()", "").replace(")", "").split()[:4]
         tagname = "_".join(tagname)
     # Handle timer (TIM) tags
     elif tag_type == "TIMER":
@@ -149,18 +167,19 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
         #     if word == split[-1]: tagname += word
         #     else: tagname = tagname + word + "_"
         # tagname += split[0] 
-
-    tagname = system_name + "_" + tagname
+    prefix = tagname[:4]
+    if prefix != "EXT_": # Only add system name if it is not already there
+        tagname = system_name + "_" + tagname
         # print(tagname)
 
     # DESCRIPTION
     # Determine tag description to use
     if scada_description != "": # Use SCADA description if it exists
         tag_description = scada_description
-    elif scada_description == "" and description != "": # If no SCADA description, use PLC description
-        tag_description = description
-    else: # If no description, use symbol
-        tag_description = symbol
+    elif scada_description == "" and plc_description != "": # If no SCADA description, use PLC description
+        tag_description = plc_description
+    else: # If no description, use plc_symbol
+        tag_description = plc_symbol
 
     # Add timer suffix to tagname
     if tag_type == "TIMER":
@@ -195,13 +214,16 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
     if tag_description != "":
         tag_description = '"' + tag_description + '"'
 
-    # print(tagname, tag_description)
+    # if address == TEST_TAG: # Testing for specific tags
+    #     print("Add: ", address, "Tag: ", tagname, "Desc: ", tag_description)
+
     return tagname, tag_description, parent
 
 def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
     
     # 1. Convert PLC address to SCADA address
     tagname = tag_detailed["tagname"]
+    address = tag_detailed["address"]
     tag_type = tag_detailed["tag_type"]
     tag = []
     # print(tagname, tagtype)
@@ -216,13 +238,17 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
             tag.append(tagname)
         else:
             try:
-                tag.append("IR" + tagname.split('.')[0] + "." + str(int(tagname.split('.')[1])))
-                tag.append("IR" + tagname)
+                # This ensures the formatting of the bit part of the DINT is correct (ie. 1.01 instead of 1.1)
+                tag.append("CIO" + str(address.split('.')[0]) + "." + str(int(address.split('.')[1])))
+                tag.append("CIO" + str(address))
             except:
                 tag.append(tagname)
     else:
         tag.append(tagname)
     # print(tag)
+    # if address == TEST_TAG: # Testing for specific tags
+    #     print(address, tagname, tag_type)
+    #     print(tag)
 
     query = scada_taglist.query(f'Clean_Address == "{tag[0]}"')
     if query.empty and len(tag) > 1 and tag[1] != None:
@@ -233,8 +259,13 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
     # else:
         # print("Tag found in SCADA")
 
-    scada_tagname = query["TAG"].to_string(index=False)
-    scada_description = query["DESCRIPTION"].to_string(index=False) 
+    if not query.empty and len(query) > 1: # If multiple tags found, choose the first one
+        query = query.iloc[0]
+        scada_tagname = query["TAG"]
+        scada_description = query["DESCRIPTION"]
+    else:
+        scada_tagname = query["TAG"].to_string(index=False)
+        scada_description = query["DESCRIPTION"].to_string(index=False) 
     
     # print(scada_tagname, scada_description)
     return scada_tagname, scada_description

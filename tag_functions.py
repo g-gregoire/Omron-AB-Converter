@@ -152,6 +152,7 @@ def regroupScadaTables(system_name, subtables):
         subtable.to_csv(scada_updated_file, mode='a', index=False)
         scada_updated_file.write("\n")
 
+    # print("Created SCADA import file")
     
     # combined_table.to_excel(combined_output_path, index=False)
 

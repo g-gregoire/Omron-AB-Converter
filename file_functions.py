@@ -84,6 +84,8 @@ def createLookupTable(tagList:list, output_filename, system_name):
     tagList = pd.DataFrame(tagList)
     # Create Excel file
     tagList.to_csv(filename, index=False)
+    
+    # print("Created tag lookup file")
 
     return tagList
 

@@ -62,12 +62,48 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = Fals
             
     return catchErrors
 
+def countInstructions(logic_file: pd.DataFrame, instr_count_total):
+    # This function counts the number of different instructions in the program,
+    # and how many times each instruction is used
+    rung = ""
+    instr_count = {}
+    for row_index, row in logic_file.iterrows():
+        # print(row_index, row['logic'])
+        # Loop through each row and build the rung until the end of the rung
+        rung, end_of_rung = getRung(row['logic'], "")
+        instr = rung.split(' ')[0]
+        # print(instr)
+        # Skip on end of rung (^^^)
+        if end_of_rung: continue
+        # Skip on comments (')
+        if instr == "'": continue
+        if instr in instr_count:
+            instr_count[instr] += 1
+        else:
+            instr_count[instr] = 1
+        
+        if instr in instr_count_total:
+            instr_count_total[instr] += 1
+        else:
+            instr_count_total[instr] = 1
+
+    # Order instructions by count (value)
+    instr_count = dict(sorted(instr_count.items(), key=lambda item: item[1], reverse=True))
+    instr_count_total = dict(sorted(instr_count_total.items(), key=lambda item: item[1], reverse=True))
+    # Order instruction list alphabetically
+    # instr_count = dict(sorted(instr_count.items(), key=lambda item: item[0]))
+    print(instr_count)
+    return instr_count, instr_count_total
+
 def getRung(text: str, rung: str):
     # Check if the end of the rung is reached (^^^) and set the flag true
     if text == EOL:
         end_of_rung = True
 
     # Otherwise, add the text to the rung and new line
+    elif text == "ORLD" or text == "ANDLD":
+        end_of_rung = False
+        rung += text + " " + NL
     else: 
         end_of_rung = False
         rung += text + NL
@@ -961,27 +997,6 @@ def checkMultipleOutputs(rung):
             output_count += 2
     # print("Num of output: ", output_count) #, ". With: ", rung)
     return (output_count>1)
-
-def countInstructions(logic_file: pd.DataFrame):
-    # This function counts the number of different instructions in the program,
-    # and how many times each instruction is used
-    rung = ""
-    instr_count = {}
-    for rowindex, row in logic_file.iterrows():
-        # print(rung_num)
-        # Loop through each row and build the rung until the end of the rung
-        rung, end_of_rung = getRung(row['logic'], "")
-        instr = rung.split(' ')[0]
-        # print(instr)
-        if instr in instr_count:
-            instr_count[instr] += 1
-        else:
-            instr_count[instr] = 1
-
-    # Order instructions alphabetically
-    instr_count = dict(sorted(instr_count.items()))
-    # pprint(instr_count)
-    return instr_count
 
 def findLastLD(rung: Rung):
     # This function finds the last LD index in a block

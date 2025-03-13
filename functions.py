@@ -60,7 +60,6 @@ def getFileContents(tag_info_filename, logic_input_filename, VIEW_TAGS=False):
     print("Files extracted successfully")
     return plc_taglist, plc_logic_file
 
-
 def tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_filename, CREATE_TAGS = True, VIEW_TAGS=False, CREATE_LOOKUP = True, CONVERT_SCADA_TAGS = True):
 
     sys_name = system_name[0]
@@ -120,9 +119,10 @@ def tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_f
     
     return tag_lookup, tag_import_file
 
-def logicConversion(logic_input_file, tag_lookup, tag_import_file, output_filename="logic.txt", CONVERT=False, VIEW_RUNGS=False, COUNT_INSTR=False, PRINT_ERRORS=False):
+def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total, output_filename="logic.txt", CONVERT=False, VIEW_RUNGS=False, COUNT_INSTR=False, PRINT_ERRORS=False):
 
-    system_name = ff.getSystemName(logic_input_file)
+    sys_name = system_name[0]
+    sys_name_short = system_name[1]
     # system_name = "Sterilizer"
 
     # Initialize variables
@@ -131,20 +131,23 @@ def logicConversion(logic_input_file, tag_lookup, tag_import_file, output_filena
     snum = 1 # Initialize Section number
     
     # Open input file & create output file
+    print("Creating conversion files")
     logic_wb = ff.openFile(logic_input_file)
     logic_wb = ff.prepareFile(logic_wb) # Remove everything except the Mnemonic section
     output_file = ff.createFile(output_filename, logic_input_file)
-    output_file = ff.addContext(output_file, system_name)
+    output_file = ff.addContext(output_file, sys_name)
 
     # Add specific logic chunks
     if COUNT_INSTR:
-        lc.countInstructions(logic_wb)
+        print("Begin instruction count")
+        _, instr_count_total = lc.countInstructions(logic_wb, instr_count_total)
 
     if CONVERT:
         # Convert the rungs to ladder logic
+        print("Begin logic conversion")
         try:
-            catchErrors = lc.loop_rungs(logic_wb, output_file, tag_lookup, view_rungs=VIEW_RUNGS, num_rungs=-1, system_name= system_name)
-            print("Conversion complete")
+            catchErrors = lc.loop_rungs(logic_wb, output_file, tag_lookup, view_rungs=VIEW_RUNGS, num_rungs=-1, system_name= sys_name_short)
+            # print("Conversion complete")
         except Exception as e:
             print("Conversion failed: ", e)
             traceback.print_exc()
@@ -155,11 +158,10 @@ def logicConversion(logic_input_file, tag_lookup, tag_import_file, output_filena
                 print("No errors in conversion")
             else:
                 print("Errors: ", catchErrors)
-
+    
     # Add footer at the end
     output_file = ff.addFooter(output_file)
 
     output_file.close()
 
-    # return tagfile
-    return
+    return instr_count_total
