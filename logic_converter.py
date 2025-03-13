@@ -1,6 +1,6 @@
 import file_functions as ff
 import lookup as lk
-from structures import Rung, Block
+from structures import Routine, Rung, Block
 
 import pandas as pd
 from pprint import pprint
@@ -15,6 +15,44 @@ END = ";"
 # To be used as global variables
 one_shot_index = 0
 
+def extract_rungs(logic_file: pd.DataFrame):
+    # This function extracts the rungs from the logic file and creates a routine object
+    routine = Routine()
+    rung = Rung()
+    rung_text = ""
+    comment = ""
+    for rowindex, row in logic_file.iterrows():
+        rung_text, comment, end_of_rung, BREAK = get_rung(row['logic'], rung_text, comment)
+        if end_of_rung:
+            rung.addOriginal(rung_text)
+            routine.addRung(rung)
+            if comment != "":
+                rung.addComment(comment)
+            
+            # Reset variables
+            rung = Rung()
+            rung_text = ""
+            comment = ""
+        if BREAK: break
+    
+    routine.viewRungs()
+    return routine
+
+def convert_rungs(routine: Routine):
+    # This function converts the rungs in a routine
+    catchErrors = {
+        "count": 0,
+        "list": [],
+        "error": False
+    }
+    for rung in routine.rungs:
+            # _, catchErrors = blockBreaker(rung, catchErrors)
+            rung, _ = block_breaker_v2(rung, catchErrors)
+            # rung.viewBlocks()
+        
+    return routine, catchErrors
+
+
 def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1, system_name:str="Sterilizer"):
     rung = ""
     rung_num = 0
@@ -23,10 +61,11 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = Fals
         "list": [],
         "error": False
     }
+    
     for rowindex, row in logic_file.iterrows():
         # print(rung_num)
         # Loop through each row and build the rung until the end of the rung
-        rung, end_of_rung = getRung(row['logic'], rung)
+        rung, end_of_rung, BREAK = get_rung(row['logic'], rung)
         # print(rung)
 
         # Once the end of the rung is reached, decode the entire rung
@@ -34,10 +73,13 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = Fals
             # print(rung)
             if rung_num <= start_rung-1:
                 rung = ""
-                continue
+                continue # Skip to the next rung
 
             # Call function to break the rung into blocks
-            rung_blocks = blockBreaker(rung, catchErrors)
+            rung_blocks, catchErrors = blockBreaker(rung, catchErrors)
+            for block in rung_blocks.blocks:
+                print(block)
+            break
             # Call function to convert the blocks
             converted_rung, catchErrors = convertBlocks(rung_blocks, catchErrors, tagfile, system_name)
             # Call function to assemble the blocks
@@ -60,6 +102,11 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = Fals
                 print("Reached end of requested rungs")
                 return
             
+        if BREAK: 
+            print("Exiting code at Break point.")
+            print(rung)
+            break
+            
     return catchErrors
 
 def countInstructions(logic_file: pd.DataFrame, instr_count_total):
@@ -70,7 +117,7 @@ def countInstructions(logic_file: pd.DataFrame, instr_count_total):
     for row_index, row in logic_file.iterrows():
         # print(row_index, row['logic'])
         # Loop through each row and build the rung until the end of the rung
-        rung, end_of_rung = getRung(row['logic'], "")
+        rung, end_of_rung = get_rung(row['logic'], "")
         instr = rung.split(' ')[0]
         # print(instr)
         # Skip on end of rung (^^^)
@@ -95,40 +142,87 @@ def countInstructions(logic_file: pd.DataFrame, instr_count_total):
     print(instr_count)
     return instr_count, instr_count_total
 
-def getRung(text: str, rung: str):
-    # Check if the end of the rung is reached (^^^) and set the flag true
-    if text == EOL:
+def get_rung(text: str, rung_text: str, comment: str):
+    # Check if the end of the rung_text is reached (^^^) and set the flag true
+    BREAK = False
+    end_of_rung = False
+    if text == "BREAK": # Break point for testing
+        BREAK = True
+    elif text == EOL: # End of rung designator ^^^
         end_of_rung = True
+    elif text[0] == "'": # Comment designator ' as first character
+        # print("Comment found")
+        comment = text
 
-    # Otherwise, add the text to the rung and new line
+    # Otherwise, add the text to the rung_text and new line
     elif text == "ORLD" or text == "ANDLD":
         end_of_rung = False
-        rung += text + " " + NL
-    else: 
+        rung_text += text + " " + NL
+    else: # If nothing else, add the text to the rung_text
         end_of_rung = False
-        rung += text + NL
+        rung_text += text + NL
 
-    return rung, end_of_rung
+    return rung_text, comment, end_of_rung, BREAK
 
-def blockBreaker(rung: str, catchErrors: dict):
+def block_breaker_v2(rung: Rung, catchErrors: dict):
     # This function splits rung into logic/load blocks
+    rung_text = rung.original
+    rung_array = rung_text.split(NL)[:-1]
+    current_block = []
+    current_block_type = ""
+    in_blocks = 1
 
+    # Loop through each instruction in the rung_text
+    for index, line in enumerate(rung_array):
+        instr, params, details = expand_instruction(line)
+        print(instr, params, details)
+        block_type = details["block_type"]
+
+        if block_type == "START" and current_block == []: # LD-type instruction and no current block
+            current_block.append(line)
+            block_type = block_type
+        elif block_type == "START" and current_block != []: # LD-type instruction with an existing block
+            # Log the current block before continuing
+            rung.addBlock(Block(current_block, block_type, in_blocks))
+            current_block = []
+            # Continue
+            current_block.append(line)
+            block_type = block_type
+        elif block_type == "OUT" and current_block == []: # Output-type instruction and no current block
+            current_block.append(line)
+            block_type = block_type
+            blocks_in = details["blocks_in"]
+        elif block_type == "OUT" and current_block != []: # Output-type instruction and no current block
+            # Log the current block before continuing
+            rung.addBlock(Block(current_block, block_type, blocks_in))
+            current_block = []
+            # Continue
+            current_block.append(line)
+            block_type = block_type
+            blocks_in = details["blocks_in"]
+        elif block_type == "IN":
+            current_block.append(line)
+            blocks_in = details["blocks_in"]
+
+        # Catch the last block
+        if index == len(rung_array) - 1:
+            rung.addBlock(Block(current_block, block_type, blocks_in))
+    
+    return rung, catchErrors
+
+def blockBreaker(rung: Rung, catchErrors: dict):
+    # This function splits rung into logic/load blocks
+    rung_text = rung.original
     # print(rung)
     # Create structures to use
-    outputRung = Rung()
+    # outputRung = Rung()
     startRung = False
     OUTPUT_BLOCK = False
     # Split instructions into an array; exclude the last empty string
-    rung = rung.split(NL)[:-1]
+    rung_text = rung_text.split(NL)[:-1]
 
-    # Check for comments
-    if rung[0][0] == "'":
-        outputRung.addComment(rung[0])
-        # print(rung[0])
-        rung = rung[1:]
-
-    # Loop through each instruction in the rung
-    for index, line in enumerate(rung):
+    # Loop through each instruction in the rung_text
+    for index, line in enumerate(rung_text):
         # print(line)
         # Extract current line
         instr, param, instr_type, conv_instr,_,_ = extractLine(line)
@@ -139,19 +233,19 @@ def blockBreaker(rung: str, catchErrors: dict):
 
         # Extract previous line
         try: 
-            prev_line = rung[index-1]
+            prev_line = rung_text[index-1]
             prev_instr, prev_param, prev_instr_type, prev_conv_instr = extractLine(prev_line)
         except: 
             prev_line = prev_instr = prev_param = prev_instr_type = prev_conv_instr = None
         # Extract next line
         try:
-            next_line = rung[index+1]
+            next_line = rung_text[index+1]
             next_instr, next_param, next_instr_type, next_conv_instr,_,_ = extractLine(next_line)
         except:
             next_line = next_instr = next_param = next_instr_type = next_conv_instr = None
         # Extract after next line
         try:
-            after_next_line = rung[index+2]
+            after_next_line = rung_text[index+2]
             after_next_instr, after_next_param, after_next_instr_type, after_next_conv_instr,_,_ = extractLine(after_next_line)
         except:
             after_next_line = after_next_instr = after_next_param = after_next_instr_type = after_next_conv_instr = None
@@ -161,14 +255,14 @@ def blockBreaker(rung: str, catchErrors: dict):
             # print("Counter is next")
             # print(next_line)
             if len(block.logic) > 0:
-                outputRung.addBlock(block) # Add the old block to the rung
+                rung.addBlock(block) # Add the old block to the rung
             block = Block() # Create a new block
             new_block = Block() # Create a separate block from the current thread
             new_block.addLine(next_line)
-            outputRung.addBlock(new_block) # Add the current output block to the rung
+            rung.addBlock(new_block) # Add the current output block to the rung
             block = Block()
             block.addLine("ANDLD") # This is used to artifically add an ANDLD block
-            outputRung.addBlock(block)
+            rung.addBlock(block)
             block = Block()
 
         # Required since the counter instruction is split into 2 lines (CTU and RES)
@@ -181,7 +275,7 @@ def blockBreaker(rung: str, catchErrors: dict):
         if instr_type.upper() == "COMPARE":
             # print("Compare")
             if len(block.logic) > 0:
-                outputRung.addBlock(block) # Add the old block to the rung
+                rung.addBlock(block) # Add the old block to the rung
             block = Block() # Create a new block
             # Determine which comparison is being used
             EQU = GRT = LES = False
@@ -189,7 +283,7 @@ def blockBreaker(rung: str, catchErrors: dict):
                 # print("End of rung")
                 catchErrors["error"] = True
                 catchErrors["list"].append(line)
-                outputRung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
+                rung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
             else:
                 if next_line.find("EQUALS") != -1 or next_line.find("P_EQ") != -1:
                     EQU = True
@@ -208,55 +302,55 @@ def blockBreaker(rung: str, catchErrors: dict):
                     # print("GEQ")
                     line = line.replace("CMP(20)", "GEQ")
                     # Pop next 3 lines
-                    rung.pop(index+1)
-                    rung.pop(index+1)
-                    rung.pop(index+1)
+                    rung_text.pop(index+1)
+                    rung_text.pop(index+1)
+                    rung_text.pop(index+1)
                 elif EQU and LES:
                     # print("LEQ")
                     line = line.replace("CMP(20)", "LEQ")
                     # Pop next 3 lines
-                    rung.pop(index+1)
-                    rung.pop(index+1)
-                    rung.pop(index+1)
+                    rung_text.pop(index+1)
+                    rung_text.pop(index+1)
+                    rung_text.pop(index+1)
                 elif EQU:
                     # print("EQU")
                     line = line.replace("CMP(20)", "EQU")
                     # Pop next line
-                    rung.pop(index+1)
+                    rung_text.pop(index+1)
                 elif GRT:
                     # print("GRT")
                     line = line.replace("CMP(20)", "GRT")
                     # Pop next line
-                    rung.pop(index+1)
+                    rung_text.pop(index+1)
                 elif LES:
                     # print("LES")
                     line = line.replace("CMP(20)", "LES")
                     # Pop next line
-                    rung.pop(index+1)
+                    rung_text.pop(index+1)
                 else:
                     line = line.replace("CMP(20)", "LES")
-                    rung.pop(index+1)
+                    rung_text.pop(index+1)
 
         # If parameter matches pattern TRx where x is a number, using regex
         if param != None and re.match(r"TR\d", param):
             # print("TR Block")
-            outputRung.has_TR_blocks = True
+            rung.has_TR_blocks = True
             TR_NUM = param[-1]
             # print(TR_NUM)
             if instr == "OUT":
                 if len(block.logic) > 0:
-                    outputRung.addBlock(block) # Add the old block to the rung
+                    rung.addBlock(block) # Add the old block to the rung
                 block = Block() 
                 block.addLine("STBR-"+TR_NUM) # This is used to artifically add an Start Branch (STBR) block
-                outputRung.addBlock(block)
+                rung.addBlock(block)
                 block = Block()
                 continue
             elif instr == "LD":
                 if len(block.logic) > 0:
-                    outputRung.addBlock(block) # Add the old block to the rung
+                    rung.addBlock(block) # Add the old block to the rung
                 block = Block() 
                 block.addLine("NWBR-"+TR_NUM) # This is used to artifically add an Start Branch (NWBR) block
-                outputRung.addBlock(block)
+                rung.addBlock(block)
                 block = Block()
                 continue
             # continue
@@ -268,61 +362,61 @@ def blockBreaker(rung: str, catchErrors: dict):
                 startRung = True
                 block = Block()
                 block.addLine(line)
-                # outputRung.addConnector("START")
-                # outputRung.viewRung()
+                # rung.addConnector("START")
+                # rung.viewRung()
             else:
                 # print("New Block")
                 if len(block.logic) > 0:
-                    outputRung.addBlock(block) # Add the old block to the rung
+                    rung.addBlock(block) # Add the old block to the rung
                 block = Block() # Create a new block
                 block.addLine(line)
 
         elif instr == "OR" or instr == "ORNOT":
             # print("New Block - OR")
             if len(block.logic) > 0:
-                outputRung.addBlock(block) # Add the old block to the rung
+                rung.addBlock(block) # Add the old block to the rung
             block = Block()
             block.addLine(line) # This is used to add the current block
-            outputRung.addBlock(block)
+            rung.addBlock(block)
             block = Block() 
             block.addLine("ORLD") # This is used to artifically add an ORLD block
-            outputRung.addBlock(block)
+            rung.addBlock(block)
             block = Block()
 
         elif instr == "ANDLD" or instr == "ORLD":
             if len(block.logic) > 0:
-                outputRung.addBlock(block) # Add the old block to the rung
+                rung.addBlock(block) # Add the old block to the rung
             block = Block()
             block.addLine(instr)
-            outputRung.addBlock(block)
+            rung.addBlock(block)
             block = Block()
 
         # Keep instruction - needs to be broken up into OTL and OTU
         elif instr_type.upper() == "KEEP":
             if len(block.logic) > 0:
-                outputRung.addBlock(block) # Add the old block to the rung
+                rung.addBlock(block) # Add the old block to the rung
             # print("keep")
-            insert_index = findLastLD(outputRung)
+            insert_index = findLastLD(rung)
             if insert_index != -1:
                 # Insert OTL instruction before the last LD instruction
                 block = Block()
                 block.addLine(line)
-                outputRung.blocks.insert(insert_index, block)
+                rung.blocks.insert(insert_index, block)
                 block = Block() 
                 block.addLine("ANDLD") # This is used to artifically add an ORLD block
-                outputRung.blocks.insert(insert_index+1, block)
+                rung.blocks.insert(insert_index+1, block)
                 block = Block()
                 # Insert OTU instruction in the Keep block
                 block = Block()
                 line = line.replace("KEEP(11)", "OTU")
                 block.addLine(line)
-                outputRung.addBlock(block) # Add the OTU block to the rung
+                rung.addBlock(block) # Add the OTU block to the rung
                 block = Block() 
                 block.addLine("ANDLD") # This is used to artifically add an ORLD block
-                outputRung.addBlock(block)
+                rung.addBlock(block)
                 block = Block()
                 block.addLine("ORLD") # This is used to artifically add an ORLD block
-                outputRung.addBlock(block)
+                rung.addBlock(block)
                 block = Block()
 
         # Manage output-type instructions
@@ -335,67 +429,67 @@ def blockBreaker(rung: str, catchErrors: dict):
             if instr_type.upper() == "COUNTER":
                 # print(1)
                 block.addLine(line)
-                outputRung.addBlock(block) # Add the current output block to the rung
+                rung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 block.addLine("ORLD") # This is used to artifically add an ORLD block
-                outputRung.addBlock(block)
+                rung.addBlock(block)
                 block = Block()
-            elif checkMultipleOutputs(rung) and not OUTPUT_BLOCK:
+            elif checkMultipleOutputs(rung_text) and not OUTPUT_BLOCK:
                 # print(2)
                 if len(block.logic) > 0:
-                    outputRung.addBlock(block) # Add the current output block to the rung
+                    rung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 block.addLine(line)
-                outputRung.addBlock(block) # Add the current output block to the rung
+                rung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 OUTPUT_BLOCK = True
             # Output block is active but previous instruction was "AND" 
             elif len(block.logic) > 0 and OUTPUT_BLOCK and (prev_instr == "AND" and prev_instr == "ANDNOT"):
                 # print(3)
-                # outputRung.addBlock(block) # Add the old block to the rung
+                # rung.addBlock(block) # Add the old block to the rung
                 # block = Block() # Create a new block
                 block.addLine(line)
-                outputRung.addBlock(block) # Add the current output block to the rung
+                rung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 # if next_line == None:
                     # print(3.5)
                 block = Block() # Create a new block
                 block.addLine("ORLD") # This is used to artifically add an ORLD block
-                    # outputRung.addBlock(block)
+                    # rung.addBlock(block)
                     # OUTPUT_BLOCK = False
             elif OUTPUT_BLOCK:
                 # print(4)
                 block.addLine(line)
                 if len(block.logic) > 0:
-                    outputRung.addBlock(block) # Add the current output block to the rung
+                    rung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
                 block.addLine("ORLD") # This is used to artifically add an ORLD block
-                outputRung.addBlock(block)
+                rung.addBlock(block)
                 block = Block()
                 if next_line == None:
                     # print(4.5)
                     # block = Block() # Create a new block
                     # block.addLine("ORLD") # This is used to artifically add an ORLD block
-                    # outputRung.addBlock(block)
+                    # rung.addBlock(block)
                     OUTPUT_BLOCK = False
             else:
                 # print(5)
                 block.addLine(line)
-                outputRung.addBlock(block) # Add the current output block to the rung
+                rung.addBlock(block) # Add the current output block to the rung
                 block = Block() # Create a new block
 
         else:
             # print(6)
             block.addLine(line) # Add any non-specific lines to the block
 
-        if index == len(rung) - 1:
+        if index == len(rung_text) - 1:
             # Append the last block to the rung
             if len(block.logic) > 0:
-                outputRung.addBlock(block) # Add the old block to the rung
+                rung.addBlock(block) # Add the old block to the rung
             # print("End of Rung")
     
-    # outputRung.viewRung()
-    return outputRung
+    # rung.viewRung()
+    return rung, catchErrors
 
 def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
     # This function converts the blocks in a rung
@@ -545,6 +639,9 @@ def assembleBlocks(rung: Rung):
     
     rung.addConvertedLogic(new_rung)
     return rung
+
+def blockAssembler_v2(rung: Rung):
+    pass
 
 # Not working - currently used
 def TRBreaker(blocks, rung: Rung):
@@ -938,6 +1035,21 @@ def extractLine(line: str):
     # print(instr, param, param2, param3)
 
     return instr, param, instr_type, conv_instr, param2, param3
+
+def expand_instruction(line: str):
+    line = line.replace("@" , "").replace("!","").replace("%","")
+    args = line.split(" ")
+    instr = args[0].replace("(0","(") # Remove leading 0 from instruction code if it exists (ie. MOV(021) -> MOV(21))
+    params = args[1:]
+
+    # Get instruction into from lookup table
+    try:
+        details = lk.lookup[instr]
+    except:
+        details = None
+
+    return instr, params, details
+
 
 def convertTagname(address: str, tagfile: pd.DataFrame, system_name:str):
     # This function searches the tagfile to determine if a converted tagname exists

@@ -135,7 +135,7 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
     logic_wb = ff.openFile(logic_input_file)
     logic_wb = ff.prepareFile(logic_wb) # Remove everything except the Mnemonic section
     output_file = ff.createFile(output_filename, logic_input_file)
-    output_file = ff.addContext(output_file, sys_name)
+    output_file = ff.addContext(output_file, sys_name) # Add required headers, etc.
 
     # Add specific logic chunks
     if COUNT_INSTR:
@@ -146,7 +146,10 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
         # Convert the rungs to ladder logic
         print("Begin logic conversion")
         try:
-            catchErrors = lc.loop_rungs(logic_wb, output_file, tag_lookup, view_rungs=VIEW_RUNGS, num_rungs=-1, system_name= sys_name_short)
+            routine = lc.extract_rungs(logic_wb) # Extracts comments and rungs into routine object
+            routine, catchErrors = lc.convert_rungs(routine) # Converts rungs to ladder logic
+            routine.rungs[0].viewBlocks()
+            # catchErrors = lc.loop_rungs(logic_wb, output_file, tag_lookup, view_rungs=VIEW_RUNGS, num_rungs=-1, system_name= sys_name_short)
             # print("Conversion complete")
         except Exception as e:
             print("Conversion failed: ", e)
