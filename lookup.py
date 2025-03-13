@@ -140,5 +140,4 @@ lookup = {
     "CADD(730)": {"instr": "ignore", "type": "macro", "args": "?"},
     "PMCR(260)": {"instr": "ignore", "type": "macro", "args": "?"},
     "SSET(630)": {"instr": "ignore", "type": "stack", "args": "?"}, # Not needed with ABR
-
 }
