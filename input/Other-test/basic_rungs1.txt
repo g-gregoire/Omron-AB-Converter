@@ -1,24 +1,188 @@
-      LD 421.04
-      LDNOT 492.03
-      LD 421.06
-      LD 492.00
-      LD 0.03
-      OR 233.03
+@ -1,187 +0,0 @@
+      ' Basic LD-AND-OR
+      LD 0000
+      AND 0001
+      OR 0002
+      AND 0003
+      AND NOT 0004
+      OUT 0005
+      ^^^
+      '  Basic ANDLD
+      LD 0000
+      OR 0001
+      LD 0002
+      AND 0003
       ANDLD
+      OUT PS1
+      ^^^
+      '  Basic ORLD
+      LD 0000
+      ANDNOT 0001
+      LD 0002
+      AND 0003
+      ORLD 
+      OUT PS1
+      ^^^
+      '  Combo ANDLD + ORLD
+      LDNOT 0000
+      AND 0001
+      LD 0002
+      ANDNOT 0003
+      LDNOT 0004
+      AND 0005
       ORLD
-      OR 492.01
-      OR 490.04
-      OR 421.06
       ANDLD
-      OR 492.03
+      OUT PS1
+      ^^^
+      ' Double ANDLD
+      LD 0000
+      ORNOT 0001
+      LDNOT 0002
+      OR 0003
       ANDLD
-      OUT TR0
-      TIM 234 #6000
-      AND TIM234
-      TIM 235 #6000
-      LD TR0
-      ANDNOT 421.06
-      RSET 490.04
-      LD TR0
-      OUT 421.06
+      LD 0004
+      OR 0005
+      ANDLD
+      OUT 0055
+      ^^^
+      ' Double ORLD
+      LD 0000
+      ANDNOT 0001
+      LDNOT 0002
+      ANDNOT 0003
+      ORLD
+      LD 0004
+      AND 0005
+      ORLD
+      OUT 0055
+      ^^^
+      ' Double OR with an ANDLD
+      LD 0000
+      ANDNOT 0001
+      LD 0002
+      AND 0003
+      OR 0004
+      ORNOT 0005
+      ANDLD 
+      OUT 0055
+      ^^^
+      ' Complicated Combo 1
+      LD 00000
+      LD 00001
+      LD 00002
+      ANDNOT 00003
+      ORLD ––
+      ANDLD ––
+      LDNOT 00004
+      AND 00005
+      ORLD ––
+      LDNOT 00006
+      AND 00007
+      ORLD ––
+      OUT LR 0000
+      ^^^
+      ' Complicated Combo 3
+      LD 00000
+      LD 00001
+      AND 00002
+      LD 00003
+      AND 00004
+      LD 00005
+      LD 00006
+      AND 00007
+      ORLD ––
+      ANDLD ––
+      ORLD ––
+      ANDLD ––
+      OUT LR0000
+      ^^^
+      ' Complicated Combo 4
+      LD 00000
+      AND 00001
+      LD 01000
+      AND 01001
+      ORLD ––
+      OR 00500
+      AND 00002
+      ANDNOT 00003
+      LD 00004
+      AND 00005
+      OR 00006
+      ANDLD ––
+      OUT 00500
+      ^^^
+      ' Multiple Output Bits
+      LD 00000
+      OR 00001
+      OR 00002
+      OR HR0000
+      AND 00003
+      OUT HR0001
+      OUT 00500
+      AND 00004
+      OUT 00506
+      ^^^
+      ' Math instructions
+      LDNOT 232.08
+      ADD(30) DM503 DM506 DM508
+      DIV(33) DM508 #60 DM509
+      MUL(32) DM510 #100 DM513
+      DIV(33) DM513 #60 DM515
+      ^^^
+      ' Set & Reset
+      LDNOT CS1
+      AND CIP_MANUAL_PB
+      SET CIP_MANUAL_SELECTED
+      RSET CIP_AUTO_SELECTED
+      RSET CIP_AUTO_MONTHLY_SELECTED
+      RSET CIP_AUTO_SHORT_SELECTED
+      ^^^
+      ' Move Instruction
+      LD 506.01
+      MOV(21) #2 DM420
+      ^^^
+      ' Diff - oneshot outputs
+      LD 493.01
+      DIFU(13) 493.00
+      DIFD(14) 493.01
+      ^^^
+      ' Timer instruction
+      LD PS3
+      LD PS4
+      OR 503.10
+      OR I001
+      ANDLD
+      TIM 203 #600
+      OUT PS4
+      ^^^
+      ' Counter instruction
+      LD 494.00
+      AND P_1min
+      LDNOT PARK_POSITION
+      CNT 301 #105
+      ^^^
+      ' Compare - Simple
+      LD ON
+      CMP(20) CNTP207_PV #1
+      AND EQUALS
+      OUT ONDIVIDEOFFP207
+      ^^^
+      ' Compare - Double
+      LD SS4
+      CMP(20) SEP_LEVEL #100
+      LD EQUALS
+      OR LESS_THAN
+      ANDLD
+      TIM 288 #15
+      AND TIM288
+      OUT 470.04
+      ^^^
+      ' KEEP Instruction
+      LD PS1
+      ANDNOT PARK_POSITION
+      ANDNOT CS1
+      ANDNOT SS1
+      LD SS1
+      OR PARK_POSITION
+      KEEP(11) 506.00
       ^^^

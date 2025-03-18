@@ -3,16 +3,18 @@ import lookup as lk
 from typing import List
 
 class Block:
-    def __init__(self, logic: List[str]=[], type: str="", in_blocks: int=0):
+    def __init__(self, logic: List[str]=[], block_type: str="", blocks_in: int=0):
         self.content = {
             "logic": logic,
-            "type": type,
-            "in_blocks": in_blocks
+            "type": block_type,
+            "blocks_in": blocks_in
         }
+        self.converted_logic = ""
         # print("Block created. Logic: ", self.logic)
 
     def __str__(self) -> str:
-        return f"{self.content["logic"]}"
+        logic = str(self.content["logic"])
+        return logic
         # return f"{self.logic}" # old structure
     
     def addLine(self, logic: str):
@@ -20,10 +22,10 @@ class Block:
         # self.logic.append(block) # old structure
         # print("Line updated. Logic: ", self.logic)
 
-    def addContent(self, logic, type, in_blocks):
+    def addContent(self, logic, block_type, blocks_in):
         self.content["logic"] = logic
-        self.content["type"] = type
-        self.content["in_blocks"] = in_blocks
+        self.content["block_type"] = block_type
+        self.content["blocks_in"] = blocks_in
 
 class Rung:
     def __init__(self, original:str="", blocks: List[Block]=[], connectors: List[str]=[], comment: str="", converted_blocks: List[str]=[]):

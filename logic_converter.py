@@ -1,6 +1,7 @@
 import file_functions as ff
 import lookup as lk
 from structures import Routine, Rung, Block
+from typing import List
 
 import pandas as pd
 from pprint import pprint
@@ -38,7 +39,7 @@ def extract_rungs(logic_file: pd.DataFrame):
     routine.viewRungs()
     return routine
 
-def convert_rungs(routine: Routine):
+def loop_rungs_v2(routine: Routine, system_name:str):
     # This function converts the rungs in a routine
     catchErrors = {
         "count": 0,
@@ -49,6 +50,9 @@ def convert_rungs(routine: Routine):
             # _, catchErrors = blockBreaker(rung, catchErrors)
             rung, _ = block_breaker_v2(rung, catchErrors)
             # rung.viewBlocks()
+            rung = block_assembler_v2(rung)
+            
+            
         
     return routine, catchErrors
 
@@ -170,38 +174,39 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
     rung_array = rung_text.split(NL)[:-1]
     current_block = []
     current_block_type = ""
-    in_blocks = 1
+    blocks_in = 1
 
     # Loop through each instruction in the rung_text
     for index, line in enumerate(rung_array):
         instr, params, details = expand_instruction(line)
-        print(instr, params, details)
+        # print(instr, params, details)
         block_type = details["block_type"]
 
         if block_type == "START" and current_block == []: # LD-type instruction and no current block
             current_block.append(line)
-            block_type = block_type
+            current_type = block_type
         elif block_type == "START" and current_block != []: # LD-type instruction with an existing block
             # Log the current block before continuing
-            rung.addBlock(Block(current_block, block_type, in_blocks))
+            rung.addBlock(Block(current_block, current_type, blocks_in))
             current_block = []
             # Continue
             current_block.append(line)
-            block_type = block_type
+            current_type = block_type
         elif block_type == "OUT" and current_block == []: # Output-type instruction and no current block
             current_block.append(line)
-            block_type = block_type
+            current_type = block_type
             blocks_in = details["blocks_in"]
         elif block_type == "OUT" and current_block != []: # Output-type instruction and no current block
             # Log the current block before continuing
-            rung.addBlock(Block(current_block, block_type, blocks_in))
+            rung.addBlock(Block(current_block, current_type, blocks_in))
             current_block = []
             # Continue
             current_block.append(line)
-            block_type = block_type
+            current_type = block_type
             blocks_in = details["blocks_in"]
         elif block_type == "IN":
             current_block.append(line)
+            current_type = block_type
             blocks_in = details["blocks_in"]
 
         # Catch the last block
@@ -571,6 +576,28 @@ def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_n
 
     return rung, catchErrors
 
+def block_assembler_v2(rung: Rung):
+    
+    for index, block in enumerate(reversed(rung.blocks)):
+        print(block.content)
+        
+        # Passthrough once for outputs
+    new_block = join_single_block(rung.blocks[1])
+
+def join_single_block(block:Block):
+    current_logic = block.content["logic"]
+    new_logic = ""
+    if len(current_logic) == 1:
+        new_logic = current_logic[0]
+    else:
+        for i, content in enumerate(current_logic):
+            instr, params, details = expand_instruction(content)
+
+            # if 
+
+    print(new_logic)
+    return new_block
+
 def assembleBlocks(rung: Rung):
     # This function assembles the blocks into a rung
     blocks = rung.converted_blocks.copy()
@@ -639,9 +666,6 @@ def assembleBlocks(rung: Rung):
     
     rung.addConvertedLogic(new_rung)
     return rung
-
-def blockAssembler_v2(rung: Rung):
-    pass
 
 # Not working - currently used
 def TRBreaker(blocks, rung: Rung):
