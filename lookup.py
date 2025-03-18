@@ -24,9 +24,8 @@ lookup = {
     # Logic Instructions
     "AND": {"instr": "XIC", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},
     "ANDNOT": {"instr": "XIO", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},
-    "ANDW(34)": {"instr": "AND", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},
-    "OR": {"instr": "XIC", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},
-    "ORNOT": {"instr": "XIO", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},
+    "OR": {"instr": "XIC", "type": "logic", "args": 1, "block_type": "OR", "blocks_in": 1},
+    "ORNOT": {"instr": "XIO", "type": "logic", "args": 1, "block_type": "OR", "blocks_in": 1},
 
     # Output Instructions
     "OUT": {"instr": "OTE", "type": "output", "args": 1, "block_type": "OUT", "blocks_in": 1},
@@ -113,6 +112,7 @@ lookup = {
     "XFRB(62)": {"instr": "COP", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1},
     "BSET(71)": {"instr": "FLL", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1}, # For fill length, Omron specifies start & end bits; AB specifies start bit & length
     "MOVB(82)": {"instr": "BTD", "type": "copy", "args": 5, "block_type": "OUT", "blocks_in": 1}, # Omron has 3 args (Source, Control Word, Dest), AB has 5 (Source, Source bit, Dest, Dest Bit, Length).
+    "ANDW(34)": {"instr": "AND", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},
 
     # Scaling Instructions
     "SCL(64)": {"instr": "CPT", "type": "scaling", "args": 2, "block_type": "OUT", "blocks_in": 1},

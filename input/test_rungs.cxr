@@ -1,5 +1,12 @@
       ' Struggle Ex 1 - incorrect counter branching
       LD 500.03
+      AND 500.00
+      OR 500.02
+      OUT 051 
+      ^^^
+      BREAK
+      ' Struggle Ex 1 - incorrect counter branching
+      LD 500.03
       LDNOT 500.03
       OR CNT051
       CNT 051 #60

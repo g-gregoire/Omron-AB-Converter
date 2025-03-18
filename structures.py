@@ -1,31 +1,70 @@
 import lookup as lk
 
-from typing import List
+from typing import List, Dict
 
 class Block:
-    def __init__(self, logic: List[str]=[], block_type: str="", blocks_in: int=0):
-        self.content = {
-            "logic": logic,
-            "type": block_type,
-            "blocks_in": blocks_in
-        }
-        self.converted_logic = ""
+    def __init__(self, details: List[Dict]=[], block_type: str="", blocks_in: int=1):
+        if details[0]["logic"]: 
+            logic = [item["logic"] for item in details if "logic" in item]
+        else: logic = []
+        self.details = details
+        self.logic = logic
+        self.block_type = block_type
+        self.blocks_in = blocks_in
+        self.converted_block = logic
+        # self.converted_logic = ""
         # print("Block created. Logic: ", self.logic)
 
     def __str__(self) -> str:
-        logic = str(self.content["logic"])
+        logic = str(self.converted_block)
         return logic
         # return f"{self.logic}" # old structure
     
-    def addLine(self, logic: str):
-        self.content["logic"].append(logic)
-        # self.logic.append(block) # old structure
-        # print("Line updated. Logic: ", self.logic)
+    # def addLine(self, logic: str):
+    #     self.logic.append(logic)
 
-    def addContent(self, logic, block_type, blocks_in):
-        self.content["logic"] = logic
-        self.content["block_type"] = block_type
-        self.content["blocks_in"] = blocks_in
+    # def addContent(self, logic, block_type, blocks_in):
+    #     self.content["logic"] = logic
+    #     self.content["block_type"] = block_type
+    #     self.content["blocks_in"] = blocks_in
+
+    def innerJoin(self):
+        logic_details = self.details
+        working_logic = []
+        active_OR = False
+        # REVERSE PASS
+        for index, line in enumerate(reversed(self.details)):
+            logic = line["logic"]
+            line_type = line["block_type"]
+            # print(logic, "- Type:", line_type)
+
+            if line_type == "START" or line_type == "IN":
+                # print("In type. Line: ", logic)
+                if active_OR == False:
+                    working_logic.append(logic)
+                else:
+                    working_logic.append(logic)
+                    working_logic.append("[")
+                    active_OR = False
+            elif line_type == "OR":
+                # print("OR type. Line: ", logic)
+                if active_OR == False:
+                    working_logic.append("]")
+                    working_logic.append(logic)
+                    working_logic.append(",")
+                    active_OR = True
+                else:
+                    working_logic.append(",")
+                    working_logic.append(logic)
+
+        # print(working_logic)
+        output_logic = "".join(reversed(working_logic))
+        self.converted_block = [output_logic]
+        # self.converted_logic = output_logic
+        # Set type to IN
+        self.block_type = "IN"
+        # print(output_logic)
+        return output_logic
 
 class Rung:
     def __init__(self, original:str="", blocks: List[Block]=[], connectors: List[str]=[], comment: str="", converted_blocks: List[str]=[]):
@@ -81,12 +120,35 @@ class Rung:
         print("Converted Logic: ")
         print(self.converted_logic)
 
-    # def convertBlocks(self):
-    #     for index, block in enumerate(self.blocks):
-    #         print(block)
+    def join2Blocks(self, index1, index2, connector: str):
+        block1 = self.blocks[index1]
+        block2 = self.blocks[index2]
+        # print("Joining 2 blocks")
+        # print(block1.details)
+        # print(block2)
+        # print(connector)
+        if connector == "AND":
+            self.blocks[index1] = self.simpleJoin(block1, block2)
+            self.blocks.pop(index2)
 
-    #         break
+    def simpleJoin(self, block1:Block, block2:Block):
+        details = {}
+        logic = []
+        converted_block = []
+        block_type = ""
+        blocks_in = 1
 
+        converted_block = block1.converted_block[0] + block2.converted_block[0]
+        block_type = block1.block_type
+        blocks_in = block1.blocks_in
+        details["logic"] = converted_block
+        details["converted_block"] = converted_block
+        details["block_type"] = block_type
+        details["blocks_in"] = blocks_in
+
+        # print("Joined block: ", [details])
+        joined_block = Block([details], block_type, blocks_in)
+        return joined_block
 
 class Routine:
     def __init__(self, rungs: List[Rung]=[]):
