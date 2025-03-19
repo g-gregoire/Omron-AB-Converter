@@ -38,7 +38,7 @@ class Block:
             line_type = line["block_type"]
             # print(logic, "- Type:", line_type)
 
-            if line_type == "START" or line_type == "IN":
+            if line_type == "START":
                 # print("In type. Line: ", logic)
                 if active_OR == False:
                     working_logic.append(logic)
@@ -46,6 +46,12 @@ class Block:
                     working_logic.append(logic)
                     working_logic.append("[")
                     active_OR = False
+            elif line_type == "IN":
+                # print("In type. Line: ", logic)
+                if active_OR == False:
+                    working_logic.append(logic)
+                else:
+                    working_logic.append(logic)
             elif line_type == "OR":
                 # print("OR type. Line: ", logic)
                 if active_OR == False:
@@ -54,8 +60,8 @@ class Block:
                     working_logic.append(",")
                     active_OR = True
                 else:
-                    working_logic.append(",")
                     working_logic.append(logic)
+                    working_logic.append(",")
 
         # print(working_logic)
         output_logic = "".join(reversed(working_logic))
@@ -128,18 +134,25 @@ class Rung:
         # print(block2)
         # print(connector)
         if connector == "AND":
-            self.blocks[index1] = self.simpleJoin(block1, block2)
-            self.blocks.pop(index2)
+            self.blocks[index1] = self.simpleJoin(block1, block2, "AND")
+        elif connector == "OR":
+            self.blocks[index1] = self.simpleJoin(block1, block2, "OR")
+        self.blocks.pop(index2)
 
-    def simpleJoin(self, block1:Block, block2:Block):
+    def simpleJoin(self, block1:Block, block2:Block, connect_type="AND"):
         details = {}
         logic = []
         converted_block = []
         block_type = ""
         blocks_in = 1
 
-        converted_block = block1.converted_block[0] + block2.converted_block[0]
-        block_type = block1.block_type
+        if connect_type == "AND":        
+            converted_block = block1.converted_block[0] + block2.converted_block[0]
+        elif connect_type == "OR":
+            converted_block = "[" + block1.converted_block[0] + "," + block2.converted_block[0] + "]"
+        else:
+            converted_block = block1.converted_block[0] + block2.converted_block[0]
+        block_type = block2.block_type # Allow for and IN + OUT block to stay OUT type
         blocks_in = block1.blocks_in
         details["logic"] = converted_block
         details["converted_block"] = converted_block

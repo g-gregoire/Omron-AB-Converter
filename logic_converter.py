@@ -52,6 +52,7 @@ def loop_rungs_v2(routine: Routine, system_name:str):
             rung, _ = block_breaker_v2(rung, catchErrors)
             rung.viewBlocks()
             rung = block_assembler_v2(rung)
+            rung.viewBlocks()
             
             
         
@@ -68,7 +69,7 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
     # Loop through each instruction in the rung_text
     for index, line in enumerate(rung_array):
         instr, params, details = ul.expand_instruction(line)
-        # print(instr, params, details)
+        print(instr, params, details)
         block_type = details["block_type"]
 
         if block_type == "START" and current_details == []: # LD-type instruction and no current block
@@ -82,24 +83,21 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
             current_details.append(details)
             current_type = block_type
         elif block_type == "OUT" and current_details == []: # Output-type instruction and no current block
-            current_details.append(details)
-            current_type = block_type
-            blocks_in = details["blocks_in"]
+            # Immediately log output block
+            rung.addBlock(Block([details], block_type, details["blocks_in"]))
         elif block_type == "OUT" and current_details != []: # Output-type instruction and no current block
             # Log the current block before continuing
             rung.addBlock(Block(current_details, current_type, blocks_in))
             current_details = []
-            # Continue
-            current_details.append(details)
-            current_type = block_type
-            blocks_in = details["blocks_in"]
+            # Continue and immediately log output block
+            rung.addBlock(Block([details], block_type, details["blocks_in"]))
         elif block_type == "IN" or block_type == "OR":
             current_details.append(details)
             current_type = block_type
             blocks_in = details["blocks_in"]
 
         # Catch the last block
-        if index == len(rung_array) - 1:
+        if index == len(rung_array) - 1 and current_details != []:
             rung.addBlock(Block(current_details, current_type, blocks_in))
     
     return rung, catchErrors
@@ -119,32 +117,52 @@ def block_assembler_v2(rung: Rung):
     # rung.viewBlocks()
 
     # REVERSE PASS - handle output-type blocks
-    for index, block in enumerate(reversed(rung.blocks)):
+    index = 0
+    while index < len(rung.blocks):
+        if len(rung.blocks) == 1:
+            break
+        if index == 0: # Recalculate the array each time we restart the loop
+            reversed_blocks = list(reversed(rung.blocks))
+        block = reversed_blocks[index]
+
+        print(index, block)
         block_type = block.block_type
         blocks_in = block.blocks_in
         actual_index = len(rung.blocks) - index - 1
-        actual_index_next = len(rung.blocks) - index - 2
-        # Determine next block in reversed array
+        actual_index_prev = len(rung.blocks) - index - 2
+        # Determine previous block in array (next in reversed array)
         try:
-            next_block = rung.blocks[-index-2]
-            next_type = next_block.block_type
+            prev_block = rung.blocks[-index-2]
+            prev_type = prev_block.block_type
         except:
-            next_block = None
+            prev_block = None
+            prev_type = None
         # print("Type: ", block.block_type, " Blocks_in: ", block.blocks_in)
-        # print("Next Block: ", next_block.block_type, " Blocks_in: ", next_block.blocks_in)
+        # print("prev Block: ", prev_block.block_type, " Blocks_in: ", prev_block.blocks_in)
         
-        if block_type == "OUT" and next_block != None and (next_type == "IN" or next_type == "START"):
-            rung.join2Blocks(actual_index_next, actual_index, "AND")
+        # TO-DO - Add logic for 2 in_block outputs (CNT)
+        if block_type == "OUT" and prev_block != None and (prev_type == "IN" or prev_type == "START"):
+            rung.join2Blocks(actual_index_prev, actual_index, "AND")
+            index = 0 # Reset counter since we popped a block
+            print("End: ", rung.blocks[actual_index-1], NL)
+            continue
 
-        elif block_type == "OUT" and next_type == "OUT":
+        elif block_type == "OUT" and prev_type == "OUT":
             print("Repeated output block")
-            # block.outerJoin(next_block)
-        break
+            rung.join2Blocks(actual_index_prev, actual_index, "OR")
+            index = 0 # Reset counter since we popped a block
+            print("End: ", rung.blocks[actual_index-1], NL)
+            continue
+        
+        # Increment index
+        print("End: ", block)
+        index += 1
         
         
     # rung.viewBlocks()
         # Passthrough once for outputs
     # new_block = join_single_block(rung.blocks[1])
+    return rung
 
 def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1, system_name:str="Sterilizer"):
     rung = ""

@@ -1,8 +1,12 @@
       ' Struggle Ex 1 - incorrect counter branching
       LD 500.03
+      OR 500.00
+      OR 500.00
+      OR 500.00
       AND 500.00
-      OR 500.02
       OUT 051 
+      AND 500.00
+      OUT 052
       ^^^
       BREAK
       ' Struggle Ex 1 - incorrect counter branching
