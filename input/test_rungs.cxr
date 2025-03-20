@@ -1,12 +1,15 @@
-      ' Struggle Ex 1 - incorrect counter branching
-      LD 500.03
-      OR 500.00
-      OR 500.00
-      OR 500.00
-      AND 500.00
-      OUT 051 
-      AND 500.00
-      OUT 052
+      ' Eg1 - Test branch
+      LD 00000
+      ANDNOT 00003
+      OR 00001
+      AND 00000
+      LDNOT 00004
+      AND 00005
+      ORLD
+      LDNOT 00006
+      AND 00007
+      ORLD
+      OUT LR0000
       ^^^
       BREAK
       ' Struggle Ex 1 - incorrect counter branching

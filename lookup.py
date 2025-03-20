@@ -18,8 +18,10 @@ lookup = {
     # Load Instructions
     "LD": {"instr": "XIC", "type": "load", "args": 1, "block_type": "START", "blocks_in": 1},
     "LDNOT": {"instr": "XIO", "type": "load", "args": 1, "block_type": "START", "blocks_in": 1},
-    "ANDLD": {"instr": "XIC", "type": "load", "args": 1, "block_type": "INTER", "blocks_in": 1},
-    "ORLD": {"instr": "XIC", "type": "load", "args": 1, "block_type": "INTER", "blocks_in": 1},
+
+    # Logic Block Instructions (Interlocking)
+    "ANDLD": {"instr": "ANDLD", "type": "load", "args": 1, "block_type": "INTER", "blocks_in": 1},
+    "ORLD": {"instr": "ORLD", "type": "load", "args": 1, "block_type": "INTER", "blocks_in": 1},
 
     # Logic Instructions
     "AND": {"instr": "XIC", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},

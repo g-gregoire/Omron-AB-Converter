@@ -7,11 +7,14 @@ class Block:
         if details[0]["logic"]: 
             logic = [item["logic"] for item in details if "logic" in item]
         else: logic = []
-        self.details = details
+        if details == []: self.details = []
+        else: self.details = details
         self.logic = logic
-        self.block_type = block_type
-        self.blocks_in = blocks_in
         self.converted_block = logic
+        if block_type == "": self.block_type = ""
+        else: self.block_type = block_type
+        if blocks_in == 1: self.blocks_in = 1
+        else: self.blocks_in = blocks_in
         # self.converted_logic = ""
         # print("Block created. Logic: ", self.logic)
 
@@ -19,23 +22,17 @@ class Block:
         logic = str(self.converted_block)
         return logic
         # return f"{self.logic}" # old structure
-    
-    # def addLine(self, logic: str):
-    #     self.logic.append(logic)
-
-    # def addContent(self, logic, block_type, blocks_in):
-    #     self.content["logic"] = logic
-    #     self.content["block_type"] = block_type
-    #     self.content["blocks_in"] = blocks_in
 
     def innerJoin(self):
         logic_details = self.details
         working_logic = []
+        types_array = []
         active_OR = False
         # REVERSE PASS
         for index, line in enumerate(reversed(self.details)):
             logic = line["logic"]
             line_type = line["block_type"]
+            types_array.append(line_type)
             # print(logic, "- Type:", line_type)
 
             if line_type == "START":
@@ -68,7 +65,12 @@ class Block:
         self.converted_block = [output_logic]
         # self.converted_logic = output_logic
         # Set type to IN
-        self.block_type = "IN"
+        if "START" in types_array:
+            self.block_type = "START"
+        elif "OUT" in types_array:
+            self.block_type = "OUT"
+        else:
+            self.block_type = "IN"
         # print(output_logic)
         return output_logic
 
@@ -95,6 +97,7 @@ class Rung:
     
     def addBlock(self, block: Block):
         self.blocks.append(block)
+        return []
 
     def addConnector(self, connector: str):
         self.connectors.append(connector)
@@ -109,9 +112,12 @@ class Rung:
         self.converted_logic = logic
 
     def viewBlocks(self):
-        print("\n", len(self.blocks), "Blocks:")
-        for block in self.blocks:
-            print(block)
+        if len(self.blocks) == 1:
+            print("Block:\n", self.blocks[0].converted_block[0])
+        else:
+            print("\n", len(self.blocks), "Blocks:")
+            for block in self.blocks:
+                print(block)
 
     def viewRung(self):
         print("Comment: ", self.comment)
@@ -129,8 +135,8 @@ class Rung:
     def join2Blocks(self, index1, index2, connector: str):
         block1 = self.blocks[index1]
         block2 = self.blocks[index2]
-        # print("Joining 2 blocks")
-        # print(block1.details)
+        # print("Joining 2 blocks,", connector)
+        # print(block1)
         # print(block2)
         # print(connector)
         if connector == "AND":
@@ -138,6 +144,8 @@ class Rung:
         elif connector == "OR":
             self.blocks[index1] = self.simpleJoin(block1, block2, "OR")
         self.blocks.pop(index2)
+
+    # def joinOutputBlocks(self, index1, index2, connector: str, ):
 
     def simpleJoin(self, block1:Block, block2:Block, connect_type="AND"):
         details = {}
@@ -149,7 +157,11 @@ class Rung:
         if connect_type == "AND":        
             converted_block = block1.converted_block[0] + block2.converted_block[0]
         elif connect_type == "OR":
-            converted_block = "[" + block1.converted_block[0] + "," + block2.converted_block[0] + "]"
+            if block1.converted_block[0][0] == "[" and block1.converted_block[0][-1] == "]":
+                # print("Joining already OR'd block")
+                converted_block = block1.converted_block[0][:-1] + "," + block2.converted_block[0] + "]"
+            else:
+                converted_block = "[" + block1.converted_block[0] + "," + block2.converted_block[0] + "]"
         else:
             converted_block = block1.converted_block[0] + block2.converted_block[0]
         block_type = block2.block_type # Allow for and IN + OUT block to stay OUT type

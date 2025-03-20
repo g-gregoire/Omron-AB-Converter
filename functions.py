@@ -147,7 +147,7 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
         print("Begin logic conversion")
         try:
             routine = lc.extract_rungs(logic_wb) # Extracts comments and rungs into routine object
-            routine, catchErrors = lc.loop_rungs_v2(routine, system_name) # Converts rungs to ladder logic
+            routine, catchErrors = lc.loop_rungs_v2(routine, tag_lookup, system_name) # Converts rungs to ladder logic
             # routine.rungs[0].viewBlocks()
             # catchErrors = lc.loop_rungs(logic_wb, output_file, tag_lookup, view_rungs=VIEW_RUNGS, num_rungs=-1, system_name= sys_name_short)
             # print("Conversion complete")

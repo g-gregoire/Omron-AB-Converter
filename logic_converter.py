@@ -40,7 +40,7 @@ def extract_rungs(logic_file: pd.DataFrame):
     # routine.viewRungs()
     return routine
 
-def loop_rungs_v2(routine: Routine, system_name:str):
+def loop_rungs_v2(routine: Routine, tagfile: pd.DataFrame, system_name:str):
     # This function converts the rungs in a routine
     catchErrors = {
         "count": 0,
@@ -50,6 +50,8 @@ def loop_rungs_v2(routine: Routine, system_name:str):
     for rung in routine.rungs:
             # _, catchErrors = blockBreaker(rung, catchErrors)
             rung, _ = block_breaker_v2(rung, catchErrors)
+            rung.viewBlocks()
+            rung, catchErrors = convert_blocks(rung, catchErrors, tagfile, system_name)
             rung.viewBlocks()
             rung = block_assembler_v2(rung)
             rung.viewBlocks()
@@ -65,41 +67,94 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
     current_details = []
     current_block_type = ""
     blocks_in = 1
+    DEBUG_bbv2 = False
 
     # Loop through each instruction in the rung_text
     for index, line in enumerate(rung_array):
         instr, params, details = ul.expand_instruction(line)
-        print(instr, params, details)
+        if DEBUG_bbv2: print(index, details)
         block_type = details["block_type"]
+        details_add = details.copy() # Need to create copy due to dictionary reference
 
-        if block_type == "START" and current_details == []: # LD-type instruction and no current block
-            current_details.append(details)
+        if block_type == "INTER" and current_details != []: # ANDLD or ORLD, with a current block
+            if DEBUG_bbv2: print("-", 1, current_details)
+            # Log the current block before continuing
+            rung.addBlock(Block(current_details, current_type, blocks_in))
+            current_details = []
+            # Continue and immediately log ANDLD/ORLD block
+            rung.addBlock(Block([details_add], block_type, details["blocks_in"]))
+            current_details = []
+            
+        elif block_type == "INTER" and current_details == []: # ANDLD or ORLD, with no current block (ie back-to-back ANDLD/ORLD)
+            if DEBUG_bbv2: print("-", 1, current_details)
+            # Continue and immediately log ANDLD/ORLD block
+            rung.addBlock(Block([details_add], block_type, details["blocks_in"]))
+            current_details = []
+
+        elif block_type == "START" and current_details == []: # LD-type instruction and no current block
+            current_details.append(details_add)
             current_type = block_type
+            if DEBUG_bbv2: print("-", 2, current_details)
+
         elif block_type == "START" and current_details != []: # LD-type instruction with an existing block
+            if DEBUG_bbv2: print("-", 3, current_details)
             # Log the current block before continuing
             rung.addBlock(Block(current_details, current_type, blocks_in))
             current_details = []
             # Continue
-            current_details.append(details)
+            current_details.append(details_add)
             current_type = block_type
+
         elif block_type == "OUT" and current_details == []: # Output-type instruction and no current block
+            if DEBUG_bbv2: print("-", 4, current_details)
             # Immediately log output block
-            rung.addBlock(Block([details], block_type, details["blocks_in"]))
-        elif block_type == "OUT" and current_details != []: # Output-type instruction and no current block
+            rung.addBlock(Block([details_add], block_type, details["blocks_in"]))
+            current_details = []
+
+        elif block_type == "OUT" and current_details != []: # Output-type instruction with an existing block
+            if DEBUG_bbv2: print("-", 5, current_details)
             # Log the current block before continuing
             rung.addBlock(Block(current_details, current_type, blocks_in))
             current_details = []
             # Continue and immediately log output block
-            rung.addBlock(Block([details], block_type, details["blocks_in"]))
-        elif block_type == "IN" or block_type == "OR":
-            current_details.append(details)
+            rung.addBlock(Block([details_add], block_type, details["blocks_in"]))
+            current_details = []
+            
+        elif block_type == "IN" or block_type == "OR": # Standard instruction
+            current_details.append(details_add)
             current_type = block_type
             blocks_in = details["blocks_in"]
+            if DEBUG_bbv2: print("-", 6, current_details)
 
         # Catch the last block
         if index == len(rung_array) - 1 and current_details != []:
+            if DEBUG_bbv2: print("-", 7, current_details)
             rung.addBlock(Block(current_details, current_type, blocks_in))
-    
+            current_details = []
+        
+    return rung, catchErrors
+
+def convert_blocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
+    # This function converts the blocks in a rung
+    for index, block in enumerate(rung.blocks):
+        # print("Block:", block)
+
+        # Loop through each instruction in the block
+        for index, line in enumerate(block.converted_block):
+            # print("Line:", line)
+            instr, params, details = ul.expand_instruction(line)
+
+            # Convert the instruction
+            converted_instruction, catchErrors = convertInstruction(line, catchErrors, tagfile, system_name)
+            if catchErrors["error"]: 
+                rung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
+                catchErrors["error"] = False
+
+            # Update the converted_block and details["logic"] with the converted instruction
+            block.converted_block[index] = converted_instruction
+            block.details[index]["logic"] = converted_instruction
+            # print(converted_instruction)
+
     return rung, catchErrors
 
 def block_assembler_v2(rung: Rung):
@@ -113,55 +168,99 @@ def block_assembler_v2(rung: Rung):
             block.innerJoin()
         else: # Single line block -> set to converted_logic
             block.converted_block = block.logic
-
     # rung.viewBlocks()
 
-    # REVERSE PASS - handle output-type blocks
+    # FORWARD PASS - handle ANDLD and ORLD blocks
     index = 0
-    while index < len(rung.blocks):
-        if len(rung.blocks) == 1:
-            break
-        if index == 0: # Recalculate the array each time we restart the loop
-            reversed_blocks = list(reversed(rung.blocks))
-        block = reversed_blocks[index]
+    while index < len(rung.blocks): # Could be improved - multiple ORLD creates multiple nested branches
+        block = rung.blocks[index]
+        # print(index, block, block.block_type)
+        if block.block_type == "INTER":
+            if block.details[0]["instr"] == "ANDLD":
+                rung.blocks.pop(index) # Remove the ANDLD block
+                rung.join2Blocks(index-2, index-1, "AND") # Join the previous 2 blocks
+                index = 0 # Reset counter since we popped a block
+                # print("End: ", rung.blocks[index-1], NL)
+                continue
+            elif block.details[0]["instr"] == "ORLD":
+                rung.blocks.pop(index) # Remove the ORLD block
+                rung.join2Blocks(index-2, index-1, "OR") # Join the previous 2 blocks
+                index = 0 # Reset counter since we popped a block
+                # print("End: ", rung.blocks[index-1], NL)
+                continue
 
-        print(index, block)
+        index += 1
+    
+    # Check if multiple OUT-type blocks exist
+    multiple_count = 0
+    for block in rung.blocks:
+        if block.block_type == "OUT":
+            multiple_count += 1
+    if multiple_count > 1:
+        multiple_OUT = True
+    else:
+        multiple_OUT = False
+            
+    # REVERSE PASS - handle output-type blocks and remaining joins
+    index = 0
+    working_logic = []
+    active_OR = False
+    for index, block in enumerate(reversed(rung.blocks)):
+        
+        # Get working variables
+        logic = block.converted_block
         block_type = block.block_type
-        blocks_in = block.blocks_in
-        actual_index = len(rung.blocks) - index - 1
-        actual_index_prev = len(rung.blocks) - index - 2
-        # Determine previous block in array (next in reversed array)
+        # print(index, block, block_type)
+
+        # Determine previous block in array (next one in reversed array)
         try:
             prev_block = rung.blocks[-index-2]
             prev_type = prev_block.block_type
         except:
             prev_block = None
             prev_type = None
-        # print("Type: ", block.block_type, " Blocks_in: ", block.blocks_in)
-        # print("prev Block: ", prev_block.block_type, " Blocks_in: ", prev_block.blocks_in)
-        
-        # TO-DO - Add logic for 2 in_block outputs (CNT)
-        if block_type == "OUT" and prev_block != None and (prev_type == "IN" or prev_type == "START"):
-            rung.join2Blocks(actual_index_prev, actual_index, "AND")
-            index = 0 # Reset counter since we popped a block
-            print("End: ", rung.blocks[actual_index-1], NL)
-            continue
 
-        elif block_type == "OUT" and prev_type == "OUT":
-            print("Repeated output block")
-            rung.join2Blocks(actual_index_prev, actual_index, "OR")
-            index = 0 # Reset counter since we popped a block
-            print("End: ", rung.blocks[actual_index-1], NL)
-            continue
+        if block_type == "OUT":
+            # print("OR type. Line: ", logic)
+            if multiple_OUT: # If multiple outputs, we need brackets for branches
+                if active_OR == False:
+                    working_logic.append("]")
+                    working_logic.append(logic[0])
+                    active_OR = True
+                else:
+                    working_logic.append(",")
+                    working_logic.append(logic[0])
+            else: # If single output, no brackets needed
+                working_logic.append(logic[0])
+
+        elif block_type == "START": # If start (LD) block, then close bracket is it's open
+            if active_OR == False:
+                working_logic.append(logic[0])
+            else:
+                working_logic.append("[")
+                working_logic.append(logic[0])
+                active_OR = False
+        elif block_type == "IN": # If IN block, then just add the logic normally
+            if active_OR == False:
+                working_logic.append(logic[0])
+            else:
+                working_logic.append(logic[0])
         
-        # Increment index
-        print("End: ", block)
-        index += 1
-        
-        
-    # rung.viewBlocks()
-        # Passthrough once for outputs
-    # new_block = join_single_block(rung.blocks[1])
+        # print("End: ", block)
+    # print(working_logic)
+    output_logic = "".join(reversed(working_logic))
+    # print(output_logic)
+    details = {
+        "logic": output_logic,
+        "block_type": "IN",
+        "blocks_in": 1
+    }
+    block_type = "IN"
+    blocks_in = 1
+
+    # Overwrite blocks with new logic
+    rung.blocks = [Block([details], block_type, blocks_in)]
+    
     return rung
 
 def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1, system_name:str="Sterilizer"):
@@ -192,7 +291,7 @@ def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = Fals
                 print(block)
             break
             # Call function to convert the blocks
-            converted_rung, catchErrors = convertBlocks(rung_blocks, catchErrors, tagfile, system_name)
+            converted_rung, catchErrors = convert_blocks(rung_blocks, catchErrors, tagfile, system_name)
             # Call function to assemble the blocks
             converted_rung = assembleBlocks(converted_rung)
             # break
@@ -556,100 +655,6 @@ def blockBreaker(rung: Rung, catchErrors: dict):
     # rung.viewRung()
     return rung, catchErrors
 
-def convertBlocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
-    # This function converts the blocks in a rung
-    for index, block in enumerate(rung.blocks):
-        # print(block)
-        converted_logic = ""
-        OR_BLOCK = False
-
-        # Loop through each instruction in the block
-        for index, line in enumerate(block.logic):
-            # print(line)
-            instr, param, instr_type, conv_instr,_,_ = extractLine(line) # Extract current line
-
-            if instr == "ORLD" or instr == "ANDLD":
-                converted_logic = instr
-                rung.addConvertedBlock(converted_logic)
-                continue
-            try: # Extract next line
-                next_line = block.logic[index+1]
-                next_instr, next_param, next_instr_type, next_conv_instr,_,_ = extractLine(next_line)
-            except: 
-                next_line = next_instr = next_param = next_instr_type = next_conv_instr = None
-            # Extract next line
-            try: 
-                after_next_line = block.logic[index+2]
-                after_next_instr, after_next_param, after_next_instr_type, after_next_conv_instr,_,_ = extractLine(after_next_line)
-            except:
-                after_next_line = after_next_instr = after_next_param = after_next_instr_type = after_next_conv_instr = None
-
-            # Begin Conversion
-            # Create OR block
-            if not OR_BLOCK and (next_instr == "OR" or next_instr == "ORNOT"):
-                OR_BLOCK = True
-                # print("Start OR block")
-                converted_logic += "[" 
-                # print(converted_logic)
-            elif not OR_BLOCK and (next_instr == "AND" or next_instr == "ANDNOT") and (after_next_instr == "OR" or after_next_instr == "ORNOT"):
-                OR_BLOCK = True
-                # print("Start OR block")
-                converted_logic += "[" 
-                # print(converted_logic)
-            
-            # print("Add Logic")
-            # Convert the instruction
-            converted_instruction, catchErrors = convertInstruction(line, catchErrors, tagfile, system_name)
-            converted_logic += converted_instruction
-            if catchErrors["error"]:
-                rung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
-                catchErrors["error"] = False
-            # print(converted_logic)
-
-            # Allow for LD-AD-OR block (LD & AND are part of the first branch)
-            if OR_BLOCK and next_instr != "OR" and after_next_instr != "OR": 
-                # print("End OR Block")
-                converted_logic += "]"
-                # print(converted_logic)
-                OR_BLOCK = False
-            # Don't add anything if the next instruction is an AND within an OR block
-            elif OR_BLOCK and (next_instr == "AND" or next_instr == "ANDNOT"): 
-                continue
-            # If it's an OR block and it's not the end of the block, add a comma
-            elif OR_BLOCK and next_line != None:
-                # print("New line - add comma")
-                converted_logic += ","
-                # print(converted_logic)
-            # If the OR block is open and it's the last line, close the OR block
-            elif OR_BLOCK and next_line == None: 
-                # print("End OR Block")
-                converted_logic += "]"
-                # print(converted_logic)
-                OR_BLOCK = False
-            
-            if next_line == None: # Last line in the block, add to the rung
-                # print("End of block")
-                rung.addConvertedBlock(converted_logic)
-        # print(converted_logic)
-        # break
-    # rung.viewRung()
-
-    return rung, catchErrors
-
-def join_single_block(block:Block):
-    current_logic = block.content["logic"]
-    new_logic = ""
-    if len(current_logic) == 1:
-        new_logic = current_logic[0]
-    else:
-        for i, content in enumerate(current_logic):
-            instr, params, details = ul.expand_instruction(content)
-
-            # if 
-
-    print(new_logic)
-    return new_block
-
 def assembleBlocks(rung: Rung):
     # This function assembles the blocks into a rung
     blocks = rung.converted_blocks.copy()
@@ -857,7 +862,17 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
     ONS_instr = False
     NEEDS_DN_BIT = False
 
-    instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
+    # instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
+    instr, params, details = ul.expand_instruction(line)
+    instr_type = details["type"]
+    conv_instr = details["instr"]
+
+    try: param = params[0]
+    except: param = None
+    try: param2 = params[1]
+    except: param2 = None
+    try: param3 = params[2]
+    except: param3 = None
 
     if line[0] == "@":
         ONS_instr = True
@@ -943,10 +958,10 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
             converted_instruction = instr + "(" + param + "," + param2 + ")"
         else:
             converted_instruction = instr + "(" + param + ")"
-        if not (instr.find("STBR") != -1 or instr.find("NWBR") != -1):
-            catchErrors["count"] += 1
-            catchErrors["list"].append(line)
-            catchErrors["error"] = True
+        # if not (instr.find("STBR") != -1 or instr.find("NWBR") != -1):
+        #     catchErrors["count"] += 1
+        #     catchErrors["list"].append(line)
+        #     catchErrors["error"] = True
 
     # For logical instructions with 2 parameters like MOVE
     elif instr_type.upper() == "LOGICAL": 
@@ -1119,6 +1134,9 @@ def convertTagname(address: str, tagfile: pd.DataFrame, system_name:str):
     # If it doesn't, it returns the original tagname
     # print(address)
     INDIRECT_ADDRESS = False
+
+    if tagfile is None:
+        return address
     
     # If it's an indirect address, so flag it to be put in the global array
     if address.find("*") != -1:
