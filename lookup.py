@@ -52,8 +52,8 @@ lookup = {
     "CNR(545)": {"instr": "RES", "type": "counter", "args": 1, "block_type": "OUT", "blocks_in": 1}, # Reset counters & timers in input range: N1(start range) & N2(end range)
 
     # Comparison Instructions
-    "CMP(20)": {"instr": "", "type": "compare", "args": 2, "block_type": "OUT", "blocks_in": 1},
-    "CMPL(60)": {"instr": "", "type": "compare", "args": 2, "block_type": "OUT", "blocks_in": 1},
+    "CMP(20)": {"instr": "", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
+    "CMPL(60)": {"instr": "", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
     "AND<(310)": {"instr": "LES", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
     "AND<=(315)": {"instr": "LEQ", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
     "AND=(300)": {"instr": "EQU", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
@@ -104,12 +104,12 @@ lookup = {
     "DVB(53)": {"instr": "DIV", "type": "math", "args": 3, "block_type": "OUT", "blocks_in": 1},
 
     # Copy Instructions
-    "MOV(21)": {"instr": "MOV", "type": "copy", "args": 2, "block_type": "OUT", "blocks_in": 1},
-    "MOVD(83)": {"instr": "MOV", "type": "copy", "args": 2, "block_type": "OUT", "blocks_in": 1},
-    "MOVL(498)": {"instr": "MOV", "type": "copy", "args": 2, "block_type": "OUT", "blocks_in": 1},
-    "BCD(24)": {"instr": "MOV", "type": "copy", "args": 2, "block_type": "OUT", "blocks_in": 1},
-    "BCDL(59)": {"instr": "MOV", "type": "copy", "args": 2, "block_type": "OUT", "blocks_in": 1},
-    "BIN(23)": {"instr": "MOV", "type": "copy", "args": 2, "block_type": "OUT", "blocks_in": 1},
+    "MOV(21)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
+    "MOVD(83)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
+    "MOVL(498)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
+    "BCD(24)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
+    "BCDL(59)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
+    "BIN(23)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
     "XFER(70)": {"instr": "COP", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1},
     "XFRB(62)": {"instr": "COP", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1},
     "BSET(71)": {"instr": "FLL", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1}, # For fill length, Omron specifies start & end bits; AB specifies start bit & length

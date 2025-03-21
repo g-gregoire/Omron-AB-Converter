@@ -74,6 +74,7 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
         instr, params, details = ul.expand_instruction(line)
         if DEBUG_bbv2: print(index, details)
         block_type = details["block_type"]
+        instr_type = details["type"]
         details_add = details.copy() # Need to create copy due to dictionary reference
 
         if block_type == "INTER" and current_details != []: # ANDLD or ORLD, with a current block
@@ -104,6 +105,21 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
             # Continue
             current_details.append(details_add)
             current_type = block_type
+
+        elif instr_type.upper() == "COMPARE_OLD":
+            try: next_line = rung_array[index + 1]
+            except: next_line = None
+            try: after_next_line = rung_array[index + 2]
+            except: after_next_line = None
+            combined_instr, pop_count, catchErrors = ul.combine_compare(rung, line, next_line, after_next_line, catchErrors)
+            if DEBUG_bbv2: print("Combined: ", combined_instr)
+            details_add["logic"] = combined_instr
+            current_details.append(details_add)
+
+            # Pop required lines
+            for i in range(pop_count):
+                print("Popping: ", rung_array[index + i + 1])
+                rung_array.pop(index + i + 1)
 
         elif block_type == "OUT" and current_details == []: # Output-type instruction and no current block
             if DEBUG_bbv2: print("-", 4, current_details)
@@ -172,7 +188,7 @@ def block_assembler_v2(rung: Rung):
 
     # FORWARD PASS - handle ANDLD and ORLD blocks
     index = 0
-    while index < len(rung.blocks): # Could be improved - multiple ORLD creates multiple nested branches
+    while index < len(rung.blocks): 
         block = rung.blocks[index]
         # print(index, block, block.block_type)
         if block.block_type == "INTER":
@@ -434,6 +450,13 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
             param = param.replace("#", "")
         converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
     # For word copy instructions like XFER (->COP)
+    elif instr_type.upper() == "MOVE":
+        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "")
+            # Omron arguments are Length, Source, Destination
+            # AB arguments are Source, Destination, Length
+            converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
+   
     elif instr_type.upper() == "COPY":
         if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
             param = param.replace("#", "")
