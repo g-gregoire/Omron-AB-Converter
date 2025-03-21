@@ -1,8 +1,10 @@
       ' Eg1 - Test branch
-      LD _1HEAT1CMPLT
-      AND T0007
-      LD _1COOK1CMPLT
-      CNT 0002 #6
+      LD PRT1_SEQ_TIM_EN
+      OR PRT1_1M_TIME_RETENTIVE
+      OR 403.02
+      LD PRT1_1M_TIME_RETENTIVE
+      ORNOT PRT1_SEQ_TIM_EN
+      TTIM(087) 3031 #600
       ^^^
       BREAK
       ' Struggle Ex 1 - incorrect counter branching

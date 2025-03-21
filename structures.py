@@ -1,6 +1,7 @@
 import lookup as lk
 
 from typing import List, Dict
+import re
 
 class Block:
     def __init__(self, details: List[Dict]=[], block_type: str="", blocks_in: int=1):
@@ -145,7 +146,48 @@ class Rung:
             self.blocks[index1] = self.simpleJoin(block1, block2, "OR")
         self.blocks.pop(index2)
 
-    # def joinOutputBlocks(self, index1, index2, connector: str, ):
+    def join3Blocks(self, index1, index2, index3, instr_type: str):
+        # This function is for special cases like counters, KEEP, and TTIM that have two inputs going into it
+        block1 = self.blocks[index1]
+        block2 = self.blocks[index2]
+        block3 = self.blocks[index3]
+        # print("Joining 3 blocks")
+        # print(block1)
+        # print(block2)
+        # print(block3)
+
+        # Extract instruction Tag from Counter/Timer
+        print("Block 3: ", block3.converted_block[0])
+        if instr_type.upper() == "COUNTER":
+            match = re.search(r"CNT\d{3,4}", block3.converted_block[0])
+            if match:
+                tag = match.group(0)
+            else: tag = "???" # Placeholder for error
+            reset_instruction = "RES(" + tag + ")"
+        elif instr_type.upper() == "KEEP":
+            match = re.search(r"OTL\(\w+\)", block3.converted_block[0])
+            if match:
+                # print("Match: ", match.group(0))
+                tag = match.group(0)
+            else: tag = "OTL(???)" # Placeholder for error
+            reset_instruction = tag.replace("OTL", "OTU")
+        elif instr_type.upper() == "RET_TIMER":
+            match = re.search(r"TIM\d{3,4}", block3.converted_block[0])
+            if match:
+                tag = match.group(0)
+            else: tag = "???" # Placeholder for error
+            reset_instruction = "RES(" + tag + ")"
+        reset_block = Block([{"logic": reset_instruction}], "OUT", 1) # Create a reset block
+        temp_block1 = self.simpleJoin(block1, block3, "AND") # Join the first block and the counter
+        temp_block2 = self.simpleJoin(block2, reset_block, "AND") # Join the second block and the reset block
+        final_block = self.simpleJoin(temp_block1, temp_block2, "OR") # Join the two new blocks
+        final_block.block_type = "OUT"
+        self.blocks[index3] = final_block
+        self.blocks[index3].details[0]["type"] = "output"
+        # print("Final Block: ", final_block.details)
+        self.blocks.pop(index2)
+        self.blocks.pop(index1)
+
 
     def simpleJoin(self, block1:Block, block2:Block, connect_type="AND"):
         details = {}

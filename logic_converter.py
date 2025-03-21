@@ -145,7 +145,7 @@ def convert_blocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_
             instr, params, details = ul.expand_instruction(line)
 
             # Convert the instruction
-            converted_instruction, catchErrors = convertInstruction(line, catchErrors, tagfile, system_name)
+            converted_instruction, catchErrors = convert_instruction(line, catchErrors, tagfile, system_name)
             if catchErrors["error"]: 
                 rung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
                 catchErrors["error"] = False
@@ -190,27 +190,52 @@ def block_assembler_v2(rung: Rung):
                 continue
 
         index += 1
+
+    # REVERSE PASS - handle special output blocks: CNT, TTIM, KEEP
+    index = len(rung.blocks) - 1
+    while index >= 0: # Could be improved - multiple ORLD creates multiple nested branches
+        block = rung.blocks[index]
+        block_type = block.block_type
+        # print(index, block, block_type)
+        if block_type == "OUT":
+            if block.details[0]["type"].upper() == "COUNTER" or block.details[0]["type"].upper() == "KEEP" or block.details[0]["type"].upper() == "RET_TIMER":
+                rung.join3Blocks(index-2, index-1, index, block.details[0]["type"])
+                index = len(rung.blocks) - 1 # Reset counter since we popped a block
+            # elif block.details[0]["type"].upper() == "RET_TIMER":
+            #     match = re.search(r"XIC\(\w+\)RES\(\w+\)", block.converted_block[0])
+            #     if match:
+            #         print("Match: ", match.group(0))
+            #         tag = match.group(0)
+            #         block.converted_block[0] = block.converted_block[0].replace(tag, "")
+            #     else: tag = "???" # Placeholder for error
+            #     reset_instruction = "RES(" + tag + ")"
+
+        # rung.viewBlocks()
+        index -= 1
     
-    # Check if multiple OUT-type blocks exist
+    # Check if multiple OUT-type blocks exist for next pass
     multiple_count = 0
     for block in rung.blocks:
         if block.block_type == "OUT":
             multiple_count += 1
     if multiple_count > 1:
         multiple_OUT = True
+        # print("Multiple OUT blocks:", multiple_count)
     else:
         multiple_OUT = False
             
-    # REVERSE PASS - handle output-type blocks and remaining joins
+    # REVERSE PASS - handle normal output-type blocks and remaining joins
     index = 0
+    multiple_out_added = 0
     working_logic = []
     active_OR = False
     for index, block in enumerate(reversed(rung.blocks)):
         
         # Get working variables
+        actual_index = len(rung.blocks) - index - 1
         logic = block.converted_block
         block_type = block.block_type
-        print(index, block, block_type)
+        # print(index, block, block_type)
 
         # Determine previous block in array (next one in reversed array)
         try:
@@ -223,28 +248,48 @@ def block_assembler_v2(rung: Rung):
         if block_type == "OUT":
             # print("OUT type. Line: ", logic)
             if multiple_OUT: # If multiple outputs, we need brackets for branches
-                if active_OR == False:
+                if logic[0][0] == "[" and logic[0][-1] == "]":
+                    logic[0] = logic[0][:-1]
+                    # print("logic: ", logic)
+                if multiple_out_added == 0:
                     working_logic.append("]")
                     working_logic.append(logic[0])
-                    active_OR = True
-                else:
+                    multiple_out_added += 1
+                elif 0 < multiple_out_added <= multiple_count:
                     working_logic.append(",")
+                    working_logic.append(logic[0])
+                    multiple_out_added += 1
+                elif multiple_out_added == multiple_count:
+                    working_logic.append(logic[0])
+                    working_logic.append("[")
+                else:
                     working_logic.append(logic[0])
             else: # If single output, no brackets needed
                 working_logic.append(logic[0])
 
-        elif block_type == "START": # If start (LD) block, then close bracket is it's open
-            if active_OR == False:
+        elif block_type == "START" or block_type == "IN": # If start (LD) or IN block, then close bracket is it's open
+            if multiple_OUT: # If multiple outputs, we need brackets for branches
+                # if 0 < multiple_out_added <= multiple_count:
+                #     working_logic.append(logic[0])
+                # elif multiple_out_added == multiple_count:
+                #     working_logic.append("[")
+                #     working_logic.append(logic[0])
+                # else:
                 working_logic.append(logic[0])
-            else:
-                working_logic.append("[")
+            else: # If single output, no brackets needed
                 working_logic.append(logic[0])
-                active_OR = False
-        elif block_type == "IN": # If IN block, then just add the logic normally
-            if active_OR == False:
-                working_logic.append(logic[0])
-            else:
-                working_logic.append(logic[0])
+
+        #     if active_OR == False:
+        #         working_logic.append(logic[0])
+        #     else:
+        #         working_logic.append("[")
+        #         working_logic.append(logic[0])
+        #         active_OR = False
+        # elif block_type == "IN": # If IN block, then just add the logic normally
+        #     if active_OR == False:
+        #         working_logic.append(logic[0])
+        #     else:
+        #         working_logic.append(logic[0])
         
         # print("End: ", block)
     # print(working_logic)
@@ -262,6 +307,235 @@ def block_assembler_v2(rung: Rung):
     rung.blocks = [Block([details], block_type, blocks_in)]
     
     return rung
+
+def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
+    # This function converts an instruction from Omron to AB
+    # print(line)
+    # Pull in global variable for Oneshots
+    global one_shot_index
+
+    # Set default values
+    ONS_instr = False
+    NEEDS_DN_BIT = False
+
+    # instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
+    instr, params, details = ul.expand_instruction(line)
+    instr_type = details["type"]
+    conv_instr = details["instr"]
+
+    try: param = params[0]
+    except: param = None
+    try: param2 = params[1]
+    except: param2 = None
+    try: param3 = params[2]
+    except: param3 = None
+
+    # Check if param matches Txxxx or Cxxxx, and then update to TIMxxxx or Cxxxx
+    if param != None and (re.match(r"T\d{3,4}", param) or re.match(r"C\d{3,4}", param)):
+        if param.find("T") != -1:
+            param = "TIM" + param[1:]
+        elif param.find("C") != -1:
+            param = "CNT" + param[1:]
+
+    if line[0] == "@":
+        ONS_instr = True
+        line = line[1:]
+    # If it's a timer or counter tag, add the .DN bit. Check either TIM/CNT, or Txxxx/Cxxxx using regex
+    elif param != None and instr.upper() != "RESET" and (param.find("TIM") != -1 or param.find("TTIM") != -1 or param.find("CNT") != -1): 
+        NEEDS_DN_BIT = True
+    # If it's a timer instruction, add TIM to the tag
+    elif line.find("TIM ") != -1: 
+        param = "TIM" + param
+    elif line.find("TTIM(") != -1: 
+        param = "TIM" + param
+    # If it's a counter instruction, add CNT to the tag
+    elif line.find("CNT ") != -1: 
+        param = "CNT" + param
+    
+
+    # If it's a scaling instruction, extract internal parameters
+    elif instr_type.upper() == "SCALING":
+        # Create additional required parameters (P1, P2, P3, P4) for scaling
+        try: 
+            # print(param2)
+            p_base = int(param2.split("DM")[1])
+            p_prefix = param2.split("DM")[0] + "DM"
+            # print(p_base, p_prefix)
+            p1 = param2
+            p2 = p_prefix + str(p_base + 1)
+            p3 = p_prefix + str(p_base + 2)
+            p4 = p_prefix + str(p_base + 3)
+        except:
+            p1 = p2 = p3 = p4 = param2
+        # print("Scaling values: " + p1, p2, p3, p4)
+
+    # If it's a PID instruction, extract internal parameters
+    elif instr_type.upper() == "PID":
+        # Create additional required parameters (P, I, D, Sampling) for PID
+        try: 
+            # print(param2)
+            p_base = int(param2.split("DM")[1])
+            p_prefix = param2.split("DM")[0] + "DM"
+            # print(p_base, p_prefix)
+            SP = param2
+            KP = p_prefix + str(p_base + 1)
+            KI = p_prefix + str(p_base + 2)
+            KD = p_prefix + str(p_base + 3)
+            SampRate = p_prefix + str(p_base + 4)
+        except:
+            SP = KP = KI = KD = SampRate = param2
+        # print("PID values: " + SP, KP, KI, KD, SampRate)
+    
+    # If it's a MOVB instruction, break up designation word into two destination bits
+    elif instr_type.upper() == "BTD":
+        # Ensure that the destination bit is in the correct format: 4 numbers with leading zeros if needed
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param2 = param2.replace("#", "")
+        # Make sure param2 has 4 digits
+        while len(param2) < 4:
+            param2 = "0" + param2
+        # print(param2)
+        dest_bit = str(int(param2[0:2]))
+        source_bit = str(int(param2[2:4]))
+        # print(source_bit, dest_bit)
+
+    # Convert the tagname
+    if param != None:
+        param = convertTagname(param, tagfile, system_name)
+    if param2 != None:
+        param2 = convertTagname(param2, tagfile, system_name)
+    if param3 != None:
+        param3 = convertTagname(param3, tagfile, system_name)
+
+    # Check to add .DN bit
+    if NEEDS_DN_BIT:
+        param = param + ".DN"
+
+    if conv_instr == None or param == None:
+        # If instruction has code (xx), remove it using regex
+        instr = instr.split("(")[0]
+        # Check what type of instruction it is, and just created it with the original instruction
+        if param == None:
+            converted_instruction = instr
+        elif param3 != None:
+            converted_instruction = instr + "(" + param + "," + param2 + "," + param3 + ")"
+        elif param2 != None:
+            converted_instruction = instr + "(" + param + "," + param2 + ")"
+        else:
+            converted_instruction = instr + "(" + param + ")"
+        # if not (instr.find("STBR") != -1 or instr.find("NWBR") != -1):
+        #     catchErrors["count"] += 1
+        #     catchErrors["list"].append(line)
+        #     catchErrors["error"] = True
+
+    # For logical instructions with 2 parameters like MOVE
+    elif instr_type.upper() == "LOGICAL": 
+        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "")
+        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
+    # For word copy instructions like XFER (->COP)
+    elif instr_type.upper() == "COPY":
+        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "")
+            # Omron arguments are Length, Source, Destination
+            # AB arguments are Source, Destination, Length
+            converted_instruction = conv_instr + "(" + param2 + "," + param3 + "," + param + ")"
+    
+    # For BTD instructions like MOVB
+    elif instr_type.upper() == "BTD":
+        # Omron arguments are Source, Bit Designation, Destination
+        # AB arguments are Source, Source Bit, Destination, Destination Bit, Length
+        converted_instruction = conv_instr + "(" + param + "," + source_bit + "," + param3 + "," + dest_bit + "," + "1" + ")"
+
+    # For output intsructions like OUT, SET, RSET
+    elif instr_type.upper() == "OUTPUT": 
+        converted_instruction = conv_instr + "(" + param + ")"
+    # For math instructions like ADD, SUB, MUL, SCL
+    elif instr_type.upper() == "MATH": 
+        #Check if it's a hardcoded value (e.g. #10) and remove the #
+        if param.find("#") != -1: param = param.replace("#", "")
+        else: param = param
+        if param2.find("#") != -1: param2 = param2.replace("#", "")
+        else: param2 = param2
+        converted_instruction = conv_instr + "(" + param + "," + param2 + "," + param3 + ")"
+
+    # For scaling instructions like SCL, needs to be handled specially
+    elif instr_type.upper() == "SCALING":
+
+        # Parameters calculated higher up, before tagname conversion
+        # Converted equation is: Result = P3 - (P3 - P1) / (P4 - P2) * (P4 - Input)
+        converted_instruction = f"{conv_instr}({param3},{p3}-({p3}-{p1})/({p4}-{p2})*({p4}-{param}))"
+        # print(converted_instruction)
+
+    # For PID instructions like PID, needs to be handled specially
+    elif instr_type.upper() == "PID":
+
+        # Parameters calculated higher up, before tagname conversion
+        # Order of arguments for Omron is Process Variable, Constants (incl. P, I, D, Sampling Period), Control Variable
+        # Order of arguments for AB is PID, Process Variable, Tieback(0), Control Variable, Inhold bit (0), Inhold value (0)
+        converted_instruction = f"{conv_instr}({param}_PID, {param}, 0, {param3}, 0, 0)"
+        # print(converted_instruction)
+
+    elif instr_type.upper() == "ONESHOT":
+        converted_instruction = conv_instr + "(" + param + "_storage" + "," + param + ")"
+
+    elif instr_type.upper() == "TIMER" or instr_type.upper() == "RET_TIMER":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            # Convert from 1/10th sec to ms
+            preset = str(int(int(param2.replace("#", "")) * 1000 / 10)) 
+        else:
+            preset = param2
+        # if param3 != None: # For RET_TIMER instructions - not needed
+        #     converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")" + f"XIC({param3})RES({param})"
+        # else:
+        converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+
+    elif instr_type.upper() == "COUNTER":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            preset = param2.replace("#", "")
+        else:
+            preset = param2
+        converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" 
+        # Make sure to increment global one shot index
+        one_shot_index += 1
+        converted_instruction += conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+
+    elif instr_type.upper() == "RESET":
+        converted_instruction = conv_instr + "(" + param + ")"
+    elif instr_type.upper() == "COMPARE":
+        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param2 = param2.replace("#", "")
+        else:
+            param2 = param2
+        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
+    elif instr_type.upper() == "KEEP":
+        # print("Keep instruction")
+        # print(line)
+        converted_instruction = conv_instr + "(" + param + ")"
+
+    else:
+        # If instruction has code (xx), remove it using regex
+        conv_instr = conv_instr.split("(")[0]
+        
+        # Remove any odd characters from parameter
+        param = param.replace("#", "")
+
+        # Build instruction based on which parameters are available
+        converted_instruction = conv_instr + "("
+        if param != None:
+            converted_instruction += param
+        if param2 != None:
+            converted_instruction += "," + param2
+        if param3 != None:
+            converted_instruction += "," + param3
+        converted_instruction += ")"
+
+    if ONS_instr and param != None:
+        converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" + converted_instruction
+        # Make sure to increment global one shot index
+        one_shot_index += 1
+
+    return converted_instruction, catchErrors
 
 def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1, system_name:str="Sterilizer"):
     rung = ""
@@ -851,231 +1125,6 @@ def subBlockAssembler(new_rung: Rung):
         index += 1
     
     return new_rung[0]
-
-def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
-    # This function converts an instruction from Omron to AB
-    # print(line)
-    # Pull in global variable for Oneshots
-    global one_shot_index
-
-    # Set default values
-    ONS_instr = False
-    NEEDS_DN_BIT = False
-
-    # instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
-    instr, params, details = ul.expand_instruction(line)
-    instr_type = details["type"]
-    conv_instr = details["instr"]
-
-    try: param = params[0]
-    except: param = None
-    try: param2 = params[1]
-    except: param2 = None
-    try: param3 = params[2]
-    except: param3 = None
-
-    # Check if param matches Txxxx or Cxxxx, and then update to TIMxxxx or Cxxxx
-    if param != None and (re.match(r"T\d{3,4}", param) or re.match(r"C\d{3,4}", param)):
-        if param.find("T") != -1:
-            param = "TIM" + param[1:]
-        elif param.find("C") != -1:
-            param = "CNT" + param[1:]
-
-    if line[0] == "@":
-        ONS_instr = True
-        line = line[1:]
-    # If it's a timer or counter tag, add the .DN bit. Check either TIM/CNT, or Txxxx/Cxxxx using regex
-    elif param != None and instr.upper() != "RESET" and (param.find("TIM") != -1 or param.find("CNT") != -1): 
-        NEEDS_DN_BIT = True
-    # If it's a timer instruction, add TIM to the tag
-    elif line.find("TIM ") != -1: 
-        param = "TIM" + param
-    # If it's a counter instruction, add CNT to the tag
-    elif line.find("CNT ") != -1: 
-        param = "CNT" + param
-    
-
-    # If it's a scaling instruction, extract internal parameters
-    elif instr_type.upper() == "SCALING":
-        # Create additional required parameters (P1, P2, P3, P4) for scaling
-        try: 
-            # print(param2)
-            p_base = int(param2.split("DM")[1])
-            p_prefix = param2.split("DM")[0] + "DM"
-            # print(p_base, p_prefix)
-            p1 = param2
-            p2 = p_prefix + str(p_base + 1)
-            p3 = p_prefix + str(p_base + 2)
-            p4 = p_prefix + str(p_base + 3)
-        except:
-            p1 = p2 = p3 = p4 = param2
-        # print("Scaling values: " + p1, p2, p3, p4)
-
-    # If it's a PID instruction, extract internal parameters
-    elif instr_type.upper() == "PID":
-        # Create additional required parameters (P, I, D, Sampling) for PID
-        try: 
-            # print(param2)
-            p_base = int(param2.split("DM")[1])
-            p_prefix = param2.split("DM")[0] + "DM"
-            # print(p_base, p_prefix)
-            SP = param2
-            KP = p_prefix + str(p_base + 1)
-            KI = p_prefix + str(p_base + 2)
-            KD = p_prefix + str(p_base + 3)
-            SampRate = p_prefix + str(p_base + 4)
-        except:
-            SP = KP = KI = KD = SampRate = param2
-        # print("PID values: " + SP, KP, KI, KD, SampRate)
-    
-    # If it's a MOVB instruction, break up designation word into two destination bits
-    elif instr_type.upper() == "BTD":
-        # Ensure that the destination bit is in the correct format: 4 numbers with leading zeros if needed
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param2 = param2.replace("#", "")
-        # Make sure param2 has 4 digits
-        while len(param2) < 4:
-            param2 = "0" + param2
-        # print(param2)
-        dest_bit = str(int(param2[0:2]))
-        source_bit = str(int(param2[2:4]))
-        # print(source_bit, dest_bit)
-
-
-    # Convert the tagname
-    if param != None:
-        param = convertTagname(param, tagfile, system_name)
-    if param2 != None:
-        param2 = convertTagname(param2, tagfile, system_name)
-    if param3 != None:
-        param3 = convertTagname(param3, tagfile, system_name)
-
-    # Check to add .DN bit
-    if NEEDS_DN_BIT:
-        param = param + ".DN"
-
-    if conv_instr == None or param == None:
-        # If instruction has code (xx), remove it using regex
-        instr = instr.split("(")[0]
-        # Check what type of instruction it is, and just created it with the original instruction
-        if param == None:
-            converted_instruction = instr
-        elif param3 != None:
-            converted_instruction = instr + "(" + param + "," + param2 + "," + param3 + ")"
-        elif param2 != None:
-            converted_instruction = instr + "(" + param + "," + param2 + ")"
-        else:
-            converted_instruction = instr + "(" + param + ")"
-        # if not (instr.find("STBR") != -1 or instr.find("NWBR") != -1):
-        #     catchErrors["count"] += 1
-        #     catchErrors["list"].append(line)
-        #     catchErrors["error"] = True
-
-    # For logical instructions with 2 parameters like MOVE
-    elif instr_type.upper() == "LOGICAL": 
-        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param = param.replace("#", "")
-        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
-    # For word copy instructions like XFER (->COP)
-    elif instr_type.upper() == "COPY":
-        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param = param.replace("#", "")
-            # Omron arguments are Length, Source, Destination
-            # AB arguments are Source, Destination, Length
-            converted_instruction = conv_instr + "(" + param2 + "," + param3 + "," + param + ")"
-    
-    # For BTD instructions like MOVB
-    elif instr_type.upper() == "BTD":
-        # Omron arguments are Source, Bit Designation, Destination
-        # AB arguments are Source, Source Bit, Destination, Destination Bit, Length
-        converted_instruction = conv_instr + "(" + param + "," + source_bit + "," + param3 + "," + dest_bit + "," + "1" + ")"
-
-    # For output intsructions like OUT, SET, RSET
-    elif instr_type.upper() == "OUTPUT": 
-        converted_instruction = conv_instr + "(" + param + ")"
-    # For math instructions like ADD, SUB, MUL, SCL
-    elif instr_type.upper() == "MATH": 
-        #Check if it's a hardcoded value (e.g. #10) and remove the #
-        if param.find("#") != -1: param = param.replace("#", "")
-        else: param = param
-        if param2.find("#") != -1: param2 = param2.replace("#", "")
-        else: param2 = param2
-        converted_instruction = conv_instr + "(" + param + "," + param2 + "," + param3 + ")"
-
-    # For scaling instructions like SCL, needs to be handled specially
-    elif instr_type.upper() == "SCALING":
-
-        # Parameters calculated higher up, before tagname conversion
-        # Converted equation is: Result = P3 - (P3 - P1) / (P4 - P2) * (P4 - Input)
-        converted_instruction = f"{conv_instr}({param3},{p3}-({p3}-{p1})/({p4}-{p2})*({p4}-{param}))"
-        # print(converted_instruction)
-
-    # For PID instructions like PID, needs to be handled specially
-    elif instr_type.upper() == "PID":
-
-        # Parameters calculated higher up, before tagname conversion
-        # Order of arguments for Omron is Process Variable, Constants (incl. P, I, D, Sampling Period), Control Variable
-        # Order of arguments for AB is PID, Process Variable, Tieback(0), Control Variable, Inhold bit (0), Inhold value (0)
-        converted_instruction = f"{conv_instr}({param}_PID, {param}, 0, {param3}, 0, 0)"
-        # print(converted_instruction)
-
-    elif instr_type.upper() == "ONESHOT":
-        converted_instruction = conv_instr + "(" + param + "_storage" + "," + param + ")"
-
-    elif instr_type.upper() == "TIMER":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            # Convert from 1/10th sec to ms
-            preset = str(int(int(param2.replace("#", "")) * 1000 / 10)) 
-        else:
-            preset = param2
-        converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
-
-    elif instr_type.upper() == "COUNTER":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            preset = param2.replace("#", "")
-        else:
-            preset = param2
-        converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" 
-        # Make sure to increment global one shot index
-        one_shot_index += 1
-        converted_instruction += conv_instr + "(" + param + "," + preset + "," + "0" + ")"
-
-    elif instr_type.upper() == "RESET":
-        converted_instruction = conv_instr + "(" + param + ")"
-    elif instr_type.upper() == "COMPARE":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param2 = param2.replace("#", "")
-        else:
-            param2 = param2
-        converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
-    elif instr_type.upper() == "KEEP":
-        # print("Keep instruction")
-        # print(line)
-        converted_instruction = conv_instr + "(" + param + ")"
-
-    else:
-        # If instruction has code (xx), remove it using regex
-        conv_instr = conv_instr.split("(")[0]
-        
-        # Remove any odd characters from parameter
-        param = param.replace("#", "")
-
-        # Build instruction based on which parameters are available
-        converted_instruction = conv_instr + "("
-        if param != None:
-            converted_instruction += param
-        if param2 != None:
-            converted_instruction += "," + param2
-        if param3 != None:
-            converted_instruction += "," + param3
-        converted_instruction += ")"
-
-    if ONS_instr and param != None:
-        converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" + converted_instruction
-        # Make sure to increment global one shot index
-        one_shot_index += 1
-
-    return converted_instruction, catchErrors
 
 def logicCleanup(rung:str): 
     # This function cleans up the logic string

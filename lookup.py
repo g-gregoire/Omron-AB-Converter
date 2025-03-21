@@ -33,7 +33,7 @@ lookup = {
     "OUT": {"instr": "OTE", "type": "output", "args": 1, "block_type": "OUT", "blocks_in": 1},
     "SET": {"instr": "OTL", "type": "output", "args": 1, "block_type": "OUT", "blocks_in": 1},
     "RSET": {"instr": "OTU", "type": "output", "args": 1, "block_type": "OUT", "blocks_in": 1},
-    "KEEP(11)": {"instr": "OTL", "type": "output", "args": 1, "block_type": "OUT", "blocks_in": 2},
+    "KEEP(11)": {"instr": "OTL", "type": "keep", "args": 1, "block_type": "OUT", "blocks_in": 2},
     "OTU": {"instr": "OTU", "type": "output", "args": 1, "block_type": "OUT", "blocks_in": 1},
 
     # Oneshot Instructions
@@ -42,7 +42,7 @@ lookup = {
 
     # Timer Instructions
     "TIM": {"instr": "TON", "type": "timer", "args": 1, "block_type": "OUT", "blocks_in": 1},
-    "TTIM(87)": {"instr": "RTO", "type": "timer", "args": 1, "block_type": "OUT", "blocks_in": 2}, # Retentive timer with resset input
+    "TTIM(87)": {"instr": "RTO", "type": "ret_timer", "args": 1, "block_type": "OUT", "blocks_in": 2}, # Retentive timer with resset input
 
     # Counter Instructions
     "CNT": {"instr": "CTU", "type": "counter", "args": 1, "block_type": "OUT", "blocks_in": 2},
