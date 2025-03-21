@@ -1,15 +1,8 @@
       ' Eg1 - Test branch
-      LD 00000
-      ANDNOT 00003
-      OR 00001
-      AND 00000
-      LDNOT 00004
-      AND 00005
-      ORLD
-      LDNOT 00006
-      AND 00007
-      ORLD
-      OUT LR0000
+      LD _1HEAT1CMPLT
+      AND T0007
+      LD _1COOK1CMPLT
+      CNT 0002 #6
       ^^^
       BREAK
       ' Struggle Ex 1 - incorrect counter branching

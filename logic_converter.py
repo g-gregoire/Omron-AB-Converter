@@ -210,7 +210,7 @@ def block_assembler_v2(rung: Rung):
         # Get working variables
         logic = block.converted_block
         block_type = block.block_type
-        # print(index, block, block_type)
+        print(index, block, block_type)
 
         # Determine previous block in array (next one in reversed array)
         try:
@@ -221,7 +221,7 @@ def block_assembler_v2(rung: Rung):
             prev_type = None
 
         if block_type == "OUT":
-            # print("OR type. Line: ", logic)
+            # print("OUT type. Line: ", logic)
             if multiple_OUT: # If multiple outputs, we need brackets for branches
                 if active_OR == False:
                     working_logic.append("]")
@@ -874,10 +874,17 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
     try: param3 = params[2]
     except: param3 = None
 
+    # Check if param matches Txxxx or Cxxxx, and then update to TIMxxxx or Cxxxx
+    if param != None and (re.match(r"T\d{3,4}", param) or re.match(r"C\d{3,4}", param)):
+        if param.find("T") != -1:
+            param = "TIM" + param[1:]
+        elif param.find("C") != -1:
+            param = "CNT" + param[1:]
+
     if line[0] == "@":
         ONS_instr = True
         line = line[1:]
-    # If it's a timer or counter tag, add the .DN bit
+    # If it's a timer or counter tag, add the .DN bit. Check either TIM/CNT, or Txxxx/Cxxxx using regex
     elif param != None and instr.upper() != "RESET" and (param.find("TIM") != -1 or param.find("CNT") != -1): 
         NEEDS_DN_BIT = True
     # If it's a timer instruction, add TIM to the tag
@@ -886,6 +893,7 @@ def convertInstruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, syst
     # If it's a counter instruction, add CNT to the tag
     elif line.find("CNT ") != -1: 
         param = "CNT" + param
+    
 
     # If it's a scaling instruction, extract internal parameters
     elif instr_type.upper() == "SCALING":
