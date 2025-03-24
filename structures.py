@@ -217,6 +217,10 @@ class Rung:
         joined_block = Block([details], block_type, blocks_in)
         return joined_block
 
+    def createSubSet(self, start_index:int, end_index:int) -> List[Block]:
+        subset = self.blocks[start_index:end_index]
+        return subset
+
 class Routine:
     def __init__(self, rungs: List[Rung]=[]):
         if rungs == []: self.rungs = []

@@ -1,6 +1,7 @@
 import lookup as lk
 from structures import Block, Rung
 
+from typing import List, Dict
 import re
 import pandas as pd
 
@@ -83,3 +84,138 @@ def combine_compare(rung:Rung, line1, line2, line3, catchErrors):
             pop_count = 1
     
     return line1, pop_count, catchErrors
+
+def combine_simple_logic(block_array:List[Block])->List[Block]:
+    index = 0
+    multiple_out_added = 0
+    working_logic = []
+
+    multiple_count = 0
+    for block in block_array:
+        if block.block_type == "OUT":
+            multiple_count += 1
+    if multiple_count > 1:
+        multiple_OUT = True
+        # print("Multiple OUT blocks:", multiple_count)
+    else:
+        multiple_OUT = False
+
+    for index, block in enumerate(reversed(block_array)):
+
+        if block.details[0]["block_type"] == "TR":
+            working_logic.append(block.details[0]["logic"])
+            continue
+        
+        # Get working variables
+        logic = block.converted_block
+        block_type = block.block_type
+        # print(index, block, block_type)
+
+        # Determine previous block in array (next one in reversed array)
+        try:
+            prev_block = block_array[-index-2]
+        except:
+            prev_block = None
+
+        if block_type == "OUT":
+            # print("OUT type. Line: ", logic)
+            if multiple_OUT: # If multiple outputs, we need brackets for branches
+                if logic[0][0] == "[" and logic[0][-1] == "]":
+                    logic[0] = logic[0][:-1]
+                    # print("logic: ", logic)
+                if multiple_out_added == 0:
+                    working_logic.append("]")
+                    working_logic.append(logic[0])
+                    multiple_out_added += 1
+                elif 0 < multiple_out_added < (multiple_count - 1):
+                    working_logic.append(",")
+                    working_logic.append(logic[0])
+                    multiple_out_added += 1
+                elif multiple_out_added == multiple_count - 1:
+                    working_logic.append(",")
+                    working_logic.append(logic[0])
+                    working_logic.append("[")
+                else:
+                    working_logic.append(logic[0])
+            else: # If single output, no brackets needed
+                working_logic.append(logic[0])
+
+        elif block_type == "START" or block_type == "IN": # If start (LD) or IN block, then close bracket is it's open
+            if multiple_OUT: # If multiple outputs, we need brackets for branches
+                # if 0 < multiple_out_added <= multiple_count:
+                #     working_logic.append(logic[0])
+                # elif multiple_out_added == multiple_count:
+                #     working_logic.append("[")
+                #     working_logic.append(logic[0])
+                # else:
+                working_logic.append(logic[0])
+            else: # If single output, no brackets needed
+                working_logic.append(logic[0])
+
+    # print(working_logic)
+    output_logic = "".join(reversed(working_logic))
+
+    # print(output_logic)
+    details = {
+        "logic": output_logic,
+        "block_type": "IN",
+        "blocks_in": 1
+    }
+    block_type = "IN"
+    blocks_in = 1
+
+    output_block = [Block([details], block_type, blocks_in)]
+
+    return output_block
+
+def OR_block_list(block_array:List[Block])->List[Block]:
+    # This function takes a list of blocks and combines them into a single OR block
+    # This is done by adding brackets around each block and adding a comma between each block
+    # The output is a single block with the logic of all blocks combined
+    working_logic = []
+    for index, block in enumerate(reversed(block_array)):
+        logic = block.converted_block
+        block_type = block.block_type
+        if index == 0:
+            working_logic.append("]")
+        working_logic.append(logic[0])
+        if index != len(block_array) - 1:
+            working_logic.append(",")
+    working_logic.append("[")
+        
+    output_logic = "".join(reversed(working_logic))
+    details = {
+        "logic": output_logic,
+        "block_type": "IN",
+        "blocks_in": 1
+    }
+    block_type = "IN"
+    blocks_in = 1
+    output_block = [Block([details], block_type, blocks_in)]
+    return output_block
+
+def createSubSet(block_list:List[Block], start_index:int, end_index:int) -> List[Block]:
+        # print("Creating subset. Indexes: ", start_index, end_index)
+        # for block in block_list:
+        #     print(block)
+        subset = block_list[start_index:end_index]
+        # print("Subset. Indexes: ", start_index, end_index)
+        # for block in subset:
+        #     print(block)
+        return subset
+
+def concat_block_list(initial:List[Block], inter:List[Block], final:List[Block]) -> List[Block]:
+    block_list = []
+
+    if initial != None:
+        for block in initial:
+            block_list.append(block)
+    block_list.append(inter[0])
+    if final != None:
+        for block in final:
+            block_list.append(block)
+
+    # print("Concatenated block list")
+    # for block in block_list:
+    #     print(block)
+    return block_list

@@ -11,7 +11,7 @@ NL = "\n"
 dir = os.getcwd()
 # Open file
 
-array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+rng = 2
 
-for i in range(1):
-    print(i)
+for i in reversed(range(rng+1)):
+    print(f"Idx {i}") 
