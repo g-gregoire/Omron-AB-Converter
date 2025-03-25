@@ -110,7 +110,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
         # Get working variables
         logic = block.converted_block
         block_type = block.block_type
-        print(index, block, block_type)
+        # print(index, block, block_type)
 
         # Determine previous block in array (next one in reversed array)
         try:

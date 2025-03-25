@@ -119,7 +119,7 @@ class Rung:
         else:
             print("\n", len(self.blocks), "Blocks:")
             for block in self.blocks:
-                print(block, block.block_type)
+                print(block)
 
     def viewRung(self):
         print("Comment: ", self.comment)

@@ -52,7 +52,7 @@ def loop_rungs_v2(routine: Routine, tagfile: pd.DataFrame, system_name:str):
             rung, _ = block_breaker_v2(rung, catchErrors)
             # rung.viewBlocks()
             rung, catchErrors = convert_blocks(rung, catchErrors, tagfile, system_name)
-            rung.viewBlocks()
+            # rung.viewBlocks()
             rung = block_assembler_v2(rung)
             rung.viewBlocks()            
         
@@ -135,7 +135,7 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
 
             # Pop required lines
             for i in range(pop_count):
-                print("Popping: ", rung_array[index + i + 1])
+                # print("Popping: ", rung_array[index + i + 1])
                 rung_array.pop(index + i + 1)
 
         elif block_type == "OUT" and current_details == []: # Output-type instruction and no current block
@@ -235,9 +235,9 @@ def block_assembler_v2(rung: Rung):
                 # print("End: ", rung.blocks[index-1], NL)
                 
             if next_block != None and next_block.block_type == "IN": # If next block is an IN block, then join to previous block
-                print("In block found:", next_block)
-                print("Block1:", rung.blocks[index-2])
-                print("Block2:", rung.blocks[index-1])
+                # print("In block found:", next_block)
+                # print("Block1:", rung.blocks[index-2])
+                # print("Block2:", rung.blocks[index-1])
                 rung.join2Blocks(index-2, index-1, "AND") # Join the previous 2 blocks
                 # print("End: ", rung.blocks[index-1], NL)
 
@@ -246,7 +246,7 @@ def block_assembler_v2(rung: Rung):
 
         index += 1
 
-    rung.viewBlocks()
+    # rung.viewBlocks()
 
     # 3. REVERSE PASS - handle special output blocks: CNT, TTIM, KEEP
     index = len(rung.blocks) - 1
@@ -284,8 +284,8 @@ def block_assembler_v2(rung: Rung):
             # TR_array.sort()
 
             TR_exists = True
-    if TR_exists:
-        print("TR numbers: ", TR_array)
+    # if TR_exists:
+        # print("TR numbers: ", TR_array)
     # print("TR exists: ", TR_exists)
     # print("Largest TR number: ", largest_TR)
 
@@ -300,7 +300,7 @@ def block_assembler_v2(rung: Rung):
         # Run through for each TR# we have
         for num in reversed(TR_array):
             while TR_array[num] > 0:
-                print("TR#", num, " - Remaining TR blocks: ", TR_array[num])
+                # print("TR#", num, " - Remaining TR blocks: ", TR_array[num])
                 TR_num = "TR" + str(num)
                 next_TR_num = "TR" + str(num - 1)
                 start_TR_num = "START(" + TR_num + ")"
@@ -320,10 +320,10 @@ def block_assembler_v2(rung: Rung):
                 # for index, block in enumerate(rung.blocks):
                 while index < len(rung.blocks):
                     block = rung.blocks[index]
-                    print("Index: ", index, block)
+                    # print("Index: ", index, block)
                     
                     if initial == False and re.search(next_TR_num, block.converted_block[0]) is not None: # This is used to capture what is after the TR blocks, and will remain untouched (for now)
-                        print("Next block - add inter & final subset")
+                        # print("Next block - add inter & final subset")
                         inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index)
                         inter_array.append(inter_subset)
                         final_subset = ul.createSubSet(rung.blocks, index, len(rung.blocks))
@@ -331,16 +331,16 @@ def block_assembler_v2(rung: Rung):
                         break
 
                     elif index == len(rung.blocks) - 1: # Used to add last block to the inter-set
-                        print("Last block - add inter & final subset")
+                        # print("Last block - add inter & final subset")
                         inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index+1)
                         inter_array.append(inter_subset)
 
                     elif block.converted_block[0].find(start_TR_num) != -1: # Used to capture if it's the first TR block
-                        print("Start block - add initial subset")
+                        # print("Start block - add initial subset")
                         
                         if TR_num_converted < TR_num_total: # Used to skip the first TR block if there are multiple
                             TR_num_converted += 1
-                            print("Skip first TR start block")
+                            # print("Skip first TR start block")
                             index += 1
                             continue
 
@@ -358,10 +358,10 @@ def block_assembler_v2(rung: Rung):
                     
                     elif block.converted_block[0].find(out_TR_num) != -1:
                         if initial:
-                            print("Skip blocks until we add a Start block")
+                            # print("Skip blocks until we add a Start block")
                             index += 1
                             continue
-                        print("OUT block - add inter subset")
+                        # print("OUT block - add inter subset")
                         inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index)
                         inter_array.append(inter_subset)
                         prev_index = index
@@ -370,21 +370,21 @@ def block_assembler_v2(rung: Rung):
                 
                 
                 # Print all sections - for debugging
-                print("Initial Subset")
+                # print("Initial Subset")
                 for block in initial_subset: print(block)
-                print("Inter Array")
+                # print("Inter Array")
                 conv_array = []
                 for inter in inter_array:
-                    for block in inter: print("Inter blocks:", block)
+                    # for block in inter: print("Inter blocks:", block)
                     converted_block = ul.combine_simple_logic(inter)
-                    print("Converted Block:", converted_block[0])
+                    # print("Converted Block:", converted_block[0])
                     conv_array.append(converted_block[0])
                 new_inter_block = ul.OR_block_list(conv_array)
-                print("Double Converted Block:", new_inter_block[0])
+                # print("Double Converted Block:", new_inter_block[0])
                 if final_subset != None:
-                    print("Final Subset")
+                    # print("Final Subset")
                     for block in final_subset: print(block)
-                    print("End.")
+                    # print("End.")
 
                 # Combine the initial, converted-inter and final (if it exists)
                 rung.blocks = ul.concat_block_list(initial_subset, new_inter_block, final_subset)
@@ -411,7 +411,7 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
 
     # instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
     instr, params, details = ul.expand_instruction(line)
-    # print(instr)
+    # print(instr, details)
     instr_type = details["type"]
     conv_instr = details["instr"]
 
@@ -429,7 +429,7 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         elif param.find("C") != -1:
             param = "CNT" + param[1:]
 
-    if line[0] == "@":
+    if line[0] == "@" or line[0] == "#" or line[0] == "&":
         ONS_instr = True
         line = line[1:]
     # If it's a timer or counter tag, add the .DN bit. Check either TIM/CNT, or Txxxx/Cxxxx using regex
@@ -493,11 +493,11 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
 
     # Convert the tagname
     if param != None:
-        param = convertTagname(param, tagfile, system_name)
+        param = convert_tagname(param, tagfile, system_name)
     if param2 != None:
-        param2 = convertTagname(param2, tagfile, system_name)
+        param2 = convert_tagname(param2, tagfile, system_name)
     if param3 != None:
-        param3 = convertTagname(param3, tagfile, system_name)
+        param3 = convert_tagname(param3, tagfile, system_name)
 
     # Check to add .DN bit
     if NEEDS_DN_BIT:
@@ -534,11 +534,13 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
    
     elif instr_type.upper() == "COPY":
-        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param = param.replace("#", "")
+        # print("Copy instruction")
+        if param.find("#") != -1 or param.find("&") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "").replace("&", "")
             # Omron arguments are Length, Source, Destination
             # AB arguments are Source, Destination, Length
-            converted_instruction = conv_instr + "(" + param2 + "," + param3 + "," + param + ")"
+        converted_instruction = conv_instr + "(" + param2 + "," + param3 + "," + param + ")"
+
     
     # For BTD instructions like MOVB
     elif instr_type.upper() == "BTD":
@@ -1284,7 +1286,7 @@ def extractLine(line: str):
     return instr, param, instr_type, conv_instr, param2, param3
 
 
-def convertTagname(address: str, tagfile: pd.DataFrame, system_name:str):
+def convert_tagname(address: str, tagfile: pd.DataFrame, system_name:str):
     # This function searches the tagfile to determine if a converted tagname exists
     # If it does, it returns the converted tagname
     # If it doesn't, it returns the original tagname
@@ -1304,15 +1306,17 @@ def convertTagname(address: str, tagfile: pd.DataFrame, system_name:str):
         return address
     else:
         # Search the tagfile for the address
-        # try:
-        if address.find("HR") >= 0 or address.find("AR") >= 0:
+        try:
             query = tagfile.query(f'address == "{address}"')
-        elif address.isnumeric() or address.find(".") >= 0:
+        except:
+            query = None
+        # if address.find("HR") >= 0 or address.find("AR") >= 0:
+        # elif address.isnumeric() or address.find(".") >= 0:
             # print(1)
-            query = tagfile.query(f'address == "{address}"')
-        else:
+            # query = tagfile.query(f'address == "{address}"')
+        # else:
             # print(2)
-            query = tagfile.query(f'address == "{address}"')
+            # query = tagfile.query(f'address == "{address}"')
         # print(query)
         if query.empty:
             converted_tagname = ""

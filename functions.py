@@ -17,7 +17,7 @@ def getFileContents(tag_info_filename, logic_input_filename, VIEW_TAGS=False):
     # 3. PLC Logic File
 
     # Get all directories
-    _, input_dir, output_dir, _ = ff.getDirectories(dir)
+    _, input_dir, _, _ = ff.getDirectories(dir)
 
     # Get System Name
     system_name = ff.getSystemName(tag_info_filename)
@@ -59,6 +59,28 @@ def getFileContents(tag_info_filename, logic_input_filename, VIEW_TAGS=False):
 
     print("Files extracted successfully")
     return plc_taglist, plc_logic_file
+
+def readTagLookup(tag_lookup_filename):
+    # Read in tag lookup file
+
+    # Get all directories
+    _, input_dir, _, _ = ff.getDirectories(dir)
+
+    # Get System Name
+    system_name = ff.getSystemName(tag_lookup_filename)
+
+    # Set input dir
+    os.chdir(input_dir)
+
+    # 1. Extract PLC Tag List
+    file = os.path.join(input_dir, tag_lookup_filename)
+
+    tag_lookup = pd.read_csv(file)
+    tag_lookup = tag_lookup.fillna('')
+    # print(tag_lookup.head())
+
+    return tag_lookup
+
 
 def tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_filename, CREATE_TAGS = True, VIEW_TAGS=False, CREATE_LOOKUP = True, CONVERT_SCADA_TAGS = True):
 
@@ -147,7 +169,7 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
         print("Begin logic conversion")
         try:
             routine = lc.extract_rungs(logic_wb) # Extracts comments and rungs into routine object
-            routine, catchErrors = lc.loop_rungs_v2(routine, tag_lookup, system_name) # Converts rungs to ladder logic
+            routine, catchErrors = lc.loop_rungs_v2(routine, tag_lookup, sys_name) # Converts rungs to ladder logic
             # routine.rungs[0].viewBlocks()
             # catchErrors = lc.loop_rungs(logic_wb, output_file, tag_lookup, view_rungs=VIEW_RUNGS, num_rungs=-1, system_name= sys_name_short)
             # print("Conversion complete")
