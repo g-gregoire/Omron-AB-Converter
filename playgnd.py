@@ -11,7 +11,13 @@ NL = "\n"
 dir = os.getcwd()
 # Open file
 
-rng = 2
+num = 10
+i = 0
 
-for i in reversed(range(rng+1)):
-    print(f"Idx {i}") 
+while i < num:
+    print(f"i: {i}")
+    if i == 5:
+        print("changing i to 8")
+        i = 8
+        continue
+    i += 1

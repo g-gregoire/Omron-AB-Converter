@@ -1,48 +1,29 @@
-      ' Struggle Ex - TR0 used multiple times
-      LD P_On
-      OUT TR0
-      AND 500.06
-      DIFU(13) 500.10
-      AND 500.10
-      SET 501.00
-      RSET 39.08
-      RSET 39.11
-      RSET 500.06
-      LD TR0
-      AND 501.00
-      OUT TR0
-      ANDNOT TIM032
-      OUT TR1
-      TIM 029 #9000
-      AND TIM029
-      TIM 033 #9000
-      LD TR1
-      TIM 034 #9100
-      LD TR0
-      ANDNOT TIM033
-      RSET 39.11
-      LD TR0
-      AND TIM034
-      RSET 39.08
-      LD TR0
-      AND TIM033
-      ANDNOT TIM032
-      SET 39.11
-      TIM 032 #100
-      LD TR0
-      AND TIM029
-      ANDNOT TIM034
-      SET 39.08
-      LD TR0
-      RSET 39.10
-      RSET 39.09
-      RSET 501.01
-      RSET 501.10
-      RSET 501.02
-      RSET 501.03
-      RSET 501.07
-      RSET 501.14
-      RSET 502.05
+      'Test rung
+      LD _1FILL1STRT
+      ANDNOT _1FILL1CMPLT
+      ANDNOT 3353.00
+      LD _1FILL2STRT
+      ANDNOT _1FILL2CMPLT
+      ORLD
+      LD _1FILL3STRT
+      ANDNOT _1FILL3CMPLT
+      LD _1FILL4STRT
+      ANDNOT _1FILL4CMPLT
+      ORLD
+      ANDNOT H16.00
+      ORLD
+      LD _1WF3START
+      ANDNOT _1WF3ADDCMPLT
+      ORLD
+      LD _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      ANDNOT H16.00
+      ORLD
+      ANDNOT _1WTRFEEDAM
+      LD _1WTRFEEDAM
+      AND _1WTRFEEDM
+      ORLD
+      OUT _1WTRFEED
       ^^^
       BREAK
       ' Struggle Ex 3 - too many branches
@@ -83,11 +64,4 @@
       LD TR0
       RSET 39.10
       RSET 39.09
-      RSET 501.01
-      RSET 501.10
-      RSET 501.02
-      RSET 501.03
-      RSET 501.07
-      RSET 501.14
-      RSET 502.05
       ^^^

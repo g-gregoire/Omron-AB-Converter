@@ -89,6 +89,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
     index = 0
     multiple_out_added = 0
     working_logic = []
+    OR_active = False
 
     multiple_count = 0
     for block in block_array:
@@ -109,7 +110,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
         # Get working variables
         logic = block.converted_block
         block_type = block.block_type
-        # print(index, block, block_type)
+        print(index, block, block_type)
 
         # Determine previous block in array (next one in reversed array)
         try:
@@ -127,6 +128,8 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
                     working_logic.append("]")
                     working_logic.append(logic[0])
                     multiple_out_added += 1
+                    print("set OR active")
+                    OR_active = True
                 elif 0 < multiple_out_added < (multiple_count - 1):
                     working_logic.append(",")
                     working_logic.append(logic[0])
@@ -135,6 +138,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
                     working_logic.append(",")
                     working_logic.append(logic[0])
                     working_logic.append("[")
+                    OR_active = False
                 else:
                     working_logic.append(logic[0])
             else: # If single output, no brackets needed
@@ -148,7 +152,13 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
                 #     working_logic.append("[")
                 #     working_logic.append(logic[0])
                 # else:
-                working_logic.append(logic[0])
+                if OR_active and (multiple_out_added > 1): # If or active, and more than 1 output added already, wrap output in brackets
+                    print("OR active - wrap in brackets")
+                    working_logic.insert(0, "]")
+                    working_logic.append("[")
+                    working_logic.append(logic[0])
+                else:
+                    working_logic.append(logic[0])
             else: # If single output, no brackets needed
                 working_logic.append(logic[0])
 
@@ -219,3 +229,15 @@ def concat_block_list(initial:List[Block], inter:List[Block], final:List[Block])
     # for block in block_list:
     #     print(block)
     return block_list
+
+def determine_block_type(type_array:List[str]) -> str:
+    if len(type_array) == 1:
+        block_type = type_array[0]
+    else:
+        if "START" in type_array:
+            block_type = "START"
+        elif "OUT" in type_array:
+            block_type = "OUT"
+        else:
+            block_type = "IN"
+    return block_type

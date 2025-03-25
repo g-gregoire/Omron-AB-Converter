@@ -1,4 +1,5 @@
 import lookup as lk
+import utilities_logic as ul
 
 from typing import List, Dict
 import re
@@ -98,7 +99,7 @@ class Rung:
     
     def addBlock(self, block: Block):
         self.blocks.append(block)
-        return []
+        return [], [] # Output used to reset current_details and type_array
 
     def addConnector(self, connector: str):
         self.connectors.append(connector)
@@ -118,7 +119,7 @@ class Rung:
         else:
             print("\n", len(self.blocks), "Blocks:")
             for block in self.blocks:
-                print(block)
+                print(block, block.block_type)
 
     def viewRung(self):
         print("Comment: ", self.comment)
@@ -206,7 +207,7 @@ class Rung:
                 converted_block = "[" + block1.converted_block[0] + "," + block2.converted_block[0] + "]"
         else:
             converted_block = block1.converted_block[0] + block2.converted_block[0]
-        block_type = block2.block_type # Allow for and IN + OUT block to stay OUT type
+        block_type = ul.determine_block_type([block1.block_type, block2.block_type])
         blocks_in = block1.blocks_in
         details["logic"] = converted_block
         details["converted_block"] = converted_block
