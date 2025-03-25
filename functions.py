@@ -81,7 +81,6 @@ def readTagLookup(tag_lookup_filename):
 
     return tag_lookup
 
-
 def tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_filename, CREATE_TAGS = True, VIEW_TAGS=False, CREATE_LOOKUP = True, CONVERT_SCADA_TAGS = True):
 
     sys_name = system_name[0]
@@ -156,7 +155,7 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
     print("Creating conversion files")
     logic_wb = ff.openFile(logic_input_file)
     logic_wb = ff.prepareFile(logic_wb) # Remove everything except the Mnemonic section
-    output_file = ff.createFile(output_filename, logic_input_file)
+    output_file, simple_output = ff.createFile(output_filename, logic_input_file, simple_output=True)
     output_file = ff.addContext(output_file, sys_name) # Add required headers, etc.
 
     # Add specific logic chunks
@@ -169,10 +168,7 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
         print("Begin logic conversion")
         try:
             routine = lc.extract_rungs(logic_wb) # Extracts comments and rungs into routine object
-            routine, catchErrors = lc.loop_rungs_v2(routine, tag_lookup, sys_name) # Converts rungs to ladder logic
-            # routine.rungs[0].viewBlocks()
-            # catchErrors = lc.loop_rungs(logic_wb, output_file, tag_lookup, view_rungs=VIEW_RUNGS, num_rungs=-1, system_name= sys_name_short)
-            # print("Conversion complete")
+            routine, catchErrors = lc.loop_rungs_v2(output_file, simple_output, routine, tag_lookup, sys_name_short, view_rungs=VIEW_RUNGS, num_rungs=-1) # Converts rungs to ladder logic
         except Exception as e:
             print("Conversion failed: ", e)
             traceback.print_exc()

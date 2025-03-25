@@ -40,8 +40,9 @@ def extract_rungs(logic_file: pd.DataFrame):
     # routine.viewRungs()
     return routine
 
-def loop_rungs_v2(routine: Routine, tagfile: pd.DataFrame, system_name:str):
+def loop_rungs_v2(output_file, simple_output, routine: Routine, tagfile: pd.DataFrame, system_name:str, view_rungs = False, start_rung=0, num_rungs=-1):
     # This function converts the rungs in a routine
+    rung_num = 0
     catchErrors = {
         "count": 0,
         "list": [],
@@ -54,7 +55,23 @@ def loop_rungs_v2(routine: Routine, tagfile: pd.DataFrame, system_name:str):
             rung, catchErrors = convert_blocks(rung, catchErrors, tagfile, system_name)
             # rung.viewBlocks()
             rung = block_assembler_v2(rung)
-            rung.viewBlocks()            
+            # rung.viewBlocks()
+
+            # Add the rung to the output file
+            rung_num = ff.addRung(output_file, simple_output, rung_num, rung.converted_logic, rung.comment)
+            # rung_num += 1
+
+            # If the view_rungs flag is set, print the rung
+            if view_rungs:
+                rung.viewBlocks()
+
+            # If the number of rungs is not specified, continue to the end of the file
+            if num_rungs == -1:
+                pass
+            # If the number of rungs is specified, check if the number of rungs is reached
+            elif rung_num >= (start_rung+num_rungs):
+                print("Reached end of requested rungs")
+                return routine, catchErrors
         
     return routine, catchErrors
 
@@ -395,6 +412,9 @@ def block_assembler_v2(rung: Rung):
         
         # Lastly, once we're done with all TR blocks, we can combine the logic blocks
         rung.blocks = ul.combine_simple_logic(rung.blocks)
+    
+    # Finally, set the converted logic to the correct string property
+    rung.converted_logic = rung.blocks[0].converted_block[0]
         # rung.viewBlocks()
     
     return rung
@@ -422,12 +442,14 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
     try: param3 = params[2]
     except: param3 = None
 
-    # Check if param matches Txxxx or Cxxxx, and then update to TIMxxxx or Cxxxx
+    # Check if param matches Txxxx or Cxxxx, and then update to TIMxxxx or Cxxxx.
+    # Doing this so that it matches with the actual instruction (TIM, CNT)
     if param != None and (re.match(r"T\d{3,4}", param) or re.match(r"C\d{3,4}", param)):
+        # print("Timer tag", param)
         if param.find("T") != -1:
-            param = "TIM" + param[1:]
+            param = "TIM" + param[1:] # Required to match the actual instruction
         elif param.find("C") != -1:
-            param = "CNT" + param[1:]
+            param = "CNT" + param[1:] # Required to match the actual instruction
 
     if line[0] == "@" or line[0] == "#" or line[0] == "&":
         ONS_instr = True
@@ -637,6 +659,64 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         one_shot_index += 1
 
     return converted_instruction, catchErrors
+
+def convert_tagname(address: str, tagfile: pd.DataFrame, system_name:str):
+    # This function searches the tagfile to determine if a converted tagname exists
+    # If it does, it returns the converted tagname
+    # If it doesn't, it returns the original tagname
+    # print(address)
+    INDIRECT_ADDRESS = False
+
+    if tagfile is None:
+        return address
+    
+    # If it's an indirect address, so flag it to be put in the global array
+    if address.find("*") != -1:
+        address = address.replace("*", "")
+        INDIRECT_ADDRESS = True
+    elif address.find("TIM") != -1:
+        address = address.replace("TIM", "T")
+        address = "T" + str(int(address[1:])) # Required shortening to match tag lookup file (eg. T0090 -> T90)
+    elif address.find("CNT") != -1:
+        address = address.replace("CNT", "C")
+        address = "C" + str(int(address[1:])) # Required shortening to match tag lookup file (eg. C0090 -> C90)
+
+    # if it's a hardcoded value (e.g. #10), return the value as is
+    if address.find("#") != -1 or address.find("&") != -1: # Do not convert hardcoded values
+        return address
+    if address.find("P_") != -1: # Do not convert System Parameters (P_on, P_First_Cycle, etc.)
+        return address   
+    else:
+        # Search the tagfile for the address
+        try:
+            query = tagfile.query(f'address == "{address}"')
+        except:
+            query = None
+        # if address.find("HR") >= 0 or address.find("AR") >= 0:
+        # elif address.isnumeric() or address.find(".") >= 0:
+            # print(1)
+            # query = tagfile.query(f'address == "{address}"')
+        # else:
+            # print(2)
+            # query = tagfile.query(f'address == "{address}"')
+        # print(query)
+        if query.empty:
+            converted_tagname = ""
+            # split = address.split(".")
+            converted_tagname = system_name + "_ADDR_" + address
+            # for word in split:
+            #     if word == split[-1]: converted_tagname += word
+            #     else: converted_tagname = tagname + word + "_"
+        else:
+            converted_tagname = query["tagname"].to_string(index=False)
+        
+        # Add converted tagname to the global array if needed
+        if INDIRECT_ADDRESS:
+            converted_tagname = system_name + "Global_Array[" + converted_tagname + "]" 
+            INDIRECT_ADDRESS = False
+
+        # print(converted_tagname)
+        return converted_tagname
 
 def loop_rungs(logic_file: pd.DataFrame, output_file, tagfile, view_rungs = False, start_rung=0, num_rungs=-1, system_name:str="Sterilizer"):
     rung = ""
@@ -1284,57 +1364,6 @@ def extractLine(line: str):
     # print(instr, param, param2, param3)
 
     return instr, param, instr_type, conv_instr, param2, param3
-
-
-def convert_tagname(address: str, tagfile: pd.DataFrame, system_name:str):
-    # This function searches the tagfile to determine if a converted tagname exists
-    # If it does, it returns the converted tagname
-    # If it doesn't, it returns the original tagname
-    # print(address)
-    INDIRECT_ADDRESS = False
-
-    if tagfile is None:
-        return address
-    
-    # If it's an indirect address, so flag it to be put in the global array
-    if address.find("*") != -1:
-        address = address.replace("*", "")
-        INDIRECT_ADDRESS = True
-
-    # if it's a hardcoded value (e.g. #10), return the value as is
-    if address.find("#") != -1:
-        return address
-    else:
-        # Search the tagfile for the address
-        try:
-            query = tagfile.query(f'address == "{address}"')
-        except:
-            query = None
-        # if address.find("HR") >= 0 or address.find("AR") >= 0:
-        # elif address.isnumeric() or address.find(".") >= 0:
-            # print(1)
-            # query = tagfile.query(f'address == "{address}"')
-        # else:
-            # print(2)
-            # query = tagfile.query(f'address == "{address}"')
-        # print(query)
-        if query.empty:
-            converted_tagname = ""
-            split = address.split(".")
-            tagname = system_name + "_ADDR_"
-            for word in split:
-                if word == split[-1]: converted_tagname += word
-                else: converted_tagname = tagname + word + "_"
-        else:
-            converted_tagname = query["tagname"].to_string(index=False)
-        
-        # Add converted tagname to the global array if needed
-        if INDIRECT_ADDRESS:
-            converted_tagname = "Global_Array[" + converted_tagname + "]" 
-            INDIRECT_ADDRESS = False
-
-        # print(converted_tagname)
-        return converted_tagname
     
 def checkMultipleOutputs(rung):
     # This function checks for multiple outputs in a rung

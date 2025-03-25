@@ -128,7 +128,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
                     working_logic.append("]")
                     working_logic.append(logic[0])
                     multiple_out_added += 1
-                    print("set OR active")
+                    # print("set OR active")
                     OR_active = True
                 elif 0 < multiple_out_added < (multiple_count - 1):
                     working_logic.append(",")

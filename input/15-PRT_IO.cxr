@@ -5,142 +5,142 @@
   <SECTION>
     <MNEMONIC>
       '  DO Mapping PRT1
-      LD M1000_MC
-      LDNOT PRT1_AG_TON
-      OR ON
-      LD>=(325) PRT1_STEP #221
-      AND<=(315) PRT1_STEP #230
+      LD W5.00
+      LDNOT T3033
+      OR P_On
+      LD>=(325) D32100 #221
+      AND<=(315) D32100 #230
       ORLD
       ANDLD
       OUT 3202.00
       ^^^
-      LD M3_SPARE1
+      LD W5.01
       OUT 3202.01
       ^^^
-      LD V1001_ZC
+      LD W5.02
       OUT 3202.02
       ^^^
-      LD V1002_ZC
+      LD W5.03
       OUT 3202.03
       ^^^
-      LD V1003_ZC
+      LD W5.04
       OUT 3202.04
       ^^^
-      LD V1004_ZC
+      LD W5.05
       OUT 3202.05
       ^^^
-      LD V1005_ZC
+      LD W5.06
       OUT 3202.06
       ^^^
-      LD V1006_ZC
+      LD W5.07
       OUT 3202.07
       ^^^
-      LD V1007_ZC
+      LD W5.08
       OUT 3202.08
       ^^^
-      LD V1008_ZC
+      LD W5.09
       OUT 3202.09
       ^^^
-      LD M3_SPARE2
+      LD W5.10
       OUT 3202.10
       ^^^
-      LD V1010_ZC
+      LD W5.11
       OUT 3202.11
       ^^^
-      LD V1011_ZC
+      LD W5.12
       OUT 3202.12
       ^^^
-      LD V1012_ZC
+      LD W5.13
       OUT 3202.13
       ^^^
-      LD V1013_ZC
+      LD W5.14
       OUT 3202.14
       ^^^
-      LD M3_SPARE3
+      LD W5.15
       OUT 3202.15
       ^^^
       '  DO Mapping PRT2
-      LD M2000_MC
-      LDNOT PRT2_AG_TON
-      OR ON
-      LD>=(325) PRT2_STEP #221
-      AND<=(315) PRT2_STEP #230
+      LD W6.00
+      LDNOT T3083
+      OR P_On
+      LD>=(325) D32200 #221
+      AND<=(315) D32200 #230
       ORLD
       ANDLD
       OUT 3203.00
       ^^^
-      LD M4_SPARE1
+      LD W6.01
       OUT 3203.01
       ^^^
-      LD V2001_ZC
+      LD W6.02
       OUT 3203.02
       ^^^
-      LD V2002_ZC
+      LD W6.03
       OUT 3203.03
       ^^^
-      LD V2003_ZC
+      LD W6.04
       OUT 3203.04
       ^^^
-      LD V2004_ZC
+      LD W6.05
       OUT 3203.05
       ^^^
-      LD V2005_ZC
+      LD W6.06
       OUT 3203.06
       ^^^
-      LD V2006_ZC
+      LD W6.07
       OUT 3203.07
       ^^^
-      LD V2007_ZC
+      LD W6.08
       OUT 3203.08
       ^^^
-      LD V2008_ZC
+      LD W6.09
       OUT 3203.09
       ^^^
-      LD M4_SPARE2
+      LD W6.10
       OUT 3203.10
       ^^^
-      LD V2010_ZC
+      LD W6.11
       OUT 3203.11
       ^^^
-      LD V2011_ZC
+      LD W6.12
       OUT 3203.12
       ^^^
-      LD V2012_ZC
+      LD W6.13
       OUT 3203.13
       ^^^
-      LD V2013_ZC
+      LD W6.14
       OUT 3203.14
       ^^^
-      LD M4_SPARE3
+      LD W6.15
       OUT 3203.15
       ^^^
       '  DO Mapping ACID DOSING / CAUSTIC SYATEM
-      LD V120_ZC
+      LD W7.00
       OUT 3204.00
       ^^^
-      LD V121_ZC
+      LD W7.01
       OUT 3204.01
       ^^^
-      LD P120_MC
+      LD W7.02
       OUT 3204.02
       OUT H350.00
       ^^^
-      LD V105
+      LD W7.03
       OUT 3204.03
       ^^^
-      LD Spray_Ball_WFT
+      LD W7.04
       OUT 3204.04
       ^^^
-      LD Drain_Valve_WFT
+      LD W7.05
       OUT 3204.05
       ^^^
-      LD M5_SPARE4
+      LD W7.06
       OUT 3204.06
       ^^^
-      LD V120A_OUT_ZC
+      LD W7.07
       OUT 3204.07
       ^^^
-      LD ON
+      LD P_On
       LD 350.03
       OR 350.01
       OR 350.00
@@ -148,7 +148,7 @@
       ANDLD
       OUT 3204.08
       ^^^
-      LD ON
+      LD P_On
       LD 350.03
       AND 350.06
       LD 350.01
@@ -163,611 +163,611 @@
       ANDLD
       OUT 3204.09
       ^^^
-      LD V115_ZC
+      LD W7.10
       OUT 3204.10
       ^^^
-      LD P110_MC
+      LD W7.11
       OUT 3204.11
       ^^^
-      LD V110_ZC
+      LD W7.12
       OUT 3204.12
       ^^^
-      LD P100_MC
+      LD W7.13
       OUT 3204.13
       ^^^
-      LD TK_100
+      LD W7.14
       OUT 3204.14
       ^^^
-      LD M5_SPARE11
+      LD W7.15
       OUT 3204.15
       ^^^
       '  DO Mapping PRT3
-      LD M3000_MC
-      LDNOT PRT3_AG_TON
-      OR ON
-      LD>=(325) PRT3_STEP #221
-      AND<=(315) PRT3_STEP #230
+      LD W12.00
+      LDNOT T3133
+      OR P_On
+      LD>=(325) D32300 #221
+      AND<=(315) D32300 #230
       ORLD
       ANDLD
       OUT 3201.00
       ^^^
-      LD P1M5_SPARE1
+      LD W12.01
       OUT 3201.01
       ^^^
-      LD V3001_ZC
+      LD W12.02
       OUT 3201.02
       ^^^
-      LD V3002_ZC
+      LD W12.03
       OUT 3201.03
       ^^^
-      LD V3003_ZC
+      LD W12.04
       OUT 3201.04
       ^^^
-      LD V3004_ZC
+      LD W12.05
       OUT 3201.05
       ^^^
-      LD V3005_ZC
+      LD W12.06
       OUT 3201.06
       ^^^
-      LD V3006_ZC
+      LD W12.07
       OUT 3201.07
       ^^^
-      LD V3007_ZC
+      LD W12.08
       OUT 3201.08
       ^^^
-      LD V3008_ZC
+      LD W12.09
       OUT 3201.09
       ^^^
-      LD P1M5_SPARE2
+      LD W12.10
       OUT 3201.10
       ^^^
-      LD V3010_ZC
+      LD W12.11
       OUT 3201.11
       ^^^
-      LD V3011_ZC
+      LD W12.12
       OUT 3201.12
       ^^^
-      LD V3012_ZC
+      LD W12.13
       OUT 3201.13
       ^^^
-      LD V3013_ZC
+      LD W12.14
       OUT 3201.14
       ^^^
-      LD P1M5_SPARE3
+      LD W12.15
       OUT 3201.15
       ^^^
       '  DO Mapping PRT4
-      LD M4000_MC
-      LDNOT PRT4_AG_TON
-      OR ON
-      LD>=(325) PRT4_STEP #221
-      AND<=(315) PRT4_STEP #230
+      LD W15.00
+      LDNOT T4033
+      OR P_On
+      LD>=(325) D32500 #221
+      AND<=(315) D32500 #230
       ORLD
       ANDLD
-      OUT M4000
+      OUT 3200.00
       ^^^
-      LD P1M7_SPARE1
+      LD W15.01
       OUT 700.00
       ^^^
-      LD V4001_ZC
-      OUT V4001
+      LD W15.02
+      OUT 3200.02
       ^^^
-      LD V4002_ZC
-      OUT V4002
+      LD W15.03
+      OUT 3200.03
       ^^^
-      LD V4003_ZC
-      OUT V4003
+      LD W15.04
+      OUT 3200.04
       ^^^
-      LD V4004_ZC
-      OUT V4004
+      LD W15.05
+      OUT 3200.05
       ^^^
-      LD V4005_ZC
-      OUT V4005
+      LD W15.06
+      OUT 3200.06
       ^^^
-      LD V4006_ZC
-      OUT V4006
+      LD W15.07
+      OUT 3200.07
       ^^^
-      LD V4007_ZC
-      OUT V4007
+      LD W15.08
+      OUT 3200.08
       ^^^
-      LD V4008_ZC
-      OUT V4008
+      LD W15.09
+      OUT 3200.09
       ^^^
-      LD P1M7_SPARE2
-      OUT V4009
+      LD W15.10
+      OUT 3200.10
       ^^^
-      LD V4010_ZC
-      OUT V4010
+      LD W15.11
+      OUT 3200.11
       ^^^
-      LD V4011_ZC
+      LD W15.12
       OUT 3200.12
       ^^^
-      LD V4012_ZC
+      LD W15.13
       OUT 3200.13
       ^^^
-      LD V4013_ZC
+      LD W15.14
       OUT 3200.14
       ^^^
-      LD P1M7_SPARE3
+      LD W15.15
       OUT 3200.15
       ^^^
       '  DI Mapping PRT1
       LD 3332.00
-      OUT M1000_MN
+      OUT W0.00
       ^^^
       LD 3332.01
-      OUT M1000_FA
+      OUT W0.01
       ^^^
       LD 3332.02
-      OUT LS_RINDTK1_LL
+      OUT W0.02
       ^^^
       LD 3332.03
-      OUT STK_PIT_OVERFLOW_SW
+      OUT W0.03
       ^^^
       LD 3332.04
-      OUT Caustic_SYS_HeatTrace
+      OUT W0.04
       ^^^
       LD 3332.05
-      OUT LS_PRETK1_HL
+      OUT W0.05
       ^^^
       LD 3332.06
-      OUT V1011_ZH
+      OUT W0.06
       ^^^
       LD 3332.07
-      OUT V1012_ZH
+      OUT W0.07
       ^^^
       LD 3332.08
-      OUT V1013_ZH
+      OUT W0.08
       ^^^
       LD 3332.09
-      OUT M0_SPARE1
+      OUT W0.09
       ^^^
       LD 3332.10
-      OUT M0_SPARE2
+      OUT W0.10
       ^^^
       LD 3332.11
-      OUT M0_SPARE3
+      OUT W0.11
       ^^^
       LD 3332.12
-      OUT LS120_ON
+      OUT W0.12
       ^^^
       LD 3332.13
-      OUT LS_LH120_CAUSTIC
+      OUT W0.13
       ^^^
       LD 3332.14
-      OUT V115_ZH
+      OUT W0.14
       ^^^
       LD 3332.15
-      OUT P110_MN
+      OUT W0.15
       ^^^
       '  DI Mapping PRT1
       LD 3333.00
-      OUT M0_SPARE8
+      OUT W1.00
       ^^^
       LD 3333.01
-      OUT M0_SPARE9
+      OUT W1.01
       ^^^
       LD 3333.02
-      OUT V1001_ZH
+      OUT W1.02
       ^^^
       LD 3333.03
-      OUT V1002_ZH
+      OUT W1.03
       ^^^
       LD 3333.04
-      OUT V1002_ZL
+      OUT W1.04
       ^^^
       LD 3333.05
-      OUT V1003_ZH
+      OUT W1.05
       ^^^
       LD 3333.06
-      OUT V1004_ZH
+      OUT W1.06
       ^^^
       LD 3333.07
-      OUT V1005_ZH
+      OUT W1.07
       ^^^
       LD 3333.08
-      OUT V1006_ZH
+      OUT W1.08
       ^^^
       LD 3333.09
-      OUT V1007_ZH
+      OUT W1.09
       ^^^
       LD 3333.10
-      OUT V1007_ZL
+      OUT W1.10
       ^^^
       LD 3333.11
-      OUT V1008_ZH
+      OUT W1.11
       ^^^
       LD 3333.12
-      OUT M0_SPARE10
+      OUT W1.12
       ^^^
       LD 3333.13
-      OUT M0_SPARE11
+      OUT W1.13
       ^^^
       LD 3333.14
-      OUT V1010_ZH
+      OUT W1.14
       ^^^
       LD 3333.15
-      OUT M0_SPARE12
+      OUT W1.15
       ^^^
       '  DI Mapping PRT2
       LD 3334.00
-      OUT M2000_MN
+      OUT W2.00
       ^^^
       LD 3334.01
-      OUT M2000_FA
+      OUT W2.01
       ^^^
       LD 3334.02
-      OUT LS_RINDTK2_LL
+      OUT W2.02
       ^^^
       LD 3334.03
-      OUT LS_RINDTK2_HL
+      OUT W2.03
       ^^^
       LD 3334.04
-      OUT LS_PRETK2_LL
+      OUT W2.04
       ^^^
       LD 3334.05
-      OUT LS_PRETK2_HL
+      OUT W2.05
       ^^^
       LD 3334.06
-      OUT V2011_ZH
+      OUT W2.06
       ^^^
       LD 3334.07
-      OUT V2012_ZH
+      OUT W2.07
       ^^^
       LD 3334.08
-      OUT V2013_ZH
+      OUT W2.08
       ^^^
       LD 3334.09
-      OUT M1_SPARE1
+      OUT W2.09
       ^^^
       LD 3334.10
-      OUT M1_SPARE2
+      OUT W2.10
       ^^^
       LD 3334.11
-      OUT M1_SPARE3
+      OUT W2.11
       ^^^
       LD 3334.12
-      OUT M1_SPARE4
+      OUT W2.12
       ^^^
       LD 3334.13
-      OUT M1_SPARE5
+      OUT W2.13
       ^^^
       LD 3334.14
-      OUT M1_SPARE6
+      OUT W2.14
       ^^^
       LD 3334.15
-      OUT M1_SPARE7
+      OUT W2.15
       ^^^
       '  DI Mapping PRT2
       LD 3335.00
-      OUT M1_SPARE8
+      OUT W3.00
       ^^^
       LD 3335.01
-      OUT M1_SPARE9
+      OUT W3.01
       ^^^
       LD 3335.02
-      OUT V2001_ZH
+      OUT W3.02
       ^^^
       LD 3335.03
-      OUT V2002_ZH
+      OUT W3.03
       ^^^
       LD 3335.04
-      OUT V2002_ZL
+      OUT W3.04
       ^^^
       LD 3335.05
-      OUT V2003_ZH
+      OUT W3.05
       ^^^
       LD 3335.06
-      OUT V2004_ZH
+      OUT W3.06
       ^^^
       LD 3335.07
-      OUT V2005_ZH
+      OUT W3.07
       ^^^
       LD 3335.08
-      OUT V2006_ZH
+      OUT W3.08
       ^^^
       LD 3335.09
-      OUT V2007_ZH
+      OUT W3.09
       ^^^
       LD 3335.10
-      OUT V2007_ZL
+      OUT W3.10
       ^^^
       LD 3335.11
-      OUT V2008_ZH
+      OUT W3.11
       ^^^
       LD 3335.12
-      OUT M1_SPARE10
+      OUT W3.12
       ^^^
       LD 3335.13
-      OUT M1_SPARE11
+      OUT W3.13
       ^^^
       LD 3335.14
-      OUT V2010_ZH
+      OUT W3.14
       ^^^
       LD 3335.15
-      OUT M1_SPARE12
+      OUT W3.15
       ^^^
       '  DI Mapping   ACID DOSING / CAUSTIC SYSTEM
       LD 3336.00
-      OUT V120_ZH
+      OUT W4.00
       ^^^
       LD 3336.01
-      OUT V121_ZH
+      OUT W4.01
       ^^^
       LD 3336.02
-      OUT LS_TK120_LH
+      OUT W4.02
       ^^^
       LD 3336.03
-      OUT V120A_OUT_ZH
+      OUT W4.03
       ^^^
       LD 3336.04
-      OUT V105_ZH
+      OUT W4.04
       ^^^
       LD 3336.05
-      OUT P120_MN
+      OUT W4.05
       ^^^
       LD 3336.06
-      OUT SKM_BSN_EXIT
+      OUT W4.06
       ^^^
       LD 3336.07
-      OUT GREASE_SYSTEM
+      OUT W4.07
       ^^^
       LD 3336.08
-      OUT GREASE_PUMP_RUNNING
+      OUT W4.08
       ^^^
       LD 3336.09
-      OUT GREASE_TANKS_FULL
+      OUT W4.09
       ^^^
       LD 3336.10
-      OUT GREASE_PUMP_NO_FLOW
+      OUT W4.10
       ^^^
       LD 3336.11
-      OUT LS_LH110_CAUSTIC
+      OUT W4.11
       ^^^
       LD 3336.12
-      OUT LS_LH100_CAUSTIC
+      OUT W4.12
       ^^^
       LD 3336.13
-      OUT LS_LS100_CAUSTIC
+      OUT W4.13
       ^^^
       LD 3336.14
-      OUT V110_ZH
+      OUT W4.14
       ^^^
       LD 3336.15
-      OUT P100_MN
+      OUT W4.15
       ^^^
       '  DI Mapping PRT3
       LD 3304.00
-      OUT M3000_MN
+      OUT W10.00
       ^^^
       LD 3304.01
-      OUT M3000_FA
+      OUT W10.01
       ^^^
       LD 3304.02
-      OUT LS_RINDTK3_LL
+      OUT W10.02
       ^^^
       LD 3304.03
-      OUT LS_RINDTK3_HL
+      OUT W10.03
       ^^^
       LD 3304.04
-      OUT LS_PRETK3_LL
+      OUT W10.04
       ^^^
       LD 3304.05
-      OUT LS_PRETK3_HL
+      OUT W10.05
       ^^^
       LD 3304.06
-      OUT V3011_ZH
+      OUT W10.06
       ^^^
       LD 3304.07
-      OUT V3012_ZH
+      OUT W10.07
       ^^^
       LD 3304.08
-      OUT V3013_ZH
+      OUT W10.08
       ^^^
       LD 3304.09
-      OUT P1M2_SPARE1
+      OUT W10.09
       ^^^
       LD 3304.10
-      OUT P1M2_SPARE2
+      OUT W10.10
       ^^^
       LD 3304.11
-      OUT P1M2_SPARE3
+      OUT W10.11
       ^^^
       LD 3304.12
-      OUT P1M2_SPARE4
+      OUT W10.12
       ^^^
       LD 3304.13
-      OUT P1M2_SPARE5
+      OUT W10.13
       ^^^
       LD 3304.14
-      OUT P1M2_SPARE6
+      OUT W10.14
       ^^^
       LD 3304.15
-      OUT P1M2_SPARE7
+      OUT W10.15
       ^^^
       '  DI Mapping PRT3
       LD 3305.00
-      OUT P1M2_SPARE8
+      OUT W11.00
       ^^^
       LD 3305.01
-      OUT P1M2_SPARE9
+      OUT W11.01
       ^^^
       LD 3305.02
-      OUT V3001_ZH
+      OUT W11.02
       ^^^
       LD 3305.03
-      OUT V3002_ZH
+      OUT W11.03
       ^^^
       LD 3305.04
-      OUT V3002_ZL
+      OUT W11.04
       ^^^
       LD 3305.05
-      OUT V3003_ZH
+      OUT W11.05
       ^^^
       LD 3305.06
-      OUT V3004_ZH
+      OUT W11.06
       ^^^
       LD 3305.07
-      OUT V3005_ZH
+      OUT W11.07
       ^^^
       LD 3305.08
-      OUT V3006_ZH
+      OUT W11.08
       ^^^
       LD 3305.09
-      OUT P1M2_SPARE30
+      OUT W11.12
       ^^^
       LD 3305.10
-      OUT V3007_ZL
+      OUT W11.10
       ^^^
       LD 3305.11
-      OUT V3008_ZH
+      OUT W11.11
       ^^^
       LD 3305.12
-      OUT V3007_ZH
+      OUT W11.09
       ^^^
       LD 3305.13
-      OUT P1M2_SPARE11
+      OUT W11.13
       ^^^
       LD 3305.14
-      OUT V3010_ZH
+      OUT W11.14
       ^^^
       LD 3305.15
-      OUT P1M2_SPARE12
+      OUT W11.15
       ^^^
       '  DI Mapping PRT4
-      LD M4000_AUX
-      OUT M4000_MN
+      LD 3302.00
+      OUT W13.00
       ^^^
-      LD M4000_OL
-      OUT M4000_FA
+      LD 3302.01
+      OUT W13.01
       ^^^
-      LD LS_RINDTK4_LL_OLD
-      OUT LS_RINDTK4_LL
+      LD 3302.02
+      OUT W13.02
       ^^^
-      LD LS_RINDTK4_HL_OLD
-      OUT LS_RINDTK4_HL
+      LD 3302.03
+      OUT W13.03
       ^^^
-      LD LS_PRETK4_LL_OLD
-      OUT LS_PRETK4_LL
+      LD 3302.04
+      OUT W13.04
       ^^^
-      LD LS_PRETK4_HL_OLD
-      OUT LS_PRETK4_HL
+      LD 3302.05
+      OUT W13.05
       ^^^
       LD 3302.06
-      OUT V4011_ZH
+      OUT W13.06
       ^^^
       LD 3302.07
-      OUT V4012_ZH
+      OUT W13.07
       ^^^
       LD 3302.08
-      OUT V4013_ZH
+      OUT W13.08
       ^^^
       LD 3302.09
-      OUT P1M6_SPARE1
+      OUT W13.09
       ^^^
       LD 3302.10
-      OUT P1M6_SPARE2
+      OUT W13.10
       ^^^
       LD 3302.11
-      OUT P1M6_SPARE3
+      OUT W13.11
       ^^^
       LD 3302.12
-      OUT P1M6_SPARE4
+      OUT W13.12
       ^^^
       LD 3302.13
-      OUT P1M6_SPARE5
+      OUT W13.13
       ^^^
       LD 3302.14
-      OUT P1M6_SPARE6
+      OUT W13.14
       ^^^
       LD 3302.15
-      OUT P1M6_SPARE7
+      OUT W13.15
       ^^^
       '  DI Mapping PRT4 
-      LD V4000_ZSO
-      OUT P1M6_SPARE8
+      LD 3303.00
+      OUT W14.00
       ^^^
-      LD V4000_ZSC
-      OUT P1M6_SPARE9
+      LD 3303.01
+      OUT W14.01
       ^^^
-      LD V4001_ZSO
-      OUT V4001_ZH
+      LD 3303.02
+      OUT W14.02
       ^^^
-      LD V4002_ZSO
-      OUT V4002_ZH
+      LD 3303.03
+      OUT W14.03
       ^^^
-      LD V4002_ZSC
-      OUT V4002_ZL
+      LD 3303.04
+      OUT W14.04
       ^^^
-      LD V4003_ZSO
-      OUT V4003_ZH
+      LD 3303.05
+      OUT W14.05
       ^^^
-      LD V4004_ZSO
-      OUT V4004_ZH
+      LD 3303.06
+      OUT W14.06
       ^^^
-      LD V4005_ZSO
-      OUT V4005_ZH
+      LD 3303.07
+      OUT W14.07
       ^^^
-      LD V4006_ZSO
-      OUT V4006_ZH
+      LD 3303.08
+      OUT W14.08
       ^^^
-      LD V4007_ZSO
-      OUT V4007_ZH
+      LD 3303.09
+      OUT W14.09
       ^^^
-      LD V4007_ZSC
-      OUT V4007_ZL
+      LD 3303.10
+      OUT W14.10
       ^^^
-      LD V4008_ZSO
-      OUT V4008_ZH
+      LD 3303.11
+      OUT W14.11
       ^^^
-      LD V4009_ZSO
-      OUT P1M6_SPARE30
+      LD 3303.12
+      OUT W14.12
       ^^^
-      LD V4009_ZSC
-      OUT P1M6_SPARE11
+      LD 3303.13
+      OUT W14.13
       ^^^
-      LD V4010_ZSO
-      OUT V4010_ZH
+      LD 3303.14
+      OUT W14.14
       ^^^
       LD 3303.15
-      OUT P1M6_SPARE12
+      OUT W14.15
       ^^^
       '  AI Mapping
-      LD ON
+      LD P_On
       OUT TR0
       AND P_Off
       AND<=(315) 3337 &6500
-      APR(069) LEVEL_FORMULA 3344 WF_TANK_LEVEL
+      APR(069) D31200 3344 D32151
       LD TR0
       AND<=(315) 3344 &6500
-      SCL(194) 3344 D32674 WF_TANK_LEVEL
+      SCL(194) 3344 D32674 D32151
       LD TR0
       AND>(320) 3344 &6500
-      MOV(021) &0 WF_TANK_LEVEL
+      MOV(021) &0 D32151
       LD TR0
       AND<(310) 3344 &0
-      MOV(021) &0 WF_TANK_LEVEL
+      MOV(021) &0 D32151
       ^^^
       '  RHT#1 Level Scaling
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3339 &6500
-      APR(069) LEVEL_FORMULA 3339 LIT_1001_AI
+      APR(069) D31200 3339 D32102
       LD TR0
       AND>(320) 3339 &6500
-      MOV(021) &0 LIT_1001_AI
+      MOV(021) &0 D32102
       ^^^
       '  PRT#1 Level Scaling
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3340 &6500
-      APR(069) LEVEL_FORMULA 3340 LIT_1002_AI
+      APR(069) D31200 3340 D32104
       LD TR0
       AND>(320) 3340 &6500
-      MOV(021) &0 LIT_1002_AI
+      MOV(021) &0 D32104
       ^^^
       '  Test Scaling for PRT #1 using SCL
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3340 &6500
       SCL(194) 3340 D32674 D32679
@@ -776,35 +776,35 @@
       MOV(021) &0 D32679
       ^^^
       '  PRT#1 Level > 9%
-      LD ON
-      AND>=(325) LIT_1002_AI #900
+      LD P_On
+      AND>=(325) D32104 #900
       TIM 0600 #50
       AND T0600
       OUT 3360.00
       ^^^
       '  PRT#1 Level > 13%
-      LD ON
-      AND>=(325) LIT_1002_AI #1300
+      LD P_On
+      AND>=(325) D32104 #1300
       TIM 0601 #50
       AND T0601
       OUT 3360.01
       ^^^
       '  PRT#1 Level > 16%
-      LD ON
-      AND>=(325) LIT_1002_AI #1500
+      LD P_On
+      AND>=(325) D32104 #1500
       TIM 0602 #50
       AND T0602
       OUT 3360.03
       ^^^
       '  PRT#1 Level < 2%
-      LD ON
-      AND<=(315) LIT_1002_AI #200
+      LD P_On
+      AND<=(315) D32104 #200
       TIM 0603 #1800
       AND T0603
       OUT 3360.04
       ^^^
-      LD ON
-      AND>=(325) LIT_1002_AI #1700
+      LD P_On
+      AND>=(325) D32104 #1700
       TIM 0605 #50
       AND T0605
       OUT 3360.05
@@ -817,16 +817,16 @@
       OUT 3360.02
       ^^^
       '  PRT#2 Level Scaling
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3342 &6500
-      APR(069) LEVEL_FORMULA_2 3342 LIT_2002_AI
+      APR(069) D32440 3342 D32204
       LD TR0
       AND>(320) 3342 &6500
-      MOV(021) &0 LIT_2002_AI
+      MOV(021) &0 D32204
       ^^^
       '  Test Scaling for PRT #2 using SCL
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3342 &6500
       SCL(194) 3342 D32674 D32678
@@ -835,54 +835,54 @@
       MOV(021) &0 D32678
       ^^^
       '  RHT#2 Level Scaling
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3341 &6500
-      APR(069) LEVEL_FORMULA 3341 LIT_2001_AI
+      APR(069) D31200 3341 D32202
       LD TR0
       AND>(320) 3341 &6500
-      MOV(021) &0 LIT_2001_AI
+      MOV(021) &0 D32202
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3345 &6500
-      APR(069) D32730 3345 FIT_120_AI
+      APR(069) D32730 3345 D32401
       LD TR0
       AND>(320) 3345 &6500
-      MOV(021) &0 FIT_120_AI
+      MOV(021) &0 D32401
       LD TR0
-      AND>=(325) FIT_120_AI #0
-      /(430) FIT_120_AI &10 PRT_ACID_WATER_SCL
+      AND>=(325) D32401 #0
+      /(430) D32401 &10 D32610
       LD TR0
-      AND<(310) FIT_120_AI #0
-      MOV(021) &0 PRT_ACID_WATER_SCL
+      AND<(310) D32401 #0
+      MOV(021) &0 D32610
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       LD P_Off
       AND<=(315) 3338 &6500
       OR<=(315) 3343 &6500
       ANDLD
-      APR(069) FLOW_CAUSTC_FORMULA 3343 FIT_100_AI
+      APR(069) D32180 3343 D32414
       LD TR0
       LD P_Off
       AND>(320) 3338 &6500
       OR>(320) 3343 &6500
       ANDLD
-      MOV(021) &0 FIT_100_AI
+      MOV(021) &0 D32414
       LD TR0
-      MOV(021) FIT_100_AI D32600
+      MOV(021) D32414 D32600
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3346 &6500
-      APR(069) FLOW_CAUSTC_FORMULA 3346 FIT_1010_AI
+      APR(069) D32180 3346 D32415
       LD TR0
       AND>(320) 3346 &6500
-      MOV(021) &0 FIT_1010_AI
+      MOV(021) &0 D32415
       ^^^
       '  Test to check accuracy - caustic SCALED instead of APR'd
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3346 &6010
       SCL(194) 3346 D32750 D32754
@@ -891,34 +891,34 @@
       MOV(021) &0 D32754
       ^^^
       '  Test to check accuracy - 0.2s clock pulse instead of 1s
-      LD CAUSTIC_IND
-      AND CAUSTIC_AREA2_IND
-      AND _1_SEC_PULSE
+      LD H357.15
+      AND H357.01
+      AND P_1s
       +C(402) D32755 D32754 D32755
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3347 &6500
-      SCL(194) 3347 D32660 FIT_121_AI
-      BIN(023) FIT_121_AI D32652
+      SCL(194) 3347 D32660 D32400
+      BIN(023) D32400 D32652
       LD TR0
       AND>(320) 3347 &6500
-      MOV(021) &0 FIT_121_AI
+      MOV(021) &0 D32400
       MOV(021) &0 D32652
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
-      AND<=(315) HG_TK2_Level_Raw &6500
-      APR(069) LEVEL_FORMULA HG_TK2_Level_Raw LIT_112_AI
+      AND<=(315) 3348 &6500
+      APR(069) D31200 3348 D32416
       LD TR0
-      AND>(320) HG_TK2_Level_Raw &6500
-      MOV(021) &0 LIT_112_AI
+      AND>(320) 3348 &6500
+      MOV(021) &0 D32416
       ^^^
       '  DAF SLUDGE TANK RATE OF CHANGE ALARM\nIF LEVEL INCREASES > 5%/Hr ALARM
-      LD FIRST_SCAN
+      LD P_First_Cycle_Task
       SET W18.03
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       ANDNOT W18.03
       BSET(071) #0 D32437 D32438
@@ -944,12 +944,12 @@
       SSET(630) D32580 &10
       SSET(630) D32620 &10
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       LD T0340
       @OR W18.03
       ANDLD
-      @PUSH(632) D32580 LIT_112_AI
+      @PUSH(632) D32580 D32416
       LD TR0
       LD>(320) C351 #0
       AND C0351
@@ -958,14 +958,14 @@
       ORLD
       ANDLD
       @FIFO(633) D32580 D32437
-      @-B(414) LIT_112_AI D32437 D32438
+      @-B(414) D32416 D32437 D32438
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       LD T0341
       @OR W18.03
       ANDLD
-      @PUSH(632) D32620 LIT_111_AI
+      @PUSH(632) D32620 D32420
       LD TR0
       LD>(320) C352 #0
       AND C0352
@@ -974,7 +974,7 @@
       ORLD
       ANDLD
       @FIFO(633) D32620 D32630
-      @-B(414) LIT_111_AI D32630 D32631
+      @-B(414) D32420 D32630 D32631
       ^^^
       LD W18.03
       OUT TR0
@@ -1017,93 +1017,93 @@
       RSET W18.05
       ^^^
       '  Scaling for Caustic Level
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3349 &6500
-      SCL(194) 3349 D31270 LIT_100_AI
+      SCL(194) 3349 D31270 D32417
       LD TR0
       AND>(320) 3349 &6500
-      MOV(021) &0 LIT_100_AI
+      MOV(021) &0 D32417
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3350 &6500
-      APR(069) LEVEL_FORMULA 3350 LIT_110_AI
+      APR(069) D31200 3350 D32418
       LD TR0
       AND>(320) 3350 &6500
-      MOV(021) &0 LIT_110_AI
+      MOV(021) &0 D32418
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3351 &6500
-      APR(069) FLOW_CAUSTC_FORMULA 3351 FIT_110
+      APR(069) D32180 3351 D32419
       LD TR0
       AND>(320) 3351 &6500
-      MOV(021) &0 FIT_110
+      MOV(021) &0 D32419
       LD TR0
-      MOV(021) FIT_110 D32604
-      @AND _1_SEC_PULSE
-      +L(401) DT_CAUSTIC_TOTAL_M D32604 DT_CAUSTIC_TOTAL_M
+      MOV(021) D32419 D32604
+      @AND P_1s
+      +L(401) D32606 D32604 D32606
       LD TR0
-      MOVL(498) DT_CAUSTIC_TOTAL_M CAUSTIC_TOTAL_M__AREA9
+      MOVL(498) D32606 D32498
       ^^^
       '  SWITCH Input #7 3336 to Input#7 in the other card 3328 Jun-30-08
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3352 &6500
-      APR(069) LEVEL_FORMULA 3352 LIT_111_AI
+      APR(069) D31200 3352 D32420
       LD TR0
       AND>(320) 3352 &6500
-      MOV(021) &0 LIT_111_AI
+      MOV(021) &0 D32420
       ^^^
       '  AI Mapping RHT #3 and PRT #3
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3310 &6500
-      SCL(194) 3310 D32664 LIT_3001_AI
+      SCL(194) 3310 D32664 D32302
       LD TR0
       AND>(320) 3310 &6500
-      MOV(021) &0 LIT_3001_AI
+      MOV(021) &0 D32302
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3321 &6500
-      SCL(194) 3321 D32664 LIT_3002_AI
+      SCL(194) 3321 D32664 D32304
       LD TR0
       AND>(320) 3321 &6500
-      MOV(021) &0 LIT_3002_AI
+      MOV(021) &0 D32304
       ^^^
       '  AI Mapping RHT #4 and PRT #4 Level
-      LD ON
+      LD P_On
       OUT TR0
-      AND<=(315) LIT4001 &6500
-      SCL(194) LIT4001 D32664 LIT_4001_AI
+      AND<=(315) 3308 &6500
+      SCL(194) 3308 D32664 D32502
       LD TR0
-      AND>(320) LIT4001 &6500
-      MOV(021) &0 LIT_4001_AI
+      AND>(320) 3308 &6500
+      MOV(021) &0 D32502
       ^^^
       '  PRT#4 Level Scaling
-      LD ON
+      LD P_On
       OUT TR0
-      AND<=(315) LIT4002 &6500
-      SCL(194) LIT4002 D32664 LIT_4002_AI
+      AND<=(315) 3309 &6500
+      SCL(194) 3309 D32664 D32504
       LD TR0
-      AND>(320) LIT4002 &6500
-      MOV(021) &0 LIT_4002_AI
+      AND>(320) 3309 &6500
+      MOV(021) &0 D32504
       ^^^
       '  WIND DIRECTION
-      LD ON
+      LD P_On
       SCL(194) 3312 D31420 D31424
       ^^^
       '  WIND SPEED
-      LD ON
-      SCL(194) AIT4002b D31415 D31419
+      LD P_On
+      SCL(194) 3313 D31415 D31419
       ^^^
       LD P_Off
-      APR(069) LEVEL_FORMULA 3315 TIT_3013
+      APR(069) D31200 3315 D31301
       ^^^
       '  Extractor #1 RADAR Level Transmitter
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3316 &6500
       SCL(194) 3316 D31380 D31384
@@ -1111,7 +1111,7 @@
       AND>(320) 3316 &6500
       MOV(021) &0 D31384
       ^^^
-      LD ON
+      LD P_On
       AND>=(325) D31384 #9950
       TIM 0175 #10
       AND T0175
@@ -1121,7 +1121,7 @@
       AND T0239
       OUT W9.06
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND>=(325) D31384 #9200
       LD>=(325) D31384 #9400
@@ -1132,31 +1132,31 @@
       AND T0179
       OUT W8.08
       ^^^
-      LD _1FILL1CMPLT
-      ANDNOT _1HEAT1START
-      LD _1FILL2CMPLT
-      ANDNOT _1HEAT2STRT
+      LD H0.02
+      ANDNOT H0.03
+      LD H0.12
+      ANDNOT H0.13
       ORLD
-      LD _1FILL3CMPLT
-      ANDNOT _1HEAT3STRT
+      LD H2.10
+      ANDNOT H1.06
       ORLD
-      LD _1FILL4CMPLT
-      ANDNOT _1HEAT4STRT
+      LD H2.01
+      ANDNOT H2.02
       ORLD
       TIM 0185 #20
       AND T0185
       MOV(021) D31384 D31385
       ^^^
-      LD _1HEAT1START
-      ANDNOT _1DROP1STRT
-      LD _1HEAT2STRT
-      ANDNOT _1DROP2STRT
+      LD H0.03
+      ANDNOT H0.06
+      LD H0.13
+      ANDNOT H1.00
       ORLD
-      LD _1HEAT3STRT
-      ANDNOT _1DROP3STRT
+      LD H1.06
+      ANDNOT H1.09
       ORLD
-      LD _1HEAT4STRT
-      ANDNOT _1DROP4STRT
+      LD H2.02
+      ANDNOT H2.05
       ORLD
       AND<(310) D31384 D31385
       TIM 0186 #100
@@ -1172,7 +1172,7 @@
       RSET W8.12
       ^^^
       '  Extractor #2 RADAR Level Transmitter
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3318 &6500
       SCL(194) 3318 D31307 D31311
@@ -1180,7 +1180,7 @@
       AND>(320) 3318 &6500
       MOV(021) &0 D31311
       ^^^
-      LD ON
+      LD P_On
       AND>=(325) D31311 #9950
       TIM 0176 #10
       AND T0176
@@ -1190,7 +1190,7 @@
       AND T0240
       OUT W9.07
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND>=(325) D31311 #9400
       TIM 0180 #10
@@ -1198,31 +1198,31 @@
       AND T0180
       OUT W8.09
       ^^^
-      LD _2FILL1CMPLT
-      ANDNOT _2HEAT1STRT
-      LD _2FILL2CMPLT
-      ANDNOT _2HEAT2STRT
+      LD H3.02
+      ANDNOT H3.03
+      LD H3.12
+      ANDNOT H3.13
       ORLD
-      LD _2FILL3CMPLT
-      ANDNOT _2HEAT3START
+      LD H3.00
+      ANDNOT H4.06
       ORLD
-      LD _2FILL4CMPLT
-      ANDNOT _2HEAT4STRT
+      LD H5.10
+      ANDNOT H5.02
       ORLD
       TIM 0187 #20
       AND T0187
       MOV(021) D31311 D31386
       ^^^
-      LD _2HEAT1STRT
-      ANDNOT _2DROP1STRT
-      LD _2HEAT2STRT
-      ANDNOT _2DROP2STRT
+      LD H3.03
+      ANDNOT H3.06
+      LD H3.13
+      ANDNOT H4.00
       ORLD
-      LD _2HEAT3START
-      ANDNOT _2DROP4STRT
+      LD H4.06
+      ANDNOT H5.05
       ORLD
-      LD _2HEAT4STRT
-      ANDNOT _1DROP4STRT
+      LD H5.02
+      ANDNOT H2.05
       ORLD
       AND<(310) D31311 D31386
       TIM 0188 #100
@@ -1238,16 +1238,16 @@
       RSET W8.13
       ^^^
       '  Extractor #3 RADAR Level Transmitter
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3314 &6500
-      SCL(194) 3314 D31296 LIT_3012
+      SCL(194) 3314 D31296 D31300
       LD TR0
       AND>(320) 3314 &6500
-      MOV(021) &0 LIT_3012
+      MOV(021) &0 D31300
       ^^^
-      LD ON
-      AND>=(325) LIT_3012 #9950
+      LD P_On
+      AND>=(325) D31300 #9950
       TIM 0177 #10
       AND T0177
       OUT W8.02
@@ -1256,45 +1256,45 @@
       AND T0235
       OUT W9.08
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
-      AND>=(325) LIT_3012 #9400
+      AND>=(325) D31300 #9400
       TIM 0189 #10
       LD TR0
       AND T0189
       OUT W8.10
       ^^^
-      LD _3FILL1CMPLT
-      ANDNOT _3HEAT1STRT
-      LD _3FILL2CMPLT
-      ANDNOT _3HEAT2STRT
+      LD H6.02
+      ANDNOT H6.03
+      LD H6.12
+      ANDNOT H6.13
       ORLD
-      LD _3FILL3CMPLT
-      ANDNOT _3HEAT3STRT
+      LD H8.10
+      ANDNOT H7.06
       ORLD
-      LD _3FILL4CMPLT
-      ANDNOT _3HEAT4STRT
+      LD H8.01
+      ANDNOT H8.02
       ORLD
       TIM 0364 #20
       AND T0364
-      MOV(021) LIT_3012 D31387
+      MOV(021) D31300 D31387
       ^^^
-      LD _3HEAT1STRT
-      ANDNOT _3DROP1STRT
-      LD _3HEAT2STRT
-      ANDNOT _3DROP2STRT
+      LD H6.03
+      ANDNOT H6.06
+      LD H6.13
+      ANDNOT H7.00
       ORLD
-      LD _3HEAT3STRT
-      ANDNOT _3DROP3STRT
+      LD H7.06
+      ANDNOT H7.09
       ORLD
-      LD _3HEAT4STRT
-      ANDNOT _3DROP4STRT
+      LD H8.02
+      ANDNOT H8.05
       ORLD
-      AND<(310) LIT_3012 D31387
+      AND<(310) D31300 D31387
       TIM 0365 #100
       AND T0365
       LD T0364
-      AND<(310) LIT_3012 #3800
+      AND<(310) D31300 #3800
       ORLD
       AND P_Off
       SET W8.06
@@ -1304,7 +1304,7 @@
       RSET W8.14
       ^^^
       '  Extractor #4 RADAR Level Transmitter
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3320 &6500
       SCL(194) 3320 D31291 D31295
@@ -1312,7 +1312,7 @@
       AND>(320) 3320 &6500
       MOV(021) &0 D31295
       ^^^
-      LD ON
+      LD P_On
       AND>=(325) D31295 #9950
       TIM 0178 #10
       AND T0178
@@ -1322,7 +1322,7 @@
       AND T0238
       OUT W9.09
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
       AND>=(325) D31295 #9400
       TIM 0190 #10
@@ -1331,7 +1331,7 @@
       OUT W8.11
       ^^^
       '  PRT#3 RADAR TEST
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) PRT3_LEVEL_RAW &6500
       SCL(194) PRT3_LEVEL_RAW D31291 D31275
@@ -1339,31 +1339,31 @@
       AND>(320) PRT3_LEVEL_RAW &6500
       MOV(021) &0 D31275
       ^^^
-      LD _4FILL1CMPLT
-      ANDNOT _4HEAT1STRT
-      LD _4FILL2CMPLT
-      ANDNOT _4HEAT2STRT
+      LD H9.02
+      ANDNOT H9.03
+      LD H9.12
+      ANDNOT H9.13
       ORLD
-      LD _4FILL3CMPLT
-      ANDNOT _4HEAT3STRT
+      LD H10.11
+      ANDNOT H10.06
       ORLD
-      LD _4FILL4CMPLT
-      ANDNOT _4HEAT4STRT
+      LD H11.10
+      ANDNOT H11.02
       ORLD
       TIM 0366 #20
       AND T0366
       MOV(021) D31295 D31388
       ^^^
-      LD _4HEAT1STRT
-      ANDNOT _4DROP1STRT
-      LD _4HEAT2STRT
-      ANDNOT _4DROP2STRT
+      LD H9.03
+      ANDNOT H9.06
+      LD H9.13
+      ANDNOT H10.00
       ORLD
-      LD _4HEAT3STRT
-      ANDNOT _4DROP3STRT
+      LD H10.06
+      ANDNOT H10.09
       ORLD
-      LD _4HEAT4STRT
-      ANDNOT _4DROP4STRT
+      LD H11.02
+      ANDNOT H11.05
       ORLD
       AND<(310) D31295 D31388
       TIM 0367 #100
@@ -1379,7 +1379,7 @@
       RSET W8.15
       ^^^
       '  PRETREATMENT DRAIN FLOWMETER SCALING\n(4-20mA = 0.00 - 50.00 litres/sec)
-      LD ON
+      LD P_On
       OUT TR0
       AND<=(315) 3317 &6500
       MOV(021) 3317 D31316
@@ -1387,7 +1387,7 @@
       AND>(320) 3317 &6500
       MOV(021) &0 D31316
       ^^^
-      LD ON
+      LD P_On
       MOV(021) #1 D31360
       MOV(021) &6000 D31361
       MOV(021) #0 D31362
@@ -1398,54 +1398,54 @@
       APR(069) D31360 D31316 D31367
       ^^^
       '  PRT1 AGT Timer ON/OFF
-      LD M1000_MC
-      ANDNOT PRT1_AG_TOFF
+      LD W5.00
+      ANDNOT T3032
       TIM 3033 #1800
-      AND PRT1_AG_TON
+      AND T3033
       TIM 3032 #7200
       ^^^
       '  PRT2 AGT Timer ON/OFF
-      LD M2000_MC
-      ANDNOT PRT2_AG_TOFF
+      LD W6.00
+      ANDNOT T3082
       TIM 3083 #1800
-      AND PRT2_AG_TON
+      AND T3083
       TIM 3082 #7200
       ^^^
       '  PRT3 AGT Timer ON/OFF
-      LD M3000_MC
-      ANDNOT PRT3_AG_TOFF
+      LD W12.00
+      ANDNOT T3132
       TIM 3133 #1800
-      AND PRT3_AG_TON
+      AND T3133
       TIM 3132 #7200
       ^^^
       '  PRT4 AGT Timer ON/OFF
-      LD M4000_MC
-      ANDNOT PRT4_AG_TOFF
+      LD W15.00
+      ANDNOT T4032
       TIM 4033 #1800
-      AND PRT4_AG_TON
+      AND T4033
       TIM 4032 #7200
       ^^^
-      LD ON
+      LD P_On
       APR(069) D31280 D31402 D31400
       ^^^
-      LD ON
+      LD P_On
       OUT TR0
-      AND>=(325) PRT1_SEQ_TIM_PRE #5
-      -B(414) PRT1_SEQ_TIM_PRE #4 D32190
+      AND>=(325) D32101 #5
+      -B(414) D32101 #4 D32190
       LD TR0
-      AND>=(325) PRT2_SEQ_TIM_PRE #5
-      -B(414) PRT2_SEQ_TIM_PRE #4 D32290
+      AND>=(325) D32201 #5
+      -B(414) D32201 #4 D32290
       LD TR0
-      AND>=(325) PRT3_SEQ_TIM_PRE #5
-      -B(414) PRT3_SEQ_TIM_PRE #4 D32390
+      AND>=(325) D32301 #5
+      -B(414) D32301 #4 D32390
       LD TR0
-      AND>=(325) PRT4_SEQ_TIM_PRE #5
-      -B(414) PRT4_SEQ_TIM_PRE #4 D32590
+      AND>=(325) D32501 #5
+      -B(414) D32501 #4 D32590
       ^^^
       '  TK1 High Level From Effluent PLC via SCADA\nW17.14 is an Override
       LD 403.04
       LDNOT W17.14
-      OR ON
+      OR P_On
       ANDLD
       OUT 403.03
       ^^^
@@ -1500,7 +1500,7 @@
       LD 403.03
       OR 403.05
       LDNOT W17.14
-      OR ON
+      OR P_On
       ANDLD
       TIM 0610 #50
       AND T0610
@@ -1527,11 +1527,11 @@
       LD 403.03
       OR 403.05
       ANDLD
-      MOV(021) #FA0 RPCNTRLVLV
+      MOV(021) #FA0 2031
       OUT 403.02
       ^^^
       LD W17.10
-      MOV(021) #FA0 RPCNTRLVLV
+      MOV(021) #FA0 2031
       ^^^
       '  NO DRAIN ACTIVE & TK1 NOT HI LEVEL:\nOutput to Valve is 65% (Closed 65% : Open 35%)\n\nNO DRAIN ACTIVE & TK1 IS HI LEVEL:\nOutput to Valve is 100% (Closed 100% : Open 0%)
       LDNOT W17.00
@@ -1540,16 +1540,16 @@
       ANDNOT 403.05
       AND W17.15
       ANDNOT W17.10
-      MOV(021) #960 RPCNTRLVLV
+      MOV(021) #960 2031
       LD TR0
       LD 403.03
       OR 403.05
       ANDLD
       ANDNOT W17.10
-      MOV(021) #FA0 RPCNTRLVLV
+      MOV(021) #FA0 2031
       ^^^
       '  PID Block Parameters:\nwatch C+6 #449 or #494   ---  manual may be wrong??
-      LD ON
+      LD P_On
       OUT TR0
       AND P_Off
       MOV(021) #1500 D31318
@@ -1563,18 +1563,18 @@
       MOV(021) #190 D31325
       MOV(021) #ED8 D31326
       ^^^
-      LD ON
+      LD P_On
       AND W17.00
       ANDNOT 403.03
       ANDNOT 403.05
       AND W17.15
       ANDNOT W17.10
-      PID(190) D31367 D31318 RPCNTRLVLV
+      PID(190) D31367 D31318 2031
       ^^^
-      LD ON
+      LD P_On
       BCD(024) D31367 D31378
       ^^^
-      LD ON
+      LD P_On
       MOV(021) #4001 D31370
       MOV(021) &4000 D31371
       MOV(021) #0 D31372
@@ -1582,35 +1582,35 @@
       MOV(021) #0 D31374
       MOV(021) &4000 D31375
       MOV(021) &9999 D31376
-      APR(069) D31370 RPCNTRLVLV D31377
+      APR(069) D31370 2031 D31377
       ^^^
       '  Moved analog out 2031 to 2030 because 2031 is faulty.
-      LD ON
-      MOV(021) RPCNTRLVLV 2030
+      LD P_On
+      MOV(021) 2031 2030
       ^^^
       LD P_Off
       MOV(021) #7D0 2030
       ^^^
-      LD ON
-      AND>=(325) LIT_2002_AI #1700
+      LD P_On
+      AND>=(325) D32204 #1700
       TIM 0606 #50
       AND T0606
       OUT 3361.00
       ^^^
-      LD ON
-      AND>=(325) LIT_3002_AI #1700
+      LD P_On
+      AND>=(325) D32304 #1700
       TIM 0607 #50
       AND T0607
       OUT 3361.01
       ^^^
-      LD ON
-      AND>=(325) LIT_4002_AI #1700
+      LD P_On
+      AND>=(325) D32504 #1700
       TIM 0608 #50
       AND T0608
       OUT 3361.02
       ^^^
       '  Skimming Basin Exit Door /w Override
-      LDNOT SKM_BSN_EXIT
+      LDNOT W4.06
       OUT TR0
       ANDNOT 3361.04
       TIM 0609 #600
@@ -1627,459 +1627,6 @@
       RSET 3361.04
     </MNEMONIC>
     <GLOBALSYMBOL>
-      M1000_MC	BOOL	W5.00	M1000 Output Contact (Agitator)		0	
-      PRT1_AG_TON	BOOL	T3033	PRT1 AG On		0	
-      ON	BOOL	CF113	System Normally On Flag		0	
-      PRT1_STEP	WORD	D32100	PRT1 STEP NUMBER		0	
-      M3_SPARE1	BOOL	W5.01	spare		0	
-      V1001_ZC	BOOL	W5.02	RHT1 Drain Valve Output		0	
-      V1002_ZC	BOOL	W5.03	RHT1 Slide Gate Valve Output		0	
-      V1003_ZC	BOOL	W5.04	PRT1 Spray Ball Cold Water Valve  Output		0	
-      V1004_ZC	BOOL	W5.05	PRT1 Drain Valve Output		0	
-      V1005_ZC	BOOL	W5.06	PRT1 Drain Valve Output		0	
-      V1006_ZC	BOOL	W5.07	PRT1 Cold Water Valve Output		0	
-      V1007_ZC	BOOL	W5.08	PRT1 Discharge Valve Output		0	
-      V1008_ZC	BOOL	W5.09	RHT1 Cold Water valve Output		0	
-      M3_SPARE2	BOOL	W5.10	spare		0	
-      V1010_ZC	BOOL	W5.11	PRT1 Acid Dosing Valve Output		0	
-      V1011_ZC	BOOL	W5.12	Caustic Dosing Valve for PRT1		0	
-      V1012_ZC	BOOL	W5.13	Caustic Dosing Valve for RHT1		0	
-      V1013_ZC	BOOL	W5.14	Caustic Dosing Valve for EXT1		0	
-      M3_SPARE3	BOOL	W5.15	spare		0	
-      M2000_MC	BOOL	W6.00	M2000 Output Contact (Agitator)		0	
-      PRT2_AG_TON	BOOL	T3083	PRT2 AG On		0	
-      PRT2_STEP	WORD	D32200	Step Word (Counter)		0	
-      M4_SPARE1	BOOL	W6.01	spare		0	
-      V2001_ZC	BOOL	W6.02	RHT2 Drain Valve Output		0	
-      V2002_ZC	BOOL	W6.03	RHT2 Slide Gate Valve Output		0	
-      V2003_ZC	BOOL	W6.04	PRT2 Spray Ball Cold Water Valve  Output		0	
-      V2004_ZC	BOOL	W6.05	PRT2 Drain Valve Output		0	
-      V2005_ZC	BOOL	W6.06	PRT2 Drain Valve Output		0	
-      V2006_ZC	BOOL	W6.07	PRT2 Cold Water Valve Output		0	
-      V2007_ZC	BOOL	W6.08	PRT2 Discharge Valve Output		0	
-      V2008_ZC	BOOL	W6.09	RHT2 Cold Water valve Output		0	
-      M4_SPARE2	BOOL	W6.10	spare		0	
-      V2010_ZC	BOOL	W6.11	PRT2 Acid Dosing Valve Output		0	
-      V2011_ZC	BOOL	W6.12	Caustic Dosing Valve for PRT2		0	
-      V2012_ZC	BOOL	W6.13	Caustic Dosing Valve for RHT2		0	
-      V2013_ZC	BOOL	W6.14	Caustic Dosing Valve for EXT2		0	
-      M4_SPARE3	BOOL	W6.15	spare		0	
-      V120_ZC	BOOL	W7.00	Acid D Fill Valve Output		0	
-      V121_ZC	BOOL	W7.01	Acid D Water Valve Output		0	
-      P120_MC	BOOL	W7.02	Acid Pump Control Signal		0	
-      V105	BOOL	W7.03	Water Fraction Tank Caustic Valve Output		0	
-      Spray_Ball_WFT	BOOL	W7.04	Water Fraction Tank Spray Ball Output 		0	
-      Drain_Valve_WFT	BOOL	W7.05	Water Fraction Tank Drain Valve Output 		0	
-      M5_SPARE4	BOOL	W7.06	SPARE		0	
-      V120A_OUT_ZC	BOOL	W7.07	Acid Dosing Pump Suction/Discharge Valve Output		0	
-      	BOOL	350.03	Cook 1 Permissive		0	
-      	BOOL	350.01	Cook 2 Permissive		0	
-      	BOOL	350.00	Cook 3/4 Permissive		0	
-      	BOOL	351.03	Cook 3/4 Permissive HBLV 		0	
-      	BOOL	3204.08	Output to EXT Hot Water Tank Pump - Y_project (input 3:03)		0	
-      	BOOL	350.06	Ext. Cook #1 Fill Temp Limits		0	
-      	BOOL	350.11	Ext. Cook #2 Fill Temp Limits		0	
-      	BOOL	350.14	Ext. Cook #3/4 Fill Temp Limits		0	
-      	BOOL	351.02	Ext. Cook #3/4 HBLV Fill Temp Limits		0	
-      	BOOL	3204.09	Output to EXT Hot Water Tank H/E - Y_project (input 4:07)		0	
-      V115_ZC	BOOL	W7.10	Demin Caustic Day Tank Fill Valve		0	
-      P110_MC	BOOL	W7.11	Day Tank Caustic Delivery Pump Running		0	
-      V110_ZC	BOOL	W7.12	Old Caustic Tank Fill Valve		0	
-      P100_MC	BOOL	W7.13	Caustic Delivery Pump Running		0	
-      TK_100	BOOL	W7.14	High Level Audible Alarm		0	
-      M5_SPARE11	BOOL	W7.15	SPARE		0	
-      M3000_MC	BOOL	W12.00	M3000 Output Contact (Agitator)		0	
-      PRT3_AG_TON	BOOL	T3133	PRT3 AG On		0	
-      PRT3_STEP	WORD	D32300	Step Word (Counter)		0	
-      P1M5_SPARE1	BOOL	W12.01	spare		0	
-      V3001_ZC	BOOL	W12.02	RHT3 Drain Valve Output		0	
-      V3002_ZC	BOOL	W12.03	RHT3 Slide Gate Valve Output		0	
-      V3003_ZC	BOOL	W12.04	PRT3 Spray Ball Cold Water Valve  Output		0	
-      V3004_ZC	BOOL	W12.05	PRT3 Drain Valve Output		0	
-      V3005_ZC	BOOL	W12.06	PRT3 Drain Valve Output		0	
-      V3006_ZC	BOOL	W12.07	PRT3 Cold Water Valve Output		0	
-      V3007_ZC	BOOL	W12.08	PRT3 Discharge Valve Output		0	
-      V3008_ZC	BOOL	W12.09	RHT3 Cold Water valve Output		0	
-      P1M5_SPARE2	BOOL	W12.10	spare		0	
-      V3010_ZC	BOOL	W12.11	PRT3 Acid Dosing Valve Output		0	
-      V3011_ZC	BOOL	W12.12	Caustic Dosing Valve for PRT3		0	
-      V3012_ZC	BOOL	W12.13	Caustic Dosing Valve for RHT3		0	
-      V3013_ZC	BOOL	W12.14	Caustic Dosing Valve for EXT3		0	
-      P1M5_SPARE3	BOOL	W12.15	spare		0	
-      M4000_MC	BOOL	W15.00	M4000 Output Contact (Agitator)		0	
-      PRT4_AG_TON	BOOL	T4033	PRT4 AG On		0	
-      PRT4_STEP	WORD	D32500	Step Word (Counter)		0	
-      M4000	BOOL	3200.00	M4000 Start = 1Stop =0		0	
-      P1M7_SPARE1	BOOL	W15.01	spare		0	
-      V4001_ZC	BOOL	W15.02	RHT4 Drain Valve Output		0	
-      V4001	BOOL	3200.02	V4001 Open 1=Open 0=Close		0	
-      V4002_ZC	BOOL	W15.03	RHT4 Slide Gate Valve Output		0	
-      V4002	BOOL	3200.03	V4002 Open 1=Open 0=Close		0	
-      V4003_ZC	BOOL	W15.04	PRT4 Spray Ball Cold Water Valve  Output		0	
-      V4003	BOOL	3200.04	V4002 Open 1=Open 0=Close		0	
-      V4004_ZC	BOOL	W15.05	PRT4 Drain Valve Output		0	
-      V4004	BOOL	3200.05	V4002 Open 1=Open 0=Close		0	
-      V4005_ZC	BOOL	W15.06	PRT4 Drain Valve Closed		0	
-      V4005	BOOL	3200.06	V4005 Open 1=Open 0=Close		0	
-      V4006_ZC	BOOL	W15.07	PRT4 Cold Water Valve Output		0	
-      V4006	BOOL	3200.07	V4006 Open 1=Open 0=Close		0	
-      V4007_ZC	BOOL	W15.08	PRT4 Discharge Valve Output		0	
-      V4007	BOOL	3200.08	V4007 Open 1=Open 0=Close		0	
-      V4008_ZC	BOOL	W15.09	RHT4 Cold Water valve Output		0	
-      V4008	BOOL	3200.09	V4008 Open 1=Open 0=Close		0	
-      P1M7_SPARE2	BOOL	W15.10	spare		0	
-      V4009	BOOL	3200.10	V4009 Open 1=Open 0=Close		0	
-      V4010_ZC	BOOL	W15.11	PRT4 Acid Dosing Valve Output		0	
-      V4010	BOOL	3200.11	V4010 Open 1=Open 0=Close		0	
-      V4011_ZC	BOOL	W15.12	Caustic Dosing Valve for PRT4		0	
-      V4012_ZC	BOOL	W15.13	Caustic Dosing Valve for RHT4		0	
-      V4013_ZC	BOOL	W15.14	Caustic Dosing Valve for EXT4		0	
-      P1M7_SPARE3	BOOL	W15.15	spare		0	
-      M1000_MN	BOOL	W0.00	M1000 Auxiliary Contact (Agitator)		0	
-      M1000_FA	BOOL	W0.01	Mixer 1000 Overload		0	
-      LS_RINDTK1_LL	BOOL	W0.02	Rind TK-1 Level Switch Low		0	
-      STK_PIT_OVERFLOW_SW	BOOL	W0.03	Settiling Tank's PIT Overflow		0	
-      Caustic_SYS_HeatTrace	BOOL	W0.04	Caustic system heat trace ON		0	
-      LS_PRETK1_HL	BOOL	W0.05	Pretreatment TK-1 Level Switch High		0	
-      V1011_ZH	BOOL	W0.06	Caustic Dosing Valve for PRT1		0	
-      V1012_ZH	BOOL	W0.07	Caustic Dosing Valve for RHT1		0	
-      V1013_ZH	BOOL	W0.08	Caustic Dosing Valve for EXT1		0	
-      M0_SPARE1	BOOL	W0.09	Spare1		0	
-      M0_SPARE2	BOOL	W0.10	Spare2		0	
-      M0_SPARE3	BOOL	W0.11	Spare3		0	
-      LS120_ON	BOOL	W0.12	Demin Caustic Day Tank Request for Caustic		0	
-      LS_LH120_CAUSTIC	BOOL	W0.13	Demin Caustic Day Tank Level High High		0	
-      V115_ZH	BOOL	W0.14	Demin Caustic Day Tank Fill Valve Opened		0	
-      P110_MN	BOOL	W0.15	New Caustic Day Tank Delivery Pump Running		0	
-      M0_SPARE8	BOOL	W1.00	Spare8		0	
-      M0_SPARE9	BOOL	W1.01	Spare9		0	
-      V1001_ZH	BOOL	W1.02	RHT1 Drain Valve Opened		0	
-      V1002_ZH	BOOL	W1.03	RHT1 Slide Gate Valve Opened		0	
-      V1002_ZL	BOOL	W1.04	RHT1 Slide Gate Valve Closed		0	
-      V1003_ZH	BOOL	W1.05	PRT1 Spray Ball Cold Water Valve  Opened		0	
-      V1004_ZH	BOOL	W1.06	PRT1 Drain Valve Opened		0	
-      V1005_ZH	BOOL	W1.07	PRT1 Drain Valve Opened		0	
-      V1006_ZH	BOOL	W1.08	PRT1 Cold Water Valve Opened		0	
-      V1007_ZH	BOOL	W1.09	PRT1 Discharge Valve Opened		0	
-      V1007_ZL	BOOL	W1.10	PRT1 Discharge Valve  Closed		0	
-      V1008_ZH	BOOL	W1.11	RHT1 Cold Water valve Opened		0	
-      M0_SPARE10	BOOL	W1.12	Spare10		0	
-      M0_SPARE11	BOOL	W1.13	Spare11		0	
-      V1010_ZH	BOOL	W1.14	PRT1 Acid Dosing Valve Opened		0	
-      M0_SPARE12	BOOL	W1.15	Spare12		0	
-      M2000_MN	BOOL	W2.00	M2000 Auxiliary Contact (Agitator)		0	
-      M2000_FA	BOOL	W2.01	Mixer 2000 Overload		0	
-      LS_RINDTK2_LL	BOOL	W2.02	Rind TK-2 Level Switch Low		0	
-      LS_RINDTK2_HL	BOOL	W2.03	Rind TK-2 Level Switch High		0	
-      LS_PRETK2_LL	BOOL	W2.04	Pretreatment TK-2 Level Switch Low		0	
-      LS_PRETK2_HL	BOOL	W2.05	Pretreatment TK-2 Level Switch High		0	
-      V2011_ZH	BOOL	W2.06	Caustic Dosing Valve for PRT2		0	
-      V2012_ZH	BOOL	W2.07	Caustic Dosing Valve for RHT2		0	
-      V2013_ZH	BOOL	W2.08	Caustic Dosing Valve for EXT2		0	
-      M1_SPARE1	BOOL	W2.09	Spare1		0	
-      M1_SPARE2	BOOL	W2.10	Spare2		0	
-      M1_SPARE3	BOOL	W2.11	Spare3		0	
-      M1_SPARE4	BOOL	W2.12	Spare4		0	
-      M1_SPARE5	BOOL	W2.13	Spare5		0	
-      M1_SPARE6	BOOL	W2.14	Spare6		0	
-      M1_SPARE7	BOOL	W2.15	Spare7		0	
-      M1_SPARE8	BOOL	W3.00	Spare8		0	
-      M1_SPARE9	BOOL	W3.01	Spare9		0	
-      V2001_ZH	BOOL	W3.02	RHT2 Drain Valve Opened		0	
-      V2002_ZH	BOOL	W3.03	RHT2 Slide Gate Valve Opened		0	
-      V2002_ZL	BOOL	W3.04	RHT2 Slide Gate Valve Closed		0	
-      V2003_ZH	BOOL	W3.05	PRT2 Spray Ball Cold Water Valve  Opened		0	
-      V2004_ZH	BOOL	W3.06	PRT2 Drain Valve Opened		0	
-      V2005_ZH	BOOL	W3.07	PRT2 Drain Valve Opened		0	
-      V2006_ZH	BOOL	W3.08	PRT2 Cold Water Valve Opened		0	
-      V2007_ZH	BOOL	W3.09	PRT2 Discharge Valve Opened		0	
-      V2007_ZL	BOOL	W3.10	PRT2 Discharge Valve  Closed		0	
-      V2008_ZH	BOOL	W3.11	RHT2 Cold Water valve Opened		0	
-      M1_SPARE10	BOOL	W3.12	Spare20		0	
-      M1_SPARE11	BOOL	W3.13	Spare11		0	
-      V2010_ZH	BOOL	W3.14	PRT2 Acid Dosing Valve Opened		0	
-      M1_SPARE12	BOOL	W3.15	Spare12		0	
-      V120_ZH	BOOL	W4.00	Acid D Fill Valve Opened		0	
-      V121_ZH	BOOL	W4.01	Acid D Water Valve Opened		0	
-      LS_TK120_LH	BOOL	W4.02	Acid D Tank High Level		0	
-      V120A_OUT_ZH	BOOL	W4.03	Acid Dosing Pump Suction/Discharge Valve Opened		0	
-      V105_ZH	BOOL	W4.04	V105 Water Fraction Tank Caustic Valve Opened		0	
-      	BOOL	3336.05	ACID DOSING PUMP RUNNING		0	
-      P120_MN	BOOL	W4.05	ACID DOSING PUMP RUNNING		0	
-      SKM_BSN_EXIT	BOOL	W4.06	Skimming Basin Exit Door		0	
-      GREASE_SYSTEM	BOOL	W4.07	Grease Pump System Condition		0	
-      GREASE_PUMP_RUNNING	BOOL	W4.08	Lard Pump Running		0	
-      GREASE_TANKS_FULL	BOOL	W4.09	Hous Grease Tanks TK111/112 full		0	
-      GREASE_PUMP_NO_FLOW	BOOL	W4.10	Lard pump no flow switch		0	
-      LS_LH110_CAUSTIC	BOOL	W4.11	Old Caustic Tank High Level		0	
-      LS_LH100_CAUSTIC	BOOL	W4.12	New Caustic Tank High Level		0	
-      LS_LS100_CAUSTIC	BOOL	W4.13	New Caustic Tank Leak Switch		0	
-      V110_ZH	BOOL	W4.14	Old Caustic Tank Fill Valve		0	
-      P100_MN	BOOL	W4.15	Caustic Delivery Pump Running		0	
-      M3000_MN	BOOL	W10.00	M3000 Auxiliary Contact (Agitator)		0	
-      M3000_FA	BOOL	W10.01	Mixer 3000 Overload		0	
-      LS_RINDTK3_LL	BOOL	W10.02	Rind TK-3 Level Switch Low		0	
-      LS_RINDTK3_HL	BOOL	W10.03	Rind TK-3 Level Switch High		0	
-      LS_PRETK3_LL	BOOL	W10.04	Pretreatment TK-3 Level Switch Low		0	
-      LS_PRETK3_HL	BOOL	W10.05	Pretreatment TK-3 Level Switch High		0	
-      V3011_ZH	BOOL	W10.06	Caustic Dosing Valve for PRT3		0	
-      V3012_ZH	BOOL	W10.07	Caustic Dosing Valve for RHT3		0	
-      V3013_ZH	BOOL	W10.08	Caustic Dosing Valve for EXT3		0	
-      P1M2_SPARE1	BOOL	W10.09	Spare1		0	
-      P1M2_SPARE2	BOOL	W10.10	Spare2		0	
-      P1M2_SPARE3	BOOL	W10.11	Spare3		0	
-      P1M2_SPARE4	BOOL	W10.12	Spare4		0	
-      P1M2_SPARE5	BOOL	W10.13	Spare5		0	
-      P1M2_SPARE6	BOOL	W10.14	Spare6		0	
-      P1M2_SPARE7	BOOL	W10.15	Spare7		0	
-      P1M2_SPARE8	BOOL	W11.00	Spare8		0	
-      P1M2_SPARE9	BOOL	W11.01	Spare9		0	
-      V3001_ZH	BOOL	W11.02	RHT3 Drain Valve Opened		0	
-      V3002_ZH	BOOL	W11.03	RHT3 Slide Gate Valve Opened		0	
-      V3002_ZL	BOOL	W11.04	RHT3 Slide Gate Valve Closed		0	
-      V3003_ZH	BOOL	W11.05	PRT3 Spray Ball Cold Water Valve  Opened		0	
-      V3004_ZH	BOOL	W11.06	PRT3 Drain Valve Opened		0	
-      V3005_ZH	BOOL	W11.07	PRT3 Drain Valve Opened		0	
-      V3006_ZH	BOOL	W11.08	PRT3 Cold Water Valve Opened		0	
-      P1M2_SPARE30	BOOL	W11.12	DO NOT USE		0	
-      V3007_ZL	BOOL	W11.10	PRT3 Discharge Valve  Closed		0	
-      V3008_ZH	BOOL	W11.11	RHT3 Cold Water valve Opened		0	
-      V3007_ZH	BOOL	W11.09	PRT3 Discharge Valve Opened		0	
-      P1M2_SPARE11	BOOL	W11.13	Spare11		0	
-      V3010_ZH	BOOL	W11.14	PRT3 Acid Dosing Valve Opened		0	
-      P1M2_SPARE12	BOOL	W11.15	Spare12		0	
-      M4000_AUX	BOOL	3302.00	M4000 Auxiliary Contact		0	
-      M4000_MN	BOOL	W13.00	M4000 Auxiliary Contact (Agitator)		0	
-      M4000_OL	BOOL	3302.01	Mixer 4000 Overload		0	
-      M4000_FA	BOOL	W13.01	Mixer 4000 Overload		0	
-      LS_RINDTK4_LL_OLD	BOOL	3302.02	Rind TK-4 Level Switch Low		0	
-      LS_RINDTK4_LL	BOOL	W13.02	Rind TK-4 Level Switch Low		0	
-      LS_RINDTK4_HL_OLD	BOOL	3302.03	Rind TK-4 Level Switch High		0	
-      LS_RINDTK4_HL	BOOL	W13.03	Rind TK-4 Level Switch High		0	
-      LS_PRETK4_LL_OLD	BOOL	3302.04	Pretreatment TK-4 Level Switch Low		0	
-      LS_PRETK4_LL	BOOL	W13.04	Pretreatment TK-4 Level Switch Low		0	
-      LS_PRETK4_HL_OLD	BOOL	3302.05	Pretreatment TK-4 Level Switch High		0	
-      LS_PRETK4_HL	BOOL	W13.05	Pretreatment TK-4 Level Switch High		0	
-      V4011_ZH	BOOL	W13.06	Caustic Dosing Valve for PRT4		0	
-      V4012_ZH	BOOL	W13.07	Caustic Dosing Valve for RHT4		0	
-      V4013_ZH	BOOL	W13.08	Caustic Dosing Valve for EXT4		0	
-      P1M6_SPARE1	BOOL	W13.09	Spare1		0	
-      P1M6_SPARE2	BOOL	W13.10	Spare2		0	
-      P1M6_SPARE3	BOOL	W13.11	Spare3		0	
-      P1M6_SPARE4	BOOL	W13.12	Spare4		0	
-      P1M6_SPARE5	BOOL	W13.13	Spare5		0	
-      P1M6_SPARE6	BOOL	W13.14	Spare6		0	
-      P1M6_SPARE7	BOOL	W13.15	Spare7		0	
-      V4000_ZSO	BOOL	3303.00	V4000 Open		0	
-      P1M6_SPARE8	BOOL	W14.00	Spare8		0	
-      V4000_ZSC	BOOL	3303.01	V4000 Close		0	
-      P1M6_SPARE9	BOOL	W14.01	Spare9		0	
-      V4001_ZSO	BOOL	3303.02	V4001 Open		0	
-      V4001_ZH	BOOL	W14.02	RHT4 Drain Valve Opened		0	
-      V4002_ZSO	BOOL	3303.03	V4002 Open		0	
-      V4002_ZH	BOOL	W14.03	RHT4 Slide Gate Valve Opened		0	
-      V4002_ZSC	BOOL	3303.04	V4002 Close		0	
-      V4002_ZL	BOOL	W14.04	RHT4 Slide Gate Valve Closed		0	
-      V4003_ZSO	BOOL	3303.05	V4003 Open		0	
-      V4003_ZH	BOOL	W14.05	PRT4 Spray Ball Cold Water Valve  Opened		0	
-      V4004_ZSO	BOOL	3303.06	V4004 Open		0	
-      V4004_ZH	BOOL	W14.06	PRT4 Drain Valve Opened		0	
-      V4005_ZSO	BOOL	3303.07	V4005 Open		0	
-      V4005_ZH	BOOL	W14.07	PRT4 Drain Valve Closed		0	
-      V4006_ZSO	BOOL	3303.08	V4006 Open		0	
-      V4006_ZH	BOOL	W14.08	PRT4 Cold Water Valve Opened		0	
-      V4007_ZSO	BOOL	3303.09	V4007 Open		0	
-      V4007_ZH	BOOL	W14.09	PRT4 Discharge Valve Opened		0	
-      V4007_ZSC	BOOL	3303.10	V4007 Close		0	
-      V4007_ZL	BOOL	W14.10	PRT4 Discharge Valve  Closed		0	
-      V4008_ZSO	BOOL	3303.11	V4008 Open		0	
-      V4008_ZH	BOOL	W14.11	RHT4 Cold Water valve Opened		0	
-      V4009_ZSO	BOOL	3303.12	V4009 Open		0	
-      P1M6_SPARE30	BOOL	W14.12	Spare10		0	
-      V4009_ZSC	BOOL	3303.13	V4009 Close		0	
-      P1M6_SPARE11	BOOL	W14.13	Spare11		0	
-      V4010_ZSO	BOOL	3303.14	V4010 Open		0	
-      V4010_ZH	BOOL	W14.14	PRT4 Acid Dosing Valve Opened		0	
-      P1M6_SPARE12	BOOL	W14.15	Spare12		0	
-      	CHANNEL	3337	Bad Input: Slot 6 Input 0		0	
-      LEVEL_FORMULA	CHANNEL	D31200	Level Control Formula		0	
-      WF_TANK_LEVEL	CHANNEL	D32151	Water Fraction Tank %		0	
-      LIT_1001_AI	CHANNEL	D32102	RHT1 Level Transmitter		0	
-      LIT_1002_AI	CHANNEL	D32104	PRT1 Level Transmitter		0	
-      	BOOL	3360.00	PRT#1 Level > 8%		0	
-      	BOOL	3360.01	PRT#1 Level > 10%		0	
-      	BOOL	3360.03	PRT#1 Level > 14%		0	
-      	BOOL	3360.04	PRT#1 Level < 2%		0	
-      	BOOL	3360.05	PRT#1 Level >= 17%		0	
-      	BOOL	3360.02	PRT#1 Level OK		0	
-      LEVEL_FORMULA_2	CHANNEL	D32440	Flow Meter Formula 2 D32440-D32449		0	
-      LIT_2002_AI	CHANNEL	D32204	PRT2 Level Transmitter		0	
-      LIT_2001_AI	CHANNEL	D32202	RHT2 Level Transmitter		0	
-      FIT_120_AI	CHANNEL	D32401	Acid Water Flow Meter		0	
-      PRT_ACID_WATER_SCL	CHANNEL	D32610			0	
-      	CHANNEL	3338	Bad Input: Slot 6 Point 2		0	
-      FLOW_CAUSTC_FORMULA	CHANNEL	D32180	Flow Caustic Formula (0-2.5 l/s) 2 decimal place		0	
-      FIT_100_AI	CHANNEL	D32414	Flow Meter Plant Caustic Supply		0	
-      FIT_1010_AI	CHANNEL	D32415	Flow Meter Caustic Dosing		0	
-      CAUSTIC_IND	BOOL	H357.15	Caustic General Indicator		0	
-      CAUSTIC_AREA2_IND	BOOL	H357.01	Caustic IND Area 2 (Pretreatment)		0	
-      _1_SEC_PULSE	BOOL	CF102	System 1.0 second clock pulse bit		0	
-      	CHANNEL	3347	FIT-121 RAW		0	
-      FIT_121_AI	CHANNEL	D32400	Acid Day Tank Flow Meter		0	
-      	CHANNEL	D32652	FIT-121 DOUBLE		0	
-      HG_TK2_Level_Raw	CHANNEL	3348	House Grease Tank Level (Raw)		0	
-      LIT_112_AI	CHANNEL	D32416	DAF SLUDGE TANK		0	
-      FIRST_SCAN	BOOL	A200.15	System First Scan Flag		0	
-      	BOOL	W18.03	Set ON First Scan		0	
-      	CHANNEL	D32437	Sludge First Out Address		0	
-      	CHANNEL	D32630	Skimmings First Out Address		0	
-      	BOOL	T0340	10min Sludge Timer		0	
-      	BOOL	T0341	10min Skimmings Timer		0	
-      	CHANNEL	D32580	Start of 10 Word Sludge Address		0	
-      	CHANNEL	D32620	Start of 10 Word Skimming Address		0	
-      	CHANNEL	C351	Sludge 6 x 10min Counter		0	
-      	BOOL	C0351	Sludge 6 x 10min Counter		0	
-      LIT_111_AI	CHANNEL	D32420	SKIMMINGS TANK LEVEL %		0	
-      	CHANNEL	C352	Skimmings 6 x 10min Counter		0	
-      	BOOL	C0352	Skimmings 6 x 10min Counter		0	
-      	BOOL	W18.01	SCADA Reset P.B Sludge		0	
-      	BOOL	W18.05	SCADA Reset P.B Skimmings		0	
-      LIT_100_AI	CHANNEL	D32417	New Caustic Level		0	
-      LIT_110_AI	CHANNEL	D32418	Old Caustic Level		0	
-      FIT_110	CHANNEL	D32419	Caustic to EFF Flow Meter		0	
-      DT_CAUSTIC_TOTAL_M	DINT	D32606	Day Tank Caustic Monthly Total		0	
-      CAUSTIC_TOTAL_M__AREA9	DWORD	D32498	Caustic Monthly Total		0	
-      LIT_3001_AI	CHANNEL	D32302	RHT3 Level Transmitter		0	
-      LIT_3002_AI	CHANNEL	D32304	PRT3 Level Transmitter		0	
-      LIT4001	CHANNEL	3308	Rind Tank Level Transmitter		0	
-      LIT_4001_AI	CHANNEL	D32502	RHT4 Level Transmitter		0	
-      LIT4002	CHANNEL	3309	Pretreatment Tank Level Transmitter		0	
-      LIT_4002_AI	CHANNEL	D32504	PRT4 Level Transmitter		0	
-      	CHANNEL	3312	WIND DIRECTION		0	
-      AIT4002b	CHANNEL	3313	Wind Speed		0	
-      TIT_3013	CHANNEL	D31301	PRT#3 Temperature Transmitter		0	
-      	CHANNEL	3316	EXT #1 Level (RAW)		0	
-      	CHANNEL	D31384	EXT #1 Level (SCALED)		0	
-      	BOOL	W8.00	EXT #1 HI LVL		0	
-      	BOOL	W9.06	EXT #1 HI LVL >2min		0	
-      	BOOL	W8.08	EXT #1 HIGH LEVEL on DROP		0	
-      _1FILL1CMPLT	BOOL	H0.02	Extractor 1 Fill 1 Complete		0	
-      _1HEAT1START	BOOL	H0.03	Extractor 1 Start Heat Up #1		0	
-      _1FILL2CMPLT	BOOL	H0.12	Extractor 1 2nd Cook Fill Complete		0	
-      _1HEAT2STRT	BOOL	H0.13	Extractor 1 Start Heat Up #2		0	
-      _1FILL3CMPLT	BOOL	H2.10	 		0	
-      _1HEAT3STRT	BOOL	H1.06	Extractor 1 Start Heat Up #3		0	
-      _1FILL4CMPLT	BOOL	H2.01	 		0	
-      _1HEAT4STRT	BOOL	H2.02	Extractor 1 Start Heat Up #4 		0	
-      _1DROP1STRT	BOOL	H0.06	Extractor 1 Drop Valve Open		0	
-      _1DROP2STRT	BOOL	H1.00	Extractor 1 2nd Cook Drop		0	
-      _1DROP3STRT	BOOL	H1.09	 		0	
-      _1DROP4STRT	BOOL	H2.05	 		0	
-      	BOOL	W8.04	Extractor #1 Losing Level		0	
-      	CHANNEL	D31311	EXT #2 Level (SCALED)		0	
-      	BOOL	W8.01	EXT #2 HI LVL		0	
-      	BOOL	W9.07	EXT #2 HI LVL > 2min		0	
-      	BOOL	W8.09	EXT #2 HIGH LEVEL on DROP		0	
-      _2FILL1CMPLT	BOOL	H3.02	 		0	
-      _2HEAT1STRT	BOOL	H3.03	 		0	
-      _2FILL2CMPLT	BOOL	H3.12	 		0	
-      _2HEAT2STRT	BOOL	H3.13	 		0	
-      _2FILL3CMPLT	BOOL	H3.00	 		0	
-      _2HEAT3START	BOOL	H4.06	 		0	
-      _2FILL4CMPLT	BOOL	H5.10	 		0	
-      _2HEAT4STRT	BOOL	H5.02	 		0	
-      _2DROP1STRT	BOOL	H3.06	 		0	
-      _2DROP2STRT	BOOL	H4.00	 		0	
-      _2DROP4STRT	BOOL	H5.05	 		0	
-      	CHANNEL	3314	EXT #3 Level (RAW)		0	
-      LIT_3012	CHANNEL	D31300	EXT #3 Level (SCALED)		0	
-      	BOOL	W8.02	EXT #3 HI LVL		0	
-      	BOOL	T0235	EXT #3 LVL DELAY		0	
-      	BOOL	W9.08	EXT #3 HI LVL > 2min		0	
-      	BOOL	W8.10	EXT #3 HIGH LEVEL on DROP		0	
-      _3FILL1CMPLT	BOOL	H6.02	 		0	
-      _3HEAT1STRT	BOOL	H6.03	 		0	
-      _3FILL2CMPLT	BOOL	H6.12	 		0	
-      _3HEAT2STRT	BOOL	H6.13	 		0	
-      _3FILL3CMPLT	BOOL	H8.10	 		0	
-      _3HEAT3STRT	BOOL	H7.06	 		0	
-      _3FILL4CMPLT	BOOL	H8.01	 		0	
-      _3HEAT4STRT	BOOL	H8.02	 		0	
-      _3DROP1STRT	BOOL	H6.06	 		0	
-      _3DROP2STRT	BOOL	H7.00	 		0	
-      _3DROP3STRT	BOOL	H7.09	 		0	
-      _3DROP4STRT	BOOL	H8.05	 		0	
-      	CHANNEL	3320	EXT #4 Level (RAW)		0	
-      	CHANNEL	D31295	EXT #4 Level (SCALED)		0	
-      	BOOL	W8.03	EXT #4 HI LVL		0	
-      	BOOL	T0238	EXT #4 LVL DELAY		0	
-      	BOOL	W9.09	EXT #4 HI LVL >2min		0	
-      	BOOL	W8.11	EXT #4 HIGH LEVEL on DROP		0	
-      _4FILL1CMPLT	BOOL	H9.02	 		0	
-      _4HEAT1STRT	BOOL	H9.03	 		0	
-      _4FILL2CMPLT	BOOL	H9.12	 		0	
-      _4HEAT2STRT	BOOL	H9.13	 		0	
-      _4FILL3CMPLT	BOOL	H10.11	 		0	
-      _4HEAT3STRT	BOOL	H10.06	 		0	
-      _4FILL4CMPLT	BOOL	H11.10	 		0	
-      _4HEAT4STRT	BOOL	H11.02	 		0	
-      _4DROP1STRT	BOOL	H9.06	 		0	
-      _4DROP2STRT	BOOL	H10.00	 		0	
-      _4DROP3STRT	BOOL	H10.09	 		0	
-      _4DROP4STRT	BOOL	H11.05	 		0	
-      	CHANNEL	D31316	PRETREATMENT DRAIN RAW		0	
-      	CHANNEL	D31360	Control Word		0	
-      	CHANNEL	D31367	DRAIN FLOW SCALED HEX		0	
-      PRT1_AG_TOFF	BOOL	T3032	PRT1 AG Off		0	
-      PRT2_AG_TOFF	BOOL	T3082	PRT2 AG Off		0	
-      PRT3_AG_TOFF	BOOL	T3132	PRT3 AG Off		0	
-      PRT4_AG_TOFF	BOOL	T4032	PRT4 AG Off		0	
-      PRT1_SEQ_TIM_PRE	CHANNEL	D32101	Time Preset Value		0	
-      	CHANNEL	D32190	PRT1 Acid Drain 4 min Time		0	
-      PRT2_SEQ_TIM_PRE	CHANNEL	D32201	Time Preset Value		0	
-      	CHANNEL	D32290	PRT2 Acid Drain 4 min Time		0	
-      PRT3_SEQ_TIM_PRE	CHANNEL	D32301	Time Preset Value		0	
-      	CHANNEL	D32390	PRT3 Acid Drain 4 min Time		0	
-      PRT4_SEQ_TIM_PRE	CHANNEL	D32501	Time Preset Value		0	
-      	CHANNEL	D32590	PRT4 Acid Drain 4 min Time		0	
-      	BOOL	403.04	TK1 High Level		0	
-      	BOOL	W17.14	TK1 High Level Override		0	
-      	BOOL	403.03	EFF TK1 HI LEVEL		0	
-      	BOOL	W17.01	PRT1 Draining		0	
-      	BOOL	W17.05	PRT1 Drain Counter STOP		0	
-      	BOOL	W17.02	PRT2 Draining		0	
-      	BOOL	W17.06	PRT #2 Drain Counter STOP		0	
-      	BOOL	W17.03	PRT3 Draining		0	
-      	BOOL	W17.07	PRT #3 Drain Counter STOP		0	
-      	BOOL	W17.04	PRT4 Draining		0	
-      	BOOL	W17.08	PRT4 Drain Counter STOP		0	
-      	BOOL	W17.12	Delay After TK1 Not HI Level		0	
-      	BOOL	W17.11	Delay to Open PRT Drop Valve		0	
-      	BOOL	W17.13	Delay to Open RotoStrainer Valve		0	
-      	BOOL	403.05	DAF Trouble		0	
-      	BOOL	W17.09	EXT Drain Valve Interlock		0	
-      	BOOL	W17.00	One or more PRT's Draining		0	
-      	BOOL	W17.10	Manual (test)		0	
-      	CHANNEL	D31318	C (Drain Flow Setpoint)		0	
-      	BOOL	403.01	PRT Drain Active		0	
-      RPCNTRLVLV	CHANNEL	2031	PRETREATMENT DRAIN VALVE OUTPUT		0	
-      	BOOL	403.02	PRT Drain & TK1 HI Level/DAF Trouble		0	
-      	CHANNEL	D31319	C+1 (P)		0	
-      	CHANNEL	D31320	C+2 (I)		0	
-      	CHANNEL	D31321	C+3 (D)		0	
-      	CHANNEL	D31322	C+4 (Sampling Period)		0	
-      	CHANNEL	D31323	C+5		0	
-      	CHANNEL	D31324	C+6		0	
-      	CHANNEL	D31325	C+7 (Output Lower Limit)		0	
-      	CHANNEL	D31326	C+8 (Output Upper Limit)		0	
-      	CHANNEL	D31378	DRAIN FLOW SCALED BCD		0	
-      	BOOL	3361.00	PTR#2 Level >= 17%		0	
-      	BOOL	3361.01	PRT#3 Level >= 17%		0	
-      	BOOL	3361.02	PRT#4 Level >= 17%		0	
-      	BOOL	3361.04	Override from SCADA		0	
-      	BOOL	T0609	Alarm On Delay		0	
-      	BOOL	3361.03	Door Status to SCADA		0	
-      	BOOL	C0353	xx Min Door Override		0	
     </GLOBALSYMBOL>
     <LOCALSYMBOL>
       PRT3_LEVEL_RAW	CHANNEL	3311			0	

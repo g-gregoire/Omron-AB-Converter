@@ -158,7 +158,7 @@ class Rung:
         # print(block3)
 
         # Extract instruction Tag from Counter/Timer
-        print("Block 3: ", block3.converted_block[0])
+        # print("Block 3: ", block3.converted_block[0])
         if instr_type.upper() == "COUNTER":
             match = re.search(r"CNT\d{3,4}", block3.converted_block[0])
             if match:
@@ -166,7 +166,8 @@ class Rung:
             else: tag = "???" # Placeholder for error
             reset_instruction = "RES(" + tag + ")"
         elif instr_type.upper() == "KEEP":
-            match = re.search(r"OTL\(\w+\)", block3.converted_block[0])
+            match = re.search(r"OTL\([\w.]+\)", block3.converted_block[0])
+            # print("Match: ", match)
             if match:
                 # print("Match: ", match.group(0))
                 tag = match.group(0)

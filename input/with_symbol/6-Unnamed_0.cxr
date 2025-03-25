@@ -1,0 +1,575 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      LD T0145
+      AND _1AIRSHOTCMD
+      ANDNOT _1AIRSHOTCNT_Status
+      ANDNOT _1AIRSHOTDLY_Status
+      TIM 0004 #900
+      ^^^
+      LD _1AIRSHOTDLY_Status
+      LD _1AIRSHOTLENGTH_Status
+      OR H93.01
+      CNT 0090 #10
+      ^^^
+      LD T0146
+      AND _2AIRSHOTCMD
+      ANDNOT _2AIRSHOTCNT_Status
+      ANDNOT _2AIRSHOTDLY_Status
+      TIM 0050 #900
+      ^^^
+      LD _2AIRSHOTDLY_Status
+      LD _2AIRSHOTLENGTH_Status
+      OR H93.02
+      CNT 0091 #10
+      ^^^
+      LD T0147
+      AND _3AIRSHOTCMD
+      ANDNOT _3AIRSHOTCNT_Status
+      ANDNOT _3AIRSHOTLENGTH_Status
+      TIM 0101 #900
+      ^^^
+      LD _3AIRSHOTDLY_Status
+      LD _3AIRSHOTLENGTH_Status
+      OR H93.03
+      CNT 0092 #10
+      ^^^
+      LD T0148
+      AND _4AIRSHOTCMD
+      ANDNOT _4AIRSHOTCNT_Status
+      ANDNOT _4AIRSHOTDLY_Status
+      TIM 0121 #900
+      ^^^
+      LD _4AIRSHOTDLY_Status
+      LD T0120
+      OR H93.04
+      CNT 0093 #10
+      ^^^
+      LD _1HEAT1START
+      ANDNOT _1HEAT1CMPLT
+      LD _1HEAT2STRT
+      ANDNOT _1HEAT2CMPLT
+      ORLD
+      LD _1HEAT3STRT
+      ANDNOT _1HEAT3CMPLT
+      ORLD
+      LD _1HEAT4STRT
+      ANDNOT _1HEAT4CMPLT
+      ORLD
+      LD _2HEAT1STRT
+      ANDNOT _2HEAT1CMPLT
+      ORLD
+      LD _2HEAT2STRT
+      ANDNOT _2HEAT2CMPLT
+      ORLD
+      LD _2HEAT3START
+      ANDNOT _2HEAT3CMPLT
+      ORLD
+      LD _2HEAT4STRT
+      ANDNOT _2HEAT4CMPLT
+      ORLD
+      TIM 0139 #600
+      ^^^
+      LD _3HEAT1STRT
+      ANDNOT _3HEAT1CMPLT
+      LD _3HEAT2STRT
+      ANDNOT _3HEAT2CMPLT
+      ORLD
+      LD _3HEAT3STRT
+      ANDNOT _3HEAT3CMPLT
+      ORLD
+      LD _3HEAT4STRT
+      ANDNOT _3HEAT4CMPLT
+      ORLD
+      LD _4HEAT1STRT
+      ANDNOT _4HEAT1CMPLT
+      ORLD
+      LD _4HEAT2STRT
+      ANDNOT _4HEAT2CMPLT
+      ORLD
+      LD _4HEAT3STRT
+      ANDNOT _4HEAT3CMPLT
+      ORLD
+      LD _4HEAT4STRT
+      ANDNOT _4HEAT4CMPLT
+      ORLD
+      TIM 0140 #600
+      ^^^
+      LD HTCMPFLAG
+      OR HE1_TEMP
+      ANDNOT H93.01
+      TIM 0141 #1800
+      OUT HE1_TEMP
+      ^^^
+      LD _2HTCMPFLAG
+      OR HE2_TEMP
+      ANDNOT H93.02
+      TIM 0142 #1800
+      OUT HE2_TEMP
+      ^^^
+      LD _34HECMLFLAG
+      OR HE3_TEMP
+      ANDNOT H93.03
+      TIM 0143 #1800
+      OUT HE3_TEMP
+      ^^^
+      LD _4HTCMPLTFLAG
+      OR HE4_TEMP
+      ANDNOT H93.04
+      TIM 0144 #1800
+      OUT HE4_TEMP
+      ^^^
+      LD ON
+      MOV(021) #0 D3205
+      ^^^
+      LD ON
+      MOV(021) #0 D3207
+      MOV(021) WFFLOWMETER D3206
+      MOV(021) WFFLOWMETER D990
+      ^^^
+      '  WF TOTL REST\nwater fraction totalizer Reset
+      LD _3FILL3CMPLT
+      ANDNOT _3WF3START
+      LD _4FILL3CMPLT
+      ANDNOT _4WF3START
+      ORLD
+      LD _3FILL4CMPLT
+      ANDNOT _3WFFILL4STRT
+      ORLD
+      LD _4FILL4CMPLT
+      ANDNOT _4WFFILL4STRT
+      ORLD
+      LDNOT _1WF3START
+      ANDNOT _2WF3START
+      ANDNOT _3WF3START
+      ANDNOT _4WF3START
+      ORLD
+      ANDNOT WFSUPPLY_SV30_02
+      @BSET(071) #0 D995 D996
+      @BSET(071) #0 D990 D991
+      @MOV(021) #0 D995
+      ^^^
+      '  WF TOTALIZER\nSet point from SCADA DM82 to set the WF add to each EXT
+      LD _1WF3START
+      ANDNOT _1WF3ADDCMPLT
+      LD _2WF3START
+      ANDNOT _2WF3ADDCMPLT
+      ORLD
+      LD _3WF3START
+      ANDNOT _3WF3ADDCMPLT
+      ORLD
+      LD _4WF3START
+      ANDNOT _4WF3ADDCMPLT
+      ORLD
+      LD _1WF4STRT
+      ANDNOT _1WFADDCMPLT
+      ORLD
+      LD _2WF4STRT
+      ANDNOT _2WFADDCMPLT
+      ORLD
+      LD _3WFFILL4STRT
+      ANDNOT _3WFADDCMPLT
+      ORLD
+      LD _4WFFILL4STRT
+      ANDNOT _4WFADDCMPLT
+      ORLD
+      AND _1_SEC_PULSE
+      @+BCL(407) D995 D990 D995
+      ^^^
+      LD ON
+      CMPL(060) D995 D90
+      LD GREATER_THAN
+      OR EQUALS
+      ANDLD
+      OUT STOP_WF
+      ^^^
+      LDNOT EXT1_2_Fill_valve_via_HE
+      ANDNOT EXT3_4_Fill_valve_via_HE
+      ANDNOT _1WTRFEED
+      ANDNOT _2WTRFEED
+      ANDNOT _3WTRFEED
+      ANDNOT _4WTRFEEDVLV
+      TIM 0210 #100
+      AND T0210
+      BSET(071) #0 D3200 D3203
+      ^^^
+      LD WATERSUPPLY
+      AND WFSUPPLY_SV30_02
+      OUT SUPPLY_ALM
+      ^^^
+      LD _1WTRFEED
+      OR _2WTRFEED
+      OR _3WTRFEED
+      OR _4WTRFEEDVLV
+      LD EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      ANDNOT _4WTRFEEDVLV
+      AND _4GELFEED
+      LD H18.00
+      ANDNOT _3WTRFEED
+      AND _3GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      LD EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      ANDNOT _2WTRFEED
+      AND _2GELFEED
+      LD H16.00
+      ANDNOT _1WTRFEED
+      AND _1GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      AND WATERSUPPLY
+      CMP(020) 2015 #5
+      AND LESS_THAN
+      OUT FILL_FLOW_ALM
+      ^^^
+      LD _1WTRFEED
+      OR _2WTRFEED
+      OR _3WTRFEED
+      OR _4WTRFEEDVLV
+      LD EXT3_4_Fill_valve_via_HE
+      LD H19.00
+      ANDNOT _4WTRFEEDVLV
+      AND _4GELFEED
+      LD H18.00
+      ANDNOT _3WTRFEED
+      AND _3GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      LD EXT1_2_Fill_valve_via_HE
+      LD H17.00
+      ANDNOT _2WTRFEED
+      AND _2GELFEED
+      LD H16.00
+      ANDNOT _1WTRFEED
+      AND _1GELFEED
+      ORLD
+      ANDLD
+      ORLD
+      AND WFSUPPLY_SV30_02
+      CMP(020) WFFLOWMETER #2
+      AND LESS_THAN
+      OUT WF_FLOW_ALM
+      ^^^
+      LD ON
+      SCL(194) 2017 D31440 D31444
+      ^^^
+      LD EXT12RECIRCPMP
+      CMP(020) D31444 #1000
+      AND LESS_THAN
+      TIM 4048 #150
+      AND T4048
+      OUT PU120_NOFLO_ALM
+      ^^^
+      LD EXT12RECIRCPMP
+      CMP(020) D31444 #2200
+      AND LESS_THAN
+      TIM 0355 #900
+      AND T0355
+      OUT H94.04
+      ^^^
+      LD ON
+      SCL(194) 2012 D31445 D31449
+      ^^^
+      LD EXT34RECIRCPMP
+      CMP(020) D31449 #1000
+      AND LESS_THAN
+      TIM 4049 #150
+      AND T4049
+      OUT PU340_NOFLO_ALM
+      ^^^
+      LD EXT34RECIRCPMP
+      CMP(020) D31449 #2200
+      AND LESS_THAN
+      TIM 0356 #900
+      AND T0356
+      OUT H94.05
+      ^^^
+      LD _1HEAT2STRT
+      DIFU(013) H93.05
+      ^^^
+      LD _1HEAT3STRT
+      DIFU(013) H93.06
+      ^^^
+      LD _1HEAT4STRT
+      DIFU(013) H93.07
+      ^^^
+      LD _1HEAT1START
+      DIFU(013) H94.00
+      ^^^
+      LD H94.00
+      OR H93.05
+      OR H93.06
+      OR H93.07
+      OUT H93.01
+      ^^^
+      LD _2HEAT2STRT
+      DIFU(013) H93.08
+      ^^^
+      LD _2HEAT3START
+      DIFU(013) H93.09
+      ^^^
+      LD _2HEAT4STRT
+      DIFU(013) H93.10
+      ^^^
+      LD _2HEAT1STRT
+      DIFU(013) H94.01
+      ^^^
+      LD H94.01
+      OR H93.08
+      OR H93.09
+      OR H93.10
+      OUT H93.02
+      ^^^
+      LD _3HEAT2STRT
+      DIFU(013) H93.11
+      ^^^
+      LD _3HEAT3STRT
+      DIFU(013) H93.12
+      ^^^
+      LD _3HEAT4STRT
+      DIFU(013) H93.13
+      ^^^
+      LD _3HEAT1STRT
+      DIFU(013) H94.02
+      ^^^
+      LD H94.02
+      OR H93.11
+      OR H93.12
+      OR H93.13
+      OUT H93.03
+      ^^^
+      LD _4HEAT2STRT
+      DIFU(013) H93.14
+      ^^^
+      LD _4HEAT3STRT
+      DIFU(013) H93.15
+      ^^^
+      LD _4HEAT4STRT
+      DIFU(013) H93.00
+      ^^^
+      LD _4HEAT1STRT
+      DIFU(013) H94.03
+      ^^^
+      LD H94.03
+      OR H93.14
+      OR H93.15
+      OR H93.00
+      OUT H93.04
+      ^^^
+      LD T0145
+      TIM 0008 #3000
+      ^^^
+      LD T0146
+      TIM 0009 #3000
+      ^^^
+      LD T0147
+      TIM 0010 #3000
+      ^^^
+      LD T0148
+      TIM 0011 #3000
+      ^^^
+      LD ON
+      OUT TR0
+      ANDNOT T0212
+      TIM 0211 #20
+      LD TR0
+      AND T0211
+      TIM 0212 #100
+      ^^^
+      '  REEST ALL input from SCADA
+      LDNOT T0211
+      @BSET(071) #0 465 476
+      @BSET(071) #0 480 482
+      @BSET(071) #0 506 509
+      ^^^
+      '  HBLV 1st Cook Water Fill Setpoint\nD189 and D188 are the two DM's for the Long Compare (double word)\n(12m3 = 0001 2000)
+      LD H16.00
+      OR H17.00
+      OR H18.00
+      OR H19.00
+      MOV(021) #1 D189
+      MOV(021) #2000 D188
+      ^^^
+      '  13 m3 max  for 1st cook fill for EXTs  Dec-3-08 -----KA
+      LD _1FILL1STRT
+      OUT TR0
+      ANDNOT H16.00
+      CMPL(060) D900 D88
+      AND P_GE
+      OUT 485.01
+      LD TR0
+      AND H16.00
+      CMPL(060) D900 D188
+      AND P_GE
+      OUT 485.12
+      ^^^
+      LD _2FILL1STRT
+      OUT TR0
+      ANDNOT H17.00
+      CMPL(060) D914 D88
+      AND P_GE
+      OUT 485.02
+      LD TR0
+      AND H17.00
+      CMPL(060) D914 D188
+      AND P_GE
+      OUT 485.13
+      ^^^
+      LD _3FILL1STRT
+      OUT TR0
+      ANDNOT H18.00
+      CMPL(060) D928 D88
+      AND P_GE
+      OUT 485.03
+      LD TR0
+      AND H18.00
+      CMPL(060) D928 D188
+      AND P_GE
+      OUT 485.11
+      ^^^
+      LD _4FILL1STRT
+      OUT TR0
+      ANDNOT H19.00
+      CMPL(060) D942 D88
+      AND P_GE
+      OUT 485.04
+      LD TR0
+      AND H19.00
+      CMPL(060) D942 D188
+      AND P_GE
+      OUT 485.15
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+      _1AIRSHOTCMD	BOOL	H90.00	AIR SHOT COMMAND FOR EXTRACTOR #1		0	
+      _1AIRSHOTCNT_Status	BOOL	C0090	AIR SHOT TIMER COUNT OF 10 FOR EXTRACTOR 1		0	
+      _1AIRSHOTDLY_Status	BOOL	T0004	Delay Between Air Shots		0	
+      _1AIRSHOTLENGTH_Status	BOOL	T0005	Air Shot Length		0	
+      _2AIRSHOTCMD	BOOL	H90.01	AIR SHOT COMMAND FOR EXTRACTOR #2		0	
+      _2AIRSHOTCNT_Status	BOOL	C0091	AIR SHOT TIMER COUNT OF 10 FOR EXTRACTOR 2		0	
+      _2AIRSHOTDLY_Status	BOOL	T0050	 		0	
+      _2AIRSHOTLENGTH_Status	BOOL	T0051	 		0	
+      _3AIRSHOTCMD	BOOL	H90.02	AIR SHOT COMMAND FOR EXTRACTOR #3		0	
+      _3AIRSHOTCNT_Status	BOOL	C0092	AIR SHOT TIMER COUNT OF 10 FOR EXTRACTOR 3		0	
+      _3AIRSHOTLENGTH_Status	BOOL	T0100	 		0	
+      _3AIRSHOTDLY_Status	BOOL	T0101	 		0	
+      _4AIRSHOTCMD	BOOL	H90.03	AIR SHOT COMMAND FOR EXTRACTOR #4		0	
+      _4AIRSHOTCNT_Status	BOOL	C0093	AIR SHOT TIMER COUNT OF 10 FOR EXTRACTOR 4		0	
+      _4AIRSHOTDLY_Status	BOOL	T0121	Delay Between Air Shots		0	
+      _1HEAT1START	BOOL	H0.03	Extractor 1 Start Heat Up #1		0	
+      _1HEAT1CMPLT	BOOL	H0.04	Extractor 1 Heat Up Complete		0	
+      _1HEAT2STRT	BOOL	H0.13	Extractor 1 Start Heat Up #2		0	
+      _1HEAT2CMPLT	BOOL	H0.14	Extractor 1 2nd Cook Heat Up Complete		0	
+      _1HEAT3STRT	BOOL	H1.06	Extractor 1 Start Heat Up #3		0	
+      _1HEAT3CMPLT	BOOL	H1.07	 		0	
+      _1HEAT4STRT	BOOL	H2.02	Extractor 1 Start Heat Up #4 		0	
+      _1HEAT4CMPLT	BOOL	H2.03	 		0	
+      _2HEAT1STRT	BOOL	H3.03	 		0	
+      _2HEAT1CMPLT	BOOL	H3.04	 		0	
+      _2HEAT2STRT	BOOL	H3.13	 		0	
+      _2HEAT2CMPLT	BOOL	H3.14	 		0	
+      _2HEAT3START	BOOL	H4.06	 		0	
+      _2HEAT3CMPLT	BOOL	H4.07	 		0	
+      _2HEAT4STRT	BOOL	H5.02	 		0	
+      _2HEAT4CMPLT	BOOL	H5.03	 		0	
+      _3HEAT1STRT	BOOL	H6.03	 		0	
+      _3HEAT1CMPLT	BOOL	H6.04	 		0	
+      _3HEAT2STRT	BOOL	H6.13	 		0	
+      _3HEAT2CMPLT	BOOL	H6.14	 		0	
+      _3HEAT3STRT	BOOL	H7.06	 		0	
+      _3HEAT3CMPLT	BOOL	H7.07	 		0	
+      _3HEAT4STRT	BOOL	H8.02	 		0	
+      _3HEAT4CMPLT	BOOL	H8.03	 		0	
+      _4HEAT1STRT	BOOL	H9.03	 		0	
+      _4HEAT1CMPLT	BOOL	H9.04	 		0	
+      _4HEAT2STRT	BOOL	H9.13	 		0	
+      _4HEAT2CMPLT	BOOL	H9.14	 		0	
+      _4HEAT3STRT	BOOL	H10.06	 		0	
+      _4HEAT3CMPLT	BOOL	H10.07	 		0	
+      _4HEAT4STRT	BOOL	H11.02	 		0	
+      _4HEAT4CMPLT	BOOL	H11.03	 		0	
+      HTCMPFLAG	BOOL	500.07	Extractor 1 Cook Heat Up Complete Flag		0	
+      HE1_TEMP	BOOL	H91.01	EXTRACTOR #1 HEAT EXCHANGER REACHED SETPOINT		0	
+      _2HTCMPFLAG	BOOL	494.07	 		0	
+      HE2_TEMP	BOOL	H91.02	EXTRACTOR #2 HEAT EXCHANGER REACHED SETPOINT		0	
+      _34HECMLFLAG	BOOL	490.07	 		0	
+      HE3_TEMP	BOOL	H91.03	EXTRACTOR #3 HEAT EXCHANGER REACHED SETPOINT		0	
+      _4HTCMPLTFLAG	BOOL	484.07	 		0	
+      HE4_TEMP	BOOL	H91.04	EXTRACTOR #4 HEAT EXCHANGER REACHED SETPOINT		0	
+      ON	BOOL	CF113	System Normally On Flag		0	
+      WFFLOWMETER	CHANNEL	2014	 		0	
+      _3FILL3CMPLT	BOOL	H8.10	 		0	
+      _3WF3START	BOOL	H8.11	EXT#3 3rd cook water fraction add start		0	
+      _4FILL3CMPLT	BOOL	H10.11	 		0	
+      _4WF3START	BOOL	H11.11	EXT#4 3rd cook water fraction add start		0	
+      _3FILL4CMPLT	BOOL	H8.01	 		0	
+      _3WFFILL4STRT	BOOL	H7.14	 		0	
+      _4FILL4CMPLT	BOOL	H11.10	 		0	
+      _4WFFILL4STRT	BOOL	H10.14	 		0	
+      _1WF3START	BOOL	H2.11	EXT#1 3rd cook water fraction add start		0	
+      _2WF3START	BOOL	H5.11	EXT#2 3rd cook water fraction add start		0	
+      WFSUPPLY_SV30_02	BOOL	40.02	Water Fraction SV30-02		0	
+      _1WF3ADDCMPLT	BOOL	H2.12	EXT#1 3rd cook water fraction add complete		0	
+      _2WF3ADDCMPLT	BOOL	H5.12	EXT#2 3rd cook water fraction add complete		0	
+      _3WF3ADDCMPLT	BOOL	H8.12	EXT#3 3rd cook water fraction add complete		0	
+      _4WF3ADDCMPLT	BOOL	H11.12	EXT#4 3rd cook water fraction add complete		0	
+      _1WF4STRT	BOOL	H1.14	 		0	
+      _1WFADDCMPLT	BOOL	H1.15	Extractor 1 Water Fraction Add Complete		0	
+      _2WF4STRT	BOOL	H4.14	 		0	
+      _2WFADDCMPLT	BOOL	H4.15	 		0	
+      _3WFADDCMPLT	BOOL	H7.15	 		0	
+      _4WFADDCMPLT	BOOL	H10.15	 		0	
+      _1_SEC_PULSE	BOOL	CF102	System 1.0 second clock pulse bit		0	
+      GREATER_THAN	BOOL	CF005	System Greater Than (GE) Flag		0	
+      EQUALS	BOOL	CF006	System Equals (EQ) Flag		0	
+      STOP_WF	BOOL	477.05	Stop WF S.P. Reached		0	
+      EXT1_2_Fill_valve_via_HE	BOOL	45.02	SV30-67		0	
+      EXT3_4_Fill_valve_via_HE	BOOL	45.07	SV30-68		0	
+      _1WTRFEED	BOOL	40.05	SV30-10		0	
+      _2WTRFEED	BOOL	41.04	SV30-20 		0	
+      _3WTRFEED	BOOL	44.04	SV30-30		0	
+      _4WTRFEEDVLV	BOOL	45.04	SV30-40		0	
+      WATERSUPPLY	BOOL	41.14	Water Fill SV30-05		0	
+      SUPPLY_ALM	BOOL	H92.00	SUPPLY ALARM		0	
+      	BOOL	H19.00	PRT#4 HBLV ON/OFF P.B.		0	
+      _4GELFEED	BOOL	45.06	SV30-45		0	
+      	BOOL	H18.00	PRT#3 HBLV ON/OFF P.B.		0	
+      _3GELFEED	BOOL	44.06	SV30-35		0	
+      	BOOL	H17.00	PRT#2 HBLV ON/OFF P.B.		0	
+      _2GELFEED	BOOL	41.06	SV30-25		0	
+      	BOOL	H16.00	PRT#1 HBLV ON/OFF P.B.		0	
+      _1GELFEED	BOOL	40.07	SV30-15		0	
+      	CHANNEL	2015	EXT Fill Flow litre/sec		0	
+      LESS_THAN	BOOL	CF007	System Less Than (LE) Flag		0	
+      FILL_FLOW_ALM	BOOL	H92.01	FILL FLOW ALARM		0	
+      WF_FLOW_ALM	BOOL	H92.02	WF FLOW ALARM		0	
+      EXT12RECIRCPMP	BOOL	10.02	Extractor 1 and 2 Recirc Pump		0	
+      PU120_NOFLO_ALM	BOOL	H92.03	PU120 NO FLOW ALARM		0	
+      	BOOL	H94.04	EXT 1/2 LOW FLOW ALARM		0	
+      EXT34RECIRCPMP	BOOL	11.00	 		0	
+      PU340_NOFLO_ALM	BOOL	H92.04	PU340 NO FLOW ALARM		0	
+      	BOOL	H94.05	EXT 3/4 LOW FLOW ALARM		0	
+      _1FILL1STRT	BOOL	H0.01	Extractor 1 Start fill 1st Cook		0	
+      	BOOL	485.01	stop 1st water fill EXT#1		0	
+      	BOOL	485.12	stop 1st water fill EXT#1 (HBLV)		0	
+      _2FILL1STRT	BOOL	H3.01	 		0	
+      	BOOL	485.02	stop 1st water fill EXT#2		0	
+      	BOOL	485.13	stop 1st water fill EXT#2 (HBLV)		0	
+      _3FILL1STRT	BOOL	H6.01	 		0	
+      	BOOL	485.03	stop 1st water fill EXT#3		0	
+      	BOOL	485.11	stop 1st water fill EXT#3 (HBLV)		0	
+      _4FILL1STRT	BOOL	H9.01	 		0	
+      	BOOL	485.04	stop 1st water fill EXT#4		0	
+      	BOOL	485.15	stop 1st water fill EXT#4 (HBLV)		0	
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

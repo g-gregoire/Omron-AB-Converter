@@ -1,0 +1,729 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      LD H2.06
+      AND H2.07
+      ANDNOT H0.01
+      BSET(071) #0 D3001 D3029
+      ^^^
+      LD 505.05
+      BSET(071) #0 D3030 D3039
+      ^^^
+      LD H5.06
+      AND H5.07
+      ANDNOT H3.01
+      BSET(071) #0 D3049 D3069
+      ^^^
+      LD 505.06
+      BSET(071) #0 D3070 D3079
+      ^^^
+      LD H8.06
+      AND H8.07
+      ANDNOT H6.01
+      BSET(071) #0 D3080 D3109
+      ^^^
+      LD 494.14
+      BSET(071) #0 D3110 D3119
+      ^^^
+      LD H11.06
+      AND H11.07
+      ANDNOT H9.01
+      BSET(071) #0 D3120 D3149
+      ^^^
+      LD 495.06
+      BSET(071) #0 D3150 D3159
+      ^^^
+      LD H0.01
+      ANDNOT H0.02
+      MOV(021) D982 D3001
+      MOV(021) D3170 D3002
+      ^^^
+      LD H0.03
+      ANDNOT H0.04
+      TIM 0300 #600
+      MOV(021) 2002 D3004
+      ^^^
+      LD T0300
+      DIFU(013) 510.00
+      ^^^
+      LD 510.00
+      MOV(021) 2002 D3003
+      ^^^
+      LD H0.06
+      ANDNOT H0.07
+      MOV(021) 2011 D3005
+      ^^^
+      LD H0.06
+      ANDNOT H0.08
+      MOV(021) 314 D3006
+      MOV(021) D3006 D3007
+      ^^^
+      LD H0.11
+      ANDNOT H0.12
+      MOV(021) D982 D3011
+      MOV(021) D3170 D3012
+      ^^^
+      LD H0.13
+      ANDNOT H0.14
+      TIM 0301 #600
+      MOV(021) 2002 D3014
+      ^^^
+      LD T0301
+      DIFU(013) 510.01
+      ^^^
+      LD 510.01
+      MOV(021) 2002 D3013
+      ^^^
+      LD H1.00
+      ANDNOT H1.01
+      MOV(021) 2011 D3015
+      ^^^
+      LD H1.00
+      ANDNOT H1.02
+      MOV(021) 314 D3016
+      MOV(021) D3016 D3017
+      ^^^
+      LD H1.05
+      ANDNOT H2.10
+      MOV(021) D982 D3021
+      MOV(021) D3170 D3022
+      ^^^
+      LD H2.11
+      ANDNOT H2.12
+      MOV(021) D840 D3028
+      MOV(021) D3180 D3029
+      ^^^
+      LD H1.06
+      ANDNOT H1.07
+      TIM 0302 #600
+      MOV(021) 2002 D3024
+      ^^^
+      LD T0302
+      DIFU(013) 510.02
+      ^^^
+      LD 510.02
+      MOV(021) 2002 D3023
+      ^^^
+      LD H1.09
+      ANDNOT H1.10
+      MOV(021) 2011 D3025
+      ^^^
+      LD H1.09
+      ANDNOT H1.11
+      MOV(021) 314 D3026
+      MOV(021) D3026 D3027
+      ^^^
+      LD H2.00
+      ANDNOT H2.01
+      MOV(021) D982 D3031
+      MOV(021) D3170 D3032
+      ^^^
+      '  EXT#1 FILL VOLUME ALARM
+      LD H0.01
+      @AND H0.02
+      AND<(310) D3002 #1500
+      LD H0.11
+      @AND H0.12
+      AND<(310) D3012 #1230
+      ORLD
+      LD H1.05
+      @AND H2.10
+      AND<(310) D3022 #830
+      ORLD
+      LD H2.00
+      @AND H2.01
+      AND<(310) D3032 #500
+      ORLD
+      SET W9.01
+      ^^^
+      LD H1.14
+      ANDNOT H1.15
+      MOV(021) D840 D3038
+      MOV(021) D3180 D3039
+      ^^^
+      LD H2.02
+      ANDNOT H2.03
+      TIM 0303 #600
+      MOV(021) 2002 D3034
+      ^^^
+      LD T0303
+      DIFU(013) 510.03
+      ^^^
+      LD 510.03
+      MOV(021) 2002 D3033
+      ^^^
+      LD H2.05
+      ANDNOT H2.06
+      MOV(021) 2011 D3035
+      ^^^
+      LD H2.05
+      ANDNOT H2.07
+      MOV(021) 314 D3036
+      MOV(021) D3036 D3037
+      ^^^
+      LD H3.01
+      ANDNOT H3.02
+      MOV(021) D982 D3041
+      MOV(021) D3170 D3042
+      ^^^
+      LD H3.03
+      ANDNOT H3.04
+      TIM 0304 #600
+      MOV(021) 2002 D3044
+      ^^^
+      LD T0304
+      DIFU(013) 510.04
+      ^^^
+      LD 510.04
+      MOV(021) 2002 D3043
+      ^^^
+      LD H3.06
+      ANDNOT H3.07
+      MOV(021) 2005 D3045
+      ^^^
+      LD H3.06
+      ANDNOT H3.08
+      MOV(021) 315 D3046
+      MOV(021) D3046 D3047
+      ^^^
+      LD H3.11
+      ANDNOT H3.12
+      MOV(021) D982 D3051
+      MOV(021) D3170 D3052
+      ^^^
+      LD H3.13
+      ANDNOT H3.14
+      TIM 0305 #600
+      MOV(021) 2002 D3054
+      ^^^
+      LD T0305
+      DIFU(013) 510.05
+      ^^^
+      LD 510.05
+      MOV(021) 2002 D3053
+      ^^^
+      LD H4.00
+      ANDNOT H4.01
+      MOV(021) 2005 D3055
+      ^^^
+      LD H4.00
+      ANDNOT H4.02
+      MOV(021) 315 D3056
+      MOV(021) D3056 D3057
+      ^^^
+      LD H4.05
+      ANDNOT H3.00
+      MOV(021) D982 D3061
+      MOV(021) D3170 D3062
+      ^^^
+      LD H5.11
+      ANDNOT H5.12
+      MOV(021) D840 D3068
+      MOV(021) D3180 D3069
+      ^^^
+      LD H4.06
+      ANDNOT H4.07
+      TIM 0306 #600
+      MOV(021) 2002 D3064
+      ^^^
+      LD T0306
+      DIFU(013) 510.06
+      ^^^
+      LD 510.06
+      MOV(021) 2002 D3063
+      ^^^
+      LD H4.09
+      ANDNOT H4.10
+      MOV(021) 2005 D3065
+      ^^^
+      LD H4.09
+      ANDNOT H4.11
+      MOV(021) 315 D3066
+      MOV(021) D3066 D3067
+      ^^^
+      LD H5.00
+      ANDNOT H5.10
+      MOV(021) D982 D3071
+      MOV(021) D3170 D3072
+      ^^^
+      '  EXT#2 FILL VOLUME ALARM
+      LD H3.01
+      @AND H3.02
+      AND<(310) D3042 #1500
+      LD H3.11
+      @AND H3.12
+      AND<(310) D3052 #1230
+      ORLD
+      LD H4.05
+      @AND H3.00
+      AND<(310) D3062 #830
+      ORLD
+      LD H5.00
+      @AND H5.10
+      AND<(310) D3072 #500
+      ORLD
+      SET W9.02
+      ^^^
+      LD H4.14
+      ANDNOT H4.15
+      MOV(021) D840 D3078
+      MOV(021) D3180 D3079
+      ^^^
+      LD H5.02
+      ANDNOT H5.03
+      TIM 0307 #600
+      MOV(021) 2002 D3074
+      ^^^
+      LD T0307
+      DIFU(013) 510.07
+      ^^^
+      LD 510.07
+      MOV(021) 2002 D3073
+      ^^^
+      LD H5.05
+      ANDNOT H5.06
+      MOV(021) 2005 D3075
+      ^^^
+      LD H5.05
+      ANDNOT H5.07
+      MOV(021) 315 D3076
+      MOV(021) D3076 D3077
+      ^^^
+      LD H6.01
+      ANDNOT H6.02
+      MOV(021) D982 D3081
+      MOV(021) D3170 D3082
+      ^^^
+      LD H6.03
+      ANDNOT H6.04
+      TIM 0308 #600
+      MOV(021) 2006 D3084
+      ^^^
+      LD T0308
+      DIFU(013) 510.08
+      ^^^
+      LD 510.08
+      MOV(021) 2006 D3083
+      ^^^
+      LD H6.06
+      ANDNOT H6.07
+      MOV(021) 2013 D3085
+      ^^^
+      LD H6.06
+      ANDNOT H6.08
+      MOV(021) 316 D3086
+      MOV(021) D3086 D3087
+      ^^^
+      LD H6.11
+      ANDNOT H6.12
+      MOV(021) D982 D3091
+      MOV(021) D3170 D3092
+      ^^^
+      LD H6.13
+      ANDNOT H6.14
+      TIM 0309 #600
+      MOV(021) 2006 D3094
+      ^^^
+      LD T0309
+      DIFU(013) 510.09
+      ^^^
+      LD 510.09
+      MOV(021) 2006 D3093
+      ^^^
+      LD H7.00
+      ANDNOT H7.01
+      MOV(021) 2013 D3095
+      ^^^
+      LD H7.00
+      ANDNOT H7.02
+      MOV(021) 316 D3096
+      MOV(021) D3096 D3097
+      ^^^
+      LD H7.05
+      ANDNOT H8.10
+      MOV(021) D982 D3101
+      MOV(021) D3170 D3102
+      ^^^
+      LD H8.11
+      ANDNOT H8.12
+      MOV(021) D840 D3108
+      MOV(021) D3180 D3109
+      ^^^
+      LD H7.06
+      ANDNOT H7.07
+      TIM 0310 #600
+      MOV(021) 2006 D3104
+      ^^^
+      LD T0310
+      DIFU(013) 510.10
+      ^^^
+      LD 510.10
+      MOV(021) 2006 D3103
+      ^^^
+      LD H7.09
+      ANDNOT H7.10
+      MOV(021) 2013 D3105
+      ^^^
+      LD H7.09
+      ANDNOT H7.11
+      MOV(021) 316 D3106
+      MOV(021) D3106 D3107
+      ^^^
+      LD H8.00
+      ANDNOT H8.01
+      MOV(021) D982 D3111
+      MOV(021) D3170 D3112
+      ^^^
+      LD H6.01
+      @AND H6.02
+      AND<(310) D3082 #1500
+      LD H6.11
+      @AND H6.12
+      AND<(310) D3092 #1230
+      ORLD
+      LD H7.05
+      @AND H8.10
+      AND<(310) D3102 #830
+      ORLD
+      LD H8.00
+      @AND H8.01
+      AND<(310) D3112 #500
+      ORLD
+      SET W9.03
+      ^^^
+      LD H7.14
+      ANDNOT H7.15
+      MOV(021) D840 D3118
+      MOV(021) D3180 D3119
+      ^^^
+      LD H8.02
+      ANDNOT H8.03
+      TIM 0311 #600
+      MOV(021) 2006 D3114
+      ^^^
+      LD T0311
+      DIFU(013) 510.11
+      ^^^
+      LD 510.11
+      MOV(021) 2006 D3113
+      ^^^
+      LD H8.05
+      ANDNOT H8.06
+      MOV(021) 2013 D3115
+      ^^^
+      LD H8.05
+      ANDNOT H8.07
+      MOV(021) 316 D3116
+      MOV(021) D3116 D3117
+      ^^^
+      LD H9.01
+      ANDNOT H9.02
+      MOV(021) D982 D3121
+      MOV(021) D3170 D3122
+      ^^^
+      LD H9.03
+      ANDNOT H9.04
+      TIM 0312 #600
+      MOV(021) 2006 D3124
+      ^^^
+      LD T0312
+      DIFU(013) 510.12
+      ^^^
+      LD 510.12
+      MOV(021) 2006 D3123
+      ^^^
+      LD H9.06
+      ANDNOT H9.07
+      MOV(021) 2001 D3125
+      ^^^
+      LD H9.06
+      ANDNOT H9.08
+      MOV(021) 317 D3126
+      MOV(021) D3126 D3127
+      ^^^
+      LD H9.11
+      ANDNOT H9.12
+      MOV(021) D982 D3131
+      MOV(021) D3170 D3132
+      ^^^
+      LD H9.13
+      ANDNOT H9.14
+      TIM 0313 #600
+      MOV(021) 2006 D3134
+      ^^^
+      LD T0313
+      DIFU(013) 510.13
+      ^^^
+      LD 510.13
+      MOV(021) 2006 D3133
+      ^^^
+      LD H10.00
+      ANDNOT H10.01
+      MOV(021) 2001 D3135
+      ^^^
+      LD H10.00
+      ANDNOT H10.02
+      MOV(021) 317 D3136
+      MOV(021) D3136 D3137
+      ^^^
+      LD H10.05
+      ANDNOT H10.11
+      MOV(021) D982 D3141
+      MOV(021) D3170 D3142
+      ^^^
+      LD H11.11
+      ANDNOT H11.12
+      MOV(021) D840 D3148
+      MOV(021) D3180 D3149
+      ^^^
+      LD H10.06
+      ANDNOT H10.07
+      TIM 0314 #600
+      MOV(021) 2006 D3144
+      ^^^
+      LD T0314
+      DIFU(013) 510.14
+      ^^^
+      LD 510.14
+      MOV(021) 2006 D3143
+      ^^^
+      LD H10.09
+      ANDNOT H10.10
+      MOV(021) 2001 D3145
+      ^^^
+      LD H10.09
+      ANDNOT H10.10
+      MOV(021) 317 D3146
+      MOV(021) D3146 D3147
+      ^^^
+      LD H11.00
+      ANDNOT H11.10
+      MOV(021) D982 D3151
+      MOV(021) D3170 D3152
+      ^^^
+      LD H9.01
+      @AND H9.02
+      AND<(310) D3122 #1500
+      LD H9.11
+      @AND H9.12
+      AND<(310) D3132 #1230
+      ORLD
+      LD H10.05
+      @AND H10.11
+      AND<(310) D3142 #830
+      ORLD
+      LD H11.00
+      @AND H11.10
+      AND<(310) D3152 #500
+      ORLD
+      SET W9.04
+      ^^^
+      LD H10.14
+      ANDNOT H10.15
+      MOV(021) D840 D3158
+      MOV(021) D3180 D3159
+      ^^^
+      LD H11.02
+      ANDNOT H11.03
+      TIM 0315 #600
+      MOV(021) 2006 D3154
+      ^^^
+      LD T0315
+      DIFU(013) 510.15
+      ^^^
+      LD 510.15
+      MOV(021) 2006 D3153
+      ^^^
+      LD H11.05
+      ANDNOT H11.06
+      MOV(021) 2001 D3155
+      ^^^
+      LD H11.05
+      ANDNOT H11.07
+      MOV(021) 317 D3156
+      MOV(021) D3156 D3157
+      ^^^
+      LD H0.04
+      ANDNOT H0.06
+      LD H0.14
+      ANDNOT H1.00
+      ORLD
+      LD H1.07
+      ANDNOT H1.09
+      ORLD
+      LD H2.03
+      ANDNOT H2.05
+      ORLD
+      OUT 461.00
+      ^^^
+      LD H3.04
+      ANDNOT H3.06
+      LD H3.14
+      ANDNOT H4.00
+      ORLD
+      LD H4.07
+      ANDNOT H4.09
+      ORLD
+      LD H5.03
+      ANDNOT H5.05
+      ORLD
+      OUT 461.01
+      ^^^
+      LD H6.04
+      ANDNOT H6.06
+      LD H6.14
+      ANDNOT H7.00
+      ORLD
+      LD H7.07
+      ANDNOT H7.09
+      ORLD
+      LD H8.03
+      ANDNOT H8.05
+      ORLD
+      OUT 461.02
+      ^^^
+      LD H9.04
+      ANDNOT H9.06
+      LD H9.14
+      ANDNOT H10.00
+      ORLD
+      LD H10.07
+      ANDNOT H10.09
+      ORLD
+      LD H11.03
+      ANDNOT H11.05
+      ORLD
+      OUT 461.03
+      ^^^
+      LD H0.07
+      ANDNOT H0.09
+      LD H1.01
+      ANDNOT H1.03
+      ORLD
+      LD H1.10
+      ANDNOT H1.12
+      ORLD
+      LD H2.06
+      ANDNOT H2.08
+      ORLD
+      OUT 461.04
+      ^^^
+      LD H3.07
+      ANDNOT H3.09
+      LD H4.01
+      ANDNOT H4.03
+      ORLD
+      LD H4.10
+      ANDNOT H4.12
+      ORLD
+      LD H5.06
+      ANDNOT H5.08
+      ORLD
+      OUT 461.05
+      ^^^
+      LD H6.07
+      ANDNOT H6.09
+      LD H7.01
+      ANDNOT H7.03
+      ORLD
+      LD H7.10
+      ANDNOT H7.12
+      ORLD
+      LD H8.06
+      ANDNOT H8.08
+      ORLD
+      OUT 461.06
+      ^^^
+      LD H9.07
+      ANDNOT H9.09
+      LD H10.01
+      ANDNOT H10.03
+      ORLD
+      LD H10.10
+      ANDNOT H10.12
+      ORLD
+      LD H11.06
+      ANDNOT H11.08
+      ORLD
+      OUT 461.07
+      ^^^
+      LD H0.09
+      ANDNOT H0.10
+      LD H1.03
+      ANDNOT H1.04
+      ORLD
+      LD H1.12
+      ANDNOT H1.13
+      ORLD
+      LD H2.08
+      ANDNOT H2.09
+      ORLD
+      OUT 461.08
+      ^^^
+      LD H3.09
+      ANDNOT H3.10
+      LD H4.03
+      ANDNOT H4.04
+      ORLD
+      LD H4.12
+      ANDNOT H4.13
+      ORLD
+      LD H5.08
+      ANDNOT H5.09
+      ORLD
+      OUT 461.09
+      ^^^
+      LD H6.09
+      ANDNOT H6.10
+      LD H7.03
+      ANDNOT H7.04
+      ORLD
+      LD H7.12
+      ANDNOT H7.13
+      ORLD
+      LD H8.08
+      ANDNOT H8.09
+      ORLD
+      OUT 461.10
+      ^^^
+      LD H9.09
+      ANDNOT H9.10
+      LD H10.03
+      ANDNOT H10.04
+      ORLD
+      LD H10.12
+      ANDNOT H10.13
+      ORLD
+      LD H11.08
+      ANDNOT H11.09
+      ORLD
+      OUT 461.11
+      ^^^
+      '  EXTRACTOR LOW WATER VOLUME ALARM RESET\nCOMMON RESET FOR ALL EXTRACTORS
+      LD W9.05
+      OUT TR0
+      AND W9.01
+      RSET W9.01
+      LD TR0
+      AND W9.02
+      RSET W9.02
+      LD TR0
+      AND W9.03
+      RSET W9.03
+      LD TR0
+      AND W9.04
+      RSET W9.04
+      LD TR0
+      TIM 0237 #50
+      AND T0237
+      RSET W9.05
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

@@ -1,0 +1,206 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      '  Add V-4003 & V4006    KA Mar-20-2007
+      LD H101.06
+      ANDNOT H201.07
+      ANDNOT H301.07
+      ANDNOT H501.07
+      SET H101.07
+      ^^^
+      LD H301.06
+      ANDNOT H101.07
+      ANDNOT H201.07
+      ANDNOT H501.07
+      SET H301.07
+      ^^^
+      LD H201.06
+      ANDNOT H101.07
+      ANDNOT H301.07
+      ANDNOT H501.07
+      SET H201.07
+      ^^^
+      LD H501.06
+      ANDNOT H101.07
+      ANDNOT H201.07
+      ANDNOT H301.07
+      SET H501.07
+      ^^^
+      '  Add V4004 & V4005     KA Mar-20-2007
+      LD H101.08
+      LD<(310) D32200 #100
+      OR>=(325) D32200 #110
+      ANDLD
+      LD<(310) D32300 #100
+      OR>=(325) D32300 #110
+      ANDLD
+      LD<(310) D32500 #100
+      OR>=(325) D32500 #110
+      ANDLD
+      ANDNOT H201.09
+      ANDNOT H301.09
+      ANDNOT H501.09
+      !SET H101.09
+      ^^^
+      LD H301.08
+      LD<(310) D32100 #100
+      OR>=(325) D32100 #110
+      ANDLD
+      LD<(310) D32200 #100
+      OR>=(325) D32200 #110
+      ANDLD
+      LD<(310) D32500 #100
+      OR>=(325) D32500 #110
+      ANDLD
+      ANDNOT H101.09
+      ANDNOT H201.09
+      ANDNOT H501.09
+      !SET H301.09
+      ^^^
+      LD H201.08
+      LD<(310) D32100 #100
+      OR>=(325) D32100 #110
+      ANDLD
+      LD<(310) D32300 #100
+      OR>=(325) D32300 #110
+      ANDLD
+      LD<(310) D32500 #100
+      OR>=(325) D32500 #110
+      OR=(300) D32200 #100
+      ANDLD
+      ANDNOT H101.09
+      ANDNOT H301.09
+      ANDNOT H501.09
+      !SET H201.09
+      ^^^
+      LD H501.08
+      LD<(310) D32100 #100
+      OR>=(325) D32100 #110
+      ANDLD
+      LD<(310) D32200 #100
+      OR>=(325) D32200 #110
+      ANDLD
+      LD<(310) D32300 #100
+      OR>=(325) D32300 #110
+      ANDLD
+      ANDNOT H101.09
+      ANDNOT H201.09
+      ANDNOT H301.09
+      !SET H501.09
+      ^^^
+      '  Acid Request
+      LD H101.10
+      ANDNOT H201.11
+      ANDNOT H301.11
+      ANDNOT H501.11
+      SET H101.11
+      ^^^
+      LD H201.10
+      ANDNOT H101.11
+      ANDNOT H301.11
+      ANDNOT H501.11
+      SET H201.11
+      ^^^
+      LD H301.10
+      ANDNOT H101.11
+      ANDNOT H201.11
+      ANDNOT H501.11
+      SET H301.11
+      ^^^
+      LD H501.10
+      ANDNOT H101.11
+      ANDNOT H201.11
+      ANDNOT H301.11
+      SET H501.11
+      ^^^
+      '  Caustic Request
+      LD H108.08
+      ANDNOT H208.09
+      ANDNOT H308.09
+      ANDNOT H508.09
+      ANDNOT H357.15
+      SET H108.09
+      ^^^
+      LD H208.08
+      ANDNOT H108.09
+      ANDNOT H308.09
+      ANDNOT H508.09
+      ANDNOT H357.15
+      SET H208.09
+      ^^^
+      LD H308.08
+      ANDNOT H108.09
+      ANDNOT H208.09
+      ANDNOT H508.09
+      ANDNOT H357.15
+      SET H308.09
+      ^^^
+      LD H508.08
+      ANDNOT H108.09
+      ANDNOT H208.09
+      ANDNOT H308.09
+      ANDNOT H357.15
+      SET H508.09
+      ^^^
+      '  PRT Level Check During Dropping to Ext
+      LD>=(325) D32100 #220
+      AND<=(315) D32100 #230
+      AND>=(325) D32104 #100
+      OUT W18.12
+      ^^^
+      LD>=(325) D32200 #220
+      AND<=(315) D32200 #230
+      AND>=(325) D32204 #100
+      OUT W18.13
+      ^^^
+      LD>=(325) D32300 #220
+      AND<=(315) D32300 #230
+      AND>=(325) D32304 #100
+      OUT W18.14
+      ^^^
+      LD>=(325) D32500 #220
+      AND<=(315) D32500 #230
+      AND>=(325) D32504 #100
+      OUT W18.15
+      ^^^
+      '  Monthly Totalizer for Extra PRT\nPost Washes
+      LD P_On
+      OUT TR0
+      AND>=(325) D32100 #154
+      AND<=(315) D32100 #158
+      @++B(594) W30
+      LD TR0
+      AND=(300) D32200 #154
+      AND<=(315) D32200 #158
+      @++B(594) W31
+      LD TR0
+      AND=(300) D32300 #154
+      AND<=(315) D32300 #158
+      @++B(594) W32
+      LD TR0
+      AND=(300) D32500 #154
+      AND<=(315) D32500 #158
+      @++B(594) W33
+      ^^^
+      LD=(300) D273 #1
+      @XFER(070) #4 W30 W34
+      @BSET(071) #0 W30 W33
+      ^^^
+      LD C0385
+      SET W22.11
+      ^^^
+      LD W17.00
+      AND P_1s
+      ANDNOT W22.11
+      @LD W22.13
+      CNT 0385 #10
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

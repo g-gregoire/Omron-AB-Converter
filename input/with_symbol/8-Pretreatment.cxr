@@ -1,0 +1,104 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      '  Analog Input Covertion LIT1001
+      LD ON
+      AND LIT4001_FORMULA_START
+      APR(069) LEVEL_FORMULA LIT4001 LIT_4001_AI_OLD
+      ^^^
+      LD ON
+      CMP(020) LIT_4001_AI_OLD #9500
+      AND P_GE
+      OUT LIT_4001_ALMH
+      ^^^
+      '  Analog Input Covertion LIT1002
+      LD ON
+      AND LIT4002_FORMULA_START
+      APR(069) LEVEL_FORMULA LIT4002 LIT_4002_AI_OLD
+      ^^^
+      LD ON
+      OUT TR0
+      CMP(020) LIT_4002_AI_OLD #9500
+      AND P_GE
+      OUT LIT_4002_ALMH
+      LD TR0
+      CMP(020) LIT_4002_AI_OLD #8000
+      AND P_LE
+      OUT H412.02
+      ^^^
+      '  Analog Input Covertion FIT 2000
+      LD ON
+      APR(069) FLOW_FORMULA FIT2000 FIT_2000_AI
+      ^^^
+      LD ON
+      OUT TR0
+      AND<=(315) FIT2000 &6000
+      SCL(194) FIT2000 D31224 D31228
+      LD TR0
+      LD>(320) FIT2000 &6001
+      OR<=(315) FIT2000 &185
+      ANDLD
+      MOV(021) &0 D31228
+      ^^^
+      '  Analog Input Covertion FIT 2000\nFor Totalizer Only
+      LD ON
+      APR(069) FLOW2_FORMULA FIT2000 FIT2_2000_AI
+      ^^^
+      '  Check Transmitter signals and move 0 if less than 4ma
+      LD ON
+      CMP(020) FIT2000 &6000
+      AND GREATER_THAN
+      MOV(021) &0 FIT_2000_AI
+      MOV(021) &0 FIT2_2000_AI
+      ^^^
+      LD ON
+      OUT TR0
+      CMP(020) LIT4001 &6500
+      LD P_LE
+      OR EQUALS
+      ANDLD
+      SET LIT4001_FORMULA_START
+      LD TR0
+      AND GREATER_THAN
+      RSET LIT4001_FORMULA_START
+      MOV(021) &0 LIT_4001_AI_OLD
+      ^^^
+      LD ON
+      OUT TR0
+      CMP(020) LIT4002 &6500
+      LD P_LE
+      OR EQUALS
+      ANDLD
+      SET LIT4002_FORMULA_START
+      LD TR0
+      AND GREATER_THAN
+      RSET LIT4002_FORMULA_START
+      MOV(021) &0 LIT_4002_AI_OLD
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+      ON	BOOL	CF113	System Normally On Flag		0	
+      LIT4001_FORMULA_START	BOOL	H407.11	If Transmitter signal OK		0	
+      LEVEL_FORMULA	CHANNEL	D31200	Level Control Formula		0	
+      LIT4001	CHANNEL	3308	Rind Tank Level Transmitter		0	
+      LIT_4001_AI_OLD	CHANNEL	D31207	Rind Tank Transmitter Scaled 0-100%		0	
+      LIT_4001_ALMH	BOOL	H412.00	TK-4001 Level High Alarm		0	
+      LIT4002_FORMULA_START	BOOL	H407.12	If Transmitter signal OK		0	
+      LIT4002	CHANNEL	3309	Pretreatment Tank Level Transmitter		0	
+      LIT_4002_AI_OLD	CHANNEL	D31208	Pretreatment Tank Transmitter Scaled 0-100%		0	
+      LIT_4002_ALMH	BOOL	H412.01	TK-4002 Level High Alarm		0	
+      	BOOL	H412.02	TK-4002 Level < 70%		0	
+      FLOW_FORMULA	CHANNEL	D31216	Flow Control Formula		0	
+      FIT2000	CHANNEL	3307	Cold Water Supply Flow Meter		0	
+      FIT_2000_AI	CHANNEL	D31223	Cold Water Flow Transmitter Scaled 0-100		0	
+      FLOW2_FORMULA	CHANNEL	D31230	Flow Control Formula		0	
+      FIT2_2000_AI	CHANNEL	D31237	Cold Water Flow Transmitter Scaled 0-100 For Tot.		0	
+      GREATER_THAN	BOOL	CF005	System Greater Than (GE) Flag		0	
+      EQUALS	BOOL	CF006	System Equals (EQ) Flag		0	
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

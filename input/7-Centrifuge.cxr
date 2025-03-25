@@ -4,84 +4,84 @@
   </PLCTYPE>
   <SECTION>
     <MNEMONIC>
-      LD AUTO_MAN_SW
+      LD 20.02
       OR T0322
-      OUT CR11_AUTO
+      OUT 22.10
       ^^^
-      LDNOT AUTO_MAN_SW
-      AND _1_SEC_PULSE
+      LDNOT 20.02
+      AND P_1s
       OR T0322
-      OUT CR12_MANUAL
+      OUT 22.11
       ^^^
-      LDNOT AUTO_MAN_SW
-      OR SET_REST_ROT_LT
+      LDNOT 20.02
+      OR H20.11
       OR T0322
       OUT 23.12
       ^^^
-      LD BOTH_TK_FULL
-      OR CR15_LOW_BATRY
+      LD H20.01
+      OR 23.02
       DIFU(013) H20.10
       ^^^
       LD H20.10
-      LD SILENCE_PTT_BN
-      KEEP(011) SET_REST_ROT_LT
+      LD 20.03
+      KEEP(011) H20.11
       ^^^
-      LD SILENCE_PTT_BN
+      LD 20.03
       TIM 0322 #10
       ^^^
-      LD BOTH_TK_FULL
+      LD H20.01
       OR T0322
-      OUT BOTH_TKS_FULL
+      OUT 23.01
       ^^^
-      LD LOW_BATT_FLAG
-      AND _1_SEC_PULSE
+      LD P_Low_Battery
+      AND P_1s
       OR T0322
-      OUT CR15_LOW_BATRY
+      OUT 23.02
       ^^^
-      LD CR23_LCK0UT_RLY
-      AND _1_SEC_PULSE
+      LD 23.10
+      AND P_1s
       OR T0322
-      OUT CR16_LOSS_FLOW
+      OUT 23.03
       ^^^
       LD 23.04
       AND 400.02
-      LD CR20_BALL_VALVE
+      LD 23.07
       AND 400.03
       ORLD
       LD 23.05
       AND 400.04
       ORLD
-      OUT CR23_LCK0UT_RLY
+      OUT 23.10
       ^^^
       LD 329.11
       AND 328.11
       ANDNOT 23.05
-      ANDNOT CR20_BALL_VALVE
+      ANDNOT 23.07
       OUT 23.04
       ^^^
       LD 329.12
       AND 328.12
       ANDNOT 23.05
       ANDNOT 23.04
-      OUT CR20_BALL_VALVE
+      OUT 23.07
       ^^^
       LD 329.13
       AND 328.13
       ANDNOT 23.04
-      ANDNOT CR20_BALL_VALVE
+      ANDNOT 23.07
       OUT 23.05
       ^^^
-      LD V104_AUTO_CMD
-      ANDNOT V104_MANUAL
-      LD V104_MANUAL
-      AND V104_HMI_CMD
+      LD H354.04
+      ANDNOT H352.04
+      LD H352.04
+      AND H353.04
       ORLD
-      ANDNOT XV13_ZH
-      ANDNOT V1013_ZH
-      ANDNOT V2013_ZH
-      ANDNOT V3013_ZH
-      ANDNOT V4013_ZH
-      OUT V104
+      ANDNOT W16.05
+      ANDNOT W0.08
+      ANDNOT W2.08
+      ANDNOT W10.08
+      ANDNOT W13.08
+      OUT 23.06
       ^^^
       LD 329.14
       AND 328.14
@@ -99,21 +99,21 @@
       ORLD
       ANDLD
       ORLD
-      LD STK1_Feed_A10Pump
-      OR STK2_Feed_A10Pump
-      OR STK3_Feed_A10Pump
-      OR STK4_Feed_A10Pump
+      LD 40.14
+      OR 41.10
+      OR 44.14
+      OR 45.10
       ANDLD
-      AND A10_PERMISSIVE
+      AND 20.05
       OUT 6.06
       ^^^
       LD 329.15
       AND 328.15
-      AND MAZZO_PERMISSIVE
-      LD SV30MINUS10S
-      OR SV30MINUS20S
-      OR SV30_30S
-      OR SV30_40S
+      AND 20.04
+      LD 40.00
+      OR 41.00
+      OR 44.15
+      OR 45.00
       ANDLD
       OUT 23.11
       ^^^
@@ -121,9 +121,9 @@
       OUT 400.00
       ^^^
       LD 20.11
-      OUT V104_ZH
+      OUT 400.01
       ^^^
-      LD _1WF3ADDCMPLT
+      LD H2.12
       ANDNOT 20.08
       OUT H92.05
       ^^^
@@ -160,90 +160,16 @@
       AND T4046
       OUT H92.15
       ^^^
-      LD CFT1_Agitator_Running
+      LD 20.12
       OUT H92.11
       ^^^
-      LD CFT2_Agitator_Running
+      LD 20.13
       OUT H92.12
       ^^^
-      LD CFT3_Agitator_Running
+      LD 20.14
       OUT H92.13
     </MNEMONIC>
     <GLOBALSYMBOL>
-      AUTO_MAN_SW	BOOL	20.02	AUTO MANUAL SWITCH		0	
-      CR11_AUTO	BOOL	22.10	AUTO MODE		0	
-      _1_SEC_PULSE	BOOL	CF102	System 1.0 second clock pulse bit		0	
-      CR12_MANUAL	BOOL	22.11	MANUAL MODE		0	
-      SET_REST_ROT_LT	BOOL	H20.11	SET RESET ROTATING LT		0	
-      	BOOL	23.12	Old 23.06 Output		0	
-      BOTH_TK_FULL	BOOL	H20.01	ALL TANKS ARE FULL STOP TRANSFER PUMP		0	
-      CR15_LOW_BATRY	BOOL	23.02	CR15 LOW BATTERY		0	
-      SILENCE_PTT_BN	BOOL	20.03	SILENCE (PTT)		0	
-      BOTH_TKS_FULL	BOOL	23.01	BOTH TANKS FULL		0	
-      LOW_BATT_FLAG	BOOL	A402.04	LOW BATTERY FLAG		0	
-      CR23_LCK0UT_RLY	BOOL	23.10	STOP TRANSFARE PUMP IF BOTH TANKS FULL		0	
-      CR16_LOSS_FLOW	BOOL	23.03	CR16 LOSS FLOW		0	
-      	BOOL	23.04	V104 CNT#1 SHOVEL OUT VALVE		0	
-      	BOOL	400.02	CFT#1 Level Interlock		0	
-      CR20_BALL_VALVE	BOOL	23.07	V105 CNT#2 SHOVEL OUT VALVE		0	
-      	BOOL	400.03	CFT#2 Level Interlock		0	
-      	BOOL	23.05	V106 CNT#3 SHOVEL OUT VALVE		0	
-      	BOOL	400.04	CFT#3 Level Interlock		0	
-      V104_AUTO_CMD	BOOL	H354.04	Centrifuge Caustic Valve AUTO CMD		0	
-      V104_MANUAL	BOOL	H352.04	Centrifuge Caustic Valve 1=Manual 0=Auto		0	
-      V104_HMI_CMD	BOOL	H353.04	Centrifuge Caustic Valve HMI CMD		0	
-      XV13_ZH	BOOL	W16.05	XV13 OPEN  CAUSTIC TO PRECOAT TK VLV		0	
-      V1013_ZH	BOOL	W0.08	Caustic Dosing Valve for EXT1		0	
-      V2013_ZH	BOOL	W2.08	Caustic Dosing Valve for EXT2		0	
-      V3013_ZH	BOOL	W10.08	Caustic Dosing Valve for EXT3		0	
-      V4013_ZH	BOOL	W13.08	Caustic Dosing Valve for EXT4		0	
-      V104	BOOL	23.06	V104 Centrifuge Caustic Valve Output		0	
-      	BOOL	329.14	A10_SCADA_MODE		0	
-      	BOOL	328.14	A10_ON_OFF		0	
-      	BOOL	410.00	STK1 STEP - START TRANSFER PUMP		0	
-      	BOOL	410.02	STK1 STEP - SWITCH VALVES		0	
-      	BOOL	411.00	STK2 STEP - START TRANSFER PUMP		0	
-      	BOOL	411.02	STK2 STEP - SWITCH VALVES		0	
-      	BOOL	412.00	STK3 STEP - START TRANSFER PUMP		0	
-      	BOOL	412.02	STK3 STEP - SWITCH VALVES		0	
-      	BOOL	413.00	STK4 STEP - START TRANSFER PUMP		0	
-      	BOOL	413.02	STK4 STEP - SWITCH VALVES		0	
-      STK1_Feed_A10Pump	BOOL	40.14	Pump 10 feed Valve from Settling Tank-1 SV30-51		0	
-      STK2_Feed_A10Pump	BOOL	41.10	Pump 10 feed Valve from Settling Tank-2 SV30-52		0	
-      STK3_Feed_A10Pump	BOOL	44.14	Pump 10 feed Valve from Settling Tank-3 SV30-53		0	
-      STK4_Feed_A10Pump	BOOL	45.10	Pump 10 feed Valve from Settling Tank-4 SV30-54		0	
-      A10_PERMISSIVE	BOOL	20.05	FROM CENT PLC		0	
-      	BOOL	6.06	A10_START		0	
-      	BOOL	329.15	MAZZ_SCADA_MODE		0	
-      	BOOL	328.15	MAZZ_ON_OFF		0	
-      MAZZO_PERMISSIVE	BOOL	20.04	FROM CENT PLC		0	
-      SV30MINUS10S	BOOL	40.00	Ext#1 Shovel out Valve		0	
-      SV30MINUS20S	BOOL	41.00	Ext#2 Shovel Out Valve (Bad Solenoid - used external)		0	
-      SV30_30S	BOOL	44.15	Ext#3 Shovel out Valve		0	
-      SV30_40S	BOOL	45.00	Ext#4 Shovel out Valve		0	
-      	BOOL	23.11	MAZZ_START		0	
-      	BOOL	20.07	MAZZ_FEEDBACK		0	
-      	BOOL	400.00	MAZZORATOR RUNNING		0	
-      	BOOL	20.11	V104 Centrifuge Caustic Valve Opened		0	
-      V104_ZH	BOOL	400.01	V104 Centrifuge Caustic Valve Opened		0	
-      _1WF3ADDCMPLT	BOOL	H2.12	EXT#1 3rd cook water fraction add complete		0	
-      	BOOL	20.08	CENTRIFUGE FEED PUMP RUNNING		0	
-      	BOOL	H92.05	START CENTRIFUGE ALARM.		0	
-      	BOOL	20.10	Centrifuge Lard Pump Running		0	
-      	BOOL	T4040	Time Delay		0	
-      	BOOL	H92.06	Lard Pump Not Running Alarm		0	
-      	BOOL	H92.07	Lard Pump Alarm #2		0	
-      	BOOL	H92.14	Lard Tank Overflowing		0	
-      	BOOL	20.09	Centrifuge Water Fraction Pump Running		0	
-      	BOOL	H92.08	WF Pump Not Running Alarm		0	
-      	BOOL	H92.09	WF Pump Alarm #2		0	
-      	BOOL	H92.15	WF Tank Overflowing		0	
-      CFT1_Agitator_Running	BOOL	20.12			0	
-      	BOOL	H92.11	CFT #1 AGITATOR RUNNING		0	
-      CFT2_Agitator_Running	BOOL	20.13			0	
-      	BOOL	H92.12	CFT #2 AGITATOR RUNNING		0	
-      CFT3_Agitator_Running	BOOL	20.14			0	
-      	BOOL	H92.13	CFT #3 AGITATOR RUNNING		0	
     </GLOBALSYMBOL>
     <LOCALSYMBOL>
     </LOCALSYMBOL>

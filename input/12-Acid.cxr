@@ -1,0 +1,1070 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      LD H101.11
+      AND W1.14
+      LD H201.11
+      AND W3.14
+      ORLD
+      LD H301.11
+      AND W11.14
+      ORLD
+      LD H501.11
+      AND W14.14
+      ORLD
+      OUT H350.02
+      ^^^
+      LD P_On
+      MOV(021) D32400 D32402
+      ^^^
+      @LD H101.11
+      @OR H201.11
+      @OR H301.11
+      @OR H501.11
+      BSET(071) #0 D32404 D32408
+      MOV(021) D32400 D32407
+      MOV(021) D32400 D32403
+      MOVL(498) #0 D32650
+      ^^^
+      LD<(310) D32402 D32403
+      OUT H350.01
+      ^^^
+      LD H350.02
+      AND H350.01
+      @AND P_1s
+      -B(414) D32403 D32402 D32404
+      MOV(021) D32402 D32403
+      *B(424) #60 D32408 D32405
+      ^^^
+      LDNOT H350.02
+      OR H350.12
+      MOV(021) #0 D32405
+      ^^^
+      LD P_On
+      OUT TR0
+      AND H350.02
+      ANDNOT H350.12
+      AND>=(325) D32400 5
+      @AND P_1s
+      +CL(403) D32650 D32652 D32650
+      LD TR0
+      /UL(433) D32650 #6 D32654
+      BCDL(059) D32654 D32408
+      ^^^
+      LD P_On
+      OUT TR0
+      AND H350.02
+      ANDNOT H350.12
+      AND>=(325) D32400 5
+      @AND P_1s
+      +CL(403) D32426 D32652 D32426
+      LD TR0
+      /UL(433) D32426 &600 D32428
+      BCDL(059) D32428 D32573
+      ^^^
+      LD<(310) D32570 D32572
+      SET H353.08
+      SET H353.09
+      ^^^
+      LD>=(325) D32570 D32571
+      RSET H353.08
+      RSET H353.09
+      ^^^
+      %LD H354.10
+      OUT TR0
+      AND H353.08
+      SET H354.08
+      LD TR0
+      ANDNOT H353.08
+      RSET H354.08
+      LD TR0
+      AND H353.09
+      SET H354.09
+      LD TR0
+      ANDNOT H353.09
+      RSET H354.09
+      ^^^
+      LD P_On
+      LD H354.08
+      ANDNOT H354.10
+      LD H353.08
+      AND H354.10
+      ORLD
+      ANDLD
+      OUT H354.15
+      ^^^
+      LD P_On
+      LD H354.09
+      ANDNOT H354.10
+      LD H353.09
+      AND H354.10
+      ORLD
+      ANDLD
+      OUT H357.09
+      ^^^
+      LD H350.02
+      TIM 3154 #20
+      ^^^
+      LD P_On
+      BCD(024) D31460 D31461
+      ^^^
+      LD H350.02
+      AND H101.11
+      AND>=(325) D32408 D32118
+      AND T3154
+      AND W7.02
+      SET H350.03
+      ^^^
+      LD H350.02
+      AND H201.11
+      AND>(320) D32408 D32218
+      AND T3154
+      AND W7.02
+      SET H350.04
+      ^^^
+      LD H350.02
+      AND H301.11
+      AND>=(325) D32408 D32318
+      AND T3154
+      AND W7.02
+      SET H350.05
+      ^^^
+      LD H350.02
+      AND H501.11
+      AND>=(325) D32408 D32518
+      AND T3154
+      AND W7.02
+      SET H350.06
+      ^^^
+      LD P_On
+      OUT TR0
+      AND>(320) D32100 #45
+      AND<(310) D32100 #66
+      @AND P_1s
+      +C(402) D32108 D32610 D32108
+      LD TR0
+      AND>(320) D32200 #45
+      AND<(310) D32200 #66
+      @AND P_1s
+      +C(402) D32208 D32610 D32208
+      LD TR0
+      AND>(320) D32300 #45
+      AND<(310) D32300 #66
+      @AND P_1s
+      +C(402) D32308 D32610 D32308
+      LD TR0
+      AND>(320) D32500 #45
+      AND<(310) D32500 #66
+      @AND P_1s
+      +C(402) D32508 D32610 D32508
+      ^^^
+      LD P_On
+      OUT TR0
+      AND>(320) D32100 #45
+      AND<(310) D32100 #66
+      MOVL(498) D32108 D32134
+      LD TR0
+      AND>(320) D32200 #45
+      AND<(310) D32200 #66
+      MOVL(498) D32208 D32234
+      LD TR0
+      AND>(320) D32300 #45
+      AND<(310) D32300 #66
+      MOVL(498) D32308 D32334
+      LD TR0
+      AND>(320) D32500 #45
+      AND<(310) D32500 #66
+      MOVL(498) D32508 D32534
+      ^^^
+      LD H350.02
+      ANDNOT H350.13
+      OUT TR0
+      AND<(310) D32400 D32410
+      AND W7.02
+      TIM 3151 #170
+      LD TR0
+      AND T3151
+      OUT H350.08
+      ^^^
+      LD H350.02
+      OUT TR0
+      AND>(320) D32400 D32411
+      AND P_Off
+      TIM 3150 #100
+      LD TR0
+      AND T3150
+      OUT H350.07
+      ^^^
+      LD H350.02
+      ANDNOT H350.13
+      LD H354.15
+      AND W4.01
+      LDNOT H354.15
+      AND H357.10
+      ANDNOT W4.01
+      ORLD
+      ANDLD
+      OUT TR0
+      AND<(310) D32401 D32412
+      TIM 3153 #100
+      LD TR0
+      AND T3153
+      OUT H350.10
+      ^^^
+      LD H350.02
+      OUT TR0
+      AND>(320) D32401 D32413
+      TIM 3152 #100
+      LD TR0
+      AND T3152
+      OUT H350.09
+      ^^^
+      LD H350.02
+      AND>=(325) D32402 D32403
+      TIM 3155 #100
+      ^^^
+      LD H350.08
+      OR H350.10
+      SET H350.12
+      ^^^
+      LD H350.13
+      RSET H350.12
+      RSET H350.13
+      ^^^
+      LD H354.00
+      ANDNOT H352.00
+      LD H352.00
+      AND H353.00
+      ORLD
+      OUT W7.00
+      ^^^
+      LD H354.01
+      ANDNOT H352.01
+      ANDNOT H350.12
+      LD H352.01
+      AND H353.01
+      ORLD
+      OUT W7.01
+      ^^^
+      LD H354.12
+      ANDNOT H352.12
+      LD H352.12
+      AND H353.12
+      ORLD
+      ANDNOT W4.11
+      ANDNOT W0.14
+      ANDNOT W4.04
+      OUT W7.12
+      OUT 3204.12
+      ^^^
+      LD H359.12
+      ANDNOT H352.10
+      LD H352.10
+      AND H353.10
+      ORLD
+      ANDNOT W0.13
+      ANDNOT W4.14
+      ANDNOT W4.04
+      OUT W7.10
+      ^^^
+      LD H354.02
+      ANDNOT H352.02
+      ANDNOT H350.12
+      LD H352.02
+      AND H353.02
+      ORLD
+      OUT W7.02
+      ^^^
+      LD H354.13
+      ANDNOT H352.13
+      LD H352.13
+      AND H353.13
+      ORLD
+      OUT W7.13
+      OUT 3204.13
+      ^^^
+      LD H359.13
+      ANDNOT H352.11
+      LD H352.11
+      AND H353.11
+      ORLD
+      OUT W7.11
+      OUT 3204.11
+      ^^^
+      LD H354.14
+      OUT W7.14
+      ^^^
+      LD>=(325) D32100 #46
+      AND<=(315) D32100 #63
+      LDNOT H357.09
+      AND H357.11
+      ORLD
+      AND W1.14
+      LD>=(325) D32200 #46
+      AND<=(315) D32200 #63
+      LDNOT H357.09
+      AND H357.12
+      ORLD
+      AND W3.14
+      ORLD
+      LD>=(325) D32300 #46
+      AND<=(315) D32300 #63
+      LDNOT H357.09
+      AND H357.13
+      ORLD
+      AND W11.14
+      ORLD
+      LD>=(325) D32500 #46
+      AND<=(315) D32500 #63
+      LDNOT H357.09
+      AND H357.14
+      ORLD
+      AND W14.14
+      ORLD
+      ANDNOT H350.12
+      OUT TR0
+      AND H354.15
+      OUT H354.01
+      LD TR0
+      ANDNOT H354.15
+      OUT H357.10
+      ^^^
+      LD H350.02
+      LD H354.15
+      AND W4.01
+      LDNOT H354.15
+      ANDNOT W4.01
+      ORLD
+      ANDLD
+      AND>(320) D32401 &50
+      OUT TR0
+      AND T0091
+      OUT TR1
+      AND W4.03
+      OUT H354.02
+      LD TR1
+      OUT W7.07
+      LD TR0
+      TIM 0091 #1200
+      ^^^
+      LD P_On
+      LD>=(325) D32100 #44
+      AND<=(315) D32100 #46
+      LD>=(325) D32200 #44
+      AND<=(315) D32200 #46
+      ORLD
+      LD>=(325) D32300 #44
+      AND<=(315) D32300 #46
+      ORLD
+      LD>=(325) D32500 #44
+      AND<=(315) D32500 #46
+      ORLD
+      ANDLD
+      ANDNOT H350.02
+      OUT TR0
+      AND<(310) D32400 #4900
+      AND P_Off
+      OUT H350.14
+      LD TR0
+      MOV(021) 0 D32408
+      MOVL(498) #0 D32650
+      ^^^
+      LD P_Off
+      LD>=(325) D32100 #44
+      AND<=(315) D32100 #46
+      LD>=(325) D32200 #44
+      AND<=(315) D32200 #46
+      ORLD
+      LD>=(325) D32300 #44
+      AND<=(315) D32300 #46
+      ORLD
+      LD>=(325) D32500 #44
+      AND<=(315) D32500 #46
+      ORLD
+      ANDLD
+      ANDNOT H350.02
+      LD H350.14
+      LD H354.00
+      AND<(310) D32400 #5000
+      ORLD
+      ANDLD
+      OUT H354.00
+      ^^^
+      '  Caustic Sequence
+      LD H357.01
+      LD H357.03
+      AND W0.14
+      ORLD
+      LD H357.06
+      AND W4.14
+      ORLD
+      LD H357.07
+      AND W4.04
+      ORLD
+      OUT TR0
+      SET H357.15
+      @MOV(021) #0 D32462
+      AND H357.01
+      @MOV(021) #0 D32466
+      LD TR0
+      AND H357.07
+      @MOV(021) #0 D32478
+      LD TR0
+      AND H357.03
+      @MOV(021) #0 D32470
+      ^^^
+      '  Caustic Totalizer
+      LD H357.15
+      @AND P_1s
+      OUT TR0
+      +C(402) D32462 D32414 D32462
+      +L(401) D32464 D32600 D32464
+      AND H357.01
+      +C(402) D32466 D32415 D32466
+      LD TR0
+      AND H357.07
+      +C(402) D32478 D32600 D32478
+      ^^^
+      LD H357.15
+      OUT H354.13
+      ^^^
+      LD H357.00
+      OR H357.02
+      OR H357.04
+      OR H357.05
+      SET H359.14
+      @MOV(021) #0 D32456
+      ^^^
+      '  Day Tank Caustic Totalizer
+      LD H359.14
+      @AND P_1s
+      +C(402) D32456 D32419 D32456
+      ^^^
+      LD H359.14
+      OUT H359.13
+      ^^^
+      LD>=(325) D32417 #9800
+      ANDNOT P_On
+      OR W4.12
+      OUT H354.14
+      ^^^
+      LD H357.15
+      LD>=(325) D32462 D32460
+      ANDNOT H357.01
+      LD>=(325) D32466 D32460
+      AND H357.01
+      ORLD
+      ANDNOT H357.06
+      ANDNOT H357.03
+      ANDNOT H357.07
+      LD H358.03
+      OR W0.13
+      AND H357.03
+      ORLD
+      LD H358.06
+      OR W4.11
+      AND H357.06
+      ORLD
+      LD H358.07
+      AND H357.07
+      ORLD
+      ANDLD
+      @OR H358.15
+      MOV(021) 0 D32460
+      RSET H357.01
+      RSET H357.03
+      RSET H357.06
+      RSET H357.07
+      RSET H357.15
+      ^^^
+      LD H359.14
+      AND>=(325) D32456 D32454
+      OR H359.15
+      MOV(021) 0 D32454
+      MOV(021) 0 D32455
+      RSET H357.00
+      RSET H357.02
+      RSET H357.04
+      RSET H357.05
+      RSET H359.14
+      TIM 3156 #50
+      AND T3156
+      RSET H359.15
+      ^^^
+      '  Caustic Area1 \nEXT
+      LD H356.00
+      ANDNOT H357.02
+      ANDNOT H357.04
+      ANDNOT H357.05
+      LD W0.08
+      OR W2.08
+      OR W10.08
+      OR W13.08
+      ANDLD
+      AND>(320) D32454 #1
+      SET H357.00
+      ^^^
+      LD H359.14
+      AND H357.00
+      @AND P_1s
+      +L(401) D32482 D32419 D32482
+      ^^^
+      LD 326.12
+      AND 326.13
+      OUT 6.01
+      OUT W22.03
+      ^^^
+      LD 6.01
+      OR 6.03
+      OUT 6.02
+      ^^^
+      LD 326.14
+      AND 326.15
+      OUT 6.03
+      OUT W22.04
+      ^^^
+      '  Caustic Area 2\nPRT
+      LD H356.01
+      OR H108.09
+      OR H208.09
+      OR H308.09
+      OR H508.09
+      ANDNOT H357.03
+      ANDNOT H357.06
+      ANDNOT H357.07
+      LD W0.06
+      OR W2.06
+      OR W10.06
+      OR W13.06
+      ANDLD
+      AND>(320) D32460 #1
+      SET H357.01
+      ^^^
+      LD H357.15
+      AND H357.01
+      @AND P_1s
+      +L(401) D32484 D32600 D32484
+      ^^^
+      '  Caustic Area 3\nCentrifuge
+      LD H356.02
+      ANDNOT H357.00
+      ANDNOT H357.04
+      ANDNOT H357.05
+      AND 400.01
+      AND>(320) D32454 #1
+      SET H357.02
+      ^^^
+      LD H359.14
+      AND H357.02
+      @AND P_1s
+      +L(401) D32486 D32419 D32486
+      ^^^
+      '  Caustic Area 4\nDEMIN
+      LD H356.03
+      ANDNOT H357.01
+      ANDNOT H357.06
+      ANDNOT H357.07
+      SET H357.03
+      ^^^
+      LD H357.15
+      AND H357.03
+      @AND P_1s
+      +L(401) D32488 D32600 D32488
+      ^^^
+      LDNOT H357.15
+      ANDNOT W0.13
+      AND W0.12
+      AND>(320) D32417 #1050
+      OUT TR0
+      AND T3164
+      OUT H356.03
+      LD TR0
+      TIM 3164 #200
+      ^^^
+      LDNOT W0.12
+      LD<(310) D32417 #1030
+      LD<(310) D32417 #990
+      OR H358.03
+      ANDLD
+      ORLD
+      OR W0.13
+      OR H108.09
+      OR H208.09
+      OR H308.09
+      OR H508.09
+      AND H357.03
+      OUT H358.03
+      ^^^
+      LD H357.03
+      OUT H359.12
+      ^^^
+      LD W0.14
+      ANDNOT 3204.10
+      TIM 0093 #200
+      AND T0093
+      OUT W7.09
+      ^^^
+      '  Caustic Area 5\nCHP
+      LD H356.04
+      ANDNOT H357.00
+      ANDNOT H357.02
+      ANDNOT H357.05
+      AND P_Off
+      AND>(320) D32454 #1
+      SET H357.04
+      ^^^
+      LD H359.14
+      AND H357.04
+      @AND P_1s
+      +L(401) D32490 D32419 D32490
+      ^^^
+      '  Caustic Area 6\nAJET
+      LD H356.05
+      ANDNOT H357.00
+      ANDNOT H357.02
+      ANDNOT H357.04
+      AND W16.05
+      AND>(320) D32454 #1
+      SET H357.05
+      ^^^
+      LDNOT W16.05
+      TIM 3166 #20
+      AND T3166
+      RSET H359.02
+      ^^^
+      LD W16.05
+      %AND H357.05
+      !SET H359.02
+      ^^^
+      LD H359.14
+      AND H357.05
+      AND W16.05
+      @AND P_1s
+      MOV(021) D32456 D32458
+      ^^^
+      LD H359.14
+      AND H357.05
+      @AND P_1s
+      +L(401) D32492 D32419 D32492
+      ^^^
+      '  Caustic Area 7\nFill Dosing TK-110\n\nW23.00 is a Push-Button from SCADA used to Fill TK110 to a Desired S.P. While Filling TK100
+      LD W23.00
+      MOV(021) #8000 D32608
+      MOV(021) #8500 D32609
+      ^^^
+      '  Return TK110 Fill Level S.P. to Normal After TK100 is Filled
+      LDNOT W23.00
+      MOV(021) #2000 D32608
+      MOV(021) #3000 D32609
+      ^^^
+      '  Reset TK110 Fill Push-Button (SCADA) After TK110 Reaches Fill S.P.
+      LD>(320) D32609 #4000
+      AND>=(325) D32418 D32609
+      RSET W23.00
+      ^^^
+      LD H356.06
+      ANDNOT H357.01
+      ANDNOT H357.03
+      ANDNOT H357.07
+      SET H357.06
+      ^^^
+      LD H357.15
+      AND H357.06
+      @AND P_1s
+      +L(401) D32494 D32600 D32494
+      ^^^
+      LD<=(315) D32418 D32608
+      ANDNOT H357.15
+      AND>(320) D32417 #1060
+      OUT TR0
+      AND T3161
+      ANDNOT W4.11
+      OUT H356.06
+      LD TR0
+      TIM 3161 #900
+      ^^^
+      LDNOT H509.00
+      OR P_On
+      AND>=(325) D32418 D32609
+      LD<(310) D32417 #1040
+      LD<(310) D32417 #1000
+      OR H358.06
+      ANDLD
+      ORLD
+      OR W4.11
+      OR H108.09
+      OR H208.09
+      OR H308.09
+      OR H508.09
+      AND H357.06
+      OUT H358.06
+      ^^^
+      LD H357.06
+      OUT H354.12
+      ^^^
+      LD P_Off
+      AND P_1min
+      LD C0400
+      CNT 0400 #60
+      ^^^
+      LD C0400
+      LD>=(325) D32418 D500
+      AND C0401
+      CNT 0401 #6
+      ^^^
+      LD C0401
+      LD>=(325) D32418 D500
+      KEEP(011) H509.00
+      ^^^
+      LD C0400
+      +L(401) D32418 #100 D500
+      ^^^
+      '  Caustic Area 8  Water Fraction Tank
+      LD H356.07
+      ANDNOT H357.01
+      ANDNOT H357.03
+      ANDNOT H357.06
+      AND W4.04
+      AND>(320) D32460 #1
+      SET H357.07
+      ^^^
+      LD H357.15
+      AND H357.07
+      @AND P_1s
+      +L(401) D32496 D32600 D32496
+      ^^^
+      LD H357.15
+      AND H357.07
+      AND W7.13
+      TIM 0017 #300
+      ^^^
+      LD H357.15
+      AND>=(325) D32478 D32460
+      LD<(310) D32417 #1040
+      LD<(310) D32417 #1000
+      OR H358.07
+      ANDLD
+      ORLD
+      OR T0017
+      OR H108.09
+      OR H208.09
+      OR H308.09
+      OR H508.09
+      AND H357.07
+      OUT H358.07
+      !RSET H353.05
+      ^^^
+      LD P_On
+      XFRB(062) D32197 A352 D32198
+      XFRB(062) D32187 A352 D32188
+      ^^^
+      '  Transfer Year : Month : Day : Hour : Minute : Second to DM's for use in later comparisons
+      LD P_On
+      XFRB(062) #808 A353 D275
+      XFRB(062) #800 A353 D274
+      XFRB(062) #808 A352 D273
+      XFRB(062) #800 A352 D272
+      XFRB(062) #808 A351 D271
+      XFRB(062) #800 A351 D270
+      ^^^
+      '  HBLV LOGIC - FOR KENTARO TAMADA
+      %LD H16.00
+      OR H29.00
+      RSET H16.01
+      RSET H16.04
+      LD P_First_Cycle
+      ANDNOT H16.00
+      ORLD
+      BSET(071) #7200 H21 H22
+      ^^^
+      %LD H17.00
+      OR H29.00
+      RSET H17.01
+      RSET H17.04
+      LD P_First_Cycle
+      ANDNOT H17.00
+      ORLD
+      BSET(071) #7200 H23 H24
+      ^^^
+      %LD H18.00
+      OR H29.00
+      RSET H18.01
+      RSET H18.04
+      LD P_First_Cycle
+      ANDNOT H18.00
+      ORLD
+      BSET(071) #7200 H25 H26
+      ^^^
+      %LD H19.00
+      OR H29.00
+      RSET H19.01
+      RSET H19.04
+      LD P_First_Cycle
+      ANDNOT H19.00
+      ORLD
+      BSET(071) #7200 H27 H28
+      ^^^
+      LD H29.00
+      TIM 0018 #20
+      AND T0018
+      RSET H29.00
+      ^^^
+      LD=(300) D32100 #300
+      @AND H16.00
+      ANDNOT H16.01
+      SET H16.01
+      ^^^
+      LD=(300) D32100 #300
+      AND H16.01
+      !MOV(021) #1B58 D32120
+      !MOV(021) #2400 D32119
+      SET H16.02
+      ^^^
+      LD=(300) D32200 #300
+      @AND H17.00
+      ANDNOT H17.01
+      SET H17.01
+      ^^^
+      LD=(300) D32200 #300
+      AND H17.01
+      !MOV(021) #1B58 D32220
+      !MOV(021) #2400 D32219
+      SET H17.02
+      ^^^
+      LD=(300) D32300 #300
+      @AND H18.00
+      ANDNOT H18.01
+      SET H18.01
+      ^^^
+      LD=(300) D32300 #300
+      AND H18.01
+      !MOV(021) #1B58 D32320
+      !MOV(021) #2400 D32319
+      SET H18.02
+      ^^^
+      LD=(300) D32500 #300
+      @AND H19.00
+      ANDNOT H19.01
+      SET H19.01
+      ^^^
+      LD=(300) D32500 #300
+      AND H19.01
+      !MOV(021) #1B58 D32520
+      !MOV(021) #2400 D32519
+      SET H19.02
+      ^^^
+      LD H19.00
+      AND H19.01
+      OUT TR0
+      AND=(300) D32500 #67
+      ANDNOT T0293
+      BSET(071) #600 H27 H28
+      LD TR0
+      AND=(300) D32500 #246
+      ANDNOT T0297
+      !MOV(021) #61A8 D32520
+      !MOV(021) D32505 D32519
+      ^^^
+      LD H18.00
+      AND H18.01
+      OUT TR0
+      AND=(300) D32300 #67
+      ANDNOT T0292
+      BSET(071) #600 H25 H26
+      LD TR0
+      AND=(300) D32300 #246
+      ANDNOT T0296
+      !MOV(021) #61A8 D32320
+      !MOV(021) D32305 D32319
+      ^^^
+      LD H17.00
+      AND H17.01
+      OUT TR0
+      AND=(300) D32200 #67
+      ANDNOT T0291
+      BSET(071) #600 H23 H24
+      LD TR0
+      AND=(300) D32200 #246
+      ANDNOT T0295
+      !MOV(021) #61A8 D32220
+      !MOV(021) D32205 D32219
+      ^^^
+      LD H16.00
+      AND H16.01
+      OUT TR0
+      AND=(300) D32100 #67
+      ANDNOT T0290
+      BSET(071) #600 H21 H22
+      LD TR0
+      AND=(300) D32100 #246
+      ANDNOT T0294
+      !MOV(021) #61A8 D32120
+      !MOV(021) D32105 D32119
+      ^^^
+      '  Reset Monthly Totalizers
+      LD=(300) D32198 #1
+      @MOVL(498) #0 D32464
+      @MOVL(498) #0 D32482
+      @MOVL(498) #0 D32484
+      @MOVL(498) #0 D32486
+      @MOVL(498) #0 D32488
+      @MOVL(498) #0 D32490
+      @MOVL(498) #0 D32492
+      @MOVL(498) #0 D32494
+      @MOVL(498) #0 D32496
+      @MOVL(498) #0 D32606
+      @MOVL(498) #0 D32426
+      ^^^
+      '  RESET Caustic START P.B Area 2, 4, 8
+      LD H357.15
+      RSET H356.01
+      RSET H356.03
+      RSET H356.07
+      ^^^
+      '  RESET Caustic START P.B Area 1, 3, 5, 6
+      LD H359.14
+      RSET H356.00
+      RSET H356.02
+      RSET H356.04
+      RSET H356.05
+      ^^^
+      LD W7.13
+      OUT TR0
+      ANDNOT W4.15
+      TIM 3160 #100
+      LD TR0
+      AND T3160
+      OUT H358.10
+      ^^^
+      LD W7.11
+      OUT TR0
+      ANDNOT W0.15
+      TIM 3165 #100
+      LD TR0
+      AND T3165
+      OUT H359.10
+      ^^^
+      LD<=(315) D32417 #1500
+      AND=(300) D32188 #14
+      AND=(300) D271 #0
+      OUT H358.11
+      ^^^
+      LD P_On
+      OUT TR0
+      AND=(300) D32188 #11
+      SET H358.12
+      LD TR0
+      AND H358.09
+      RSET H358.12
+      LD TR0
+      AND=(300) D32188 #12
+      RSET H358.09
+      ^^^
+      LD P_On
+      OUT TR0
+      AND=(300) D32188 #8
+      SET H358.13
+      LD TR0
+      AND H358.14
+      RSET H358.13
+      LD TR0
+      AND=(300) D32188 #9
+      RSET H358.14
+      ^^^
+      LD H108.08
+      OR H208.08
+      OR H308.08
+      OR H508.08
+      RSET H357.06
+      RSET H357.03
+      RSET H357.07
+      ^^^
+      LD H354.05
+      ANDNOT H352.05
+      LD H352.05
+      AND H353.05
+      ORLD
+      ANDNOT W0.06
+      ANDNOT W2.06
+      ANDNOT W10.06
+      ANDNOT W13.06
+      ANDNOT W0.14
+      ANDNOT W4.14
+      OUT W7.03
+      ^^^
+      LD H356.15
+      ANDNOT T3163
+      OUT TR0
+      TIM 3167 #3000
+      AND T3167
+      TIM 3162 #1800
+      LD TR0
+      AND T3167
+      ANDNOT T3162
+      OUT H354.06
+      ^^^
+      LD H356.15
+      TIM 3163 #9000
+      ANDNOT T3163
+      OUT H354.07
+      ^^^
+      LD T3163
+      OR P_First_Cycle
+      RSET H356.15
+      ^^^
+      LD H354.06
+      ANDNOT H352.06
+      LD H352.06
+      AND H353.06
+      ORLD
+      OUT W7.04
+      ^^^
+      LD H354.07
+      ANDNOT H352.07
+      LD H352.07
+      AND H353.07
+      ORLD
+      OUT W7.05
+      ^^^
+      LD W7.13
+      AND W4.04
+      LD W4.14
+      OR W0.14
+      OR W0.06
+      OR W2.06
+      OR W10.06
+      OR W13.06
+      ANDLD
+      OUT W44.00
+      ^^^
+      LD W7.13
+      AND W4.14
+      LD W4.04
+      OR W0.14
+      OR W0.06
+      OR W2.06
+      OR W10.06
+      OR W13.06
+      ANDLD
+      OUT W44.01
+      ^^^
+      LD W7.13
+      AND W0.14
+      LD W4.14
+      OR W4.04
+      OR W0.06
+      OR W2.06
+      OR W10.06
+      OR W13.06
+      ANDLD
+      OUT W44.02
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+  </SECTION>
+</LIBRARY>

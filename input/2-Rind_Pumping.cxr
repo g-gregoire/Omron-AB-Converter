@@ -1,0 +1,113 @@
+<LIBRARY>
+  <PLCTYPE>
+    CS1G-H
+  </PLCTYPE>
+  <SECTION>
+    <MNEMONIC>
+      '  Drain Control\nDrainage System Control
+      LD 40.04
+      LD 42.00
+      OR W8.00
+      ANDLD
+      OUT 480.12
+      ^^^
+      LD 41.03
+      LD 43.00
+      OR W8.01
+      ANDLD
+      OUT 480.13
+      ^^^
+      LD 44.00
+      LD 46.00
+      OR W8.02
+      ANDLD
+      OUT 480.14
+      ^^^
+      LD 45.03
+      LD 47.00
+      OR W8.03
+      ANDLD
+      OUT 480.15
+      ^^^
+      '  Tank1_pump_auto\nto start the tank-1 water feed to the happoer
+      LD H357.10
+      ANDNOT H354.15
+      ANDNOT W4.01
+      LD W1.14
+      OR W3.14
+      OR W11.14
+      OR W14.14
+      ANDLD
+      TIM 0090 #30
+      AND T0090
+      OUT 6.05
+      ^^^
+      '  Extractor Drain Valves\nDrain Valve must be OPEN to drop PRT
+      LD 329.01
+      AND 328.01
+      AND 42.15
+      ANDNOT H0.01
+      ANDNOT W17.09
+      OUT 40.04
+      ^^^
+      LD 329.02
+      AND 328.02
+      AND 43.15
+      ANDNOT H3.01
+      ANDNOT W17.09
+      OUT 41.03
+      ^^^
+      LD 329.03
+      AND 328.03
+      AND 46.15
+      ANDNOT H6.01
+      ANDNOT W17.09
+      OUT 44.00
+      ^^^
+      LD 329.04
+      AND 328.04
+      AND 47.15
+      ANDNOT H9.01
+      ANDNOT W17.09
+      OUT 45.03
+      ^^^
+      LD 40.04
+      OR 41.03
+      OR 44.00
+      OR 45.03
+      AND W22.00
+      OUT W22.10
+      ^^^
+      LD 40.04
+      OR 41.03
+      OR 44.03
+      OR 45.03
+      LDNOT 40.04
+      ANDNOT 41.03
+      ANDNOT 44.03
+      ANDNOT 45.03
+      KEEP(011) 40.01
+      ^^^
+      '  iFIX to PLC Number System Conversions
+      LD P_On
+      BCD(024) D1436 D415
+      BCD(024) D1437 D416
+      BCD(024) D1438 D417
+      BCD(024) D1439 D418
+      ^^^
+      LD P_On
+      BCD(024) D1450 D32111
+      BCD(024) D1451 D32211
+      BCD(024) D1452 D32311
+      BCD(024) D1453 D32511
+      CMP(020) D1456 #0
+    </MNEMONIC>
+    <GLOBALSYMBOL>
+    </GLOBALSYMBOL>
+    <LOCALSYMBOL>
+    </LOCALSYMBOL>
+    <COMMENT>
+      DRUM ROOM TO EXTRACTOR RIND PUMPING AUTOMATION
+    </COMMENT>
+  </SECTION>
+</LIBRARY>

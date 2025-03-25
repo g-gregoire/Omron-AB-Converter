@@ -34,6 +34,9 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         
         address = row["Address"]
         detailed_address = util.expandTag(address)
+        address = detailed_address["real_address"]
+        if address == 5.11000000000001: print(address, tagname, tag_description, parent)
+
 
         try: query = global_symbols.query(f'Address == "{address}"')
         except: query = global_symbols.query(f'Address == {address}')
@@ -44,6 +47,8 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             symbol = ""
             description = ""
             tag_type = ""
+            scada_tagname = ""
+            scada_desc = ""
         else:
             # print(query)
             # print("Symbol or Description found")
@@ -79,7 +84,8 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             detailed_address["parent"] = parent
         detailed_address["SCADA_tagname"] = []
 
-        # Before appending, check if tag already exists in taglist
+
+        # Before appending, check if tag address already exists in taglist
         query = [tag for tag in taglist if tag["real_address"] == detailed_address["real_address"]]
         if query:
             # If tag already exists, take the longest tagname and description
@@ -88,6 +94,19 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             if len(tag_description) > len(taglist[taglist.index(query[0])]["description"]):
                 taglist[taglist.index(query[0])]["description"] = tag_description
         else:
+            # Before appending, check if tagname already exists in taglist
+            tagname_suffix = 1
+            base_tagname = detailed_address["tagname"]
+            query = [tag for tag in taglist if tag["tagname"] == detailed_address["tagname"]]
+            if query:
+                # If tag already exists, add a suffix to the tagname
+                # print(query)
+                while query:
+                    # print("Tag already exists, adding suffix", detailed_address["tagname"])
+                    tagname_suffix += 1
+                    detailed_address["tagname"] = base_tagname + "_" + str(tagname_suffix)
+                    query = [tag for tag in taglist if tag["tagname"] == detailed_address["tagname"]]
+
             # Otherwise, append the tag to the list
             taglist.append(detailed_address)
         
@@ -109,10 +128,11 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         # Convert tag address to PLC address
         address = util.scadaToPlcAddress(address)
         detailed_address = util.expandTag(address)
+        address = detailed_address["real_address"]
         tagname, tag_description, parent = util.nameCreator(detailed_address, scada_tagname, scada_description, system_name)
 
         # See if tag already exists in taglist, then add to SCADA_tagname column
-        query = [tag for tag in taglist if tag["address"] == address]
+        query = [tag for tag in taglist if tag["real_address"] == address]
         if query:
             # print("Tag already exists")
             # Tag has already been added, add it to the SCADA_Tag list
@@ -123,7 +143,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         else:
             # If tag does not exist, create tag
             # print("Tag does not exist in list. Adding tag:")
-            detailed_address["address"] = address
+            detailed_address["real_address"] = address
             detailed_address["tagname"] = tagname
             detailed_address["description"] = tag_description
             # detailed_address["description"] = '"' + row["DESCRIPTION"] + '"'

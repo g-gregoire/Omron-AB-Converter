@@ -29,7 +29,7 @@ def getSystemName(filename:str):
     # print(system_name)
     return system_name
 
-def createFile(filename="code.txt", input_filename=""):
+def createFile(filename="code.txt", input_filename="", simple_output=False):
     # Set output dir
     os.chdir(output_dir)
 
@@ -43,9 +43,15 @@ def createFile(filename="code.txt", input_filename=""):
         filename = systemName + "_" + filename
     else:
         filename = filename
-    
+
     file = open(filename,"w") 
-    return file
+
+    if simple_output:
+        filename2 = "simple_output.txt"
+        file2 = open(filename2,"w") 
+        return file, file2
+    else:   
+        return file, None
 
 def create_plc_tag_import_file(system_name="IDH"):
 
@@ -161,7 +167,7 @@ def addFooter(file):
     return file
 
 # Specific routine logic
-def addRung(file, r_num, logic, comment=None):
+def addRung(file, simple_file, r_num, logic, comment=None):
     text =cmp.r_start.replace("r_num", str(r_num)) + n
     
     # If comment, add comment
@@ -174,11 +180,15 @@ def addRung(file, r_num, logic, comment=None):
     # Add routine closure
     text +=cmp.r_end
     
+    # Write full logic with context to file
     file.write(text)
     file.write(n)
+
+    # Just write the logic and newline to simple file
+    simple_file.write(logic + ";" + n)
     r_num += 1
 
-    return file, r_num
+    return r_num
 
 def addTag(full_tag, file):
     # print(tag, desc, type)
