@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R04_Revision_1" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R04_Revision_1" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA['  AIR_SHOT_1\nTIMER CONTROL FOR AIR SHOT "OFF" TIME FOR EXTRACTOR #1]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT1START)XIO(EXT_1HEAT1CMPLT)[XIO(EXT_T0241_TMR.DN)TON(EXT_T0255_TMR,900000,0),XIC(EXT_T0255_TMR.DN)TON(EXT_T0245_TMR,600000,0),XIC(EXT_T0245_TMR.DN)TON(EXT_T0251_TMR,60000,0),XIC(EXT_T0251_TMR.DN)TON(EXT_T0241_TMR,240000,0)];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA['  AIR_SHOT_2\nTIMER CONTROL FOR AIR SHOT "OFF" TIME FOR EXTRACTOR #2]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT1STRT)XIO(EXT_2HEAT1CMPLT)[XIO(EXT_T0242_TMR.DN)TON(EXT_T0256_TMR,900000,0),XIC(EXT_T0256_TMR.DN)TON(EXT_T0246_TMR,600000,0),XIC(EXT_T0246_TMR.DN)TON(EXT_T0252_TMR,60000,0),XIC(EXT_T0252_TMR.DN)TON(EXT_T0242_TMR,240000,0)];]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA['  AIR_SHOT_3\nTIMER CONTROL FOR AIR SHOT "OFF" TIME FOR EXTRACTOR #3]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT1STRT)XIO(EXT_3HEAT1CMPLT)[XIO(EXT_T0243_TMR.DN)TON(EXT_T0257_TMR,900000,0),XIC(EXT_T0257_TMR.DN)TON(EXT_T0247_TMR,600000,0),XIC(EXT_T0247_TMR.DN)TON(EXT_T0253_TMR,60000,0),XIC(EXT_T0253_TMR.DN)TON(EXT_T0243_TMR,240000,0)];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+

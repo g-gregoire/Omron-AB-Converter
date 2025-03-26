@@ -1,11 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R01_IDH_Main" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="Grantek" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R08_Pretreatment" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
 <Controller Use="Context" Name="demo_proj">
 <Programs Use="Context">
 <Program Use="Context" Name="MainProgram">
 <Routines Use="Context">
-<Routine Use="Target" Name="R01_IDH_Main" Type="RLL">
+<Routine Use="Target" Name="R08_Pretreatment" Type="RLL">
 <RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA['  Analog Input Covertion LIT1001]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(EXT_LIT4001_FORMULA_START)CPT(EXT_LIT_4001_AI_OLD,3308-(3308-3308)/(3308-3308)*(3308-EXT_LEVEL_FORMULA));]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)LES(EXT_LIT_4001_AI_OLD,9500)OTE(EXT_LIT_4001_ALMH);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA['  Analog Input Covertion LIT1002]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)XIC(EXT_LIT4002_FORMULA_START)CPT(EXT_LIT_4002_AI_OLD,3309-(3309-3309)/(3309-3309)*(3309-EXT_LEVEL_FORMULA));]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[LES(EXT_LIT_4002_AI_OLD,9500)OTE(EXT_LIT_4002_ALMH),LES(EXT_LIT_4002_AI_OLD,8000)OTE(EXT_TK_4002_LEVEL_70)];]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA['  Analog Input Covertion FIT 2000]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(EXT_FIT_2000_AI,3307-(3307-3307)/(3307-3307)*(3307-EXT_FLOW_FORMULA));]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[LEQ(EXT_FIT2000,&6000)CPT(EXT_N_PRE_FIT_2000_AI,D31224-(D31224-D31224)/(D31224-D31224)*(D31224-EXT_FIT2000)),MOV(&0,EXT_N_PRE_FIT_2000_AI)];]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA['  Analog Input Covertion FIT 2000\nFor Totalizer Only]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(EXT_FIT2_2000_AI,3307-(3307-3307)/(3307-3307)*(3307-EXT_FLOW2_FORMULA));]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA['  Check Transmitter signals and move 0 if less than 4ma]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)GRT(EXT_FIT2000,&6000)[MOV(&0,EXT_FIT_2000_AI),MOV(&0,EXT_FIT2_2000_AI)];]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)START(TR0)EQU(EXT_LIT4001,&6500),XIC(P_EQ)][OTL(EXT_LIT4001_FORMULA_START),OUT(TR0)XIC(P_GT)[OTU(EXT_LIT4001_FORMULA_START),MOV(&0,EXT_LIT_4001_AI_OLD)]];]]>
+</Text>
+</Rung>
 </RLLContent>
 </Routine>
 </Routines>

@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R06_Unnamed_0" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R06_Unnamed_0" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0145_TMR.DN)XIC(EXT_1AIRSHOTCMD)XIO(EXT_1AIRSHOTCNT_PV_CTR.DN)XIO(EXT_1AIRSHOTDLY_PV_TMR.DN)TON(EXT_1AIRSHOTDLY_PV_TMR,90000,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1AIRSHOTDLY_PV_TMR.DN)ONS(OneShots[0])CTU(EXT_1AIRSHOTCNT_PV_CTR,10,0),[XIC(EXT_1AIRSHOTLENGTH_PV_TMR.DN),XIC(EXT_ADDR_H93.01)]RES(???)];]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0146_TMR.DN)XIC(EXT_2AIRSHOTCMD)XIO(EXT_2AIRSHOTCNT_PV_CTR.DN)XIO(EXT_2AIRSHOTDLY_PV_TMR.DN)TON(EXT_2AIRSHOTDLY_PV_TMR,90000,0);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_2AIRSHOTDLY_PV_TMR.DN)ONS(OneShots[1])CTU(EXT_2AIRSHOTCNT_PV_CTR,10,0),[XIC(EXT_2AIRSHOTLENGTH_PV_TMR.DN),XIC(EXT_ADDR_H93.02)]RES(???)];]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0147_TMR.DN)XIC(EXT_3AIRSHOTCMD)XIO(EXT_3AIRSHOTCNT_PV_CTR.DN)XIO(EXT_3AIRSHOTLENGTH_PV_TMR.DN)TON(EXT_3AIRSHOTDLY_PV_TMR,90000,0);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_3AIRSHOTDLY_PV_TMR.DN)ONS(OneShots[2])CTU(EXT_3AIRSHOTCNT_PV_CTR,10,0),[XIC(EXT_3AIRSHOTLENGTH_PV_TMR.DN),XIC(EXT_ADDR_H93.03)]RES(???)];]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0148_TMR.DN)XIC(EXT_4AIRSHOTCMD)XIO(EXT_4AIRSHOTCNT_PV_CTR.DN)XIO(EXT_4AIRSHOTDLY_PV_TMR.DN)TON(EXT_4AIRSHOTDLY_PV_TMR,90000,0);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_4AIRSHOTDLY_PV_TMR.DN)ONS(OneShots[3])CTU(EXT_4AIRSHOTCNT_PV_CTR,10,0),[XIC(EXT_T0120_TMR.DN),XIC(EXT_ADDR_H93.04)]RES(???)];]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1HEAT1START)XIO(EXT_1HEAT1CMPLT),XIC(EXT_1HEAT2STRT)XIO(EXT_1HEAT2CMPLT),XIC(EXT_1HEAT3STRT)XIO(EXT_1HEAT3CMPLT),XIC(EXT_1HEAT4STRT)XIO(EXT_1HEAT4CMPLT),XIC(EXT_2HEAT1STRT)XIO(EXT_2HEAT1CMPLT),XIC(EXT_2HEAT2STRT)XIO(EXT_2HEAT2CMPLT),XIC(EXT_2HEAT3START)XIO(EXT_2HEAT3CMPLT),XIC(EXT_2HEAT4STRT)XIO(EXT_2HEAT4CMPLT)]TON(EXT_EXT1HUTIMER_PV_TMR,60000,0);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_3HEAT1STRT)XIO(EXT_3HEAT1CMPLT),XIC(EXT_3HEAT2STRT)XIO(EXT_3HEAT2CMPLT),XIC(EXT_3HEAT3STRT)XIO(EXT_3HEAT3CMPLT),XIC(EXT_3HEAT4STRT)XIO(EXT_3HEAT4CMPLT),XIC(EXT_4HEAT1STRT)XIO(EXT_4HEAT1CMPLT),XIC(EXT_4HEAT2STRT)XIO(EXT_4HEAT2CMPLT),XIC(EXT_4HEAT3STRT)XIO(EXT_4HEAT3CMPLT),XIC(EXT_4HEAT4STRT)XIO(EXT_4HEAT4CMPLT)]TON(EXT_EXT2HUTIMER_PV_TMR,60000,0);]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_HTCMPFLAG),XIC(EXT_HE1_TEMP)]XIO(EXT_ADDR_H93.01)[TON(EXT_T0141_TMR,180000,0),OTE(EXT_HE1_TEMP)];]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_2HTCMPFLAG),XIC(EXT_HE2_TEMP)]XIO(EXT_ADDR_H93.02)[TON(EXT_T0142_TMR,180000,0),OTE(EXT_HE2_TEMP)];]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_34HECMLFLAG),XIC(EXT_HE3_TEMP)]XIO(EXT_ADDR_H93.03)[TON(EXT_T0143_TMR,180000,0),OTE(EXT_HE3_TEMP)];]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_4HTCMPLTFLAG),XIC(EXT_HE4_TEMP)]XIO(EXT_ADDR_H93.04)[TON(EXT_T0144_TMR,180000,0),OTE(EXT_HE4_TEMP)];]]>
+</Text>
+</Rung>
+<Rung Number="14" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)MOV(0,EXT_ADDR_D3205);]]>
+</Text>
+</Rung>
+<Rung Number="15" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[MOV(0,EXT_ADDR_D3207),MOV(EXT_WFFLOWMETER,EXT_ADDR_D3206),MOV(EXT_WFFLOWMETER,EXT_ADDR_D990)];]]>
+</Text>
+</Rung>
+<Rung Number="16" Type="N">
+<Comment>
+<![CDATA['  WF TOTL REST\nwater fraction totalizer Reset]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_3FILL3CMPLT)XIO(EXT_3WF3START),XIC(EXT_4FILL3CMPLT)XIO(EXT_4WF3START),XIC(EXT_3FILL4CMPLT)XIO(EXT_3WFFILL4STRT),XIC(EXT_4FILL4CMPLT)XIO(EXT_4WFFILL4STRT),XIO(EXT_1WF3START)XIO(EXT_2WF3START)XIO(EXT_3WF3START)XIO(EXT_4WF3START)]XIO(EXT_WFSUPPLY_SV30_02)[FLL(EXT_ADDR_D995,EXT_ADDR_D996,0),FLL(EXT_ADDR_D990,EXT_ADDR_D991,0),MOV(0,EXT_ADDR_D995)];]]>
+</Text>
+</Rung>
+<Rung Number="17" Type="N">
+<Comment>
+<![CDATA['  WF TOTALIZER\nSet point from SCADA DM82 to set the WF add to each EXT]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1WF3START)XIO(EXT_1WF3ADDCMPLT),XIC(EXT_2WF3START)XIO(EXT_2WF3ADDCMPLT),XIC(EXT_3WF3START)XIO(EXT_3WF3ADDCMPLT),XIC(EXT_4WF3START)XIO(EXT_4WF3ADDCMPLT),XIC(EXT_1WF4STRT)XIO(EXT_1WFADDCMPLT),XIC(EXT_2WF4STRT)XIO(EXT_2WFADDCMPLT),XIC(EXT_3WFFILL4STRT)XIO(EXT_3WFADDCMPLT),XIC(EXT_4WFFILL4STRT)XIO(EXT_4WFADDCMPLT)]XIC(P_1s)ADD(EXT_ADDR_D995,EXT_ADDR_D990,EXT_ADDR_D995);]]>
+</Text>
+</Rung>
+<Rung Number="18" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(P_On)(EXT_ADDR_D995,EXT_FILL_STPT_COOKWF_1000_AI),XIC(P_EQ)]OTE(EXT_STOP_WF);]]>
+</Text>
+</Rung>
+<Rung Number="19" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(EXT_EXT1_2_FILL_VALVE_VIA_HE)XIO(EXT_EXT3_4_FILL_VALVE_VIA_HE)XIO(EXT_1WTRFEED)XIO(EXT_2WTRFEED)XIO(EXT_3WTRFEED)XIO(EXT_4WTRFEEDVLV)[TON(EXT_T0210_TMR,10000,0),XIC(EXT_T0210_TMR.DN)FLL(EXT_WATER_FILL_TOTAL_1000_AI,EXT_WF_FILL_TOTAL_10000_AI,0)];]]>
+</Text>
+</Rung>
+<Rung Number="20" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_WATERSUPPLY)XIC(EXT_WFSUPPLY_SV30_02)OTE(EXT_SUPPLY_ALM);]]>
+</Text>
+</Rung>
+<Rung Number="21" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1WTRFEED),XIC(EXT_2WTRFEED),XIC(EXT_3WTRFEED),XIC(EXT_4WTRFEEDVLV),XIC(EXT_EXT3_4_FILL_VALVE_VIA_HE)[XIC(EXT_PRT4_HBLV_ONOFF_P_B)XIO(EXT_4WTRFEEDVLV)XIC(EXT_4GELFEED),XIC(EXT_PRT3_HBLV_ONOFF_P_B)XIO(EXT_3WTRFEED)XIC(EXT_3GELFEED)],XIC(EXT_EXT1_2_FILL_VALVE_VIA_HE)[XIC(EXT_PRT2_HBLV_ONOFF_P_B)XIO(EXT_2WTRFEED)XIC(EXT_2GELFEED),XIC(EXT_PRT1_HBLV_ONOFF_P_B)XIO(EXT_1WTRFEED)XIC(EXT_1GELFEED)]]XIC(EXT_WATERSUPPLY)LES(EXT_FILL_FLOW_LITRESEC,5)OTE(EXT_FILL_FLOW_ALM);]]>
+</Text>
+</Rung>
+<Rung Number="22" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1WTRFEED),XIC(EXT_2WTRFEED),XIC(EXT_3WTRFEED),XIC(EXT_4WTRFEEDVLV),XIC(EXT_EXT3_4_FILL_VALVE_VIA_HE)[XIC(EXT_PRT4_HBLV_ONOFF_P_B)XIO(EXT_4WTRFEEDVLV)XIC(EXT_4GELFEED),XIC(EXT_PRT3_HBLV_ONOFF_P_B)XIO(EXT_3WTRFEED)XIC(EXT_3GELFEED)],XIC(EXT_EXT1_2_FILL_VALVE_VIA_HE)[XIC(EXT_PRT2_HBLV_ONOFF_P_B)XIO(EXT_2WTRFEED)XIC(EXT_2GELFEED),XIC(EXT_PRT1_HBLV_ONOFF_P_B)XIO(EXT_1WTRFEED)XIC(EXT_1GELFEED)]]XIC(EXT_WFSUPPLY_SV30_02)LES(EXT_WFFLOWMETER,2)OTE(EXT_WF_FLOW_ALM);]]>
+</Text>
+</Rung>
+<Rung Number="23" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(EXT_FLOW_PU30_120_RICK,D31440-(D31440-D31440)/(D31440-D31440)*(D31440-EXT_ADDR_2017));]]>
+</Text>
+</Rung>
+<Rung Number="24" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_EXT12RECIRCPMP)LES(EXT_FLOW_PU30_120_RICK,1000)[TON(EXT_T4048_TMR,15000,0),XIC(EXT_T4048_TMR.DN)OTE(EXT_PU120_NOFLO_ALM)];]]>
+</Text>
+</Rung>
+<Rung Number="25" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_EXT12RECIRCPMP)LES(EXT_FLOW_PU30_120_RICK,2200)[TON(EXT_T0355_TMR,90000,0),XIC(EXT_T0355_TMR.DN)OTE(EXT_12_LOW_FLOW)];]]>
+</Text>
+</Rung>
+<Rung Number="26" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)CPT(EXT_FLOW_PU30_340_RICK,D31445-(D31445-D31445)/(D31445-D31445)*(D31445-EXT_ADDR_2012));]]>
+</Text>
+</Rung>
+<Rung Number="27" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_EXT34RECIRCPMP)LES(EXT_FLOW_PU30_340_RICK,1000)[TON(EXT_T4049_TMR,15000,0),XIC(EXT_T4049_TMR.DN)OTE(EXT_PU340_NOFLO_ALM)];]]>
+</Text>
+</Rung>
+<Rung Number="28" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_EXT34RECIRCPMP)LES(EXT_FLOW_PU30_340_RICK,2200)[TON(EXT_T0356_TMR,90000,0),XIC(EXT_T0356_TMR.DN)OTE(EXT_34_LOW_FLOW)];]]>
+</Text>
+</Rung>
+<Rung Number="29" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT2STRT)OSR(EXT_ADDR_H93.05_storage,EXT_ADDR_H93.05);]]>
+</Text>
+</Rung>
+<Rung Number="30" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT3STRT)OSR(EXT_ADDR_H93.06_storage,EXT_ADDR_H93.06);]]>
+</Text>
+</Rung>
+<Rung Number="31" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT4STRT)OSR(EXT_ADDR_H93.07_storage,EXT_ADDR_H93.07);]]>
+</Text>
+</Rung>
+<Rung Number="32" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT1START)OSR(EXT_ADDR_H94.00_storage,EXT_ADDR_H94.00);]]>
+</Text>
+</Rung>
+<Rung Number="33" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_ADDR_H94.00),XIC(EXT_ADDR_H93.05),XIC(EXT_ADDR_H93.06),XIC(EXT_ADDR_H93.07)]OTE(EXT_ADDR_H93.01);]]>
+</Text>
+</Rung>
+<Rung Number="34" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT2STRT)OSR(EXT_ADDR_H93.08_storage,EXT_ADDR_H93.08);]]>
+</Text>
+</Rung>
+<Rung Number="35" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT3START)OSR(EXT_ADDR_H93.09_storage,EXT_ADDR_H93.09);]]>
+</Text>
+</Rung>
+<Rung Number="36" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT4STRT)OSR(EXT_ADDR_H93.10_storage,EXT_ADDR_H93.10);]]>
+</Text>
+</Rung>
+<Rung Number="37" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT1STRT)OSR(EXT_ADDR_H94.01_storage,EXT_ADDR_H94.01);]]>
+</Text>
+</Rung>
+<Rung Number="38" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_ADDR_H94.01),XIC(EXT_ADDR_H93.08),XIC(EXT_ADDR_H93.09),XIC(EXT_ADDR_H93.10)]OTE(EXT_ADDR_H93.02);]]>
+</Text>
+</Rung>
+<Rung Number="39" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT2STRT)OSR(EXT_ADDR_H93.11_storage,EXT_ADDR_H93.11);]]>
+</Text>
+</Rung>
+<Rung Number="40" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT3STRT)OSR(EXT_ADDR_H93.12_storage,EXT_ADDR_H93.12);]]>
+</Text>
+</Rung>
+<Rung Number="41" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT4STRT)OSR(EXT_ADDR_H93.13_storage,EXT_ADDR_H93.13);]]>
+</Text>
+</Rung>
+<Rung Number="42" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT1STRT)OSR(EXT_ADDR_H94.02_storage,EXT_ADDR_H94.02);]]>
+</Text>
+</Rung>
+<Rung Number="43" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_ADDR_H94.02),XIC(EXT_ADDR_H93.11),XIC(EXT_ADDR_H93.12),XIC(EXT_ADDR_H93.13)]OTE(EXT_ADDR_H93.03);]]>
+</Text>
+</Rung>
+<Rung Number="44" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4HEAT2STRT)OSR(EXT_ADDR_H93.14_storage,EXT_ADDR_H93.14);]]>
+</Text>
+</Rung>
+<Rung Number="45" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4HEAT3STRT)OSR(EXT_ADDR_H93.15_storage,EXT_ADDR_H93.15);]]>
+</Text>
+</Rung>
+<Rung Number="46" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4HEAT4STRT)OSR(EXT_ADDR_H93.00_storage,EXT_ADDR_H93.00);]]>
+</Text>
+</Rung>
+<Rung Number="47" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4HEAT1STRT)OSR(EXT_ADDR_H94.03_storage,EXT_ADDR_H94.03);]]>
+</Text>
+</Rung>
+<Rung Number="48" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_ADDR_H94.03),XIC(EXT_ADDR_H93.14),XIC(EXT_ADDR_H93.15),XIC(EXT_ADDR_H93.00)]OTE(EXT_ADDR_H93.04);]]>
+</Text>
+</Rung>
+<Rung Number="49" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0145_TMR.DN)TON(EXT_T0008_TMR,300000,0);]]>
+</Text>
+</Rung>
+<Rung Number="50" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0146_TMR.DN)TON(EXT_T0009_TMR,300000,0);]]>
+</Text>
+</Rung>
+<Rung Number="51" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0147_TMR.DN)TON(EXT_T0010_TMR,300000,0);]]>
+</Text>
+</Rung>
+<Rung Number="52" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0148_TMR.DN)TON(EXT_T0011_TMR,300000,0);]]>
+</Text>
+</Rung>
+<Rung Number="53" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[XIO(EXT_T0212_TMR.DN)TON(EXT_T0211_TMR,2000,0),XIC(EXT_T0211_TMR.DN)TON(EXT_T0212_TMR,10000,0)];]]>
+</Text>
+</Rung>
+<Rung Number="54" Type="N">
+<Comment>
+<![CDATA['  REEST ALL input from SCADA]]>
+</Comment>
+<Text>
+<![CDATA[XIO(EXT_T0211_TMR.DN)[FLL(EXT_ADDR_465,EXT_ADDR_476,0),FLL(EXT_ADDR_480,EXT_ADDR_482,0),FLL(EXT_ADDR_506,EXT_ADDR_509,0)];]]>
+</Text>
+</Rung>
+<Rung Number="55" Type="N">
+<Comment>
+<![CDATA['  HBLV 1st Cook Water Fill Setpoint\nD189 and D188 are the two DM's for the Long Compare (double word)\n(12m3 = 0001 2000)]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_PRT1_HBLV_ONOFF_P_B),XIC(EXT_PRT2_HBLV_ONOFF_P_B),XIC(EXT_PRT3_HBLV_ONOFF_P_B),XIC(EXT_PRT4_HBLV_ONOFF_P_B)][MOV(1,EXT_ADDR_D189),MOV(2000,EXT_ADDR_D188)];]]>
+</Text>
+</Rung>
+<Rung Number="56" Type="N">
+<Comment>
+<![CDATA['  13 m3 max  for 1st cook fill for EXTs  Dec-3-08 -----KA]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1FILL1STRT)[XIO(EXT_PRT1_HBLV_ONOFF_P_B)(EXT_ADDR_D900,EXT_FILL_STPT_COOK1_1000_AI)OTE(EXT_STOP_1ST_WATER_FILL),XIC(EXT_PRT1_HBLV_ONOFF_P_B)(EXT_ADDR_D900,EXT_ADDR_D188)OTE(EXT_STOP_1ST_WATER_FILL_6)];]]>
+</Text>
+</Rung>
+<Rung Number="57" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2FILL1STRT)[XIO(EXT_PRT2_HBLV_ONOFF_P_B)(EXT_ADDR_D914,EXT_FILL_STPT_COOK1_1000_AI)OTE(EXT_STOP_1ST_WATER_FILL_2),XIC(EXT_PRT2_HBLV_ONOFF_P_B)(EXT_ADDR_D914,EXT_ADDR_D188)OTE(EXT_STOP_1ST_WATER_FILL_7)];]]>
+</Text>
+</Rung>
+<Rung Number="58" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3FILL1STRT)[XIO(EXT_PRT3_HBLV_ONOFF_P_B)(EXT_ADDR_D928,EXT_FILL_STPT_COOK1_1000_AI)OTE(EXT_STOP_1ST_WATER_FILL_3),XIC(EXT_PRT3_HBLV_ONOFF_P_B)(EXT_ADDR_D928,EXT_ADDR_D188)OTE(EXT_STOP_1ST_WATER_FILL_5)];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+

@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R03_H_E_Scaling" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R03_H_E_Scaling" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP4CMPLT)XIC(EXT_1SETL4CMPLT)XIO(EXT_1FILL1STRT)FLL(EXT_1_1_TEMP_FILL_SIM,EXT_1_3_FLOW_TOTAL_WF_SIM,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1BATCHCMPLT)FLL(EXT_ADDR_D3030,EXT_1_4_FLOW_TOTAL_WF_SIM,0);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP4CMPLT)XIC(EXT_2SETL4CMPLT)XIO(EXT_2FILL1STRT)FLL(EXT_ADDR_D3049,EXT_2_3_FLOW_TOTAL_WF_SIM,0);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2BATCHCMPLT)FLL(EXT_ADDR_D3070,EXT_2_4_FLOW_TOTAL_WF_SIM,0);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP4CMPLT)XIC(EXT_3SETL4CMPLT)XIO(EXT_3FILL1STRT)FLL(EXT_ADDR_D3080,EXT_3_3_FLOW_TOTAL_WF_SIM,0);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3BATCHCMPLT)FLL(EXT_ADDR_D3110,EXT_3_4_FLOW_TOTAL_WF_SIM,0);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP4CMPLT)XIC(EXT_4SETL4CMPLT)XIO(EXT_4FILL1STRT)FLL(EXT_ADDR_D3120,EXT_4_3_FLOW_TOTAL_WF_SIM,0);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4BATCHCMPLT)FLL(EXT_ADDR_D3150,EXT_4_4_FLOW_TOTAL_WF_SIM,0);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1FILL1STRT)XIO(EXT_1FILL1CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_1_1_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_1_1_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT1START)XIO(EXT_1HEAT1CMPLT)[TON(EXT_T0300_TMR,60000,0),MOV(EXT_HE1TEMPIN,EXT_1_1_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0300_TMR.DN)OSR(EXT_ADDR_510.00_storage,EXT_ADDR_510.00);]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.00)MOV(EXT_HE1TEMPIN,EXT_1_1_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP1STRT)XIO(EXT_1DROP1CMPLT)MOV(EXT_STK1_TEMP,EXT_1_1_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP1STRT)XIO(EXT_1SETL1CMPLT)[MOV(EXT_SETTNK1LVL,EXT_1_1_FLOW_TOTAL_SET),MOV(EXT_1_1_FLOW_TOTAL_SET,EXT_ADDR_D3007)];]]>
+</Text>
+</Rung>
+<Rung Number="14" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1FILL2STRT)XIO(EXT_1FILL2CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_1_2_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_1_2_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="15" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT2STRT)XIO(EXT_1HEAT2CMPLT)[TON(EXT_T0301_TMR,60000,0),MOV(EXT_HE1TEMPIN,EXT_1_2_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="16" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0301_TMR.DN)OSR(EXT_ADDR_510.01_storage,EXT_ADDR_510.01);]]>
+</Text>
+</Rung>
+<Rung Number="17" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.01)MOV(EXT_HE1TEMPIN,EXT_1_2_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="18" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP2STRT)XIO(EXT_1DROP2CMPLT)MOV(EXT_STK1_TEMP,EXT_1_2_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="19" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP2STRT)XIO(EXT_1SETL2CMPLT)[MOV(EXT_SETTNK1LVL,EXT_1_2_FLOW_TOTAL_SET),MOV(EXT_1_2_FLOW_TOTAL_SET,EXT_ADDR_D3017)];]]>
+</Text>
+</Rung>
+<Rung Number="20" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1FILL3STRT)XIO(EXT_1FILL3CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_1_3_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_1_3_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="21" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1WF3START)XIO(EXT_1WF3ADDCMPLT)[MOV(EXT_WFTEMP,EXT_1_3_TEMP_WF_SIM),MOV(EXT_ADDR_D3180,EXT_1_3_FLOW_TOTAL_WF_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="22" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT3STRT)XIO(EXT_1HEAT3CMPLT)[TON(EXT_T0302_TMR,60000,0),MOV(EXT_HE1TEMPIN,EXT_1_3_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="23" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0302_TMR.DN)OSR(EXT_ADDR_510.02_storage,EXT_ADDR_510.02);]]>
+</Text>
+</Rung>
+<Rung Number="24" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.02)MOV(EXT_HE1TEMPIN,EXT_1_3_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="25" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP3STRT)XIO(EXT_1DROP3CMPLT)MOV(EXT_STK1_TEMP,EXT_1_3_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="26" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP3STRT)XIO(EXT_1SETL3CMPLT)[MOV(EXT_SETTNK1LVL,EXT_1_3_FLOW_TOTAL_SET),MOV(EXT_1_3_FLOW_TOTAL_SET,EXT_ADDR_D3027)];]]>
+</Text>
+</Rung>
+<Rung Number="27" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1FILL4STRT)XIO(EXT_1FILL4CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_1_4_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_1_4_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="28" Type="N">
+<Comment>
+<![CDATA['  EXT#1 FILL VOLUME ALARM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1FILL1STRT)XIC(EXT_1FILL1CMPLT)LES(EXT_1_1_FLOW_TOTAL_FILL_SIM,1500),XIC(EXT_1FILL2STRT)XIC(EXT_1FILL2CMPLT)LES(EXT_1_2_FLOW_TOTAL_FILL_SIM,1230),XIC(EXT_1FILL3STRT)XIC(EXT_1FILL3CMPLT)LES(EXT_1_3_FLOW_TOTAL_FILL_SIM,830),XIC(EXT_1FILL4STRT)XIC(EXT_1FILL4CMPLT)LES(EXT_1_4_FLOW_TOTAL_FILL_SIM,500)]OTL(EXT_ADDR_W9.01);]]>
+</Text>
+</Rung>
+<Rung Number="29" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1WF4STRT)XIO(EXT_1WFADDCMPLT)[MOV(EXT_WFTEMP,EXT_1_4_TEMP_WF_SIM),MOV(EXT_ADDR_D3180,EXT_1_4_FLOW_TOTAL_WF_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="30" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1HEAT4STRT)XIO(EXT_1HEAT4CMPLT)[TON(EXT_T0303_TMR,60000,0),MOV(EXT_HE1TEMPIN,EXT_1_4_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="31" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0303_TMR.DN)OSR(EXT_ADDR_510.03_storage,EXT_ADDR_510.03);]]>
+</Text>
+</Rung>
+<Rung Number="32" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.03)MOV(EXT_HE1TEMPIN,EXT_1_4_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="33" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP4STRT)XIO(EXT_1DROP4CMPLT)MOV(EXT_STK1_TEMP,EXT_1_4_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="34" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1DROP4STRT)XIO(EXT_1SETL4CMPLT)[MOV(EXT_SETTNK1LVL,EXT_1_4_FLOW_TOTAL_SET),MOV(EXT_1_4_FLOW_TOTAL_SET,EXT_ADDR_D3037)];]]>
+</Text>
+</Rung>
+<Rung Number="35" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2FILL1STRT)XIO(EXT_2FILL1CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_2_1_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_2_1_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="36" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT1STRT)XIO(EXT_2HEAT1CMPLT)[TON(EXT_T0304_TMR,60000,0),MOV(EXT_HE1TEMPIN,EXT_2_1_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="37" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0304_TMR.DN)OSR(EXT_ADDR_510.04_storage,EXT_ADDR_510.04);]]>
+</Text>
+</Rung>
+<Rung Number="38" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.04)MOV(EXT_HE1TEMPIN,EXT_2_1_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="39" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP1STRT)XIO(EXT_2DROP1CMPLT)MOV(EXT_STK2_TEMP,EXT_2_1_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="40" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP1STRT)XIO(EXT_2STL1CMPLT)[MOV(EXT_SETTNK2LVL,EXT_2_1_FLOW_TOTAL_SET),MOV(EXT_2_1_FLOW_TOTAL_SET,EXT_ADDR_D3047)];]]>
+</Text>
+</Rung>
+<Rung Number="41" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2FILL2STRT)XIO(EXT_2FILL2CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_2_2_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_2_2_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="42" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT2STRT)XIO(EXT_2HEAT2CMPLT)[TON(EXT_T0305_TMR,60000,0),MOV(EXT_HE1TEMPIN,EXT_2_2_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="43" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0305_TMR.DN)OSR(EXT_ADDR_510.05_storage,EXT_ADDR_510.05);]]>
+</Text>
+</Rung>
+<Rung Number="44" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.05)MOV(EXT_HE1TEMPIN,EXT_2_2_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="45" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP2STRT)XIO(EXT_2DROP2CMPLT)MOV(EXT_STK2_TEMP,EXT_2_2_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="46" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP2STRT)XIO(EXT_2SET2COMP)[MOV(EXT_SETTNK2LVL,EXT_2_2_FLOW_TOTAL_SET),MOV(EXT_2_2_FLOW_TOTAL_SET,EXT_ADDR_D3057)];]]>
+</Text>
+</Rung>
+<Rung Number="47" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2FILL3STRT)XIO(EXT_2FILL3CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_2_3_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_2_3_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="48" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2WF3START)XIO(EXT_2WF3ADDCMPLT)[MOV(EXT_WFTEMP,EXT_2_3_TEMP_WF_SIM),MOV(EXT_ADDR_D3180,EXT_2_3_FLOW_TOTAL_WF_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="49" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT3START)XIO(EXT_2HEAT3CMPLT)[TON(EXT_T0306_TMR,60000,0),MOV(EXT_HE1TEMPIN,EXT_2_3_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="50" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0306_TMR.DN)OSR(EXT_ADDR_510.06_storage,EXT_ADDR_510.06);]]>
+</Text>
+</Rung>
+<Rung Number="51" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.06)MOV(EXT_HE1TEMPIN,EXT_2_3_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="52" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP3STRT)XIO(EXT_2DROP3CMPLT)MOV(EXT_STK2_TEMP,EXT_2_3_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="53" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP3STRT)XIO(EXT_2SETL3CMPLT)[MOV(EXT_SETTNK2LVL,EXT_2_3_FLOW_TOTAL_SET),MOV(EXT_2_3_FLOW_TOTAL_SET,EXT_ADDR_D3067)];]]>
+</Text>
+</Rung>
+<Rung Number="54" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2FILL4STRT)XIO(EXT_2FILL4CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_2_4_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_2_4_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="55" Type="N">
+<Comment>
+<![CDATA['  EXT#2 FILL VOLUME ALARM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_2FILL1STRT)XIC(EXT_2FILL1CMPLT)LES(EXT_2_1_FLOW_TOTAL_FILL_SIM,1500),XIC(EXT_2FILL2STRT)XIC(EXT_2FILL2CMPLT)LES(EXT_2_2_FLOW_TOTAL_FILL_SIM,1230),XIC(EXT_2FILL3STRT)XIC(EXT_2FILL3CMPLT)LES(EXT_2_3_FLOW_TOTAL_FILL_SIM,830),XIC(EXT_2FILL4STRT)XIC(EXT_2FILL4CMPLT)LES(EXT_2_4_FLOW_TOTAL_FILL_SIM,500)]OTL(EXT_ADDR_W9.02);]]>
+</Text>
+</Rung>
+<Rung Number="56" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2WF4STRT)XIO(EXT_2WFADDCMPLT)[MOV(EXT_WFTEMP,EXT_2_4_TEMP_WF_SIM),MOV(EXT_ADDR_D3180,EXT_2_4_FLOW_TOTAL_WF_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="57" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2HEAT4STRT)XIO(EXT_2HEAT4CMPLT)[TON(EXT_T0307_TMR,60000,0),MOV(EXT_HE1TEMPIN,EXT_2_4_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="58" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0307_TMR.DN)OSR(EXT_ADDR_510.07_storage,EXT_ADDR_510.07);]]>
+</Text>
+</Rung>
+<Rung Number="59" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.07)MOV(EXT_HE1TEMPIN,EXT_2_4_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="60" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP4STRT)XIO(EXT_2DROP4CMPLT)MOV(EXT_STK2_TEMP,EXT_2_4_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="61" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_2DROP4STRT)XIO(EXT_2SETL4CMPLT)[MOV(EXT_SETTNK2LVL,EXT_2_4_FLOW_TOTAL_SET),MOV(EXT_2_4_FLOW_TOTAL_SET,EXT_ADDR_D3077)];]]>
+</Text>
+</Rung>
+<Rung Number="62" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3FILL1STRT)XIO(EXT_3FILL1CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_3_1_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_3_1_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="63" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT1STRT)XIO(EXT_3HEAT1CMPLT)[TON(EXT_T0308_TMR,60000,0),MOV(EXT_HE3INLETTEMP,EXT_3_1_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="64" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0308_TMR.DN)OSR(EXT_ADDR_510.08_storage,EXT_ADDR_510.08);]]>
+</Text>
+</Rung>
+<Rung Number="65" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.08)MOV(EXT_HE3INLETTEMP,EXT_3_1_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="66" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP1STRT)XIO(EXT_3DROP1CMPLT)MOV(EXT_STK3_TEMP,EXT_3_1_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="67" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP1STRT)XIO(EXT_3SETL1CMPLT)[MOV(EXT_SETTNK3LVL,EXT_3_1_FLOW_TOTAL_SET),MOV(EXT_3_1_FLOW_TOTAL_SET,EXT_ADDR_D3087)];]]>
+</Text>
+</Rung>
+<Rung Number="68" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3FILL2STRT)XIO(EXT_3FILL2CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_3_2_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_3_2_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="69" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT2STRT)XIO(EXT_3HEAT2CMPLT)[TON(EXT_T0309_TMR,60000,0),MOV(EXT_HE3INLETTEMP,EXT_3_2_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="70" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0309_TMR.DN)OSR(EXT_ADDR_510.09_storage,EXT_ADDR_510.09);]]>
+</Text>
+</Rung>
+<Rung Number="71" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.09)MOV(EXT_HE3INLETTEMP,EXT_3_2_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="72" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP2STRT)XIO(EXT_3DROP2CMPLT)MOV(EXT_STK3_TEMP,EXT_3_2_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="73" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP2STRT)XIO(EXT_3SETL2CMPLT)[MOV(EXT_SETTNK3LVL,EXT_3_2_FLOW_TOTAL_SET),MOV(EXT_3_2_FLOW_TOTAL_SET,EXT_ADDR_D3097)];]]>
+</Text>
+</Rung>
+<Rung Number="74" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3FILL3STRT)XIO(EXT_3FILL3CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_3_3_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_3_3_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="75" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3WF3START)XIO(EXT_3WF3ADDCMPLT)[MOV(EXT_WFTEMP,EXT_3_3_TEMP_WF_SIM),MOV(EXT_ADDR_D3180,EXT_3_3_FLOW_TOTAL_WF_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="76" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT3STRT)XIO(EXT_3HEAT3CMPLT)[TON(EXT_T0310_TMR,60000,0),MOV(EXT_HE3INLETTEMP,EXT_3_3_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="77" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0310_TMR.DN)OSR(EXT_ADDR_510.10_storage,EXT_ADDR_510.10);]]>
+</Text>
+</Rung>
+<Rung Number="78" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.10)MOV(EXT_HE3INLETTEMP,EXT_3_3_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="79" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP3STRT)XIO(EXT_3DROP3CMPLT)MOV(EXT_STK3_TEMP,EXT_3_3_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="80" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP3STRT)XIO(EXT_3SETL3CMPLT)[MOV(EXT_SETTNK3LVL,EXT_3_3_FLOW_TOTAL_SET),MOV(EXT_3_3_FLOW_TOTAL_SET,EXT_ADDR_D3107)];]]>
+</Text>
+</Rung>
+<Rung Number="81" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3FILL4STRT)XIO(EXT_3FILL4CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_3_4_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_3_4_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="82" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_3FILL1STRT)XIC(EXT_3FILL1CMPLT)LES(EXT_3_1_FLOW_TOTAL_FILL_SIM,1500),XIC(EXT_3FILL2STRT)XIC(EXT_3FILL2CMPLT)LES(EXT_3_2_FLOW_TOTAL_FILL_SIM,1230),XIC(EXT_3FILL3STRT)XIC(EXT_3FILL3CMPLT)LES(EXT_3_3_FLOW_TOTAL_FILL_SIM,830),XIC(EXT_3FILL4STRT)XIC(EXT_3FILL4CMPLT)LES(EXT_3_4_FLOW_TOTAL_FILL_SIM,500)]OTL(EXT_ADDR_W9.03);]]>
+</Text>
+</Rung>
+<Rung Number="83" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3WFFILL4STRT)XIO(EXT_3WFADDCMPLT)[MOV(EXT_WFTEMP,EXT_3_4_TEMP_WF_SIM),MOV(EXT_ADDR_D3180,EXT_3_4_FLOW_TOTAL_WF_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="84" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3HEAT4STRT)XIO(EXT_3HEAT4CMPLT)[TON(EXT_T0311_TMR,60000,0),MOV(EXT_HE3INLETTEMP,EXT_3_4_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="85" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0311_TMR.DN)OSR(EXT_ADDR_510.11_storage,EXT_ADDR_510.11);]]>
+</Text>
+</Rung>
+<Rung Number="86" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.11)MOV(EXT_HE3INLETTEMP,EXT_3_4_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="87" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP4STRT)XIO(EXT_3DROP4CMPLT)MOV(EXT_STK3_TEMP,EXT_3_4_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="88" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_3DROP4STRT)XIO(EXT_3SETL4CMPLT)[MOV(EXT_SETTNK3LVL,EXT_3_4_FLOW_TOTAL_SET),MOV(EXT_3_4_FLOW_TOTAL_SET,EXT_ADDR_D3117)];]]>
+</Text>
+</Rung>
+<Rung Number="89" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4FILL1STRT)XIO(EXT_4FILL1CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_4_1_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_4_1_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="90" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4HEAT1STRT)XIO(EXT_4HEAT1CMPLT)[TON(EXT_T0312_TMR,60000,0),MOV(EXT_HE3INLETTEMP,EXT_4_1_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="91" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0312_TMR.DN)OSR(EXT_ADDR_510.12_storage,EXT_ADDR_510.12);]]>
+</Text>
+</Rung>
+<Rung Number="92" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.12)MOV(EXT_HE3INLETTEMP,EXT_4_1_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="93" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP1STRT)XIO(EXT_4DROP1CMPLT)MOV(EXT_STK4_TEMP,EXT_4_1_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="94" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP1STRT)XIO(EXT_4STLCMPLT)[MOV(EXT_SETTNK4LVL,EXT_4_1_FLOW_TOTAL_SET),MOV(EXT_4_1_FLOW_TOTAL_SET,EXT_ADDR_D3127)];]]>
+</Text>
+</Rung>
+<Rung Number="95" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4FILL2STRT)XIO(EXT_4FILL2CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_4_2_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_4_2_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="96" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4HEAT2STRT)XIO(EXT_4HEAT2CMPLT)[TON(EXT_T0313_TMR,60000,0),MOV(EXT_HE3INLETTEMP,EXT_4_2_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="97" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0313_TMR.DN)OSR(EXT_ADDR_510.13_storage,EXT_ADDR_510.13);]]>
+</Text>
+</Rung>
+<Rung Number="98" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.13)MOV(EXT_HE3INLETTEMP,EXT_4_2_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="99" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP2STRT)XIO(EXT_4DROP2CMPLT)MOV(EXT_STK4_TEMP,EXT_4_2_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="100" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP2STRT)XIO(EXT_4SETL2CMPLT)[MOV(EXT_SETTNK4LVL,EXT_4_2_FLOW_TOTAL_SET),MOV(EXT_4_2_FLOW_TOTAL_SET,EXT_ADDR_D3137)];]]>
+</Text>
+</Rung>
+<Rung Number="101" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4FILL3STRT)XIO(EXT_4FILL3CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_4_3_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_4_3_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="102" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4WF3START)XIO(EXT_4WF3ADDCMPLT)[MOV(EXT_WFTEMP,EXT_4_3_TEMP_WF_SIM),MOV(EXT_ADDR_D3180,EXT_4_3_FLOW_TOTAL_WF_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="103" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4HEAT3STRT)XIO(EXT_4HEAT3CMPLT)[TON(EXT_T0314_TMR,60000,0),MOV(EXT_HE3INLETTEMP,EXT_4_3_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="104" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0314_TMR.DN)OSR(EXT_ADDR_510.14_storage,EXT_ADDR_510.14);]]>
+</Text>
+</Rung>
+<Rung Number="105" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.14)MOV(EXT_HE3INLETTEMP,EXT_4_3_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="106" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP3STRT)XIO(EXT_4DROP3CMPLT)MOV(EXT_STK4_TEMP,EXT_4_3_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="107" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP3STRT)XIO(EXT_4DROP3CMPLT)[MOV(EXT_SETTNK4LVL,EXT_4_3_FLOW_TOTAL_SET),MOV(EXT_4_3_FLOW_TOTAL_SET,EXT_ADDR_D3147)];]]>
+</Text>
+</Rung>
+<Rung Number="108" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4FILL4STRT)XIO(EXT_4FILL4CMPLT)[MOV(EXT_SPARE_TO_SCADA,EXT_4_4_TEMP_FILL_SIM),MOV(EXT_ADDR_D3170,EXT_4_4_FLOW_TOTAL_FILL_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="109" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_4FILL1STRT)XIC(EXT_4FILL1CMPLT)LES(EXT_4_1_FLOW_TOTAL_FILL_SIM,1500),XIC(EXT_4FILL2STRT)XIC(EXT_4FILL2CMPLT)LES(EXT_4_2_FLOW_TOTAL_FILL_SIM,1230),XIC(EXT_4FILL3STRT)XIC(EXT_4FILL3CMPLT)LES(EXT_4_3_FLOW_TOTAL_FILL_SIM,830),XIC(EXT_4FILL4STRT)XIC(EXT_4FILL4CMPLT)LES(EXT_4_4_FLOW_TOTAL_FILL_SIM,500)]OTL(EXT_ADDR_W9.04);]]>
+</Text>
+</Rung>
+<Rung Number="110" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4WFFILL4STRT)XIO(EXT_4WFADDCMPLT)[MOV(EXT_WFTEMP,EXT_4_4_TEMP_WF_SIM),MOV(EXT_ADDR_D3180,EXT_4_4_FLOW_TOTAL_WF_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="111" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4HEAT4STRT)XIO(EXT_4HEAT4CMPLT)[TON(EXT_T0315_TMR,60000,0),MOV(EXT_HE3INLETTEMP,EXT_4_4_TEMP_HU_F_SIM)];]]>
+</Text>
+</Rung>
+<Rung Number="112" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_T0315_TMR.DN)OSR(EXT_ADDR_510.15_storage,EXT_ADDR_510.15);]]>
+</Text>
+</Rung>
+<Rung Number="113" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_510.15)MOV(EXT_HE3INLETTEMP,EXT_4_4_TEMP_HU_I_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="114" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP4STRT)XIO(EXT_4DROP4CMPLT)MOV(EXT_STK4_TEMP,EXT_4_4_TEMP_SET_SIM);]]>
+</Text>
+</Rung>
+<Rung Number="115" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_4DROP4STRT)XIO(EXT_4SETL4CMPLT)[MOV(EXT_SETTNK4LVL,EXT_4_4_FLOW_TOTAL_SET),MOV(EXT_4_4_FLOW_TOTAL_SET,EXT_ADDR_D3157)];]]>
+</Text>
+</Rung>
+<Rung Number="116" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1HEAT1CMPLT)XIO(EXT_1DROP1STRT),XIC(EXT_1HEAT2CMPLT)XIO(EXT_1DROP2STRT),XIC(EXT_1HEAT3CMPLT)XIO(EXT_1DROP3STRT),XIC(EXT_1HEAT4CMPLT)XIO(EXT_1DROP4STRT)]OTE(EXT_ADDR_461.00);]]>
+</Text>
+</Rung>
+<Rung Number="117" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_2HEAT1CMPLT)XIO(EXT_2DROP1STRT),XIC(EXT_2HEAT2CMPLT)XIO(EXT_2DROP2STRT),XIC(EXT_2HEAT3CMPLT)XIO(EXT_2DROP3STRT),XIC(EXT_2HEAT4CMPLT)XIO(EXT_2DROP4STRT)]OTE(EXT_REPORT_EXT2_COOK_DI);]]>
+</Text>
+</Rung>
+<Rung Number="118" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_3HEAT1CMPLT)XIO(EXT_3DROP1STRT),XIC(EXT_3HEAT2CMPLT)XIO(EXT_3DROP2STRT),XIC(EXT_3HEAT3CMPLT)XIO(EXT_3DROP3STRT),XIC(EXT_3HEAT4CMPLT)XIO(EXT_3DROP4STRT)]OTE(EXT_ADDR_461.02);]]>
+</Text>
+</Rung>
+<Rung Number="119" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_4HEAT1CMPLT)XIO(EXT_4DROP1STRT),XIC(EXT_4HEAT2CMPLT)XIO(EXT_4DROP2STRT),XIC(EXT_4HEAT3CMPLT)XIO(EXT_4DROP3STRT),XIC(EXT_4HEAT4CMPLT)XIO(EXT_4DROP4STRT)]OTE(EXT_ADDR_461.03);]]>
+</Text>
+</Rung>
+<Rung Number="120" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1DROP1CMPLT)XIO(EXT_1TRNSFR1STRT),XIC(EXT_1DROP2CMPLT)XIO(EXT_1TRNSFR2STRT),XIC(EXT_1DROP3CMPLT)XIO(EXT_1TRNSFR3STRT),XIC(EXT_1DROP4CMPLT)XIO(EXT_1TRNSFR4STRT)]OTE(EXT_ADDR_461.04);]]>
+</Text>
+</Rung>
+<Rung Number="121" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_2DROP1CMPLT)XIO(EXT_2TRANSFR1STRT),XIC(EXT_2DROP2CMPLT)XIO(EXT_2TRNSFR2STRT),XIC(EXT_2DROP3CMPLT)XIO(EXT_2TRNSFR3STRT),XIC(EXT_2DROP4CMPLT)XIO(EXT_2TRNSFR4STRT)]OTE(EXT_ADDR_461.05);]]>
+</Text>
+</Rung>
+<Rung Number="122" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_3DROP1CMPLT)XIO(EXT_3TRNSFR1STRT),XIC(EXT_3DROP2CMPLT)XIO(EXT_3TRNSFR2STRT),XIC(EXT_3DROP3CMPLT)XIO(EXT_3TRNSFR3STRT),XIC(EXT_3DROP4CMPLT)XIO(EXT_3TRNSFR4STRT)]OTE(EXT_ADDR_461.06);]]>
+</Text>
+</Rung>
+<Rung Number="123" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_4DROP1CMPLT)XIO(EXT_4TRNSFR1STRT),XIC(EXT_4DROP2CMPLT)XIO(EXT_4TRNSFR2STRT),XIC(EXT_4DROP3CMPLT)XIO(EXT_4TRNSFR3STRT),XIC(EXT_4DROP4CMPLT)XIO(EXT_4TRNSFR4STRT)]OTE(EXT_ADDR_461.07);]]>
+</Text>
+</Rung>
+<Rung Number="124" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_1TRNSFR1STRT)XIO(EXT_1TRNSFR1CMPLT),XIC(EXT_1TRNSFR2STRT)XIO(EXT_1TRNSFR2CMPLT),XIC(EXT_1TRNSFR3STRT)XIO(EXT_1TRNSFR3CMPLT),XIC(EXT_1TRNSFR4STRT)XIO(EXT_1TRNSFR4CMPT)]OTE(EXT_ADDR_461.08);]]>
+</Text>
+</Rung>
+<Rung Number="125" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_2TRANSFR1STRT)XIO(EXT_2TRNSFR1CMPLT),XIC(EXT_2TRNSFR2STRT)XIO(EXT_2TRANSFR2CMPLT),XIC(EXT_2TRNSFR3STRT)XIO(EXT_2TRNSFR3CMPLT),XIC(EXT_2TRNSFR4STRT)XIO(EXT_2TRNSFR4CMPT)]OTE(EXT_ADDR_461.09);]]>
+</Text>
+</Rung>
+<Rung Number="126" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_3TRNSFR1STRT)XIO(EXT_3TRNSFR1CMPLT),XIC(EXT_3TRNSFR2STRT)XIO(EXT_3TRNSFR2CMPLT),XIC(EXT_3TRNSFR3STRT)XIO(EXT_3TRNSFR3CMPLT),XIC(EXT_3TRNSFR4STRT)XIO(EXT_3TRNSFR4CMPLT)]OTE(EXT_REPORT_EXT3_TRAN_DI);]]>
+</Text>
+</Rung>
+<Rung Number="127" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_4TRNSFR1STRT)XIO(EXT_4TRNSFR1CMPLT),XIC(EXT_4TRNSFR2STRT)XIO(EXT_4TRNSFR2CMPLT),XIC(EXT_4TRNSFR3STRT)XIO(EXT_4TRNSFR3CMPLT),XIC(EXT_4TRNSFR4STRT)XIO(EXT_4TRNSFR4CMPLT)]OTE(EXT_REPORT_EXT4_TRAN_DI);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+

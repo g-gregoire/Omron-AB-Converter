@@ -10,7 +10,7 @@ import os
 
 dir = os.getcwd()
 
-def getFileContents(tag_info_filename, logic_input_filename, VIEW_TAGS=False):
+def getTagContents(tag_info_filename):
     # This file is used to extract the following files for use throughout the conversion processes
     # 1. PLC Tag List
     # 2. SCADA Tag List
@@ -49,16 +49,30 @@ def getFileContents(tag_info_filename, logic_input_filename, VIEW_TAGS=False):
         "scada_tags": scada_taglist
     }
 
+    # print(plc_taglist)
+
+    print("Tag Files extracted successfully")
+    return plc_taglist
+
+def getLogicContents(logic_input_filename):
+    # This file is used to extract the following files for use throughout the conversion processes
+    # 1. PLC Logic File
+
+    # Get all directories
+    _, input_dir, _, _ = ff.getDirectories(dir)
+
+    # Set input dir
+    os.chdir(input_dir)
+
     # 3. Extract PLC Logic File
     # Open input file & create output file
     plc_logic_file = ff.openFile(logic_input_filename)
     plc_logic_file = ff.prepareFile(plc_logic_file) # Remove everything except the Mnemonic section
 
-    # print(plc_taglist)
     # print(plc_logic_file)
 
-    print("Files extracted successfully")
-    return plc_taglist, plc_logic_file
+    print("Logic File extracted successfully")
+    return plc_logic_file
 
 def readTagLookup(tag_lookup_filename):
     # Read in tag lookup file
@@ -96,7 +110,12 @@ def tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_f
         # Create tag output file
         tag_import_file = ff.create_plc_tag_import_file(sys_name_short)
         # Parse input file for tag information
-        tagList = parse.parseTagList(sys_name_short, tag_info, VIEW_TAGS)
+        tagList, types_array = parse.parseTagList(sys_name_short, tag_info, VIEW_TAGS)
+        # print(types_array)
+
+        # Create underlying arrays from List
+        for alias_type in types_array:
+            tag_import_file = ff.addTag(alias_type, tag_import_file, sys_name_short, BASE_ALIAS=True)
         
         # Create tags from List
         # tag_import_file = rung.createTags(tagList, tag_import_file, output_filename)
@@ -104,12 +123,24 @@ def tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_f
             # Check if tag has a parent
             if tag['parent'] != "":
                 # Then check if parent already exists in tag list
-                query = [parent for parent in tagList if parent['tagname'] == tag['parent']]
-                if len(query) == 0:
-                    # If parent does not exist, create a parent tag
-                    tag["tagname"] = tag["parent"]
-                    tag["tag_type"] = "DINT"
+                # Create parent address tag
+                parent_address = tag["real_address"].split(".")[0]
+                parent_alias = tag["alias"].split(".")[0]
+                # Check if parent address already exists
+                query = [parent for parent in tagList if parent['real_address'] == parent_address]
+                if (len(query) == 0):
+                    # If parent does not exist, log the existing tag and then create a parent tag too
                     tag_import_file = ff.addTag(tag, tag_import_file)
+                    new_tag = {
+                        "address": parent_address,
+                        "real_address": parent_address,
+                        "prefix": tag["prefix"],
+                        "tagname": tag["parent"],
+                        "description": "",
+                        "tag_type": "DINT",
+                        "source": "PLC"
+                    }
+                    tag_import_file = ff.addTag(new_tag, tag_import_file)
                 else: pass
             else:
                 tag_import_file = ff.addTag(tag, tag_import_file)
@@ -156,7 +187,7 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
     logic_wb = ff.openFile(logic_input_file)
     logic_wb = ff.prepareFile(logic_wb) # Remove everything except the Mnemonic section
     output_file, simple_output = ff.createFile(output_filename, logic_input_file, simple_output=True)
-    output_file = ff.addContext(output_file, sys_name) # Add required headers, etc.
+    output_file = ff.addContext(output_file, logic_input_file, sys_name) # Add required headers, etc.
 
     # Add specific logic chunks
     if COUNT_INSTR:

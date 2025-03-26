@@ -30,9 +30,9 @@ def combine_compare(rung:Rung, line1, line2, line3, catchErrors):
     if line1 != None: instr1, params1, details1 = expand_instruction(line1)
     if line2 != None: instr2, params2, details2 = expand_instruction(line2)
     if line3 != None: instr3, params3, details3 = expand_instruction(line3)
-    print("Line 1: ", line1)
-    print("Line 2: ", line2)
-    print("Line 3: ", line3)
+    # print("Line 1: ", line1)
+    # print("Line 2: ", line2)
+    # print("Line 3: ", line3)
     # Determine which comparison is being used
     EQU = GRT = LES = False
     if line2 == None: # Added for strange coding where CMP and comp_type are on different rungs
@@ -153,7 +153,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
                 #     working_logic.append(logic[0])
                 # else:
                 if OR_active and (multiple_out_added > 1): # If or active, and more than 1 output added already, wrap output in brackets
-                    print("OR active - wrap in brackets")
+                    # print("OR active - wrap in brackets")
                     working_logic.insert(0, "]")
                     working_logic.append("[")
                     working_logic.append(logic[0])

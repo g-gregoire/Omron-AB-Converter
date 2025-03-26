@@ -7,6 +7,9 @@ routine_header = "routine-header.xml"
 footer = "footer.xml"
 tagcsv = "tag.csv"
 
+# Update Constants
+routine_name = "_routine_name_"
+
 # Lookup conversion for Omron to AB
 # Args are the number of arguments the instruction takes in Rockwell
 # blocks_in is the number of blocks the instruction takes in Omron
@@ -102,6 +105,8 @@ lookup = {
     "SBB(51)": {"instr": "SUB", "type": "math", "args": 3, "block_type": "OUT", "blocks_in": 1},
     "MLB(52)": {"instr": "MUL", "type": "math", "args": 3, "block_type": "OUT", "blocks_in": 1},
     "DVB(53)": {"instr": "DIV", "type": "math", "args": 3, "block_type": "OUT", "blocks_in": 1},
+
+    "++B(594)": {"instr": "ADD", "type": "increment", "args": 1, "block_type": "OUT", "blocks_in": 1}, # Add 1
 
     # Copy Instructions
     "MOV(21)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},

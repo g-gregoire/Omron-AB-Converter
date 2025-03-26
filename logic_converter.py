@@ -87,6 +87,7 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
 
     # Loop through each instruction in the rung_text
     for index, line in enumerate(rung_array):
+        # print(line)
         instr, params, details = ul.expand_instruction(line)
         if DEBUG_bbv2: print(index, details)
         block_type = details["block_type"]
@@ -388,7 +389,7 @@ def block_assembler_v2(rung: Rung):
                 
                 # Print all sections - for debugging
                 # print("Initial Subset")
-                for block in initial_subset: print(block)
+                # for block in initial_subset: print(block)
                 # print("Inter Array")
                 conv_array = []
                 for inter in inter_array:
@@ -581,6 +582,9 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         if param2.find("#") != -1: param2 = param2.replace("#", "")
         else: param2 = param2
         converted_instruction = conv_instr + "(" + param + "," + param2 + "," + param3 + ")"
+
+    elif instr_type.upper() == "INCREMENT":
+        converted_instruction = conv_instr + "(" + param + "," + "1" + "," + param + ")"
 
     # For scaling instructions like SCL, needs to be handled specially
     elif instr_type.upper() == "SCALING":

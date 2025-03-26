@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R02_Rind_Pumping" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R02_Rind_Pumping" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA['  Drain Control\nDrainage System Control]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SV30_10D_2)[XIC(EXT_1HGHLVL),XIC(EXT_1_HI_LVL)]OTE(EXT_ADDR_480.12);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SV30_20D)[XIC(EXT_2HGHLVL),XIC(EXT_2_HI_LVL)]OTE(EXT_ADDR_480.13);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SV30_30D)[XIC(EXT_3HGHLVL),XIC(EXT_3_HI_LVL)]OTE(EXT_ADDR_480.14);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SV30_40D)[XIC(EXT_4HGHLVL),XIC(EXT_4_HI_LVL)]OTE(EXT_TOTAUTOMAN);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA['  Tank1_pump_auto\nto start the tank-1 water feed to the happoer]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT_RECLAIM_PUMP)XIO(EXT_PRT_FEED_WATER_IND)XIO(EXT_V121_ZH)[XIC(EXT_V1010_ZH),XIC(EXT_V2010_ZH),XIC(EXT_V3010_ZH),XIC(EXT_V4010_ZH)][TON(EXT_T0090_TMR,3000,0),XIC(EXT_T0090_TMR.DN)OTE(EXT_TNK1PMPAUTO)];]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA['  Extractor Drain Valves\nDrain Valve must be OPEN to drop PRT]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SV30_10D_AUTO_DI)XIC(EXT_SV30_10D_DO)XIC(EXT_EXT1_CONE)XIO(EXT_1FILL1STRT)XIO(EXT_DRAIN_VALVE_INTERLOCK)OTE(EXT_SV30_10D_2);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SCADA_MODE)XIC(EXT_ADDR_328.02)XIC(EXT_EXT2_CONE)XIO(EXT_2FILL1STRT)XIO(EXT_DRAIN_VALVE_INTERLOCK)OTE(EXT_SV30_20D);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SCADA_MODE3)XIC(EXT_ON_OFF_3)XIC(EXT_EXT3_CONE)XIO(EXT_3FILL1STRT)XIO(EXT_DRAIN_VALVE_INTERLOCK)OTE(EXT_SV30_30D);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SCADA_MODE_4)XIC(EXT_ON_OFF_4)XIC(EXT_EXT4_CONE)XIO(EXT_4FILL1STRT)XIO(EXT_DRAIN_VALVE_INTERLOCK)OTE(EXT_SV30_40D);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_SV30_10D_2),XIC(EXT_SV30_20D),XIC(EXT_SV30_30D),XIC(EXT_SV30_40D)]XIC(EXT_PRT_ACID_DRAIN_TO)OTE(EXT_PRT_ACID_DRAIN);]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[[XIC(EXT_SV30_10D_2),XIC(EXT_SV30_20D),XIC(EXT_RPDRNEXT3),XIC(EXT_SV30_40D)]OTL(EXT_RPDRNPMP),XIO(EXT_SV30_10D_2)XIO(EXT_SV30_20D)XIO(EXT_RPDRNEXT3)XIO(EXT_SV30_40D)OTU(EXT_RPDRNPMP)];]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Comment>
+<![CDATA['  iFIX to PLC Number System Conversions]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[MOV(EXT_BATCH_NUM_1_AI,EXT_ADDR_D415),MOV(EXT_BATCH_NUM_2_AI,EXT_ADDR_D416),MOV(EXT_BATCH_NUM_3_AI,EXT_ADDR_D417),MOV(EXT_BATCH_NUM_4_AI,EXT_ADDR_D418)];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+

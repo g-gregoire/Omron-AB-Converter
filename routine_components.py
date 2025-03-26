@@ -1,5 +1,6 @@
 # Add tag components:
 new_tag = 'TAG,,_tag_,_desc_,_type_,,"(RADIX := Decimal, Constant := false, ExternalAccess := Read/Write)"'
+new_tag_array = 'TAG,,_tag_,_desc_,"DINT[9999]","","(RADIX := Decimal, Constant := false, ExternalAccess := Read/Write)"'
 new_tag_float = 'TAG,,_tag_,_desc_,_type_,,"(RADIX := Float, Constant := false, ExternalAccess := Read/Write)"'
 new_tag_timer = 'TAG,,_tag_,_desc_,_type_,,"(Constant := false, ExternalAccess := Read/Write)"'
 new_tag_counter = 'TAG,,_tag_,_desc_,_type_,,"(Constant := false, ExternalAccess := Read/Write)"'

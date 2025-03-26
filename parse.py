@@ -7,7 +7,11 @@ import pprint as pp
 import utilities as util
 
 dir = os.getcwd()
-  
+
+# Debugging and specific tag testing
+DEBUG = True
+TEST_TAG = "D1436"
+
 def parseTagList(system_name, tag_info, VIEW_TAGS=False):
 
     global_symbols = tag_info["symbols"]
@@ -15,6 +19,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
     scada_taglist = tag_info["scada_tags"]
     
     taglist = []
+    types_array = []
 
     ## VARIOUS tag_TYPES OF TAGS - for testing
     # address = "a120.011" # Does not exist
@@ -27,19 +32,33 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
     # address = "HR01.00" # Weird tag structure
     # address = "0.02" # Physical I/O (for digital truncation in SCADA, ie. 0.02 vs IR0.2)
 
-    ### PLC TAGS ###
+    ### PLC TAGS - Cross-Reference ###
     for rowindex, row in cross_ref.iterrows():
     # Iterate through each row of the cross-ref list
         # print(rowindex)
         
         address = row["Address"]
+        if address == "": continue
         detailed_address = util.expandTag(address)
         address = detailed_address["real_address"]
-        if address == 5.11000000000001: print(address, tagname, tag_description, parent)
+        if DEBUG and (address.find(TEST_TAG) != -1): print(address, detailed_address)
 
 
-        try: query = global_symbols.query(f'Address == "{address}"')
-        except: query = global_symbols.query(f'Address == {address}')
+        query = global_symbols.query(f'Address == "{address}"')
+        # if DEBUG and (address.find(TEST_TAG) != -1): 
+            # print("First", query)
+            # print("Type:", type(global_symbols["Address"].iloc[0]))
+        if query.empty: 
+            # print("Empty query", address)
+            try: 
+                query = global_symbols.query(f'Address == {address}')
+                # if DEBUG and (address.find(TEST_TAG) != -1): 
+                    # print("Second", query)
+                    # print("Type:", type(global_symbols["Address"].iloc[0]))
+            except:
+                # print("Failed both query", address)
+                query = pd.DataFrame()
+        if DEBUG and (address.find(TEST_TAG) != -1): print(address, query)
         # print(address)
 
         if query.empty:
@@ -73,9 +92,11 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
 
         # Convert to scada name then search for Scada tagname
         scada_tagname, scada_desc = util.checkForScadaTags(scada_taglist, detailed_address)
+        if DEBUG and (address.find(TEST_TAG) != -1): print(address, scada_tagname, scada_desc)
 
         # Create tagname and description
         tagname, tag_description, parent = util.nameCreator(detailed_address, scada_tagname, scada_desc, system_name)
+        if DEBUG and (address.find(TEST_TAG) != -1): print(address, tagname, tag_description, parent)
 
         # Assign tagname and description to detailed_address, as well as empty SCADA_tagname
         detailed_address["tagname"] = tagname
@@ -113,6 +134,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         # break # Break to only run first one
         # if rowindex > 250: break # Break to only run first ten
 
+    
     ### SCADA TAGS ###
     for rowindex, row in scada_taglist.iterrows():
     # Now go through SCADA taglist to see if any tags are missing
@@ -166,10 +188,11 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         # taglist = dict(sorted(taglist.items()))
 
     # Lastly go through the taglist and check for aliases
-    taglist = util.check_for_aliases(taglist, system_name)
+    taglist, types_array = util.check_for_aliases(taglist, system_name, types_array)
+    # taglist = util.check_for_aliases(taglist, system_name)
     
     if VIEW_TAGS:
         print("Taglist:")
         pp.pprint(taglist)
 
-    return taglist
+    return taglist, types_array

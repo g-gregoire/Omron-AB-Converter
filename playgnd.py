@@ -14,10 +14,18 @@ dir = os.getcwd()
 num = 10
 i = 0
 
-while i < num:
-    print(f"i: {i}")
-    if i == 5:
-        print("changing i to 8")
-        i = 8
-        continue
-    i += 1
+num1 = "D480"
+# num2 = "480.00"
+
+numbers = ["D482", "D481", "D480"]
+df = pd.DataFrame(numbers, columns=["Address"])
+# df["Address_num"] = pd.to_numeric(df["Address"], errors="coerce")
+print(df.head())
+# print type of column
+print(type(df["Address"].iloc[0]))
+query = df.query(f'Address == {num1}')
+if query.empty: print("Empty")
+else: print(query)
+query2 = df.query(f'Address == "{num1}"')
+if query2.empty: print("Empty")
+else: print(query2)

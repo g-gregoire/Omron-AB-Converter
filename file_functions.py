@@ -38,9 +38,10 @@ def createFile(filename="code.txt", input_filename="", simple_output=False):
     try: os.remove(filename)
     except: pass
 
+    routine_name = input_filename.split(".")[0]
+
     if input_filename != "":
-        systemName = getSystemName(input_filename)
-        filename = systemName + "_" + filename
+        filename = routine_name + "_" + filename
     else:
         filename = filename
 
@@ -142,15 +143,30 @@ def prepareFile(logic_file: pd.DataFrame):
     return logic_file
 
 # To be completed
-def addContext(file, system_name:str):
+def addContext(file, output_filename, system_name:str):
     # Change to Reference folder
     os.chdir(ref_dir)
 
+    routine_name = output_filename.split(".")[0]
+    split = routine_name.split("-")
+    if len(split) > 1:
+        routine_name = split[1]
+        routine_num = split[0]
+        if int(routine_num) < 10:
+            routine_num = "0" + routine_num
+    else:
+        routine_name = split[0]
+        routine_num = "xx"
+
     # Write file header
     f = open(lk.header, "r")
-    text = f.read()
-    text = text.replace("_system_", system_name)
-    file.write(text)
+    header = f.read()
+    # Replace key pieces of header
+    header = header.replace(lk.routine_name, routine_name)
+    header = header.replace("Rxx", "R" + routine_num)
+    
+    # Update file
+    file.write(header)
     file.write(n)
 
     return file
@@ -190,24 +206,29 @@ def addRung(file, simple_file, r_num, logic, comment=None):
 
     return r_num
 
-def addTag(full_tag, file):
+def addTag(full_tag, file, system_name="", BASE_ALIAS=False):
     # print(tag, desc, type)
 
-    tag = full_tag["tagname"]
-    desc = full_tag["description"]
-    type = full_tag["tag_type"]
-    alias = full_tag["alias"]
-
-    if alias != "":
-        text = rt.new_tag_alias.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.base_tag, alias)
-    elif type == "REAL":
-        text = rt.new_tag_float.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
-    elif type == "TIMER":
-        text = rt.new_tag_timer.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
-    elif type == "COUNTER":
-        text = rt.new_tag_counter.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+    if BASE_ALIAS:
+        tag = system_name + "_" + full_tag + "_array"
+        text = rt.new_tag_array.replace(rt.tag, tag).replace(rt.desc, f"Global Array for {full_tag} type")
+    
     else:
-        text = rt.new_tag.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+        tag = full_tag["tagname"]
+        desc = full_tag["description"]
+        type = full_tag["tag_type"]
+        alias = full_tag["alias"]
+        
+        if alias != "":
+            text = rt.new_tag_alias.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.base_tag, alias)
+        elif type == "REAL":
+            text = rt.new_tag_float.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+        elif type == "TIMER":
+            text = rt.new_tag_timer.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+        elif type == "COUNTER":
+            text = rt.new_tag_counter.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
+        else:
+            text = rt.new_tag.replace(rt.tag, tag).replace(rt.desc, desc).replace(rt.type, type)
     
     file.write(text)
     file.write(n)

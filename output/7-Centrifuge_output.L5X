@@ -1,11 +1,227 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R01_IDH_Main" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="Grantek" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R07_Centrifuge" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
 <Controller Use="Context" Name="demo_proj">
 <Programs Use="Context">
 <Program Use="Context" Name="MainProgram">
 <Routines Use="Context">
-<Routine Use="Target" Name="R01_IDH_Main" Type="RLL">
+<Routine Use="Target" Name="R07_Centrifuge" Type="RLL">
 <RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_AUTO_MAN_SW),XIC(EXT_T0322_TMR.DN)]OTE(EXT_CR11_AUTO);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIO(EXT_AUTO_MAN_SW)XIC(P_1s),XIC(EXT_T0322_TMR.DN)]OTE(EXT_CR12_MANUAL);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIO(EXT_AUTO_MAN_SW),XIC(EXT_SET_REST_ROT_LT),XIC(EXT_T0322_TMR.DN)]OTE(EXT_OLD_23_06_OUTPUT);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_BOTH_TK_FULL),XIC(EXT_CR15_LOW_BATRY)]OSR(EXT_ADDR_H20.10_storage,EXT_ADDR_H20.10);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_ADDR_H20.10)OTL(EXT_SET_REST_ROT_LT),XIC(EXT_SILENCE_PTT_BN)OTU(EXT_SET_REST_ROT_LT)];]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_SILENCE_PTT_BN)TON(EXT_T0322_TMR,1000,0);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_BOTH_TK_FULL),XIC(EXT_T0322_TMR.DN)]OTE(EXT_BOTH_TKS_FULL);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(P_Low_Battery)XIC(P_1s),XIC(EXT_T0322_TMR.DN)]OTE(EXT_CR15_LOW_BATRY);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_CR23_LCK0UT_RLY)XIC(P_1s),XIC(EXT_T0322_TMR.DN)]OTE(EXT_CR16_LOSS_FLOW);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V104_CNT1_SHOVEL_OUT)XIC(EXT_CFT1_LEVEL_INTERLOCK),XIC(EXT_CR20_BALL_VALVE)XIC(EXT_CFT2_LEVEL_INTERLOCK),XIC(EXT_V106_CNT3_SHOVEL_OUT)XIC(EXT_CFT3_LEVEL_INTERLOCK)]OTE(EXT_CR23_LCK0UT_RLY);]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CENT_V104_AUTO_DI)XIC(EXT_CENT_V104_DO)XIO(EXT_V106_CNT3_SHOVEL_OUT)XIO(EXT_CR20_BALL_VALVE)OTE(EXT_V104_CNT1_SHOVEL_OUT);]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CENT_V105_AUTO_DI)XIC(EXT_CENT_V105_DO)XIO(EXT_V106_CNT3_SHOVEL_OUT)XIO(EXT_V104_CNT1_SHOVEL_OUT)OTE(EXT_CR20_BALL_VALVE);]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CENT_V106_AUTO_DI)XIC(EXT_CENT_V106_DO)XIO(EXT_V104_CNT1_SHOVEL_OUT)XIO(EXT_CR20_BALL_VALVE)OTE(EXT_V106_CNT3_SHOVEL_OUT);]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V104_AUTO_CMD)XIO(EXT_V104_MANUAL),XIC(EXT_V104_MANUAL)XIC(EXT_V104_HMI_CMD)]XIO(EXT_XV13_ZH)XIO(EXT_V1013_ZH)XIO(EXT_V2013_ZH)XIO(EXT_V3013_ZH)XIO(EXT_V4013_ZH)OTE(EXT_V104);]]>
+</Text>
+</Rung>
+<Rung Number="14" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_PU_A10_AUTO_DI)XIC(EXT_PU_A10_DO),XIO(EXT_PU_A10_AUTO_DI)[XIC(EXT_STK1_STEP_START)XIO(EXT_STK1_STEP_SWITCH),XIC(EXT_STK2_STEP_START)XIO(EXT_STK2_STEP_SWITCH),XIC(EXT_STK3_STEP_START)XIO(EXT_STK3_STEP_SWITCH),XIC(EXT_STK4_STEP_START)XIO(EXT_STK4_STEP_SWITCH)]][XIC(EXT_STK1_FEED_A10PUMP),XIC(EXT_STK2_FEED_A10PUMP),XIC(EXT_STK3_FEED_A10PUMP),XIC(EXT_STK4_FEED_A10PUMP)]XIC(EXT_A10_PERMISSIVE)OTE(EXT_A10_START);]]>
+</Text>
+</Rung>
+<Rung Number="15" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_MAZZ_AUTO_DI)XIC(EXT_MAZZ_DO)XIC(EXT_MAZZO_PERMISSIVE)[XIC(EXT_SV30_10S_2),XIC(EXT_SV30_20S),XIC(EXT_SV30_30S),XIC(EXT_SV30_40S)]OTE(EXT_MAZZ_START);]]>
+</Text>
+</Rung>
+<Rung Number="16" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_MAZZ_FEEDBACK)OTE(EXT_MAZZORATOR_RUNNING);]]>
+</Text>
+</Rung>
+<Rung Number="17" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_V104_CENTRIFUGE_CAUSTIC_VALVE)OTE(EXT_V104_ZH);]]>
+</Text>
+</Rung>
+<Rung Number="18" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_1WF3ADDCMPLT)XIO(EXT_CENTRIFUGE_FEED_PUMP_RUNNING)OTE(EXT_START_CENTRIFUGE_ALARM);]]>
+</Text>
+</Rung>
+<Rung Number="19" Type="N">
+<Comment>
+<![CDATA['  Centrifuge Alarms added 01/16/09]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CENTRIFUGE_FEED_PUMP_RUNNING)XIO(EXT_CENTRIFUDGE_LARD_PUMP)[TON(EXT_TIME_DELAY_TMR,600000,0),XIC(EXT_TIME_DELAY_TMR.DN)OTE(EXT_LARD_PUMP_NOT_RUNNING)];]]>
+</Text>
+</Rung>
+<Rung Number="20" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(EXT_CENTRIFUGE_FEED_PUMP_RUNNING)XIC(EXT_CENTRIFUDGE_LARD_PUMP)OTE(EXT_LARD_PUMP_ALARM_2);]]>
+</Text>
+</Rung>
+<Rung Number="21" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CENTRIFUGE_FEED_PUMP_RUNNING)XIC(EXT_CENTRIFUDGE_LARD_PUMP)[TON(EXT_T4045_TMR,300000,0),XIC(EXT_T4045_TMR.DN)OTE(EXT_LARD_TANK_OVERFLOWING)];]]>
+</Text>
+</Rung>
+<Rung Number="22" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CENTRIFUGE_FEED_PUMP_RUNNING)XIO(EXT_CENTRIFUGE_WATER_FRACTION_PUMP)[TON(EXT_T4041_TMR,600000,0),XIC(EXT_T4041_TMR.DN)OTE(EXT_WF_PUMP_NOT_RUNNING)];]]>
+</Text>
+</Rung>
+<Rung Number="23" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIO(EXT_CENTRIFUGE_FEED_PUMP_RUNNING)XIC(EXT_CENTRIFUGE_WATER_FRACTION_PUMP)OTE(EXT_WF_PUMP_ALARM_2);]]>
+</Text>
+</Rung>
+<Rung Number="24" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CENTRIFUGE_FEED_PUMP_RUNNING)XIC(EXT_CENTRIFUGE_WATER_FRACTION_PUMP)[TON(EXT_T4046_TMR,300000,0),XIC(EXT_T4046_TMR.DN)OTE(EXT_WF_TANK_OVERFLOWING)];]]>
+</Text>
+</Rung>
+<Rung Number="25" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CFT1_AGITATOR_RUNNING)OTE(EXT_CFT_1_AGITATOR_RUNNING);]]>
+</Text>
+</Rung>
+<Rung Number="26" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CFT2_AGITATOR_RUNNING)OTE(EXT_CFT_2_AGITATOR_RUNNING);]]>
+</Text>
+</Rung>
 </RLLContent>
 </Routine>
 </Routines>

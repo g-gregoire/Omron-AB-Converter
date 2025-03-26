@@ -2,7 +2,8 @@ import re
 import pandas as pd
 import math
 
-TEST_TAG = "T90"
+DEBUG = True
+TEST_TAG = "D1436"
 
 def expandTag(tag):
     """
@@ -129,11 +130,11 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
     try: parent = tag_detailed["parent"]
     except: parent = ""
     
-    if address == TEST_TAG: # Testing for specific tags
-        print("Addr: ", address, "Tag: ", scada_tagname, "Desc: ", plc_description, "Type: ", tag_type)
+    # if address == TEST_TAG: # Testing for specific tags
+    #     print("Addr: ", address, "Tag: ", scada_tagname, "Desc: ", plc_description, "Type: ", tag_type)
 
-    if address == TEST_TAG: # Testing for specific tags
-        print(address, prefix, number, plc_symbol, plc_description, scada_tagname, scada_description)
+    # if address == TEST_TAG: # Testing for specific tags
+    #     print(address, prefix, number, plc_symbol, plc_description, scada_tagname, scada_description)
 
     # TAGNAME
     if plc_symbol != "" and scada_tagname != "": # If we have both, use plc_symbol
@@ -163,8 +164,8 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
         prefix = prefix.replace("TIM", "T").replace("(bit)", "")
         number = f"{int(number):04d}"
         tagname = prefix + number
-        if address == TEST_TAG: # Testing for specific tags
-            print(number, tagname)
+        # if address == TEST_TAG: # Testing for specific tags
+        #     print(number, tagname)
 
     # Handle counter (CNT) tags
     elif tag_type == "COUNTER":
@@ -187,8 +188,8 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
     if prefix != "EXT_": # Only add system name if it is not already there
         tagname = system_name + "_" + tagname
         # print(tagname)
-    if address == TEST_TAG: # Testing for specific tags
-        print(number, tagname)
+    # if address == TEST_TAG: # Testing for specific tags
+    #     print(number, tagname)
 
     # DESCRIPTION
     # Determine tag description to use
@@ -205,6 +206,10 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
     # Add counter suffix to tagname
     if tag_type == "COUNTER":
         tagname = tagname + "_CTR"
+
+    # Check to replace 'MINUS' with '_'
+    if tagname.find("MINUS") != -1:
+        tagname = tagname.replace("MINUS", "_")
 
     ## Check for invalid characters
     # Remove (, ), , and / from tagname
@@ -234,8 +239,8 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
 
     # if address == TEST_TAG: # Testing for specific tags
     #     print("Add: ", address, "Tag: ", tagname, "Desc: ", tag_description)
-    if address == TEST_TAG: # Testing for specific tags
-        print("end", number, tagname)
+    # if address == TEST_TAG: # Testing for specific tags
+    #     print("end", number, tagname)
 
     return tagname, tag_description, parent
 
@@ -249,16 +254,21 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
     prefix = tag_detailed["prefix"]
     tag = []
 
+    if tagname == "": tagname = address
+
+    if DEBUG and (address.find(TEST_TAG) != -1): 
+        print("OG:", address, tag, tagname, tag_type)
+
     # print(tagname, tag_detailed)
     if tag_type == "BOOL":
         # Handle timer (TIM) tags
         if tagname.find("TIM") >= 0:
             tagname = tagname.replace("TIM", "").replace("(bit)", "") + "_TMR"
-            tag.append(tagname)
+            # tag.append(tagname)
         # Handle counter (CNT) tags
         elif tagname.find("CNT") >= 0:
             tagname = tagname.replace("CNT", "").replace("(bit)", "") + "_CTR"
-            tag.append(tagname)
+            # tag.append(tagname)
         else:
             try:
                 # This ensures the formatting of the bit part of the DINT is correct, ie.
@@ -270,22 +280,28 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
 
                 if prefix == "" or prefix == None: prefix = "CIO"
 
-                tag.append(prefix + str(address.split('.')[0]) + "." + str(decimal))
+                # tag.append(prefix + str(address.split('.')[0]) + "." + str(decimal))
+                tagname = prefix + str(address.split('.')[0]) + "." + str(decimal)
                 # tag.append("CIO" + str(address))
             except:
-                tag.append(tagname)
+                # tag.append(tagname)
+                pass
     
-    else:
-        tag.append(tagname)
+    # else:
+        # tag.append(tagname)
     # print(tag)
-    # if address == TEST_TAG: # Testing for specific tags
-    #     print(address, tagname, tag_type)
-    #     print(tag)
+    if DEBUG and (address.find(TEST_TAG) != -1): 
+        print("Search Tags:", address, tag, tagname, tag_type)
 
 
-    query = scada_taglist.query(f'Clean_Address == "{tag[0]}"')
-    if query.empty and len(tag) > 1 and tag[1] != None:
-        query = scada_taglist.query(f'Clean_Address == "{tag[1]}"')
+    clean_tagname = str(tagname).strip()
+    # query = scada_taglist.query(f'Clean_Address == {tagname}')
+    query = scada_taglist.query(f'Clean_Address == @clean_tagname')
+
+    if DEBUG and (address.find(TEST_TAG) != -1): 
+        print("First", query)
+    if query.empty:
+        query = scada_taglist.query(f'Clean_Address == "{tagname}"')
     if query.empty:
         # print("Tag not found in SCADA")
         return "", ""
@@ -303,12 +319,13 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
     # print(scada_tagname, scada_description)
     return scada_tagname, scada_description
 
-def check_for_aliases(taglist, system_name):
+def check_for_aliases(taglist, system_name, types_array):
     for tag in taglist:
         prefix = tag["prefix"]
         address = tag["real_address"]
         number = tag["number"]
         # print(address)
+        if DEBUG and address == TEST_TAG: print(tag)
 
         whole_number = get_whole_number(number)
 
@@ -318,10 +335,16 @@ def check_for_aliases(taglist, system_name):
             prefix2 = tag2["prefix"]
             if prefix == prefix2 and whole_number == whole_number2 and tag2["real_address"] != address:
                 tag["alias"] = get_alias(tag, system_name)
+
+                # Create array of all types found in prefix
+                if prefix == None: prefix = "IR"
+                if prefix not in types_array:
+                    types_array.append(prefix)
                 break
     
-    return taglist
-        
+        if DEBUG and address == TEST_TAG: print(tag)
+    
+    return taglist, types_array
 
 def get_whole_number(number:str):
     # Get integer value of tag number. ie. 1.01, 1.0 and 1 should all return 1

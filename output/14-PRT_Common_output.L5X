@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R14_PRT_Common" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R14_PRT_Common" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA['  Add V-4003 & V4006    KA Mar-20-2007]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT1_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT3_WATER_IND)XIO(EXT_PRT4_WATER_IND)OTL(EXT_PRT1_WATER_IND);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT3_WATER_REQ)XIO(EXT_PRT1_WATER_IND)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT4_WATER_IND)OTL(EXT_PRT3_WATER_IND);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_WATER_REQ)XIO(EXT_PRT1_WATER_IND)XIO(EXT_PRT3_WATER_IND)XIO(EXT_PRT4_WATER_IND)OTL(EXT_PRT2_WATER_IND);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT4_WATER_REQ)XIO(EXT_PRT1_WATER_IND)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT3_WATER_IND)OTL(EXT_PRT4_WATER_IND);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA['  Add V4004 & V4005     KA Mar-20-2007]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT1_DRAIN_REQ)[LES(EXT_PRT2_STEP,100),GEQ(EXT_PRT2_STEP,#110)][LES(EXT_PRT3_STEP,100),GEQ(EXT_PRT3_STEP,#110)][LES(EXT_PRT4_STEP,100),GEQ(EXT_PRT4_STEP,#110)]XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT3_DRAIN_IND)XIO(EXT_PRT4_DRAIN_IND)OTL(EXT_PRT1_DRAIN_IND);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT3_DRAIN_REQ)[LES(EXT_PRT1_STEP,100),GEQ(EXT_PRT1_STEP,#110)][LES(EXT_PRT2_STEP,100),GEQ(EXT_PRT2_STEP,#110)][LES(EXT_PRT4_STEP,100),GEQ(EXT_PRT4_STEP,#110)]XIO(EXT_PRT1_DRAIN_IND)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT4_DRAIN_IND)OTL(EXT_PRT3_DRAIN_IND);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_DRAIN_REQ)[LES(EXT_PRT1_STEP,100),GEQ(EXT_PRT1_STEP,#110)][LES(EXT_PRT3_STEP,100),GEQ(EXT_PRT3_STEP,#110)][LES(EXT_PRT4_STEP,100),GEQ(EXT_PRT4_STEP,#110),EQU(EXT_PRT2_STEP,#100)]XIO(EXT_PRT1_DRAIN_IND)XIO(EXT_PRT3_DRAIN_IND)XIO(EXT_PRT4_DRAIN_IND)OTL(EXT_PRT2_DRAIN_IND);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT4_DRAIN_REQ)[LES(EXT_PRT1_STEP,100),GEQ(EXT_PRT1_STEP,#110)][LES(EXT_PRT2_STEP,100),GEQ(EXT_PRT2_STEP,#110)][LES(EXT_PRT3_STEP,100),GEQ(EXT_PRT3_STEP,#110)]XIO(EXT_PRT1_DRAIN_IND)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT3_DRAIN_IND)OTL(EXT_PRT4_DRAIN_IND);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA['  Acid Request]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT1_ACID_REQ)XIO(EXT_PRT2_ACID_IND)XIO(EXT_PRT3_ACID_IND)XIO(EXT_PRT4_ACID_IND)OTL(EXT_PRT1_ACID_IND);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_ACID_REQ)XIO(EXT_PRT1_ACID_IND)XIO(EXT_PRT3_ACID_IND)XIO(EXT_PRT4_ACID_IND)OTL(EXT_PRT2_ACID_IND);]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT3_ACID_REQ)XIO(EXT_PRT1_ACID_IND)XIO(EXT_PRT2_ACID_IND)XIO(EXT_PRT4_ACID_IND)OTL(EXT_PRT3_ACID_IND);]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT4_ACID_REQ)XIO(EXT_PRT1_ACID_IND)XIO(EXT_PRT2_ACID_IND)XIO(EXT_PRT3_ACID_IND)OTL(EXT_PRT4_ACID_IND);]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Comment>
+<![CDATA['  Caustic Request]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT1_CAUSTIC_REQ)XIO(EXT_PRT2_CAUSTIC_IND)XIO(EXT_PRT3_CAUSTIC_IND)XIO(EXT_PRT4_CAUSTIC_IND)XIO(EXT_CAUSTIC_IND)OTL(EXT_PRT1_CAUSTIC_IND);]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_CAUSTIC_REQ)XIO(EXT_PRT1_CAUSTIC_IND)XIO(EXT_PRT3_CAUSTIC_IND)XIO(EXT_PRT4_CAUSTIC_IND)XIO(EXT_CAUSTIC_IND)OTL(EXT_PRT2_CAUSTIC_IND);]]>
+</Text>
+</Rung>
+<Rung Number="14" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT3_CAUSTIC_REQ)XIO(EXT_PRT1_CAUSTIC_IND)XIO(EXT_PRT2_CAUSTIC_IND)XIO(EXT_PRT4_CAUSTIC_IND)XIO(EXT_CAUSTIC_IND)OTL(EXT_PRT3_CAUSTIC_IND);]]>
+</Text>
+</Rung>
+<Rung Number="15" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT4_CAUSTIC_REQ)XIO(EXT_PRT1_CAUSTIC_IND)XIO(EXT_PRT2_CAUSTIC_IND)XIO(EXT_PRT3_CAUSTIC_IND)XIO(EXT_CAUSTIC_IND)OTL(EXT_PRT4_CAUSTIC_IND);]]>
+</Text>
+</Rung>
+<Rung Number="16" Type="N">
+<Comment>
+<![CDATA['  PRT Level Check During Dropping to Ext]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT1_STEP,220)LEQ(EXT_PRT1_STEP,230)GEQ(EXT_LIT_1002_AI,100)OTE(EXT_PRT1_10);]]>
+</Text>
+</Rung>
+<Rung Number="17" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT2_STEP,220)LEQ(EXT_PRT2_STEP,230)GEQ(EXT_LIT_2002_AI,100)OTE(EXT_PRT2_10);]]>
+</Text>
+</Rung>
+<Rung Number="18" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT3_STEP,220)LEQ(EXT_PRT3_STEP,230)GEQ(EXT_LIT_3002_AI,100)OTE(EXT_PRT3_10);]]>
+</Text>
+</Rung>
+<Rung Number="19" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT4_STEP,220)LEQ(EXT_PRT4_STEP,230)GEQ(EXT_LIT_4002_AI,100)OTE(EXT_PRT4_10);]]>
+</Text>
+</Rung>
+<Rung Number="20" Type="N">
+<Comment>
+<![CDATA['  Monthly Totalizer for Extra PRT\nPost Washes]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_On)[GEQ(EXT_PRT1_STEP,154)LEQ(EXT_PRT1_STEP,158)ADD(EXT_N_PRE_PRT1_PW2_TOT,1,EXT_N_PRE_PRT1_PW2_TOT),EQU(EXT_PRT2_STEP,154)LEQ(EXT_PRT2_STEP,158)ADD(EXT_N_PRE_PRT2_PW2_TOT,1,EXT_N_PRE_PRT2_PW2_TOT),EQU(EXT_PRT3_STEP,154)LEQ(EXT_PRT3_STEP,158)ADD(EXT_N_PRE_PRT3_PW2_TOT,1,EXT_N_PRE_PRT3_PW2_TOT),EQU(EXT_PRT4_STEP,154)LEQ(EXT_PRT4_STEP,158)ADD(EXT_N_PRE_PRT4_PW2_TOT,1,EXT_N_PRE_PRT4_PW2_TOT)];]]>
+</Text>
+</Rung>
+<Rung Number="21" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_DAY,1)[COP(EXT_N_PRE_PRT1_PW2_TOT,EXT_N_PRE_PRT1_PW2_PRV_TOT,4),FLL(EXT_N_PRE_PRT1_PW2_TOT,EXT_N_PRE_PRT4_PW2_TOT,0)];]]>
+</Text>
+</Rung>
+<Rung Number="22" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_C0385_CTR.DN)OTL(EXT_ADDR_W22.11);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+
