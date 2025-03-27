@@ -25,6 +25,8 @@ def extract_rungs(logic_file: pd.DataFrame):
     comment = ""
     for rowindex, row in logic_file.iterrows():
         rung_text, comment, end_of_rung, BREAK = get_rung(row['logic'], rung_text, comment)
+        if rowindex == logic_file.index[-1]:
+            end_of_rung = True
         if end_of_rung:
             rung.addOriginal(rung_text)
             routine.addRung(rung)
@@ -50,11 +52,11 @@ def loop_rungs_v2(output_file, simple_output, routine: Routine, tagfile: pd.Data
     }
     for rung in routine.rungs:
             # _, catchErrors = blockBreaker(rung, catchErrors)
-            rung, _ = block_breaker_v2(rung, catchErrors)
+            rung, catchErrors = block_breaker_v2(rung, catchErrors)
             # rung.viewBlocks()
             rung, catchErrors = convert_blocks(rung, catchErrors, tagfile, system_name)
             # rung.viewBlocks()
-            rung = block_assembler_v2(rung)
+            rung, catchErrors = block_assembler_v2(rung, catchErrors)
             # rung.viewBlocks()
 
             # Add the rung to the output file
@@ -214,7 +216,7 @@ def convert_blocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_
 
     return rung, catchErrors
 
-def block_assembler_v2(rung: Rung):
+def block_assembler_v2(rung: Rung, catchErrors: dict):
     ### This function reassemble the blocks into a rung
     # Steps: 
     # 1. Handle basic inner joins (inside block) (Forward pass)
@@ -418,7 +420,7 @@ def block_assembler_v2(rung: Rung):
     rung.converted_logic = rung.blocks[0].converted_block[0]
         # rung.viewBlocks()
     
-    return rung
+    return rung, catchErrors
 
 def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, system_name:str):
     # This function converts an instruction from Omron to AB

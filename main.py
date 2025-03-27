@@ -24,7 +24,7 @@ VIEW_TAGS = False
 
 # CONSTANTS FOR CONVERSION FUNCTIONALITY
 CONVERT = True # Perform conversion
-VIEW_RUNGS = True # View the rungs as they are converted
+VIEW_RUNGS = False # View the rungs as they are converted
 COUNT_INSTR = False # Count the number & type of instructions in the file
 PRINT_ERRORS = False # Print errors of failed conversions
 

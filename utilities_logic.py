@@ -25,14 +25,14 @@ def expand_instruction(line: str):
     return instr, params, details
 
 def combine_compare(rung:Rung, line1, line2, line3, catchErrors):
-    # print("Compare")
+    print("Compare")
     pop_count = 0
     if line1 != None: instr1, params1, details1 = expand_instruction(line1)
     if line2 != None: instr2, params2, details2 = expand_instruction(line2)
     if line3 != None: instr3, params3, details3 = expand_instruction(line3)
-    # print("Line 1: ", line1)
-    # print("Line 2: ", line2)
-    # print("Line 3: ", line3)
+    print("Line 1: ", line1)
+    print("Line 2: ", line2)
+    print("Line 3: ", line3)
     # Determine which comparison is being used
     EQU = GRT = LES = False
     if line2 == None: # Added for strange coding where CMP and comp_type are on different rungs

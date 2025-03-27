@@ -190,6 +190,14 @@
 <![CDATA[XIC(EXT_C0385_CTR.DN)OTL(EXT_ADDR_W22.11);]]>
 </Text>
 </Rung>
+<Rung Number="23" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_ONE_OR_MORE_PRTS)XIC(P_1s)XIO(EXT_ADDR_W22.11)ONS(OneShots[4])CTU(EXT_C0385_CTR,10,0),XIC(EXT_ADDR_W22.13)RES(???)];]]>
+</Text>
+</Rung>
 </RLLContent>
 </Routine>
 </Routines>

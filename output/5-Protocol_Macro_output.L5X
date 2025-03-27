@@ -14,6 +14,14 @@
 <![CDATA[XIC(P_First_Cycle)ignore(F2E1,#0,#0);]]>
 </Text>
 </Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_1919.14)[[MOV(EXT_ADDR_1921,#0002),EQU(EXT_ADDR_W0,&0)MOV(9999,EXT_UNIT4_PV_STORE)],EQU(EXT_ADDR_W0,&1)MOV(9999,EXT_UNIT3_PV_STORE),EQU(EXT_ADDR_W0,&2)MOV(9999,EXT_UNIT2_PV_STORE),EQU(EXT_ADDR_W0,&3)MOV(9999,EXT_UNIT1_PV_STORE),EQU(EXT_ADDR_W0,&4)MOV(9999,EXT_WFTEMP)];]]>
+</Text>
+</Rung>
 </RLLContent>
 </Routine>
 </Routines>

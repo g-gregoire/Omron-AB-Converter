@@ -55,8 +55,8 @@ lookup = {
     "CNR(545)": {"instr": "RES", "type": "counter", "args": 1, "block_type": "OUT", "blocks_in": 1}, # Reset counters & timers in input range: N1(start range) & N2(end range)
 
     # Comparison Instructions
-    "CMP(20)": {"instr": "", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
-    "CMPL(60)": {"instr": "", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
+    "CMP(20)": {"instr": "CMP", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
+    "CMPL(60)": {"instr": "CMP", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
     "P_GT": {"instr": "GRT", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
     "P_LT": {"instr": "LES", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
     "P_EQ": {"instr": "EQU", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},

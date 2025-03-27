@@ -222,6 +222,14 @@
 <![CDATA[XIC(EXT_CFT2_AGITATOR_RUNNING)OTE(EXT_CFT_2_AGITATOR_RUNNING);]]>
 </Text>
 </Rung>
+<Rung Number="27" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_CFT3_AGITATOR_RUNNING)OTE(EXT_CFT_3_AGITATOR_RUNNING);]]>
+</Text>
+</Rung>
 </RLLContent>
 </Routine>
 </Routines>
