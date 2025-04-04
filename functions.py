@@ -201,7 +201,11 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
             routine = lc.extract_rungs(logic_wb) # Extracts comments and rungs into routine object
             routine, catchErrors = lc.loop_rungs_v2(output_file, simple_output, routine, tag_lookup, sys_name_short, view_rungs=VIEW_RUNGS, num_rungs=-1) # Converts rungs to ladder logic
         except Exception as e:
-            print("Conversion failed: ", e)
+            routine.rungs = [rung for rung in routine.rungs if rung.num != 0] # Filter out rungs with num == 0
+            print("\nConversion failed on rung", routine.rungs[-1].num)
+            print("Rung Logic:")
+            print( routine.rungs[-1].original)
+            print("Failed with error: ", e,  lk.NL)
             traceback.print_exc()
 
     if PRINT_ERRORS:

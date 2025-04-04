@@ -34,7 +34,6 @@
       AND T0046
       OUT 232.02
       ^^^
-      BREAK
       LD P_On
       CMP(020) D82 &90
       AND P_LE

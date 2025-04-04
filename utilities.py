@@ -2,8 +2,8 @@ import re
 import pandas as pd
 import math
 
-DEBUG = True
-TEST_TAG = "D1436"
+DEBUG = False
+TEST_TAG = "T0245"
 
 def expandTag(tag):
     """
@@ -23,6 +23,8 @@ def expandTag(tag):
     if tag_num.find(".") >= 0:
         tag_num = float(tag_num)
         tag_num = "{:.2f}".format(tag_num)
+    elif prefix == "T" or prefix == "C":
+        tag_num = f"{int(tag_num):04d}"
     else:
         tag_num = int(tag_num)
         tag_num = "{:d}".format(tag_num)
@@ -129,6 +131,9 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
     except: tag_type = ""
     try: parent = tag_detailed["parent"]
     except: parent = ""
+
+    if DEBUG and (address.find(TEST_TAG) != -1): 
+        print("Addr: ", address, "Type: ", tag_type)
     
     # if address == TEST_TAG: # Testing for specific tags
     #     print("Addr: ", address, "Tag: ", scada_tagname, "Desc: ", plc_description, "Type: ", tag_type)
@@ -137,7 +142,20 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
     #     print(address, prefix, number, plc_symbol, plc_description, scada_tagname, scada_description)
 
     # TAGNAME
-    if plc_symbol != "" and scada_tagname != "": # If we have both, use plc_symbol
+    # Handle timer (TIM) tags - set to 4-digit format
+    if tag_type == "TIMER" and scada_tagname == "" and plc_symbol == "" :
+        prefix = prefix.replace("TIM", "T").replace("(bit)", "")
+        number = f"{int(number):04d}"
+        tagname = prefix + number
+        # if address == TEST_TAG: # Testing for specific tags
+        #     print(number, tagname)
+
+    # Handle counter (CNT) tags
+    elif tag_type == "COUNTER" and scada_tagname == "" and plc_symbol == "" :
+        prefix = prefix.replace("CNT", "C").replace("(bit)", "")
+        number = f"{int(number):04d}"
+        tagname = prefix + number
+    elif plc_symbol != "" and scada_tagname != "": # If we have both, use plc_symbol
         # print(2)
         tagname = plc_symbol.upper()
     elif scada_tagname == "" and plc_symbol != "": # If no SCADA tag, use plc_symbol (redundant)
@@ -159,19 +177,6 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
         # print(len(description))
         tagname = plc_description.upper().replace(".", "_").replace("/", "").replace("()", "").replace(")", "").split()[:4]
         tagname = "_".join(tagname)
-    # Handle timer (TIM) tags
-    elif tag_type == "TIMER":
-        prefix = prefix.replace("TIM", "T").replace("(bit)", "")
-        number = f"{int(number):04d}"
-        tagname = prefix + number
-        # if address == TEST_TAG: # Testing for specific tags
-        #     print(number, tagname)
-
-    # Handle counter (CNT) tags
-    elif tag_type == "COUNTER":
-        prefix = prefix.replace("CNT", "C").replace("(bit)", "")
-        number = f"{int(number):04d}"
-        tagname = prefix + number
     else: # If none exist, create tagname from address
         # print(5)
         tagname = "ADDR_" + address
@@ -199,6 +204,8 @@ def nameCreator(tag_detailed:dict, scada_tagname="", scada_description="", syste
         tag_description = plc_description
     else: # If no description, use plc_symbol
         tag_description = plc_symbol
+    # Add original address to description
+    tag_description = tag_description + " (OMR " + address + ")"
 
     # Add timer suffix to tagname
     if tag_type == "TIMER":
@@ -256,8 +263,7 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
 
     if tagname == "": tagname = address
 
-    if DEBUG and (address.find(TEST_TAG) != -1): 
-        print("OG:", address, tag, tagname, tag_type)
+    if DEBUG and (address.find(TEST_TAG) != -1): print("OG:", address, tag, tagname, tag_type)
 
     # print(tagname, tag_detailed)
     if tag_type == "BOOL":

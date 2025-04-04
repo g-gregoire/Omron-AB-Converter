@@ -1,13 +1,113 @@
-      '  Tank1_pump_auto\nto start the tank-1 water feed to the happoer
-      LD H357.10
-      ANDNOT H354.15
-      ANDNOT W4.01
-      LD W1.14
-      OR W3.14
-      OR W11.14
-      OR W14.14
+      '  Step 113
+      LD=(300) D32100 #113
+      OUT TR0
+      AND H108.04
+      LD>=(325) D32108 &12000
+      @OR H100.00
+      OR H108.08
       ANDLD
-      TIM 0090 #30
-      AND T0090
-      OUT 6.05
+      OUT TR1
+      AND H108.09
+      MOV(021) #114 D32100
+      BIN(023) D32160 D32460
+      LD TR1
+      RSET H100.00
+      SET H108.08
+      LD TR0
+      ANDNOT H108.04
+      MOV(021) #117 D32100
+      ^^^
+      BREAK
+      LD=(300) D32100 #14
+      LD W1.04
+      ANDNOT W1.11
+      @OR H100.00
+      ANDLD
+      OUT TR0
+      ANDNOT H101.06
+      ANDNOT H101.07
+      MOV(021) #15 D32100
+      LD TR0
+      RSET H100.00
+      RSET H101.06
+      RSET H101.07
+      ^^^
+      '  SCADA EXT #1
+      LD=(300) D32100 #0
+      OUT TR0
+      @AND H100.01
+      LD<=(315) D32104 D32110
+      OR P_On
+      ANDLD
+      MOV(021) #1 D32100
+      LD TR0
+      @MOV(021) #0 D32118
+      @MOV(021) #0 D32160
+      @MOV(021) #0 D32161
+      @MOV(021) #0 D32162
+      @RSET H108.04
+      @RSET H108.05
+      @SET H108.06
+      @SET H100.15
+      AND W22.09
+      @SET H100.06
+      ^^^
+      '  Step 1\n*****************Dropping*****************
+      LD=(300) D32100 #1
+      OUT TR0
+      ANDNOT W27.00
+      ANDNOT H100.03
+      LD<=(315) D32104 D32110
+      @OR H100.00
+      OR P_On
+      ANDLD
+      AND=L(301) D32106 #0
+      MOV(021) #2 D32100
+      LD TR0
+      AND H100.03
+      AND W27.00
+      MOV(021) #17 D32100
+      LD TR0
+      MOV(021) #0 D32106
+      CNR(545) C3000 C3005
+      ^^^
+      BREAK
+      ' Weird branching off of CNT Reset
+      LD 3361.04
+      AND P_1min
+      LD C0353
+      OUT TR0
+      CNT 0353 #30
+      LD TR0
+      RSET 3361.04
+      ^^^
+      ' Bad Omrom Branching
+      LD W17.11
+      ANDNOT 403.03
+      TIM 0611 #600
+      AND T0611
+      OR P_First_Cycle
+      SET W17.12
+      ^^^
+      BREAK
+      '  V tricky one
+      LD W18.03
+      OUT TR0
+      AND>(320) D32438 #0
+      AND>(320) D32438 #500
+      AND<(310) D32438 #4000
+      DIFU(013) W18.02
+      LD TR0
+      AND W18.02
+      LD TR0
+      LD<=(315) D32438 #500
+      OR W18.01
+      ANDLD
+      OUT TR0
+      KEEP(011) W18.00
+      LD TR0
+      TIM 0350 #20
+      AND T0350
+      AND W18.01
+      RSET W18.01
       ^^^

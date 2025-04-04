@@ -50,8 +50,14 @@ def loop_rungs_v2(output_file, simple_output, routine: Routine, tagfile: pd.Data
         "list": [],
         "error": False
     }
-    for rung in routine.rungs:
-            # _, catchErrors = blockBreaker(rung, catchErrors)
+    for index, rung in enumerate(routine.rungs):
+        # print("\nRung", rung_num)
+        rung.num = rung_num
+
+        if rung.original == "": # Handle empty rung
+            print("Empty rung")
+            rung.converted_logic = "NOP()"
+        else:
             rung, catchErrors = block_breaker_v2(rung, catchErrors)
             # rung.viewBlocks()
             rung, catchErrors = convert_blocks(rung, catchErrors, tagfile, system_name)
@@ -59,26 +65,30 @@ def loop_rungs_v2(output_file, simple_output, routine: Routine, tagfile: pd.Data
             rung, catchErrors = block_assembler_v2(rung, catchErrors)
             # rung.viewBlocks()
 
-            # Add the rung to the output file
-            rung_num = ff.addRung(output_file, simple_output, rung_num, rung.converted_logic, rung.comment)
-            # rung_num += 1
+        # Add the rung to the output file
+        rung_num = ff.addRung(output_file, simple_output, rung_num, rung.converted_logic, rung.comment)
+        # rung_num += 1
 
-            # If the view_rungs flag is set, print the rung
-            if view_rungs:
-                rung.viewBlocks()
+        # If the view_rungs flag is set, print the rung
+        if view_rungs:
+            rung.viewBlocks()
 
-            # If the number of rungs is not specified, continue to the end of the file
-            if num_rungs == -1:
-                pass
-            # If the number of rungs is specified, check if the number of rungs is reached
-            elif rung_num >= (start_rung+num_rungs):
-                print("Reached end of requested rungs")
-                return routine, catchErrors
+        # If the number of rungs is not specified, continue to the end of the file
+        if num_rungs == -1:
+            pass
+        # If the number of rungs is specified, check if the number of rungs is reached
+        elif rung_num >= (start_rung+num_rungs):
+            routine.rungs[index] = rung # Update the rung in the routine object
+            print("Reached end of requested rungs")
+            return routine, catchErrors
+            
+        routine.rungs[index] = rung # Update the rung in the routine object
         
     return routine, catchErrors
 
 def block_breaker_v2(rung: Rung, catchErrors: dict):
     # This function splits rung into logic/load blocks
+    # Initialize variables
     rung_text = rung.original
     rung_array = rung_text.split(NL)[:-1]
     current_details = []
@@ -149,14 +159,20 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
             try: after_next_line = rung_array[index + 2]
             except: after_next_line = None
             combined_instr, pop_count, catchErrors = ul.combine_compare(rung, line, next_line, after_next_line, catchErrors)
+            # print(catchErrors)
+
             if DEBUG_bbv2: print("Combined: ", combined_instr)
             details_add["logic"] = combined_instr
             current_details.append(details_add)
 
             # Pop required lines
+            # print(rung_array)
+            # print(rung_array[index])
             for i in range(pop_count):
                 # print("Popping: ", rung_array[index + i + 1])
-                rung_array.pop(index + i + 1)
+                rung_array.pop(index + 1)
+            # print(rung_array)
+            
 
         elif block_type == "OUT" and current_details == []: # Output-type instruction and no current block
             if DEBUG_bbv2: print("-", 4, current_details)
@@ -180,9 +196,15 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
             blocks_in = details["blocks_in"]
             if DEBUG_bbv2: print("-", 6, current_details)
 
+        elif block_type == "NOP": # No instruction
+            current_details.append(details_add)
+            type_array.append(block_type)
+            blocks_in = details["blocks_in"]
+            if DEBUG_bbv2: print("-", 7, current_details)
+
         # Catch the last block
         if index == len(rung_array) - 1 and current_details != []:
-            if DEBUG_bbv2: print("-", 7, current_details)
+            if DEBUG_bbv2: print("-", 8, current_details)
             add_type = ul.determine_block_type(type_array)
             current_details, type_array = rung.addBlock(Block(current_details, add_type, blocks_in))
             
@@ -194,7 +216,7 @@ def convert_blocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_
     for index, block in enumerate(rung.blocks):
         # print("Block:", block)
 
-        if block.block_type == "TR":
+        if block.block_type == "TR" or block.block_type == "INTER":
             # print("Skip TR block conversion")
             continue
 
@@ -206,6 +228,7 @@ def convert_blocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_
             # Convert the instruction
             converted_instruction, catchErrors = convert_instruction(line, catchErrors, tagfile, system_name)
             if catchErrors["error"]: 
+                catchErrors["count"] += 1
                 rung.comment += f" - ERROR CONVERTING THIS RUNG ({instr})."
                 catchErrors["error"] = False
 
@@ -226,6 +249,8 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
     # 5. Handle TR x blocks
     ###
 
+    rung.viewBlocks("Initial view")
+
     # 1. FORWARD PASS - handle basic inner joins
     for index, block in enumerate(rung.blocks):
         # print(block.details)
@@ -233,7 +258,8 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
             block.innerJoin()
         else: # Single line block -> set to converted_logic
             block.converted_block = block.logic
-    # rung.viewBlocks()
+
+    # rung.viewBlocks("After inner join pass")
 
     # 2. FORWARD PASS - handle ANDLD and ORLD blocks
     index = 0
@@ -254,11 +280,14 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 # index = 0 # Reset counter since we popped a block
                 # print("End: ", rung.blocks[index-1], NL)
                 
-            if next_block != None and next_block.block_type == "IN": # If next block is an IN block, then join to previous block
+            if next_block != None and next_block.block_type == "IN" or next_block.block_type == "OR": # If next block is an IN block, then join to previous block
                 # print("In block found:", next_block)
-                # print("Block1:", rung.blocks[index-2])
-                # print("Block2:", rung.blocks[index-1])
-                rung.join2Blocks(index-2, index-1, "AND") # Join the previous 2 blocks
+                # print("Block1:", rung.blocks[index-2].block_type, rung.blocks[index-2])
+                # print("Block2:", rung.blocks[index-1].block_type, rung.blocks[index-1])
+                if next_block.block_type == "IN":
+                    rung.join2Blocks(index-2, index-1, "AND") # Join the previous 2 blocks
+                elif next_block.block_type == "OR":
+                    rung.join2Blocks(index-2, index-1, "OR")
                 # print("End: ", rung.blocks[index-1], NL)
 
             index = 0 # Reset counter since we popped a block
@@ -266,7 +295,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
 
         index += 1
 
-    # rung.viewBlocks()
+    # rung.viewBlocks("After ANDLD/ORLD block pass")
 
     # 3. REVERSE PASS - handle special output blocks: CNT, TTIM, KEEP
     index = len(rung.blocks) - 1
@@ -289,13 +318,17 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
 
         # rung.viewBlocks()
         index -= 1
+
+    # rung.viewBlocks("After special output pass")
     
 
     # Check if TR blocks exist for next pass. Also find highest TR number
     TR_array = {}
     TR_exists = False
     for block in rung.blocks:
+        # print("Block: ", block, block.block_type, block.details[0]["type"])
         if block.block_type == "TR" and block.details[0]["type"] == "START":
+            # print("Found block", block)
             TR_number = re.search(r"TR([\d])", block.converted_block[0]).group(1)
             if int(TR_number) in TR_array:
                 TR_array[int(TR_number)] += 1
@@ -314,6 +347,8 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
         
         # Call function to combine logic blocks
         rung.blocks = ul.combine_simple_logic(rung.blocks)
+        # rung.viewBlocks("After normal output pass")
+
 
     else: # IF TR blocks exist, then we need to handle them with subblocks
 
@@ -395,16 +430,24 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 # print("Inter Array")
                 conv_array = []
                 for inter in inter_array:
+                    # print("start")
                     # for block in inter: print("Inter blocks:", block)
                     converted_block = ul.combine_simple_logic(inter)
                     # print("Converted Block:", converted_block[0])
                     conv_array.append(converted_block[0])
-                new_inter_block = ul.OR_block_list(conv_array)
+                # print("Converted Array")
+                # for block in conv_array: print(block)
+                # OR blocks together
+                new_inter_block, catchErrors = ul.OR_block_list(conv_array, catchErrors)
+                if catchErrors["error"]: 
+                    catchErrors["count"] += 1
+                    rung.comment += f" - ERROR CONVERTING THIS RUNG - STRANGE LOGIC."
+                    catchErrors["error"] = False
                 # print("Double Converted Block:", new_inter_block[0])
-                if final_subset != None:
-                    # print("Final Subset")
-                    for block in final_subset: print(block)
-                    # print("End.")
+                # if final_subset != None:
+                #     print("Final Subset")
+                #     for block in final_subset: print(block)
+                #     print("End.")
 
                 # Combine the initial, converted-inter and final (if it exists)
                 rung.blocks = ul.concat_block_list(initial_subset, new_inter_block, final_subset)
@@ -454,6 +497,7 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         elif param.find("C") != -1:
             param = "CNT" + param[1:] # Required to match the actual instruction
 
+    # Manage input parameters (e.g. Txxxx, Cxxxx or #xxxx)
     if line[0] == "@" or line[0] == "#" or line[0] == "&":
         ONS_instr = True
         line = line[1:]
@@ -468,8 +512,6 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
     # If it's a counter instruction, add CNT to the tag
     elif line.find("CNT ") != -1: 
         param = "CNT" + param
-    
-
     # If it's a scaling instruction, extract internal parameters
     elif instr_type.upper() == "SCALING":
         # Create additional required parameters (P1, P2, P3, P4) for scaling
@@ -505,18 +547,32 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
     
     # If it's a MOVB instruction, break up designation word into two destination bits
     elif instr_type.upper() == "BTD":
+        # print("BTD", instr, param, param2)
+        ctrl_word = param2
         # Ensure that the destination bit is in the correct format: 4 numbers with leading zeros if needed
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param2 = param2.replace("#", "")
-        # Make sure param2 has 4 digits
-        while len(param2) < 4:
-            param2 = "0" + param2
-        # print(param2)
-        dest_bit = str(int(param2[0:2]))
-        source_bit = str(int(param2[2:4]))
-        # print(source_bit, dest_bit)
+        if (ctrl_word.find("#") != -1) or (ctrl_word.find("&") != -1): #Check if it's a hardcoded value (e.g. #10) and remove the #
+            ctrl_word = ctrl_word.replace("#", "").replace("&", "")
+        # Make sure ctrl_word has 4 digits
+        while len(ctrl_word) < 4:
+            ctrl_word = "0" + ctrl_word
+        # print(ctrl_word)
+        if instr == "MOVB(82)":
+            source_bit = str(int(ctrl_word[2:4]))
+            dest_bit = str(int(ctrl_word[0:2]))
+            ctrl_length = "1"
+        elif instr == "MOVD(83)":
+            dest_bit = str(int(ctrl_word[1])*4)
+            source_bit = str(int(ctrl_word[3])*4)
+            ctrl_length = str((int(ctrl_word[2])+1)*4) # Input is 0-3 digits, which translates to 4-16 bits
+        else:
+            source_bit = str(int(ctrl_word[2:4]))
+            dest_bit = str(int(ctrl_word[0:2]))
+            ctrl_length = "1"
+
+        # print(source_bit, dest_bit, ctrl_length)
 
     # Convert the tagname
+    og_param, og_param2, og_param3 = param, param2, param3
     if param != None:
         param = convert_tagname(param, tagfile, system_name)
     if param2 != None:
@@ -527,6 +583,13 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
     # Check to add .DN bit
     if NEEDS_DN_BIT:
         param = param + ".DN"
+
+    # Manage & Covnert Instructions
+    if instr_type.upper() == "IGNORE":
+
+        # print("Non-convertable instruction: ", instr)
+        catchErrors["error"] = True
+        catchErrors["list"].append(line)
 
     if conv_instr == None or param == None:
         # If instruction has code (xx), remove it using regex
@@ -547,31 +610,42 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
 
     # For logical instructions with 2 parameters like MOVE
     elif instr_type.upper() == "LOGICAL": 
-        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param = param.replace("#", "")
+        if (param.find("#") != -1) or (param.find("&") != -1): #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "").replace("&", "")
         converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
     # For word copy instructions like XFER (->COP)
     elif instr_type.upper() == "MOVE":
-        if param.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param = param.replace("#", "")
+        if (param.find("#") != -1) or (param.find("&") != -1): #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "").replace("&", "")
             # Omron arguments are Length, Source, Destination
             # AB arguments are Source, Destination, Length
         converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
    
     elif instr_type.upper() == "COPY":
         # print("Copy instruction")
-        if param.find("#") != -1 or param.find("&") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+        if (param.find("#") != -1) or (param.find("&") != -1): #Check if it's a hardcoded value (e.g. #10) and remove the #
             param = param.replace("#", "").replace("&", "")
             # Omron arguments are Length, Source, Destination
             # AB arguments are Source, Destination, Length
-        converted_instruction = conv_instr + "(" + param2 + "," + param3 + "," + param + ")"
+        if instr == "BSET(71)": # This translates to FLL intsruction
+            # print("BSET", param, param2, param3, og_param, og_param2, og_param3)
+            try:
+                start_addr = int(og_param2.replace("D", "").replace("W", "").replace("A", ""))
+                end_addr = int(og_param3.replace("D", "").replace("W", "").replace("A", ""))
+                ctrl_length = str(end_addr - start_addr + 1)
+            except:
+                ctrl_length = "1"
+            converted_instruction = conv_instr + "(" + param + "," + param2 + "," + ctrl_length + ")"
+        else:
+            converted_instruction = conv_instr + "(" + param2 + "," + param3 + "," + param + ")"
 
     
-    # For BTD instructions like MOVB
+    # For BTD instructions like MOVB, MOVD
     elif instr_type.upper() == "BTD":
         # Omron arguments are Source, Bit Designation, Destination
         # AB arguments are Source, Source Bit, Destination, Destination Bit, Length
-        converted_instruction = conv_instr + "(" + param + "," + source_bit + "," + param3 + "," + dest_bit + "," + "1" + ")"
+        converted_instruction = conv_instr + "(" + param + "," + source_bit + "," + param3 + "," + dest_bit + "," + ctrl_length + ")"
+        # print(converted_instruction)
 
     # For output intsructions like OUT, SET, RSET
     elif instr_type.upper() == "OUTPUT": 
@@ -579,9 +653,11 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
     # For math instructions like ADD, SUB, MUL, SCL
     elif instr_type.upper() == "MATH": 
         #Check if it's a hardcoded value (e.g. #10) and remove the #
-        if param.find("#") != -1: param = param.replace("#", "")
+        if (param.find("#") != -1) or (param.find("&") != -1): #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param = param.replace("#", "").replace("&", "")
         else: param = param
-        if param2.find("#") != -1: param2 = param2.replace("#", "")
+        if (param2.find("#") != -1) or (param2.find("&") != -1): #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param2 = param2.replace("#", "").replace("&", "")
         else: param2 = param2
         converted_instruction = conv_instr + "(" + param + "," + param2 + "," + param3 + ")"
 
@@ -606,12 +682,12 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         # print(converted_instruction)
 
     elif instr_type.upper() == "ONESHOT":
-        converted_instruction = conv_instr + "(" + param + "_storage" + "," + param + ")"
+        converted_instruction = conv_instr + "(" + param.replace(".","_") + "_storage" + "," + param + ")"
 
     elif instr_type.upper() == "TIMER" or instr_type.upper() == "RET_TIMER":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
+        if (param2.find("#") != -1) or (param2.find("&") != -1):
             # Convert from 1/10th sec to ms
-            preset = str(int(int(param2.replace("#", "")) * 1000 / 10)) 
+            preset = str(int(int(param2.replace("#", "").replace("&", "")) * 1000 / 10)) 
         else:
             preset = param2
         # if param3 != None: # For RET_TIMER instructions - not needed
@@ -620,20 +696,40 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         converted_instruction = conv_instr + "(" + param + "," + preset + "," + "0" + ")"
 
     elif instr_type.upper() == "COUNTER":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            preset = param2.replace("#", "")
+        if (param2.find("#") != -1) or (param2.find("&") != -1): #Check if it's a hardcoded value (e.g. #10) and remove the #
+            preset = param2.replace("#", "").replace("&", "")
         else:
             preset = param2
         converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" 
         # Make sure to increment global one shot index
         one_shot_index += 1
         converted_instruction += conv_instr + "(" + param + "," + preset + "," + "0" + ")"
+    
+    elif instr_type.upper() == "SPECIAL_RESET":
+        # print("Special Reset instruction", og_param, og_param2)
+        try:
+            start_addr = int(og_param.replace("CNT", "").replace("C", ""))
+            end_addr = int(og_param2.replace("CNT", "").replace("C", ""))
+            ctrl_length = end_addr - start_addr + 1
+            print(ctrl_length)
+        except:
+            ctrl_length = 1
+        # Now build out multiple branched Resets
+        if ctrl_length > 1:
+            converted_instruction = "["
+            for i in range(ctrl_length):
+                converted_instruction += conv_instr + "(" + "C" + str(int(start_addr) + i) + "),"
+            converted_instruction = converted_instruction[:-1] + "]"
+        else:
+            converted_instruction = conv_instr + "(" + param + ")"
+        # print(converted_instruction)
 
     elif instr_type.upper() == "RESET":
         converted_instruction = conv_instr + "(" + param + ")"
+
     elif instr_type.upper() == "COMPARE":
-        if param2.find("#") != -1: #Check if it's a hardcoded value (e.g. #10) and remove the #
-            param2 = param2.replace("#", "")
+        if (param2.find("#") != -1) or (param2.find("&") != -1): #Check if it's a hardcoded value (e.g. #10) and remove the #
+            param2 = param2.replace("#", "").replace("&", "")
         else:
             param2 = param2
         converted_instruction = conv_instr + "(" + param + "," + param2 + ")"
@@ -647,7 +743,7 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         conv_instr = conv_instr.split("(")[0]
         
         # Remove any odd characters from parameter
-        param = param.replace("#", "")
+        param = param.replace("#", "").replace("&", "")
 
         # Build instruction based on which parameters are available
         converted_instruction = conv_instr + "("

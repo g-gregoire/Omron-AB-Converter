@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="Rxx_test_rungs" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="Rxx_test_rungs" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA['  Step 113]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT1_STEP,113)[XIC(EXT_PRT1_POSTWI_CAUSTIC_ENABLE)[GEQ(EXT_PRT1_WATER_TOTAL,12000),XIC(EXT_PRT1_ADVANCE),XIC(EXT_PRT1_CAUSTIC_REQ)][XIC(EXT_PRT1_CAUSTIC_IND)[MOV(114,EXT_PRT1_STEP),MOV(EXT_PRT1_POSTWI_CAUSTIC_SP,EXT_CAUSTIC_TOT_SP)],[OTU(EXT_PRT1_ADVANCE),OTL(EXT_PRT1_CAUSTIC_REQ)]],XIO(EXT_PRT1_POSTWI_CAUSTIC_ENABLE)MOV(117,EXT_PRT1_STEP)];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+

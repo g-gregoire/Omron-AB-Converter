@@ -9,8 +9,8 @@ import utilities as util
 dir = os.getcwd()
 
 # Debugging and specific tag testing
-DEBUG = True
-TEST_TAG = "D1436"
+DEBUG = False
+TEST_TAG = "T0245"
 
 def parseTagList(system_name, tag_info, VIEW_TAGS=False):
 

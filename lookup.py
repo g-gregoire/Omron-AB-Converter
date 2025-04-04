@@ -7,8 +7,12 @@ routine_header = "routine-header.xml"
 footer = "footer.xml"
 tagcsv = "tag.csv"
 
+
 # Update Constants
 routine_name = "_routine_name_"
+
+# Global Constants
+NL = "\n"
 
 # Lookup conversion for Omron to AB
 # Args are the number of arguments the instruction takes in Rockwell
@@ -17,6 +21,7 @@ routine_name = "_routine_name_"
 lookup = {
     # Comments
     "'": {"instr": "", "type": "comment", "args": 0, "block_type": "IN", "blocks_in": 1},
+    "NOP": {"instr": "NOP()", "type": "NOP", "args": 0, "block_type": "NOP", "blocks_in": 1},
 
     # Load Instructions
     "LD": {"instr": "XIC", "type": "load", "args": 1, "block_type": "START", "blocks_in": 1},
@@ -52,7 +57,7 @@ lookup = {
 
     # Reset Instructions (Counter/Timer)
     "RESET": {"instr": "RES", "type": "reset", "args": 1, "block_type": "OUT", "blocks_in": 1},
-    "CNR(545)": {"instr": "RES", "type": "counter", "args": 1, "block_type": "OUT", "blocks_in": 1}, # Reset counters & timers in input range: N1(start range) & N2(end range)
+    "CNR(545)": {"instr": "RES", "type": "SPECIAL_RESET", "args": 1, "block_type": "OUT", "blocks_in": 1}, # Reset counters & timers in input range: N1(start range) & N2(end range)
 
     # Comparison Instructions
     "CMP(20)": {"instr": "CMP", "type": "compare_old", "args": 2, "block_type": "IN", "blocks_in": 1},
@@ -64,6 +69,7 @@ lookup = {
     "AND<=(315)": {"instr": "LEQ", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
     "AND=(300)": {"instr": "EQU", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
     "AND=L(300)": {"instr": "EQU", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
+    "AND=L(301)": {"instr": "EQU", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
     "AND>(320)": {"instr": "GRT", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
     "AND>=(325)": {"instr": "GEQ", "type": "compare", "args": 2, "block_type": "IN", "blocks_in": 1},
     "LD<(310)": {"instr": "LES", "type": "compare", "args": 2, "block_type": "START", "blocks_in": 1},
@@ -110,7 +116,6 @@ lookup = {
 
     # Copy Instructions
     "MOV(21)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
-    "MOVD(83)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
     "MOVL(498)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
     "BCD(24)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
     "BCDL(59)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
@@ -118,8 +123,9 @@ lookup = {
     "XFER(70)": {"instr": "COP", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1},
     "XFRB(62)": {"instr": "COP", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1},
     "BSET(71)": {"instr": "FLL", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1}, # For fill length, Omron specifies start & end bits; AB specifies start bit & length
-    "MOVB(82)": {"instr": "BTD", "type": "copy", "args": 5, "block_type": "OUT", "blocks_in": 1}, # Omron has 3 args (Source, Control Word, Dest), AB has 5 (Source, Source bit, Dest, Dest Bit, Length).
     "ANDW(34)": {"instr": "AND", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},
+    "MOVB(82)": {"instr": "BTD", "type": "BTD", "args": 5, "block_type": "OUT", "blocks_in": 1}, # Omron has 3 args (Source, Control Word, Dest), AB has 5 (Source, Source bit, Dest, Dest Bit, Length).
+    "MOVD(83)": {"instr": "BTD", "type": "BTD", "args": 5, "block_type": "OUT", "blocks_in": 1}, # Omron has 3 args (Source, Control Word, Dest), AB has 5 (Source, Source bit, Dest, Dest Bit, Length).
 
     # Scaling Instructions
     "SCL(64)": {"instr": "CPT", "type": "scaling", "args": 2, "block_type": "OUT", "blocks_in": 1},
@@ -145,9 +151,9 @@ lookup = {
     # "SSET(630)": {"in str": "?", "type": "stack", "args": "?"}, # Not needed with Rockwell
 
     # Ignored Instructions
-    "CLC(41)": {"instr": "ignore", "type": "macro", "args": 0, "block_type": "OUT", "blocks_in": 1},
-    "DATE(735)": {"instr": "ignore", "type": "macro", "args": 0, "block_type": "OUT", "blocks_in": 1},
-    "CADD(730)": {"instr": "ignore", "type": "macro", "args": 0, "block_type": "OUT", "blocks_in": 1},
-    "PMCR(260)": {"instr": "ignore", "type": "macro", "args": 0, "block_type": "OUT", "blocks_in": 1},
-    "SSET(630)": {"instr": "ignore", "type": "stack", "args": 0, "block_type": "OUT", "blocks_in": 1}, # Not needed with Rockwell
+    "CLC(41)": {"instr": "CLC", "type": "ignore", "args": 0, "block_type": "OUT", "blocks_in": 1},
+    "DATE(735)": {"instr": "DATE", "type": "ignore", "args": 0, "block_type": "OUT", "blocks_in": 1},
+    "CADD(730)": {"instr": "CADD", "type": "ignore", "args": 0, "block_type": "OUT", "blocks_in": 1},
+    "PMCR(260)": {"instr": "PMCR", "type": "ignore", "args": 0, "block_type": "OUT", "blocks_in": 1},
+    "SSET(630)": {"instr": "SSET", "type": "ignore", "args": 0, "block_type": "OUT", "blocks_in": 1}, # Not needed with Rockwell
 }

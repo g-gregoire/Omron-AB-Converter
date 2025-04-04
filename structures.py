@@ -61,12 +61,12 @@ class Block:
                 else:
                     working_logic.append(logic)
                     working_logic.append(",")
-
-        # print(working_logic)
-        output_logic = "".join(reversed(working_logic))
-        self.converted_block = [output_logic]
-        # self.converted_logic = output_logic
-        # Set type to IN
+            
+            # Check if last line and active_OR is True, then add opening ("closing") bracket
+            if index == len(self.details) - 1 and active_OR == True:
+                working_logic.append("[")
+        
+        # Set block type
         if "START" in types_array:
             self.block_type = "START"
         elif "OUT" in types_array:
@@ -74,10 +74,20 @@ class Block:
         else:
             self.block_type = "IN"
         # print(output_logic)
+            
+        # # Lastly, if block starts with a , then remove it and set type to OR
+        # if working_logic[-1] == ",":
+        #     working_logic.pop()
+        #     self.block_type = "OR"
+
+        # print(working_logic)
+        output_logic = "".join(reversed(working_logic))
+        self.converted_block = [output_logic]
+        # self.converted_logic = output_logic
         return output_logic
 
 class Rung:
-    def __init__(self, original:str="", blocks: List[Block]=[], connectors: List[str]=[], comment: str="", converted_blocks: List[str]=[]):
+    def __init__(self, original:str="", blocks: List[Block]=[], connectors: List[str]=[], comment: str="", converted_blocks: List[str]=[], num:int=0):
         if original == "": self.original = ""
         else: self.original = original
         if blocks == []: self.blocks = []
@@ -90,6 +100,8 @@ class Rung:
         self.converted_logic = ""
         self.has_TR_blocks = False
         self.TR_blocks = {}
+        if num == 0: self.num = 0
+        else: self.num = num
 
     def __str__(self) -> str:
         return f"{self.blocks} {self.connectors}"
@@ -113,11 +125,15 @@ class Rung:
     def addConvertedLogic(self, logic: str):
         self.converted_logic = logic
 
-    def viewBlocks(self):
+    def viewBlocks(self, text: str=""):
+        if text != "":
+            print("\n" + text)
+        else:
+            print("")
         if len(self.blocks) == 1:
             print("Block:\n", self.blocks[0].converted_block[0])
         else:
-            print("\n", len(self.blocks), "Blocks:")
+            print(len(self.blocks), "Blocks:")
             for block in self.blocks:
                 print(block)
 
@@ -153,14 +169,16 @@ class Rung:
         block2 = self.blocks[index2]
         block3 = self.blocks[index3]
         # print("Joining 3 blocks")
-        # print(block1)
-        # print(block2)
-        # print(block3)
+        # print("Line 1:", block1.converted_block[0])
+        # print("Line 2:", block2.converted_block[0])
+        # print("Line 3:", block3.converted_block[0])
 
         # Extract instruction Tag from Counter/Timer
         # print("Block 3: ", block3.converted_block[0])
         if instr_type.upper() == "COUNTER":
-            match = re.search(r"CNT\d{3,4}", block3.converted_block[0])
+            # match = re.search(r"CNT\d{3,4}", block3.converted_block[0])
+            match = re.search(r"[\w.]+_CTR", block3.converted_block[0]) # Used to match to all counter tags
+            # print("Match: ", match)
             if match:
                 tag = match.group(0)
             else: tag = "???" # Placeholder for error
@@ -198,10 +216,14 @@ class Rung:
         block_type = ""
         blocks_in = 1
 
-        if connect_type == "AND":        
-            converted_block = block1.converted_block[0] + block2.converted_block[0]
+        if connect_type == "AND":
+            if block1.converted_block[0][-1] == "]" and block2.converted_block[0][0] == ",": # Adding for edge case where OR block with leading , needs to be grouped
+                # print("Joining already OR'd block")
+                converted_block = block1.converted_block[0][:-1] + block2.converted_block[0]
+            else:
+                converted_block = block1.converted_block[0] + block2.converted_block[0]
         elif connect_type == "OR":
-            if block1.converted_block[0][0] == "[" and block1.converted_block[0][-1] == "]":
+            if block1.converted_block[0][0] == "[" and block1.converted_block[0][-1] == "]": # Added for cases where two OR blocks are OR'd together, reduce double brackets
                 # print("Joining already OR'd block")
                 converted_block = block1.converted_block[0][:-1] + "," + block2.converted_block[0] + "]"
             else:

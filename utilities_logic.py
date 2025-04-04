@@ -25,64 +25,67 @@ def expand_instruction(line: str):
     return instr, params, details
 
 def combine_compare(rung:Rung, line1, line2, line3, catchErrors):
-    print("Compare")
+    # print("Compare")
     pop_count = 0
     if line1 != None: instr1, params1, details1 = expand_instruction(line1)
     if line2 != None: instr2, params2, details2 = expand_instruction(line2)
     if line3 != None: instr3, params3, details3 = expand_instruction(line3)
-    print("Line 1: ", line1)
-    print("Line 2: ", line2)
-    print("Line 3: ", line3)
+    # print("Line 1: ", line1)
+    # print("Line 2: ", line2)
+    # print("Line 3: ", line3)
     # Determine which comparison is being used
     EQU = GRT = LES = False
-    if line2 == None: # Added for strange coding where CMP and comp_type are on different rungs
-        # print("End of rung")
-        catchErrors["error"] = True
+    if line2 == None or line2 == "": # Added for strange coding where CMP and comp_type are on different rungs
+        print("Incorrect usage of CMP instruction")
+        catchErrors["count"] += 1
         catchErrors["list"].append(line1)
-        rung.comment += f" - ERROR CONVERTING THIS RUNG ({instr1})."
+        rung.comment += f" - ERROR with ({line1})- NO FOLLOW-UP COMPARISON ARGS (GRT, LEQ, etc.)."
     else:
         if line2.find("EQUALS") != -1 or line2.find("P_EQ") != -1:
             EQU = True
-        elif line2.find("GREATER_THAN") != -1 or line2.find("P_GT") != -1:
+        elif line2.find("GREATER_THAN") != -1 or line2.find("P_GT") != -1 or line2.find("GE") != -1:
             GRT = True
-        elif line2.find("LESS_THAN") != -1 or line2.find("P_LT") != -1:
+        elif line2.find("LESS_THAN") != -1 or line2.find("P_LT") != -1 or line2.find("LE") != -1:
             LES = True
         if line3.find("EQUALS") != -1 or line3.find("P_EQ") != -1:
             EQU = True
-        elif line3.find("GREATER_THAN") != -1 or line3.find("P_GT") != -1:
+        elif line3.find("GREATER_THAN") != -1 or line3.find("P_GT") != -1 or line3.find("GE") != -1:
             GRT = True
-        elif line3.find("LESS_THAN") != -1 or line3.find("P_LT") != -1:
+        elif line3.find("LESS_THAN") != -1 or line3.find("P_LT") != -1 or line3.find("LE") != -1:
             LES = True
+
+        # print(EQU, GRT, LES)
     
         if EQU and GRT:
             # print("GEQ")
-            line1 = line1.replace("CMP(20)", "GEQ").replace("CMP(020)", "GEQ")
+            line1 = line1.replace("CMP(20)", "GEQ").replace("CMP(020)", "GEQ").replace("CMPL(060)", "GEQ")
             # Pop next 3 lines
-            pop_count = 2
+            pop_count = 3
         elif EQU and LES:
             # print("LEQ")
-            line1 = line1.replace("CMP(20)", "LEQ").replace("CMP(020)", "LEQ")
+            line1 = line1.replace("CMP(20)", "LEQ").replace("CMP(020)", "LEQ").replace("CMPL(060)", "LEQ")
             # Pop next 3 lines
-            pop_count = 2
+            pop_count = 3
         elif EQU:
             # print("EQU")
-            line1 = line1.replace("CMP(20)", "EQU").replace("CMP(020)", "EQU")
+            line1 = line1.replace("CMP(20)", "EQU").replace("CMP(020)", "EQU").replace("CMPL(060)", "EQU")
             # Pop next line1
             pop_count = 1
         elif GRT:
             # print("GRT")
-            line1 = line1.replace("CMP(20)", "GRT").replace("CMP(020)", "GRT")
+            line1 = line1.replace("CMP(20)", "GRT").replace("CMP(020)", "GRT").replace("CMPL(060)", "GRT")
             # Pop next line1
             pop_count = 1
         elif LES:
             # print("LES")
-            line1 = line1.replace("CMP(20)", "LES").replace("CMP(020)", "LES")
+            line1 = line1.replace("CMP(20)", "LES").replace("CMP(020)", "LES").replace("CMPL(060)", "LES")
             # Pop next line1
             pop_count = 1
         else:
-            line1 = line1.replace("CMP(20)", "LES").replace("CMP(020)", "LES")
+            line1 = line1.replace("CMP(20)", "LES").replace("CMP(020)", "LES").replace("CMPL(060)", "LES")
             pop_count = 1
     
+        # print(line1, pop_count)
     return line1, pop_count, catchErrors
 
 def combine_simple_logic(block_array:List[Block])->List[Block]:
@@ -178,13 +181,19 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
 
     return output_block
 
-def OR_block_list(block_array:List[Block])->List[Block]:
+def OR_block_list(block_array:List[Block], catchErrors)->List[Block]:
     # This function takes a list of blocks and combines them into a single OR block
     # This is done by adding brackets around each block and adding a comma between each block
     # The output is a single block with the logic of all blocks combined
+
     working_logic = []
     for index, block in enumerate(reversed(block_array)):
         logic = block.converted_block
+        if len(logic) == 0:
+            print("Logic is None")
+            catchErrors["error"] = True
+            continue
+        # print("Block", index, logic)
         block_type = block.block_type
         if index == 0:
             working_logic.append("]")
@@ -202,7 +211,8 @@ def OR_block_list(block_array:List[Block])->List[Block]:
     block_type = "IN"
     blocks_in = 1
     output_block = [Block([details], block_type, blocks_in)]
-    return output_block
+    
+    return output_block, catchErrors
 
 def createSubSet(block_list:List[Block], start_index:int, end_index:int) -> List[Block]:
         # print("Creating subset. Indexes: ", start_index, end_index)
