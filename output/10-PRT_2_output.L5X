@@ -1,0 +1,2568 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.01" TargetName="R10_PRT_2" TargetType="Routine" TargetSubType="RLL" ContainsContext="true" Owner="SapphireAD" ExportDate="Mon Aug 26 16:10:32 2024" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="demo_proj">
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram">
+<Routines Use="Context">
+<Routine Use="Target" Name="R10_PRT_2" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA['   ****************Pretreatment Sequence Initiation****************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,0)[XIC(EXT_PRT2_DROP_START)[LEQ(EXT_LIT_2002_AI,EXT_PRT2_EMPTY_SP),XIC(P_On)]MOV(1,EXT_PRT2_STEP),[MOV(0,EXT_PRT2_AD_SP),MOV(0,EXT_PRT2_POSTWI_CAUSTIC_SP),MOV(0,EXT_PRT2_POSTWII_CAUSTIC_SP),MOV(0,EXT_PRT2_POSTWIII_CAUSTIC_SP),OTU(EXT_PRT2_POSTWI_CAUSTIC_ENABLE),OTU(EXT_PRT2_POSTWII_CAUSTIC_ENABLE),OTL(EXT_PRT2_POSTWIII_CAUSTIC_ENABLE),OTL(EXT_PRT2_POSTWII_SKIP),XIC(EXT_ADDR_W22.09)OTL(EXT_PRT2_PREWASH_SKIP)]];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA['  Step 1\n*****************Dropping*****************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,1)[XIO(EXT_CHOP_TO_PRT)XIO(EXT_PRT2_DROP_SKIP)[LEQ(EXT_LIT_2002_AI,EXT_PRT2_EMPTY_SP),XIC(EXT_PRT2_ADVANCE)]EQU(EXT_PRT2_AD_TOTAL,0)MOV(2,EXT_PRT2_STEP),XIC(EXT_PRT2_DROP_SKIP)XIC(EXT_CHOP_TO_PRT)MOV(17,EXT_PRT2_STEP),[MOV(0,EXT_PRT2_AD_TOTAL),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA['  Step 2]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,2)[XIC(EXT_V2004_ZH),XIC(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(3,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA['  Step 3]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,3)[XIC(EXT_V2002_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(4,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA['  Step 4]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,4)[LEQ(EXT_LIT_2001_AI,EXT_RHT2_EMPTY_SP),XIC(EXT_PRT2_ADVANCE)][MOV(5,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA['  Step 5]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,5)[MOV(6,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA['  Step 6]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,6)[XIC(EXT_V2002_ZH)XIC(EXT_V2008_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(7,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA['  Step 7]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,7)MOV(8,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA['  Step 8]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,8)MOV(9,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA['  Step 9]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,9)[XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(10,EXT_PRT2_STEP),[MOV(EXT_PRT2_DROPWASHTIME_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment>
+<![CDATA['  Step 10]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,10)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(11,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Comment>
+<![CDATA['  Step 11]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,11)MOV(12,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Comment>
+<![CDATA['  Step 12]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,12)MOV(13,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Comment>
+<![CDATA['  Step 13]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,13)MOV(14,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="14" Type="N">
+<Comment>
+<![CDATA['  Step 14]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,14)[XIC(EXT_V2002_ZL)XIO(EXT_V2008_ZH),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)MOV(15,EXT_PRT2_STEP),[OTU(EXT_PRT2_ADVANCE),OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="15" Type="N">
+<Comment>
+<![CDATA['  Step 15]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,15)MOV(16,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="16" Type="N">
+<Comment>
+<![CDATA['  Step 16]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,16)MOV(17,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="17" Type="N">
+<Comment>
+<![CDATA['  Step 17\n*****************PreWash*****************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,17)[XIO(EXT_PRT2_PREWASH_SKIP)[XIO(EXT_PRT2_PREWASH_AUTO)XIC(EXT_PRT2_PREWASH_START),XIC(EXT_PRT2_PREWASH_AUTO)]MOV(18,EXT_PRT2_STEP),XIC(EXT_PRT2_PREWASH_SKIP)MOV(45,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="18" Type="N">
+<Comment>
+<![CDATA['  Step 18]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,18)[XIC(EXT_PRT2_WATER_IND)XIO(EXT_V2004_ZH)XIO(EXT_V2005_ZH)MOV(19,EXT_PRT2_STEP),OTL(EXT_PRT2_WATER_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="19" Type="N">
+<Comment>
+<![CDATA['  Step 19]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,19)[[XIC(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2003_ZH),XIC(EXT_V2006_ZH),GEQ(EXT_FIT2_2000_AI,200)],XIO(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2010_ZH),GEQ(EXT_FIT_120_AI,200)],XIC(EXT_PRT2_ADVANCE)]MOV(20,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),MOV(0,EXT_PRT2_WATER_TOTAL)];]]>
+</Text>
+</Rung>
+<Rung Number="20" Type="N">
+<Comment>
+<![CDATA['  Step 20]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,20)MOV(21,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="21" Type="N">
+<Comment>
+<![CDATA['  Step 21]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,21)MOV(22,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="22" Type="N">
+<Comment>
+<![CDATA['  Step 22]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,22)[GEQ(EXT_PRT2_WATER_TOTAL,EXT_PRT2_PREWASH_WATER_SP),GEQ(EXT_LIT_2002_AI,9150),XIC(EXT_LS_PRETK2_HL),XIC(EXT_PRT2_ADVANCE)][MOV(23,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="23" Type="N">
+<Comment>
+<![CDATA['  Step 23]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,23)MOV(24,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="24" Type="N">
+<Comment>
+<![CDATA['  Step 24]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,24)MOV(25,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="25" Type="N">
+<Comment>
+<![CDATA['  Step 25]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,25)MOV(26,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="26" Type="N">
+<Comment>
+<![CDATA['  Step 26]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,26)[XIC(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2003_ZH)XIO(EXT_V2006_ZH),XIO(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2010_ZH),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)MOV(27,EXT_PRT2_STEP),[OTU(EXT_PRT2_ADVANCE),OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="27" Type="N">
+<Comment>
+<![CDATA['  Step 27]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,27)MOV(28,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="28" Type="N">
+<Comment>
+<![CDATA['  Step 28]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,28)MOV(29,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="29" Type="N">
+<Comment>
+<![CDATA['  Step 29]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,29)MOV(30,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="30" Type="N">
+<Comment>
+<![CDATA['  Step 30]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,30)MOV(31,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="31" Type="N">
+<Comment>
+<![CDATA['  Step\nPreWash Agitating]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,31)[[XIC(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(32,EXT_PRT2_STEP),[OTU(EXT_PRT2_ADVANCE),MOV(EXT_PRT2_PREWASH_AGT_SP,EXT_PRT2_SEQ_TIM_PRE)]],RES(EXT_PRT2_SEQ_TIM_DN_CTR)];]]>
+</Text>
+</Rung>
+<Rung Number="32" Type="N">
+<Comment>
+<![CDATA['  Step 32]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,32)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(33,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="33" Type="N">
+<Comment>
+<![CDATA['  Step 33]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,33)[[XIC(EXT_PRT2_DRAIN_IND),XIC(EXT_PRT2_ADVANCE)]MOV(34,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_DRAIN_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="34" Type="N">
+<Comment>
+<![CDATA['  Step 34]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,34)MOV(35,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="35" Type="N">
+<Comment>
+<![CDATA['  Step 35\nPreWash Draining]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,35)[XIC(EXT_V2004_ZH),XIC(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(36,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="36" Type="N">
+<Comment>
+<![CDATA['  Step 36]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,36)MOV(37,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="37" Type="N">
+<Comment>
+<![CDATA['  Step 37]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,37)MOV(38,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="38" Type="N">
+<Comment>
+<![CDATA['  Step 38]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,38)[XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(39,EXT_PRT2_STEP),[MOV(EXT_PRT2_PREWASH_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="39" Type="N">
+<Comment>
+<![CDATA['  Step 39]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,39)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(40,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="40" Type="N">
+<Comment>
+<![CDATA['  Step 40]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,40)MOV(41,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="41" Type="N">
+<Comment>
+<![CDATA['  Step 41]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,41)[XIO(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)][MOV(42,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="42" Type="N">
+<Comment>
+<![CDATA['  Step 42]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,42)MOV(43,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="43" Type="N">
+<Comment>
+<![CDATA['  Step 43]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,43)[XIO(EXT_V2004_ZH)XIO(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(44,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),MOV(EXT_PRT2_AD_SP,EXT_PRT2_PREVIOUS_ACID_SP)];]]>
+</Text>
+</Rung>
+<Rung Number="44" Type="N">
+<Comment>
+<![CDATA['  Step 44]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,44)[EQU(EXT_PRT2_AD_TOTAL,0)EQU(EXT_PRT2_WATER_TOTAL,0)MOV(45,EXT_PRT2_STEP),[MOV(0,EXT_PRT2_AD_TOTAL),MOV(0,EXT_PRT2_WATER_TOTAL),OTU(EXT_ACID_PRT2_DONE),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),OTU(EXT_PRT2_WATER_REQ)]];]]>
+</Text>
+</Rung>
+<Rung Number="45" Type="N">
+<Comment>
+<![CDATA['  Step 45\n*****************Acid Wash*****************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,45)[[XIO(EXT_PRT2_ACID_SKIP)XIO(EXT_PRT2_ACID_AUTO)XIC(EXT_PRT2_ACID_START),XIC(EXT_PRT2_ACID_AUTO),XIC(P_On)]GRT(EXT_PRT2_AD_SP,500)XIO(EXT_PRT2_HBLV_ENABLE),XIC(EXT_PRT2_HBLV_ENABLE)XIO(EXT_SV30_20D)][MOV(46,EXT_PRT2_STEP),XIC(EXT_PRT2_ACID_SKIP)MOV(110,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="46" Type="N">
+<Comment>
+<![CDATA['  Step 46]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,46)[GEQ(EXT_FIT_121_AI,EXT_PRT2_AD_SP),XIC(P_On),XIC(EXT_PRT2_ADVANCE),XIC(EXT_PRT2_WATER_IND)XIC(EXT_PRT2_ACID_IND)][XIC(EXT_PRT2_WATER_IND)XIC(EXT_PRT2_ACID_IND)MOV(47,EXT_PRT2_STEP),[OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_WATER_REQ),OTL(EXT_PRT2_ACID_REQ)]];]]>
+</Text>
+</Rung>
+<Rung Number="47" Type="N">
+<Comment>
+<![CDATA['  Step 47]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,47)MOV(48,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="48" Type="N">
+<Comment>
+<![CDATA['  Step 48]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,48)[MOV(49,EXT_PRT2_STEP),MOV(0,EXT_PRT2_WATER_TOTAL)];]]>
+</Text>
+</Rung>
+<Rung Number="49" Type="N">
+<Comment>
+<![CDATA['  Step 49]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,49)MOV(50,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="50" Type="N">
+<Comment>
+<![CDATA['  Step 50]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,50)MOV(51,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="51" Type="N">
+<Comment>
+<![CDATA['  Step 51]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,51)MOV(52,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="52" Type="N">
+<Comment>
+<![CDATA['  Step 52]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,52)[XIC(EXT_V2010_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(53,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="53" Type="N">
+<Comment>
+<![CDATA['  Step 53]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,53)MOV(54,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="54" Type="N">
+<Comment>
+<![CDATA['  Step 54]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,54)MOV(55,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="55" Type="N">
+<Comment>
+<![CDATA['  Step 55]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,55)MOV(56,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="56" Type="N">
+<Comment>
+<![CDATA['  Step 56]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,56)MOV(57,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="57" Type="N">
+<Comment>
+<![CDATA['  Step 57]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,57)MOV(58,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="58" Type="N">
+<Comment>
+<![CDATA['  Step 58]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,58)[XIC(EXT_ACID_PRT2_DONE),XIC(EXT_PRT2_ADVANCE)][MOV(59,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND)];]]>
+</Text>
+</Rung>
+<Rung Number="59" Type="N">
+<Comment>
+<![CDATA['  Step 59]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,59)MOV(60,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="60" Type="N">
+<Comment>
+<![CDATA['  Step 60]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,60)MOV(61,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="61" Type="N">
+<Comment>
+<![CDATA['  Step 61]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,61)MOV(62,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="62" Type="N">
+<Comment>
+<![CDATA['  Step 62]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,62)MOV(63,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="63" Type="N">
+<Comment>
+<![CDATA['  Step 63]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,63)[GEQ(EXT_PRT2_WATER_TOTAL,EXT_PRT2_ACID_WATER_SP),GEQ(EXT_LIT_2002_AI,9150),XIC(EXT_LS_PRETK2_HL),XIC(EXT_PRT2_ADVANCE)][MOV(64,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="64" Type="N">
+<Comment>
+<![CDATA['  Step 64]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,64)MOV(65,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="65" Type="N">
+<Comment>
+<![CDATA['  Step 65]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,65)[XIO(EXT_V2010_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(66,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE),OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND)];]]>
+</Text>
+</Rung>
+<Rung Number="66" Type="N">
+<Comment>
+<![CDATA['  Step 66]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,66)MOV(67,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="67" Type="N">
+<Comment>
+<![CDATA['  Step 67]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,67)[XIO(EXT_PRT2_HBLV_ENABLE)MOV(97,EXT_PRT2_STEP),XIC(EXT_PRT2_HBLV_ENABLE)[TON(EXT_T0291_TMR,20000,0),XIC(EXT_T0291_TMR.DN)[OTU(EXT_EXT2_DRAIN_VALVE_OVERRIDE),XIO(EXT_V2007_ZC)XIC(EXT_V2007_ZL)MOV(245,EXT_PRT2_STEP)]]];]]>
+</Text>
+</Rung>
+<Rung Number="68" Type="N">
+<Comment>
+<![CDATA['  Step 68]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,68)MOV(69,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="69" Type="N">
+<Comment>
+<![CDATA['  Step 69]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,69)MOV(70,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="70" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,70)MOV(71,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="71" Type="N">
+<Comment>
+<![CDATA['  Step 71]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,71)MOV(72,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="72" Type="N">
+<Comment>
+<![CDATA['  Step 72]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,72)MOV(73,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="73" Type="N">
+<Comment>
+<![CDATA['  Step 73]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,73)MOV(74,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="74" Type="N">
+<Comment>
+<![CDATA['  Step 74]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,74)MOV(75,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="75" Type="N">
+<Comment>
+<![CDATA['  Step 75]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,75)MOV(76,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="76" Type="N">
+<Comment>
+<![CDATA['  Step 76]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,76)MOV(77,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="77" Type="N">
+<Comment>
+<![CDATA['  Step 78]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,77)MOV(78,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="78" Type="N">
+<Comment>
+<![CDATA['  Step 79]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,78)MOV(79,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="79" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,79)MOV(80,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="80" Type="N">
+<Comment>
+<![CDATA['  Step 80]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,80)MOV(81,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="81" Type="N">
+<Comment>
+<![CDATA['  Step 81]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,81)MOV(82,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="82" Type="N">
+<Comment>
+<![CDATA['  Step 82]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,82)MOV(83,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="83" Type="N">
+<Comment>
+<![CDATA['  Step 83]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,83)MOV(84,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="84" Type="N">
+<Comment>
+<![CDATA['  Step 84]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,84)MOV(85,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="85" Type="N">
+<Comment>
+<![CDATA['  Step 85]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,85)MOV(86,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="86" Type="N">
+<Comment>
+<![CDATA['  Step 86]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,86)MOV(87,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="87" Type="N">
+<Comment>
+<![CDATA['  Step 87]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,87)MOV(88,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="88" Type="N">
+<Comment>
+<![CDATA['  Step 88]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,88)MOV(89,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="89" Type="N">
+<Comment>
+<![CDATA['  Step 89]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,89)MOV(90,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="90" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,90)MOV(91,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="91" Type="N">
+<Comment>
+<![CDATA['  Step 91]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,91)MOV(92,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="92" Type="N">
+<Comment>
+<![CDATA['  Step 92]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,92)MOV(93,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="93" Type="N">
+<Comment>
+<![CDATA['  Step 93]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,93)MOV(94,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="94" Type="N">
+<Comment>
+<![CDATA['  Step 94]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,94)MOV(95,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="95" Type="N">
+<Comment>
+<![CDATA['  Step 95]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,95)MOV(96,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="96" Type="N">
+<Comment>
+<![CDATA['  Step 96]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,96)MOV(97,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="97" Type="N">
+<Comment>
+<![CDATA['  Step 97]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,97)[XIC(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)][MOV(98,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="98" Type="N">
+<Comment>
+<![CDATA['  Step 98]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,98)[XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(99,EXT_PRT2_STEP),[MOV(EXT_PRT2_ACID_AGT_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="99" Type="N">
+<Comment>
+<![CDATA['  Step 99]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,99)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(100,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="100" Type="N">
+<Comment>
+<![CDATA['  Step 100]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,100)[[XIC(EXT_PRT2_DRAIN_IND),XIC(EXT_PRT2_ADVANCE)]MOV(101,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_DRAIN_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="101" Type="N">
+<Comment>
+<![CDATA['  Step 101]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,101)[[XIC(EXT_V2004_ZH),XIC(EXT_V2005_ZH)EQU(EXT_PRT2_ACID_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE)XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)]MOV(102,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[MOV(EXT_PRT2_ACID_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="102" Type="N">
+<Comment>
+<![CDATA['  Step 102]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,102)MOV(103,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="103" Type="N">
+<Comment>
+<![CDATA['  Step 103]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,103)MOV(104,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="104" Type="N">
+<Comment>
+<![CDATA['  Step 104]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,104)MOV(105,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="105" Type="N">
+<Comment>
+<![CDATA['  Step 105]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,105)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(106,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="106" Type="N">
+<Comment>
+<![CDATA['  Step 106]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,106)MOV(107,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="107" Type="N">
+<Comment>
+<![CDATA['  Step 107]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,107)[XIO(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)]MOV(108,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="108" Type="N">
+<Comment>
+<![CDATA['  Step 108]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,108)MOV(109,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="109" Type="N">
+<Comment>
+<![CDATA['  Step 109]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,109)[[XIO(EXT_V2004_ZH)XIO(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(110,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_ACID_PRT2_DONE)]];]]>
+</Text>
+</Rung>
+<Rung Number="110" Type="N">
+<Comment>
+<![CDATA['  Step 110\n******************************************PostWash I******************************************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,110)[XIO(EXT_PRT2_POSTWI_SKIP)[XIO(EXT_PRT2_POSTWI_AUTO)XIC(EXT_PRT2_POSTWI_START),XIC(EXT_PRT2_POSTWI_AUTO)][XIC(EXT_PRT2_POSTWI_CAUSTIC_ENABLE)GRT(EXT_PRT2_POSTWI_CAUSTIC_SP,0),XIO(EXT_PRT2_POSTWI_CAUSTIC_ENABLE)]MOV(111,EXT_PRT2_STEP),XIC(EXT_PRT2_POSTWI_SKIP)MOV(146,EXT_PRT2_STEP),MOV(0,EXT_PRT2_WATER_TOTAL)];]]>
+</Text>
+</Rung>
+<Rung Number="111" Type="N">
+<Comment>
+<![CDATA['  Step 111]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,111)[XIC(EXT_PRT2_WATER_IND)[MOV(112,EXT_PRT2_STEP),MOV(0,EXT_CAUSTIC_TOTAL_AREA2)],OTL(EXT_PRT2_WATER_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="112" Type="N">
+<Comment>
+<![CDATA['  Step 112]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,112)[XIC(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2003_ZH),XIC(EXT_V2006_ZH),GEQ(EXT_FIT2_2000_AI,200)],XIO(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2010_ZH),GEQ(EXT_FIT_120_AI,200)],XIC(EXT_PRT2_ADVANCE)][MOV(113,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="113" Type="N">
+<Comment>
+<![CDATA['  Step 113]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,113)[XIC(EXT_PRT2_POSTWI_CAUSTIC_ENABLE)[GEQ(EXT_PRT2_WATER_TOTAL,12000),XIC(EXT_PRT2_ADVANCE),XIC(EXT_PRT2_CAUSTIC_REQ)][XIC(EXT_PRT2_CAUSTIC_IND)[MOV(114,EXT_PRT2_STEP),MOV(EXT_PRT2_POSTWI_CAUSTIC_SP,EXT_CAUSTIC_TOT_SP)],[OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_CAUSTIC_REQ)]],XIO(EXT_PRT2_POSTWI_CAUSTIC_ENABLE)MOV(117,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="114" Type="N">
+<Comment>
+<![CDATA['  Step 114]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,114)[XIC(EXT_V2011_ZH)XIC(EXT_CAUSTIC_AREA2_IND),XIC(EXT_PRT2_ADVANCE)][MOV(115,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="115" Type="N">
+<Comment>
+<![CDATA['  Step 115]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,115)[XIO(EXT_CAUSTIC_AREA2_IND),XIC(EXT_PRT2_ADVANCE)][MOV(116,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="116" Type="N">
+<Comment>
+<![CDATA['  Step 116]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,116)[XIO(EXT_V2011_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(117,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE),OTU(EXT_PRT2_CAUSTIC_REQ),OTU(EXT_PRT2_CAUSTIC_IND)];]]>
+</Text>
+</Rung>
+<Rung Number="117" Type="N">
+<Comment>
+<![CDATA['  Step 117]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,117)[GEQ(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWI_WATER_SP),GEQ(EXT_LIT_2002_AI,9150),XIC(EXT_LS_PRETK2_HL),XIC(EXT_PRT2_ADVANCE)][MOV(118,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="118" Type="N">
+<Comment>
+<![CDATA['  Step 118]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,118)MOV(119,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="119" Type="N">
+<Comment>
+<![CDATA['  Step 119]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,119)MOV(120,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="120" Type="N">
+<Comment>
+<![CDATA['  Step 120]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,120)MOV(121,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="121" Type="N">
+<Comment>
+<![CDATA['  Step 121]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,121)[[XIC(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2003_ZH)XIO(EXT_V2006_ZH),XIO(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2010_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(122,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="122" Type="N">
+<Comment>
+<![CDATA['  Step 122]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,122)MOV(123,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="123" Type="N">
+<Comment>
+<![CDATA['  Step 123]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,123)MOV(124,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="124" Type="N">
+<Comment>
+<![CDATA['  Step 124]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,124)MOV(125,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="125" Type="N">
+<Comment>
+<![CDATA['  Step 125]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,125)[[XIC(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(126,EXT_PRT2_STEP),[MOV(EXT_PRT2_POSTWI_AGT_SP,EXT_PRT2_SEQ_TIM_PRE),OTU(EXT_PRT2_ADVANCE)]],[RES(EXT_PRT2_SEQ_TIM_DN_CTR),LES(EXT_PRT2_WATER_TOTAL,15000)OTU(EXT_PRT2_POSTWII_SKIP)]];]]>
+</Text>
+</Rung>
+<Rung Number="126" Type="N">
+<Comment>
+<![CDATA['  Step 126]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,126)MOV(127,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="127" Type="N">
+<Comment>
+<![CDATA['  Step 127]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,127)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(128,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="128" Type="N">
+<Comment>
+<![CDATA['  Step 128]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,128)MOV(129,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="129" Type="N">
+<Comment>
+<![CDATA['  Step 129]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,129)[[XIC(EXT_PRT2_DRAIN_IND),XIC(EXT_PRT2_ADVANCE)]MOV(130,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_DRAIN_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="130" Type="N">
+<Comment>
+<![CDATA['  Step 130]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,130)[XIC(EXT_V2004_ZH),XIC(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(131,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="131" Type="N">
+<Comment>
+<![CDATA['  Step 131]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,131)MOV(132,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="132" Type="N">
+<Comment>
+<![CDATA['  Step 132]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,132)MOV(133,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="133" Type="N">
+<Comment>
+<![CDATA['  Step 133]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,133)[[EQU(EXT_PRT2_POSTWI_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(134,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)],[MOV(EXT_PRT2_POSTWI_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="134" Type="N">
+<Comment>
+<![CDATA['  Step 134]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,134)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(135,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="135" Type="N">
+<Comment>
+<![CDATA['  Step 135]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,135)MOV(136,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="136" Type="N">
+<Comment>
+<![CDATA['  Step 136]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,136)MOV(137,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="137" Type="N">
+<Comment>
+<![CDATA['  Step 137]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,137)MOV(138,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="138" Type="N">
+<Comment>
+<![CDATA['  Step 138]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,138)[[XIO(EXT_V2004_ZH)XIO(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(139,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="139" Type="N">
+<Comment>
+<![CDATA['  Step 139]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,139)MOV(140,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="140" Type="N">
+<Comment>
+<![CDATA['  Step 140]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,140)MOV(141,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="141" Type="N">
+<Comment>
+<![CDATA['  Step 141]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,141)MOV(142,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="142" Type="N">
+<Comment>
+<![CDATA['  Step 142]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,142)MOV(143,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="143" Type="N">
+<Comment>
+<![CDATA['  Step 143]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,143)MOV(144,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="144" Type="N">
+<Comment>
+<![CDATA['  Step 144]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,144)MOV(145,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="145" Type="N">
+<Comment>
+<![CDATA['  Step 145]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,145)MOV(146,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="146" Type="N">
+<Comment>
+<![CDATA['  Step 146 --Skip 2nd PostWash]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,146)MOV(147,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="147" Type="N">
+<Comment>
+<![CDATA['  Step 147\n******************************************PostWash II******************************************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,147)[XIO(EXT_PRT2_POSTWII_SKIP)[XIO(EXT_PRT2_POSTWII_AUTO)XIC(EXT_PRT2_POSTWII_START),XIC(EXT_PRT2_POSTWII_AUTO)][XIC(EXT_PRT2_POSTWII_CAUSTIC_ENABLE)GRT(EXT_PRT2_POSTWII_CAUSTIC_SP,0),XIO(EXT_PRT2_POSTWII_CAUSTIC_ENABLE)]MOV(148,EXT_PRT2_STEP),XIC(EXT_PRT2_POSTWII_SKIP)MOV(180,EXT_PRT2_STEP),MOV(0,EXT_PRT2_WATER_TOTAL)];]]>
+</Text>
+</Rung>
+<Rung Number="148" Type="N">
+<Comment>
+<![CDATA['  Step 148]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,148)[XIC(EXT_PRT2_WATER_IND)[MOV(149,EXT_PRT2_STEP),MOV(0,EXT_CAUSTIC_TOTAL_AREA2)],OTL(EXT_PRT2_WATER_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="149" Type="N">
+<Comment>
+<![CDATA['  Step 149]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,149)[XIC(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2003_ZH),XIC(EXT_V2006_ZH),GEQ(EXT_FIT2_2000_AI,200)],XIO(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2010_ZH),GEQ(EXT_FIT_120_AI,200)],XIC(EXT_PRT2_ADVANCE)][MOV(150,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="150" Type="N">
+<Comment>
+<![CDATA['  Step 150]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,150)[XIC(EXT_PRT2_POSTWII_CAUSTIC_ENABLE)[GEQ(EXT_PRT2_WATER_TOTAL,12000),XIC(EXT_PRT2_ADVANCE),XIC(EXT_PRT2_CAUSTIC_REQ)][XIC(EXT_PRT2_CAUSTIC_IND)[MOV(151,EXT_PRT2_STEP),MOV(EXT_PRT2_POSTWII_CAUSTIC_SP,EXT_CAUSTIC_TOT_SP)],[OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_CAUSTIC_REQ)]],XIO(EXT_PRT2_POSTWII_CAUSTIC_ENABLE)MOV(154,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="151" Type="N">
+<Comment>
+<![CDATA['  Step 152]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,151)[XIC(EXT_V2011_ZH)XIC(EXT_CAUSTIC_AREA2_IND),XIC(EXT_PRT2_ADVANCE)][MOV(152,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="152" Type="N">
+<Comment>
+<![CDATA['  Step 153]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,152)[XIO(EXT_CAUSTIC_AREA2_IND),XIC(EXT_PRT2_ADVANCE)][MOV(153,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="153" Type="N">
+<Comment>
+<![CDATA['  Step 153]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,153)[XIO(EXT_V2011_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(154,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE),OTU(EXT_PRT2_CAUSTIC_REQ),OTU(EXT_PRT2_CAUSTIC_IND)];]]>
+</Text>
+</Rung>
+<Rung Number="154" Type="N">
+<Comment>
+<![CDATA['  Step 154]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,154)[GEQ(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWII_WATER_SP),GEQ(EXT_LIT_2002_AI,9150),XIC(EXT_LS_PRETK2_HL),XIC(EXT_PRT2_ADVANCE)][MOV(155,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="155" Type="N">
+<Comment>
+<![CDATA['  Step 155]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,155)MOV(156,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="156" Type="N">
+<Comment>
+<![CDATA['  Step 156]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,156)MOV(157,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="157" Type="N">
+<Comment>
+<![CDATA['  Step 157]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,157)MOV(158,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="158" Type="N">
+<Comment>
+<![CDATA['  Step 158]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,158)[[XIC(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2003_ZH)XIO(EXT_V2006_ZH),XIO(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2010_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(159,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="159" Type="N">
+<Comment>
+<![CDATA['  Step 159]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,159)MOV(160,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="160" Type="N">
+<Comment>
+<![CDATA['  Step 160]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,160)MOV(161,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="161" Type="N">
+<Comment>
+<![CDATA['  Step 161]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,161)MOV(162,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="162" Type="N">
+<Comment>
+<![CDATA['  Step 162]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,162)[[XIC(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(163,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)],[MOV(EXT_PRT2_POSTWII_AGT_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="163" Type="N">
+<Comment>
+<![CDATA['  Step 163]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,163)MOV(164,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="164" Type="N">
+<Comment>
+<![CDATA['  Step 164]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,164)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(165,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="165" Type="N">
+<Comment>
+<![CDATA['  Step 165]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,165)MOV(166,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="166" Type="N">
+<Comment>
+<![CDATA['  Step 166]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,166)[[XIC(EXT_PRT2_DRAIN_IND),XIC(EXT_PRT2_ADVANCE)]MOV(167,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_DRAIN_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="167" Type="N">
+<Comment>
+<![CDATA['  Step 167]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,167)[XIC(EXT_V2004_ZH),XIC(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(168,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="168" Type="N">
+<Comment>
+<![CDATA['  Step 168]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,168)MOV(169,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="169" Type="N">
+<Comment>
+<![CDATA['  Step 169]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,169)MOV(170,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="170" Type="N">
+<Comment>
+<![CDATA['  Step 170]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,170)[[EQU(EXT_PRT2_POSTWII_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(171,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)],[MOV(EXT_PRT2_POSTWII_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="171" Type="N">
+<Comment>
+<![CDATA['  Step 171]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,171)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(172,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="172" Type="N">
+<Comment>
+<![CDATA['  Step 172]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,172)MOV(173,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="173" Type="N">
+<Comment>
+<![CDATA['  Step 173]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,173)MOV(174,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="174" Type="N">
+<Comment>
+<![CDATA['  Step 174]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,174)MOV(175,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="175" Type="N">
+<Comment>
+<![CDATA['  Step 175]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,175)[[XIO(EXT_V2004_ZH)XIO(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(176,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="176" Type="N">
+<Comment>
+<![CDATA['  Step 176]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,176)MOV(177,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="177" Type="N">
+<Comment>
+<![CDATA['  Step 177]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,177)MOV(178,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="178" Type="N">
+<Comment>
+<![CDATA['  Step 178]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,178)MOV(179,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="179" Type="N">
+<Comment>
+<![CDATA['  Step 179]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,179)MOV(180,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="180" Type="N">
+<Comment>
+<![CDATA['  Step 180 \n**********************PostWash III**********************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,180)[XIO(EXT_PRT2_POSTWIII_SKIP)[XIO(EXT_PRT2_POSTWIII_AUTO)XIC(EXT_PRT2_POSTWIII_START),XIC(EXT_PRT2_POSTWIII_AUTO)][XIC(EXT_PRT2_POSTWIII_CAUSTIC_ENABLE)GRT(EXT_PRT2_POSTWIII_CAUSTIC_SP,0),XIO(EXT_PRT2_POSTWIII_CAUSTIC_ENABLE)]MOV(181,EXT_PRT2_STEP),XIC(EXT_PRT2_POSTWIII_SKIP)MOV(200,EXT_PRT2_STEP),MOV(0,EXT_PRT2_WATER_TOTAL)];]]>
+</Text>
+</Rung>
+<Rung Number="181" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,181)[XIC(EXT_PRT2_WATER_IND)[MOV(182,EXT_PRT2_STEP),MOV(0,EXT_CAUSTIC_TOTAL_AREA2)],OTL(EXT_PRT2_WATER_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="182" Type="N">
+<Comment>
+<![CDATA['  Step 182]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,182)[XIC(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2003_ZH),XIC(EXT_V2006_ZH),GEQ(EXT_FIT2_2000_AI,200)],XIO(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2010_ZH),GEQ(EXT_FIT_120_AI,200)],XIC(EXT_PRT2_ADVANCE)][MOV(183,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="183" Type="N">
+<Comment>
+<![CDATA['  Step 183]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,183)[XIC(EXT_PRT2_POSTWIII_CAUSTIC_ENABLE)[GEQ(EXT_PRT2_WATER_TOTAL,1000),XIC(EXT_PRT2_ADVANCE),XIC(EXT_PRT2_CAUSTIC_REQ)][XIC(EXT_PRT2_CAUSTIC_IND)[MOV(184,EXT_PRT2_STEP),MOV(EXT_PRT2_POSTWIII_CAUSTIC_SP,EXT_CAUSTIC_TOT_SP)],[OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_CAUSTIC_REQ)]],XIO(EXT_PRT2_POSTWIII_CAUSTIC_ENABLE)MOV(187,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="184" Type="N">
+<Comment>
+<![CDATA['  Step 184]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,184)[XIC(EXT_V2011_ZH)XIC(EXT_CAUSTIC_AREA2_IND),XIC(EXT_PRT2_ADVANCE)][MOV(185,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="185" Type="N">
+<Comment>
+<![CDATA['  Step 185]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,185)[XIO(EXT_CAUSTIC_AREA2_IND),XIC(EXT_PRT2_ADVANCE),GEQ(EXT_LIT_2002_AI,9150),GEQ(EXT_PRT2_WATER_TOTAL,25000),XIC(EXT_LS_PRETK2_HL)][MOV(186,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="186" Type="N">
+<Comment>
+<![CDATA['  Step 186]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,186)[XIO(EXT_V2011_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(187,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE),OTU(EXT_PRT2_CAUSTIC_REQ),OTU(EXT_PRT2_CAUSTIC_IND)];]]>
+</Text>
+</Rung>
+<Rung Number="187" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,187)[GEQ(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWIII_WATER_SP),GEQ(EXT_LIT_2002_AI,9150),XIC(EXT_LS_PRETK2_HL),XIC(EXT_PRT2_ADVANCE)][MOV(188,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="188" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,188)[[XIC(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2003_ZH)XIO(EXT_V2006_ZH),XIO(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2010_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(189,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="189" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,189)MOV(190,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="190" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,190)[[XIC(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(191,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)],[MOV(EXT_PRT2_POSTWIII_AGT_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="191" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,191)MOV(192,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="192" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,192)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(193,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="193" Type="N">
+<Comment>
+<![CDATA['  Step 193]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,193)[[XIC(EXT_PRT2_DRAIN_IND),XIC(EXT_PRT2_ADVANCE)]MOV(194,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_DRAIN_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="194" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,194)[XIC(EXT_V2004_ZH),XIC(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)][MOV(195,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="195" Type="N">
+<Comment>
+<![CDATA['  Step 195]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,195)[[EQU(EXT_PRT2_POSTWIII_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(196,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)],[MOV(EXT_PRT2_POSTWIII_DRAIN_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="196" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,196)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(197,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="197" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,197)MOV(198,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="198" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,198)[[XIO(EXT_V2004_ZH)XIO(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(199,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="199" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,199)MOV(200,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="200" Type="N">
+<Comment>
+<![CDATA['  Step 200\n**********************PostWash 4**********************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,200)[XIO(EXT_PRT2_POSTW4_SKIP)[XIO(EXT_PRT2_POSTW4_AUTO)XIC(EXT_PRT2_POSTW4_START),XIC(EXT_PRT2_POSTW4_AUTO)]MOV(201,EXT_PRT2_STEP),XIC(EXT_PRT2_POSTW4_SKIP)MOV(220,EXT_PRT2_STEP),MOV(0,EXT_PRT2_WATER_TOTAL)];]]>
+</Text>
+</Rung>
+<Rung Number="201" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,201)[XIC(EXT_PRT2_WATER_IND)MOV(202,EXT_PRT2_STEP),OTL(EXT_PRT2_WATER_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="202" Type="N">
+<Comment>
+<![CDATA['  Step 202]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,202)[XIC(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2003_ZH),XIC(EXT_V2006_ZH),GEQ(EXT_FIT2_2000_AI,200)],XIO(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V2010_ZH),GEQ(EXT_FIT_120_AI,200)],XIC(EXT_PRT2_ADVANCE)][MOV(203,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="203" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,203)MOV(204,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="204" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,204)MOV(205,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="205" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,205)MOV(206,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="206" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,206)MOV(207,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="207" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,207)[GEQ(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTW4_WATER_SP),GEQ(EXT_LIT_2002_AI,9150),XIC(EXT_LS_PRETK2_HL),XIC(EXT_PRT2_ADVANCE)][MOV(208,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="208" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,208)[[XIC(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2003_ZH)XIO(EXT_V2006_ZH),XIO(EXT_PRT_WASH_FEED_WATER)XIO(EXT_V2010_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(209,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="209" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,209)MOV(210,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="210" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,210)[[XIC(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)][XIO(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(211,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)],[MOV(EXT_PRT2_POSTW4_AGT_SP,EXT_PRT2_SEQ_TIM_PRE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="211" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,211)MOV(212,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="212" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,212)[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(213,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="213" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,213)[[XIC(EXT_PRT2_DRAIN_IND),XIC(EXT_PRT2_ADVANCE)]MOV(214,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),OTL(EXT_PRT2_DRAIN_REQ)];]]>
+</Text>
+</Rung>
+<Rung Number="214" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,214)[XIC(EXT_V2004_ZH),XIC(EXT_V2005_ZH),LEQ(EXT_LIT_2002_AI,7500),XIC(EXT_PRT2_ADVANCE)][MOV(215,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="215" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,215)MOV(216,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="216" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,216)[LEQ(EXT_LIT_2002_AI,6500),XIC(EXT_PRT2_ADVANCE)][MOV(217,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="217" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,217)MOV(218,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="218" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,218)[[XIO(EXT_V2004_ZH)XIO(EXT_V2005_ZH),XIC(EXT_PRT2_ADVANCE)]MOV(219,EXT_PRT2_STEP)OTU(EXT_PRT2_ADVANCE),[OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="219" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,219)MOV(220,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="220" Type="N">
+<Comment>
+<![CDATA['  Step 220\n**********************************Pretreatment: Rind  Drop to Extractor**********************************]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,220)[XIO(EXT_PRT2_DROP_EXT_SKIP)XIO(EXT_2_HI_LVL)XIO(EXT_2FILL1STRT)XIO(EXT_SV30_20S)XIC(EXT_SV30_20D)XIO(EXT_EFF_TK1_HI_LEVEL)XIO(EXT_EFF_DAF_TROUBLE_TO_PRT_DO)XIC(EXT_DELAY_AFTER_TK1_NOT)XIO(EXT_PRT2_DROP_EXT_AUTO)XIC(EXT_T0352_TMR.DN)XIC(EXT_PRT2_DROP_EXT_START)MOV(221,EXT_PRT2_STEP),XIC(EXT_PRT2_DROP_EXT_SKIP)MOV(300,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="221" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,221)MOV(222,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="222" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,222)[XIC(EXT_SV30_20D)XIC(EXT_M2000_MN),XIC(EXT_PRT2_ADVANCE)][MOV(223,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="223" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,223)MOV(224,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="224" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,224)TON(EXT_T0403_TMR,180000,0)[XIC(EXT_V2007_ZH)XIC(EXT_T0403_TMR.DN),XIC(EXT_PRT2_ADVANCE)][MOV(225,EXT_PRT2_STEP),OTU(EXT_PRT2_ADVANCE)];]]>
+</Text>
+</Rung>
+<Rung Number="225" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,225)MOV(226,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="226" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,226)[TON(EXT_T0404_TMR,360000,0),XIC(EXT_T0404_TMR.DN)MOV(227,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="227" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,227)[TON(EXT_T0410_TMR,30000,0),XIC(EXT_T0410_TMR.DN)MOV(228,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="228" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,228)[TON(EXT_T0413_TMR,15000,0),XIC(EXT_T0413_TMR.DN)MOV(229,EXT_PRT2_STEP)];]]>
+</Text>
+</Rung>
+<Rung Number="229" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,229)MOV(230,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="230" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[[EQU(EXT_PRT2_STEP,229)XIC(EXT_PRT2_DROP_EXT_SKIP),EQU(EXT_PRT2_STEP,230)XIC(EXT_PRT2_DROP_EXT_STOP)]MOV(231,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="231" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,231)XIO(EXT_V2007_ZH)MOV(232,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="232" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,232)MOV(233,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="233" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,233)MOV(234,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="234" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,234)MOV(235,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="235" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,235)MOV(236,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="236" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,236)MOV(237,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="237" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,237)MOV(238,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="238" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,238)MOV(239,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="239" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,239)MOV(240,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="240" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,240)MOV(241,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="241" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,241)MOV(242,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="242" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,242)MOV(243,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="243" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,243)MOV(244,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="244" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,244)MOV(245,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="245" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,245)MOV(246,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="246" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,246)[XIO(EXT_PRT2_HBLV_ENABLE)MOV(247,EXT_PRT2_STEP),XIC(EXT_PRT2_HBLV_ENABLE)[TON(EXT_T0295_TMR,15000,0),XIC(EXT_T0295_TMR.DN)MOV(247,EXT_PRT2_STEP)]];]]>
+</Text>
+</Rung>
+<Rung Number="247" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,247)MOV(248,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="248" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,248)[XIO(EXT_PRT2_HBLV_ENABLE)MOV(249,EXT_PRT2_STEP),XIC(EXT_PRT2_HBLV_ENABLE)[OTU(EXT_PRT2_HBLV_ENABLE),MOV(249,EXT_PRT2_STEP)]];]]>
+</Text>
+</Rung>
+<Rung Number="249" Type="N">
+<Comment>
+<![CDATA['  Step 250\nLast Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,249)MOV(250,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="250" Type="N">
+<Comment>
+<![CDATA['  Step]]>
+</Comment>
+<Text>
+<![CDATA[EQU(EXT_PRT2_STEP,250)MOV(300,EXT_PRT2_STEP);]]>
+</Text>
+</Rung>
+<Rung Number="251" Type="N">
+<Comment>
+<![CDATA['  Reset PRT Timers]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT2_STEP,0)LEQ(EXT_PRT2_STEP,4)OTE(EXT_PRT2_TIM_RESET);]]>
+</Text>
+</Rung>
+<Rung Number="252" Type="N">
+<Comment>
+<![CDATA['   ******************************Skip Sequence Management******************************]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,0)LES(EXT_PRT2_STEP,17)XIC(EXT_PRT2_DROP_SKIP)[XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT2_DRAIN_REQ)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT2_ACID_REQ)XIO(EXT_PRT2_ACID_IND)MOV(17,EXT_PRT2_STEP),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),MOV(0,EXT_PRT2_WATER_TOTAL)]];]]>
+</Text>
+</Rung>
+<Rung Number="253" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,17)LES(EXT_PRT2_STEP,44)XIC(EXT_PRT2_PREWASH_SKIP)[XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT2_DRAIN_REQ)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT2_ACID_REQ)XIO(EXT_PRT2_ACID_IND)MOV(44,EXT_PRT2_STEP),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),MOV(0,EXT_PRT2_WATER_TOTAL)]];]]>
+</Text>
+</Rung>
+<Rung Number="254" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,45)LES(EXT_PRT2_STEP,109)XIC(EXT_PRT2_ACID_SKIP)[XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT2_DRAIN_REQ)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT2_ACID_REQ)XIO(EXT_PRT2_ACID_IND)XIO(EXT_ACID_PRT2_DONE)MOV(110,EXT_PRT2_STEP),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),OTU(EXT_ACID_PRT2_DONE),MOV(0,EXT_PRT2_WATER_TOTAL)]];]]>
+</Text>
+</Rung>
+<Rung Number="255" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,110)LES(EXT_PRT2_STEP,146)XIC(EXT_PRT2_POSTWI_SKIP)[XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT2_DRAIN_REQ)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT2_ACID_REQ)XIO(EXT_PRT2_ACID_IND)XIO(EXT_PRT2_CAUSTIC_REQ)XIO(EXT_PRT2_CAUSTIC_IND)MOV(147,EXT_PRT2_STEP),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),XIC(EXT_PRT2_CAUSTIC_IND)[OTU(EXT_CAUSTIC_AREA2_IND),MOV(EXT_ADDR_0,EXT_CAUSTIC_TOT_SP),OTU(EXT_CAUSTIC_IND)]],[OTU(EXT_PRT2_CAUSTIC_REQ),OTU(EXT_PRT2_CAUSTIC_IND),MOV(0,EXT_PRT2_WATER_TOTAL)]];]]>
+</Text>
+</Rung>
+<Rung Number="256" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,147)LES(EXT_PRT2_STEP,179)XIC(EXT_PRT2_POSTWII_SKIP)[XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT2_DRAIN_REQ)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT2_ACID_REQ)XIO(EXT_PRT2_ACID_IND)XIO(EXT_PRT2_CAUSTIC_REQ)XIO(EXT_PRT2_CAUSTIC_IND)MOV(180,EXT_PRT2_STEP),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),XIC(EXT_PRT2_CAUSTIC_IND)[OTU(EXT_CAUSTIC_AREA2_IND),MOV(EXT_ADDR_0,EXT_CAUSTIC_TOT_SP),OTU(EXT_CAUSTIC_IND)]],[OTU(EXT_PRT2_CAUSTIC_REQ),OTU(EXT_PRT2_CAUSTIC_IND),MOV(0,EXT_PRT2_WATER_TOTAL)]];]]>
+</Text>
+</Rung>
+<Rung Number="257" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,180)LES(EXT_PRT2_STEP,199)XIC(EXT_PRT2_POSTWIII_SKIP)[XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT2_DRAIN_REQ)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT2_ACID_REQ)XIO(EXT_PRT2_ACID_IND)XIO(EXT_PRT2_CAUSTIC_REQ)XIO(EXT_PRT2_CAUSTIC_IND)MOV(200,EXT_PRT2_STEP),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),XIC(EXT_PRT2_CAUSTIC_IND)[OTU(EXT_CAUSTIC_AREA2_IND),MOV(EXT_ADDR_0,EXT_CAUSTIC_TOT_SP),OTU(EXT_CAUSTIC_IND)]],[OTU(EXT_PRT2_CAUSTIC_REQ),OTU(EXT_PRT2_CAUSTIC_IND),MOV(0,EXT_PRT2_WATER_TOTAL)]];]]>
+</Text>
+</Rung>
+<Rung Number="258" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,200)LES(EXT_PRT2_STEP,219)XIC(EXT_PRT2_POSTW4_SKIP)[XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT2_DRAIN_REQ)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT2_ACID_REQ)XIO(EXT_PRT2_ACID_IND)XIO(EXT_PRT2_CAUSTIC_REQ)XIO(EXT_PRT2_CAUSTIC_IND)MOV(220,EXT_PRT2_STEP),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),XIC(EXT_PRT2_CAUSTIC_IND)[OTU(EXT_CAUSTIC_AREA2_IND),MOV(EXT_ADDR_0,EXT_CAUSTIC_TOT_SP),OTU(EXT_CAUSTIC_IND)]],[OTU(EXT_PRT2_CAUSTIC_REQ),OTU(EXT_PRT2_CAUSTIC_IND),MOV(0,EXT_PRT2_WATER_TOTAL)]];]]>
+</Text>
+</Rung>
+<Rung Number="259" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,220)LES(EXT_PRT2_STEP,250)XIC(EXT_PRT2_DROP_EXT_SKIP)[XIO(EXT_PRT2_WATER_REQ)XIO(EXT_PRT2_WATER_IND)XIO(EXT_PRT2_DRAIN_REQ)XIO(EXT_PRT2_DRAIN_IND)XIO(EXT_PRT2_ACID_REQ)XIO(EXT_PRT2_ACID_IND)MOV(300,EXT_PRT2_STEP),[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),MOV(0,EXT_PRT2_WATER_TOTAL)]];]]>
+</Text>
+</Rung>
+<Rung Number="260" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[EQU(EXT_PRT2_STEP,0),EQU(EXT_PRT2_STEP,300)][[OTU(EXT_PRT2_WATER_REQ),OTU(EXT_PRT2_WATER_IND),OTU(EXT_PRT2_DRAIN_REQ),OTU(EXT_PRT2_DRAIN_IND),OTU(EXT_PRT2_ACID_REQ),OTU(EXT_PRT2_ACID_IND),OTU(EXT_ACID_PRT2_DONE),XIC(EXT_PRT2_CAUSTIC_IND)[OTU(EXT_CAUSTIC_AREA2_IND),MOV(EXT_ADDR_0,EXT_CAUSTIC_TOT_SP),OTU(EXT_CAUSTIC_IND)]],[OTU(EXT_PRT2_CAUSTIC_REQ),OTU(EXT_PRT2_CAUSTIC_IND)]];]]>
+</Text>
+</Rung>
+<Rung Number="261" Type="N">
+<Comment>
+<![CDATA['  Advance Request From HMI]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_ADVANCE_REQ)[OTL(EXT_PRT2_ADVANCE_ACT_TIM),EQU(EXT_PRT2_ADVANCE_TIM_TMR.DN,100)[OTL(EXT_PRT2_ADVANCE),RES(EXT_PRT2_SEQ_TIM_DN_CTR)]];]]>
+</Text>
+</Rung>
+<Rung Number="262" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_ADVANCE_ACT_TIM)[TON(EXT_PRT1_ADVANCE_TIM_TMR,10000,0),XIC(EXT_PRT2_ADVANCE_TIM_TMR.DN)[OTU(EXT_PRT2_ADVANCE_ACT_TIM),OTU(EXT_PRT2_ADVANCE_REQ)]];]]>
+</Text>
+</Rung>
+<Rung Number="263" Type="N">
+<Comment>
+<![CDATA['  Sequence General Timer]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_SEQ_TIM_PRE,0)OTE(EXT_PRT2_SEQ_TIM_EN);]]>
+</Text>
+</Rung>
+<Rung Number="264" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_SEQ_TIM_EN)XIO(EXT_PRT2_1M_TIME_TMR.DN)TON(EXT_PRT2_1M_TIME_TMR,60000,0);]]>
+</Text>
+</Rung>
+<Rung Number="265" Type="N">
+<Comment>
+<![CDATA['  Test Retentive Timer - To Pause Step Time During PRT Drain While TK1 HI Level\n---  NOT USED  ---]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_PRT2_SEQ_TIM_EN)XIO(EXT_PRT2_1M_TIME_RETENTIVE_TMR.DN)XIO(EXT_PRT_DRAIN_TK1)RTO(EXT_PRT2_1M_TIME_RETENTIVE_TMR,60000,0),[XIC(EXT_PRT2_1M_TIME_RETENTIVE_TMR.DN),XIO(EXT_PRT2_SEQ_TIM_EN)]RES(???)];]]>
+</Text>
+</Rung>
+<Rung Number="266" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_PRT2_SEQ_TIM_EN)XIC(EXT_PRT2_1M_TIME_TMR.DN)XIO(EXT_PRT_2_DRAIN_COUNTER)XIO(EXT_STOP_PRT2_DRAIN_TIME)XIO(EXT_EFF_DAF_TROUBLE_TO_PRT_DO)ONS(OneShots[62])CTU(EXT_PRT2_SEQ_TIM_DN_CTR,EXT_PRT2_SEQ_TIM_PRE,0),XIC(P_Off)RES(EXT_PRT2_SEQ_TIM_DN_CTR)];]]>
+</Text>
+</Rung>
+<Rung Number="267" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_SEQ_TIM_DN_CTR.DN)MOV(0,EXT_PRT2_SEQ_TIM_PRE);]]>
+</Text>
+</Rung>
+<Rung Number="268" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_SEQ_TIM_EN)MOV(EXT_PRT2_SEQ_TIM_DN_CTR.DN,EXT_PRT2_TIM_RMG);]]>
+</Text>
+</Rung>
+<Rung Number="269" Type="N">
+<Comment>
+<![CDATA['  Water Totalizer]]>
+</Comment>
+<Text>
+<![CDATA[[LES(EXT_PRT2_STEP,45),GRT(EXT_PRT2_STEP,110)]XIC(EXT_PRT_WASH_FEED_WATER)XIC(EXT_PRT2_WATER_IND)[XIC(P_1s)ADD(EXT_PRT2_WATER_TOTAL,EXT_FIT2_2000_AI,EXT_PRT2_WATER_TOTAL),GRT(EXT_PRT2_STEP,17)LES(EXT_PRT2_STEP,44)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_PREWASH_WTOT),GRT(EXT_PRT2_STEP,110)LES(EXT_PRT2_STEP,146)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWI_WTOT),GRT(EXT_PRT2_STEP,147)LES(EXT_PRT2_STEP,179)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWII_WTOT),GRT(EXT_PRT2_STEP,180)LES(EXT_PRT2_STEP,199)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWIII_WTOT),GRT(EXT_PRT2_STEP,200)LES(EXT_PRT2_STEP,219)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTW4_WTOT)];]]>
+</Text>
+</Rung>
+<Rung Number="270" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[LES(EXT_PRT2_STEP,45),GRT(EXT_PRT2_STEP,110)]XIO(EXT_PRT_WASH_FEED_WATER)XIC(EXT_PRT2_WATER_IND)[XIC(P_1s)ADD(EXT_PRT2_WATER_TOTAL,EXT_PRT_ACID_WATER_SCL,EXT_PRT2_WATER_TOTAL),GRT(EXT_PRT2_STEP,17)LES(EXT_PRT2_STEP,44)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_PREWASH_WTOT),GRT(EXT_PRT2_STEP,110)LES(EXT_PRT2_STEP,146)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWI_WTOT),GRT(EXT_PRT2_STEP,147)LES(EXT_PRT2_STEP,179)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWII_WTOT),GRT(EXT_PRT2_STEP,180)LES(EXT_PRT2_STEP,199)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTWIII_WTOT),GRT(EXT_PRT2_STEP,200)LES(EXT_PRT2_STEP,219)MOV(EXT_PRT2_WATER_TOTAL,EXT_PRT2_POSTW4_WTOT)];]]>
+</Text>
+</Rung>
+<Rung Number="271" Type="N">
+<Comment>
+<![CDATA['  Caustic Totalizer]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_CAUSTIC_IND)[GRT(EXT_PRT2_STEP,114)LES(EXT_PRT2_STEP,117)MOV(EXT_CAUSTIC_TOTAL_AREA2,EXT_PRT2_POSTWI_CAUSTIC_TOTAL),GRT(EXT_PRT2_STEP,151)LES(EXT_PRT2_STEP,154)MOV(EXT_CAUSTIC_TOTAL_AREA2,EXT_PRT2_POSTWII_CAUSTIC_TOTAL),GRT(EXT_PRT2_STEP,184)LES(EXT_PRT2_STEP,187)MOV(EXT_CAUSTIC_TOTAL_AREA2,EXT_PRT2_POSTWIII_CAUSTIC_TOTAL)];]]>
+</Text>
+</Rung>
+<Rung Number="272" Type="N">
+<Comment>
+<![CDATA['  Acid Total]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_ACID_IND)GRT(EXT_PRT2_STEP,45)LES(EXT_PRT2_STEP,109)MOV(EXT_ACID_TOT_CALC,EXT_PRT2_AD_TOTAL);]]>
+</Text>
+</Rung>
+<Rung Number="273" Type="N">
+<Comment>
+<![CDATA['  Reset Totals]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_PRT2_STEP,1)[MOV(0,EXT_PRT2_AD_TOTAL),MOV(0,EXT_PRT2_WATER_TOTAL),MOV(0,EXT_PRT2_ACID_WTOT),MOV(0,EXT_PRT2_PREWASH_WTOT),MOV(0,EXT_PRT2_POSTWI_WTOT),MOV(0,EXT_PRT2_POSTWII_WTOT),MOV(0,EXT_PRT2_POSTWIII_WTOT),MOV(0,EXT_PRT2_POSTW4_WTOT),MOV(0,EXT_PRT2_POSTWI_CAUSTIC_TOTAL),MOV(0,EXT_PRT2_POSTWII_CAUSTIC_TOTAL),MOV(0,EXT_PRT2_POSTWIII_CAUSTIC_TOTAL)];]]>
+</Text>
+</Rung>
+<Rung Number="274" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_LIT_2001_AI,8700)[TON(EXT_LT_2001_ALML_TIM_TMR,20000,0),XIC(EXT_LT_2001_ALML_TIM_TMR.DN)OTE(EXT_RHT2_HIGH_LEVEL)];]]>
+</Text>
+</Rung>
+<Rung Number="275" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_RHT_2_SELECTED)XIC(EXT_RHT2_HIGH_LEVEL)[GRT(EXT_POWERPACK_M1,100),GRT(EXT_POWERPACK_M2,100)]OTE(EXT_RHT_2_ALARM_WHILE);]]>
+</Text>
+</Rung>
+<Rung Number="276" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_LIT_2001_AI,EXT_LIT_2001_HIGH_SP)[TON(EXT_LT_2001_ALMH_TIM_TMR,10000,0),XIC(EXT_LT_2001_ALMH_TIM_TMR.DN)OTE(EXT_LT_2001_ALMH)];]]>
+</Text>
+</Rung>
+<Rung Number="277" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GRT(EXT_LIT_2002_AI,EXT_LIT_2002_HIGH_SP)[TON(EXT_LT_2002_ALMH_TIM_TMR,10000,0),[XIC(EXT_LT_2002_ALMH_TIM_TMR.DN),XIC(EXT_LS_PRETK2_HL)]OTE(EXT_LT_2002_ALMH)];]]>
+</Text>
+</Rung>
+<Rung Number="278" Type="N">
+<Comment>
+<![CDATA['  Level Alarms]]>
+</Comment>
+<Text>
+<![CDATA[NOP();]]>
+</Text>
+</Rung>
+<Rung Number="279" Type="N">
+<Comment>
+<![CDATA['  Reset Start Commands]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_DROP_START)OTU(EXT_PRT2_DROP_START);]]>
+</Text>
+</Rung>
+<Rung Number="280" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_PREWASH_START)OTU(EXT_PRT2_PREWASH_START);]]>
+</Text>
+</Rung>
+<Rung Number="281" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_ACID_START)OTU(EXT_PRT2_ACID_START);]]>
+</Text>
+</Rung>
+<Rung Number="282" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_POSTWI_START)OTU(EXT_PRT2_POSTWI_START);]]>
+</Text>
+</Rung>
+<Rung Number="283" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_POSTWII_START)OTU(EXT_PRT2_POSTWII_START);]]>
+</Text>
+</Rung>
+<Rung Number="284" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_POSTWIII_START)OTU(EXT_PRT2_POSTWIII_START);]]>
+</Text>
+</Rung>
+<Rung Number="285" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_POSTW4_START)OTU(EXT_PRT2_POSTW4_START);]]>
+</Text>
+</Rung>
+<Rung Number="286" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_DROP_EXT_START)OTU(EXT_PRT2_DROP_EXT_START);]]>
+</Text>
+</Rung>
+<Rung Number="287" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_PRT2_DROP_EXT_STOP)OTU(EXT_PRT2_DROP_EXT_STOP);]]>
+</Text>
+</Rung>
+<Rung Number="288" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_M2000_AUTO_CMD)XIO(EXT_M2000_MANUAL),XIC(EXT_M2000_MANUAL)XIC(EXT_M2000_HMI_CMD)]OTE(EXT_M2000_MC);]]>
+</Text>
+</Rung>
+<Rung Number="289" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_ADDR_3203.00)[XIO(EXT_M2000_MN)TON(EXT_T3086_TMR,10000,0),XIC(EXT_T3086_TMR.DN)OTE(EXT_M2000_RUNFL)];]]>
+</Text>
+</Rung>
+<Rung Number="290" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2001_AUTO_CMD)XIO(EXT_V2001_MANUAL),XIC(EXT_V2001_MANUAL)XIC(EXT_V2001_HMI_CMD)]OTE(EXT_V2001_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="291" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIO(EXT_CHOP_TO_PRT)[XIC(EXT_V2002_AUTO_CMD)XIO(EXT_V2002_MANUAL),XIC(EXT_V2002_MANUAL)XIC(EXT_V2002_HMI_CMD)LEQ(EXT_LIT_2002_AI,4500)]XIO(EXT_LT_2002_ALMH)LEQ(EXT_PRT2_STEP,17),XIC(EXT_V2002_MANUAL)XIC(EXT_V2002_HMI_CMD)XIC(EXT_CHOP_TO_PRT)]XIO(EXT_V2007_ZC)XIC(EXT_V2007_ZL)OTE(EXT_V2002_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="292" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2003_AUTO_CMD)XIO(EXT_V2003_MANUAL)XIC(EXT_PRT2_WATER_IND),XIC(EXT_V2003_MANUAL)XIC(EXT_V2003_HMI_CMD)]XIO(EXT_LT_2002_ALMH)XIO(EXT_LS_PRETK2_HL)OTE(EXT_V2003_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="293" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2004_AUTO_CMD)XIO(EXT_V2004_MANUAL),XIC(EXT_V2004_MANUAL)XIC(EXT_V2004_HMI_CMD)]OTE(EXT_V2004_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="294" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2005_AUTO_CMD)XIO(EXT_V2005_MANUAL),XIC(EXT_V2005_MANUAL)XIC(EXT_V2005_HMI_CMD)]OTE(EXT_V2005_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="295" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_V2006_AUTO_CMD)XIO(EXT_V2006_MANUAL)[XIC(EXT_PRT2_WATER_IND),EQU(EXT_PRT2_STEP,226)LEQ(EXT_LIT_2002_AI,3000)]XIC(EXT_V2006_MANUAL)XIC(EXT_V2006_HMI_CMD)[[XIO(EXT_T3087_TMR.DN),XIO(EXT_LT_2002_ALMH)XIO(EXT_LS_PRETK2_HL)]OTE(EXT_V2006_ZC),GEQ(EXT_PRT2_STEP,224)LEQ(EXT_PRT2_STEP,230)TON(EXT_T3087_TMR,120000,0)];]]>
+</Text>
+</Rung>
+<Rung Number="296" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2007_AUTO_CMD)XIO(EXT_V2007_MANUAL),XIC(EXT_V2007_MANUAL)XIC(EXT_V2007_HMI_CMD)]XIO(EXT_2FILL1STRT)[XIO(EXT_PRT2_HBLV_ENABLE)XIC(EXT_SV30_20D)XIO(EXT_EXT2_DRAIN_VALVE_OVERRIDE),XIC(EXT_PRT2_HBLV_ENABLE)XIO(EXT_SV30_20D)XIC(EXT_EXT2_DRAIN_VALVE_OVERRIDE)]XIO(EXT_SV30_20S)XIC(EXT_EXT2_CONE)XIO(EXT_2_HIGH_LEVEL)XIO(EXT_2HGHLVL)XIO(EXT_EFF_TK1_HI_LEVEL)XIO(EXT_EFF_DAF_TROUBLE_TO_PRT_DO)XIC(EXT_DELAY_AFTER_TK1_NOT)OTE(EXT_V2007_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="297" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_V2008_AUTO_CMD)XIO(EXT_PRT2_V2008_TON_TMR.DN)XIO(EXT_V2008_MANUAL)XIC(EXT_V2008_MANUAL)XIC(EXT_V2008_HMI_CMD)[[XIO(EXT_T3039_TMR.DN),XIO(EXT_LT_2001_ALMH)]OTE(EXT_V2008_ZC),TON(EXT_T3039_TMR,120000,0)];]]>
+</Text>
+</Rung>
+<Rung Number="298" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2010_AUTO_CMD)XIO(EXT_V2010_MANUAL),XIC(EXT_V2010_MANUAL)XIC(EXT_V2010_HMI_CMD)]XIO(EXT_LT_2002_ALMH)XIO(EXT_LS_PRETK2_HL)OTE(EXT_V2010_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="299" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2011_AUTO_CMD)XIO(EXT_V2011_MANUAL),XIC(EXT_V2011_MANUAL)XIC(EXT_V2011_HMI_CMD)]XIO(EXT_V1011_ZH)XIO(EXT_V3011_ZH)XIO(EXT_V4011_ZH)XIO(EXT_V2007_ZH)XIO(EXT_V110_ZH)XIO(EXT_V115_ZH)XIO(EXT_V105_ZH)OTE(EXT_V2011_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="300" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2012_AUTO_CMD)XIO(EXT_V2012_MANUAL),XIC(EXT_V2012_MANUAL)XIC(EXT_V2012_HMI_CMD)]OTE(EXT_V2012_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="301" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(EXT_V2013_AUTO_CMD)XIO(EXT_V2013_MANUAL),XIC(EXT_V2013_MANUAL)XIC(EXT_V2013_HMI_CMD)]XIO(EXT_2FILL1STRT)XIO(EXT_V1013_ZH)XIO(EXT_V3013_ZH)XIO(EXT_V4013_ZH)XIO(EXT_XV13_ZH)XIO(EXT_V104_ZH)OTE(EXT_V2013_ZC);]]>
+</Text>
+</Rung>
+<Rung Number="302" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[[GEQ(EXT_PRT2_STEP,31)LEQ(EXT_PRT2_STEP,34),GEQ(EXT_PRT2_STEP,97)LEQ(EXT_PRT2_STEP,100),GEQ(EXT_PRT2_STEP,125)LEQ(EXT_PRT2_STEP,128),GEQ(EXT_PRT2_STEP,162)LEQ(EXT_PRT2_STEP,165),GEQ(EXT_PRT2_STEP,190)LEQ(EXT_PRT2_STEP,192),GEQ(EXT_PRT2_STEP,210)LEQ(EXT_PRT2_STEP,212),GEQ(EXT_PRT2_STEP,221)LEQ(EXT_PRT2_STEP,224),GEQ(EXT_PRT2_STEP,227)LEQ(EXT_PRT2_STEP,228)XIO(EXT_T0413_TMR.DN)]OTE(EXT_M2000_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="303" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[[GEQ(EXT_LIT_2001_AI,8500),XIC(EXT_PRT2_CHP_IND1),XIC(EXT_PRT2_CHP_IND)]OTE(EXT_V2001_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="304" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT2_STEP,3)LEQ(EXT_PRT2_STEP,13)OTE(EXT_V2002_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="305" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[XIC(P_Off)OTE(EXT_V2003_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="306" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[[GEQ(EXT_PRT2_STEP,2)LES(EXT_PRT2_STEP,18),GEQ(EXT_PRT2_STEP,35)LEQ(EXT_PRT2_STEP,42),GEQ(EXT_PRT2_STEP,101)LEQ(EXT_PRT2_STEP,108),GEQ(EXT_PRT2_STEP,130)LEQ(EXT_PRT2_STEP,137),GEQ(EXT_PRT2_STEP,167)LEQ(EXT_PRT2_STEP,174),GEQ(EXT_PRT2_STEP,194)LEQ(EXT_PRT2_STEP,197),GEQ(EXT_PRT2_STEP,214)LEQ(EXT_PRT2_STEP,217)]OTE(EXT_V2004_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="307" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[[GEQ(EXT_PRT2_STEP,2)LES(EXT_PRT2_STEP,18),GEQ(EXT_PRT2_STEP,35)LEQ(EXT_PRT2_STEP,42),GEQ(EXT_PRT2_STEP,101)LEQ(EXT_PRT2_STEP,108),GEQ(EXT_PRT2_STEP,130)LEQ(EXT_PRT2_STEP,137),GEQ(EXT_PRT2_STEP,167)LEQ(EXT_PRT2_STEP,174),GEQ(EXT_PRT2_STEP,194)LEQ(EXT_PRT2_STEP,197),GEQ(EXT_PRT2_STEP,214)LEQ(EXT_PRT2_STEP,217)]OTE(EXT_V2005_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="308" Type="N">
+<Comment>
+<![CDATA['  Trial to STOP Step Counter During Effluent Backup (BYPASS)]]>
+</Comment>
+<Text>
+<![CDATA[[GRT(EXT_PRT2_STEP,1)LES(EXT_PRT2_STEP,19),GRT(EXT_PRT2_STEP,33)LES(EXT_PRT2_STEP,44),GRT(EXT_PRT2_STEP,100)LES(EXT_PRT2_STEP,110),GRT(EXT_PRT2_STEP,129)LES(EXT_PRT2_STEP,139),GRT(EXT_PRT2_STEP,166)LES(EXT_PRT2_STEP,176),GRT(EXT_PRT2_STEP,193)LES(EXT_PRT2_STEP,199),GRT(EXT_PRT2_STEP,213)LES(EXT_PRT2_STEP,219)][XIC(EXT_V2004_MANUAL)XIC(EXT_V2005_MANUAL)XIO(EXT_V2004_ZC)XIO(EXT_V2005_ZC)OTE(EXT_STOP_PRT2_DRAIN_TIME),[XIO(EXT_V2004_MANUAL)XIO(EXT_V2005_MANUAL),XIC(P_On)XIC(EXT_V2004_MANUAL)XIC(EXT_V2005_MANUAL)][XIC(EXT_V2004_ZC),XIC(EXT_V2005_ZC)]OTE(EXT_PRT2_DRAINING)];]]>
+</Text>
+</Rung>
+<Rung Number="309" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[[GEQ(EXT_PRT2_STEP,19)LEQ(EXT_PRT2_STEP,25),GEQ(EXT_PRT2_STEP,112)LEQ(EXT_PRT2_STEP,120),GEQ(EXT_PRT2_STEP,149)LEQ(EXT_PRT2_STEP,157),GEQ(EXT_PRT2_STEP,182)LEQ(EXT_PRT2_STEP,187),GEQ(EXT_PRT2_STEP,202)LEQ(EXT_PRT2_STEP,207)][XIC(EXT_PRT_WASH_FEED_WATER),EQU(EXT_PRT2_STEP,226)]OTE(EXT_V2006_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="310" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[[GEQ(EXT_PRT2_STEP,19)LEQ(EXT_PRT2_STEP,25),GEQ(EXT_PRT2_STEP,112)LEQ(EXT_PRT2_STEP,120),GEQ(EXT_PRT2_STEP,149)LEQ(EXT_PRT2_STEP,157),GEQ(EXT_PRT2_STEP,182)LEQ(EXT_PRT2_STEP,187),GEQ(EXT_PRT2_STEP,202)LEQ(EXT_PRT2_STEP,207)]XIO(EXT_PRT_WASH_FEED_WATER)OTE(EXT_PRT2_AUX_WT_FEED_REQ);]]>
+</Text>
+</Rung>
+<Rung Number="311" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[[EQU(EXT_PRT2_STEP,224),GEQ(EXT_PRT2_STEP,228)LEQ(EXT_PRT2_STEP,230),GEQ(EXT_PRT2_STEP,44)LEQ(EXT_PRT2_STEP,67)XIO(EXT_T0291_TMR.DN)XIC(EXT_PRT2_HBLV_ENABLE)XIC(EXT_EXT2_DRAIN_VALVE_OVERRIDE)]OTE(EXT_V2007_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="312" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT2_STEP,6)LEQ(EXT_PRT2_STEP,13)OTE(EXT_V2008_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="313" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[XIC(EXT_V2008_AUTO_CMD)XIO(EXT_PRT2_V2008_TOFF_TMR.DN)[TON(EXT_PRT2_V2008_TON_TMR,30000,0),XIC(EXT_PRT2_V2008_TON_TMR.DN)TON(EXT_PRT2_V2008_TOFF_TMR,5000,0)];]]>
+</Text>
+</Rung>
+<Rung Number="314" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[[GEQ(EXT_PRT2_STEP,52)LEQ(EXT_PRT2_STEP,64),XIO(EXT_PRT_WASH_FEED_WATER)XIC(EXT_PRT2_AUX_WT_FEED_REQ)]OTE(EXT_V2010_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="315" Type="N">
+<Comment>
+<![CDATA['  Auto]]>
+</Comment>
+<Text>
+<![CDATA[[GEQ(EXT_PRT2_STEP,114)LEQ(EXT_PRT2_STEP,115),GEQ(EXT_PRT2_STEP,151)LEQ(EXT_PRT2_STEP,152),GEQ(EXT_PRT2_STEP,184)LEQ(EXT_PRT2_STEP,185)]OTE(EXT_V2011_AUTO_CMD);]]>
+</Text>
+</Rung>
+<Rung Number="316" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT2_STEP,97)LEQ(EXT_PRT2_STEP,100)[LEQ(EXT_PRT2_TIM_RMG,300)GEQ(EXT_PRT2_TIM_RMG,240)OTE(EXT_PRT2_1H_PH_A),LEQ(EXT_PRT2_TIM_RMG,15)OTE(EXT_PRT2_6H_PH_A)];]]>
+</Text>
+</Rung>
+<Rung Number="317" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT2_STEP,190)LEQ(EXT_PRT2_STEP,193)LEQ(EXT_PRT2_TIM_RMG,60)GEQ(EXT_PRT2_TIM_RMG,30)OTE(EXT_V2001_FTC);]]>
+</Text>
+</Rung>
+<Rung Number="318" Type="N">
+<Comment>
+<![CDATA[]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(EXT_PRT2_STEP,220)LEQ(EXT_PRT2_STEP,230)OTE(EXT_ADDR_H410.14);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
+

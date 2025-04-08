@@ -2,8 +2,8 @@ import re
 import pandas as pd
 import math
 
-DEBUG = False
-TEST_TAG = "T0245"
+DEBUG = True
+TEST_TAG = "W20.01"
 
 def expandTag(tag):
     """
@@ -281,13 +281,17 @@ def checkForScadaTags(scada_taglist:pd.DataFrame, tag_detailed:dict):
                 # 1.01 should search for 1.1
                 # 1.1 should search for 1.10 (DANGER: This would cause issues)
                 decimal = address.split(".")[1]
-                if decimal == "01": decimal = "1"
+                if decimal[0] == "0": decimal = str(int(decimal))
                 elif decimal == "1": decimal = "10"
 
-                if prefix == "" or prefix == None: prefix = "CIO"
+                if prefix == "" or prefix == None: 
+                    prefix = "CIO"
+                    tagname = prefix + str(address.split('.')[0]) + "." + str(decimal)
+                else:
+                    tagname = str(address.split('.')[0]) + "." + str(decimal)
+                    
 
                 # tag.append(prefix + str(address.split('.')[0]) + "." + str(decimal))
-                tagname = prefix + str(address.split('.')[0]) + "." + str(decimal)
                 # tag.append("CIO" + str(address))
             except:
                 # tag.append(tagname)

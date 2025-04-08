@@ -1,20 +1,15 @@
-elif instr_type.upper() == "SPECIAL_RESET":
-        # print("Special Reset instruction", og_param, og_param2)
-        try:
-            start_addr = int(og_param.replace("CNT", "").replace("C", ""))
-            end_addr = int(og_param2.replace("CNT", "").replace("C", ""))
-            ctrl_length = end_addr - start_addr + 1
-            print(ctrl_length)
-        except:
-            ctrl_length = 1
-        # Now build out multiple branched Resets
-        if ctrl_length > 1:
-            converted_instruction = "["
-            for i in range(ctrl_length):
-                in_param = "C" + str(int(start_addr) + i)
-                out_param = convert_tagname(in_param, tagfile, system_name)
-                converted_instruction += conv_instr + "(" + out_param + "),"
-            converted_instruction = converted_instruction[:-1] + "]"
-        else:
-            converted_instruction = conv_instr + "(" + param + ")"
-        # print(converted_instruction)
+#TR0 replacements
+#1 - open at Start, continue branch at OUT then close at end
+pre1 = """
+EQU(EXT_PRT1_STEP,31)START(TR0)[XIC(EXT_M1000_MN),XIC(EXT_PRT1_ADVANCE)][XIO(EXT_PRT1_SEQ_TIM_DN_CTR.DN)MOV(32,EXT_PRT1_STEP),[OTU(EXT_PRT1_ADVANCE),MOV(EXT_PRT1_PREWASH_AGT_SP,EXT_PRT1_SEQ_TIM_PRE)]]OUT(TR0)RES(EXT_PRT1_SEQ_TIM_DN_CTR.DN);"""
+post1 = """
+EQU(EXT_PRT1_STEP,31)[[XIC(EXT_M1000_MN),XIC(EXT_PRT1_ADVANCE)][XIO(EXT_PRT1_SEQ_TIM_DN_CTR.DN)MOV(32,EXT_PRT1_STEP),[OTU(EXT_PRT1_ADVANCE),MOV(EXT_PRT1_PREWASH_AGT_SP,EXT_PRT1_SEQ_TIM_PRE)]],RES(EXT_PRT1_SEQ_TIM_DN_CTR.DN)];"""
+#2 - open at Start, close at OUT if leading comma
+pre2 = """
+EQU(EXT_PRT1_STEP,19)START(TR0)[XIC(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V1003_ZH),XIC(EXT_V1006_ZH),GEQ(EXT_FIT2_2000_AI,#200)],XIO(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V1010_ZH),GEQ(EXT_FIT_120_AI,#200)],XIC(EXT_PRT1_ADVANCE)][MOV(20,EXT_PRT1_STEP),OTU(EXT_PRT1_ADVANCE),OUT(TR0)MOV(0,EXT_PRT1_WATER_TOTAL)];"""
+post2 = """
+EQU(EXT_PRT1_STEP,19)[[XIC(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V1003_ZH),XIC(EXT_V1006_ZH),GEQ(EXT_FIT2_2000_AI,#200)],XIO(EXT_PRT_WASH_FEED_WATER)[XIC(EXT_V1010_ZH),GEQ(EXT_FIT_120_AI,#200)],XIC(EXT_PRT1_ADVANCE)][MOV(20,EXT_PRT1_STEP),OTU(EXT_PRT1_ADVANCE)],MOV(0,EXT_PRT1_WATER_TOTAL)];"""
+
+pre3 = 'EQU(EXT_PRT1_STEP,45)START(TR0)[XIO(EXT_PRT1_ACID_SKIP)XIO(EXT_PRT1_ACID_AUTO)XIC(EXT_PRT1_ACID_START),XIC(EXT_PRT1_ACID_AUTO),XIC(P_On)]GRT(EXT_PRT1_AD_SP,500)[XIO(EXT_PRT1_HBLV_ENABLE),XIC(EXT_PRT1_HBLV_ENABLE)XIO(EXT_SV30_10D_2)][MOV(46,EXT_PRT1_STEP),OUT(TR0)XIC(EXT_PRT1_ACID_SKIP)MOV(110,EXT_PRT1_STEP)];'
+test3 = 'EQU(EXT_PRT1_STEP,45)[[XIO(EXT_PRT1_ACID_SKIP)XIO(EXT_PRT1_ACID_AUTO)XIC(EXT_PRT1_ACID_START),XIC(EXT_PRT1_ACID_AUTO),XIC(P_On)]GRT(EXT_PRT1_AD_SP,500)[XIO(EXT_PRT1_HBLV_ENABLE),XIC(EXT_PRT1_HBLV_ENABLE)XIO(EXT_SV30_10D_2)][MOV(46,EXT_PRT1_STEP)],XIC(EXT_PRT1_ACID_SKIP)MOV(110,EXT_PRT1_STEP)];'
+post3 = 'EQU(EXT_PRT1_STEP,45)[[XIO(EXT_PRT1_ACID_SKIP)XIO(EXT_PRT1_ACID_AUTO)XIC(EXT_PRT1_ACID_START),XIC(EXT_PRT1_ACID_AUTO),XIC(P_On)]GRT(EXT_PRT1_AD_SP,500)[XIO(EXT_PRT1_HBLV_ENABLE),XIC(EXT_PRT1_HBLV_ENABLE)XIO(EXT_SV30_10D_2)]MOV(46,EXT_PRT1_STEP),XIC(EXT_PRT1_ACID_SKIP)MOV(110,EXT_PRT1_STEP)];'

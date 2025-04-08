@@ -9,8 +9,8 @@ import utilities as util
 dir = os.getcwd()
 
 # Debugging and specific tag testing
-DEBUG = False
-TEST_TAG = "T0245"
+DEBUG = True
+TEST_TAG = "W20.01"
 
 def parseTagList(system_name, tag_info, VIEW_TAGS=False):
 
@@ -41,7 +41,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
         if address == "": continue
         detailed_address = util.expandTag(address)
         address = detailed_address["real_address"]
-        if DEBUG and (address.find(TEST_TAG) != -1): print(address, detailed_address)
+        if DEBUG and (address.find(TEST_TAG) != -1): print("Detailed address check", address, detailed_address)
 
 
         query = global_symbols.query(f'Address == "{address}"')
@@ -58,7 +58,7 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
             except:
                 # print("Failed both query", address)
                 query = pd.DataFrame()
-        if DEBUG and (address.find(TEST_TAG) != -1): print(address, query)
+        if DEBUG and (address.find(TEST_TAG) != -1): print("Global Symbol lookup:", address, query)
         # print(address)
 
         if query.empty:
@@ -92,11 +92,11 @@ def parseTagList(system_name, tag_info, VIEW_TAGS=False):
 
         # Convert to scada name then search for Scada tagname
         scada_tagname, scada_desc = util.checkForScadaTags(scada_taglist, detailed_address)
-        if DEBUG and (address.find(TEST_TAG) != -1): print(address, scada_tagname, scada_desc)
+        if DEBUG and (address.find(TEST_TAG) != -1): print("Scada tag check:", address, scada_tagname, scada_desc)
 
         # Create tagname and description
         tagname, tag_description, parent = util.nameCreator(detailed_address, scada_tagname, scada_desc, system_name)
-        if DEBUG and (address.find(TEST_TAG) != -1): print(address, tagname, tag_description, parent)
+        if DEBUG and (address.find(TEST_TAG) != -1): print("Name creator check:", address, tagname, tag_description, parent)
 
         # Assign tagname and description to detailed_address, as well as empty SCADA_tagname
         detailed_address["tagname"] = tagname

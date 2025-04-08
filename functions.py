@@ -169,7 +169,7 @@ def tagConversion(system_name, tag_info, scada_tag_export_filename, tag_output_f
 
     print("Tag conversion complete")
     
-    return tag_lookup, tag_import_file
+    return tag_lookup, tag_import_file, 0
 
 def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total, output_filename="logic.txt", CONVERT=False, VIEW_RUNGS=False, COUNT_INSTR=False, PRINT_ERRORS=False):
 
@@ -203,10 +203,12 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
         except Exception as e:
             routine.rungs = [rung for rung in routine.rungs if rung.num != 0] # Filter out rungs with num == 0
             print("\nConversion failed on rung", routine.rungs[-1].num)
-            print("Rung Logic:")
-            print( routine.rungs[-1].original)
+            # print("Rung Logic:")
+            # print( routine.rungs[-1].original)
             print("Failed with error: ", e,  lk.NL)
             traceback.print_exc()
+
+            return instr_count_total, -1
 
     if PRINT_ERRORS:
         if catchErrors != None:
@@ -220,4 +222,4 @@ def logicConversion(system_name, logic_input_file, tag_lookup, instr_count_total
 
     output_file.close()
 
-    return instr_count_total
+    return instr_count_total, 0

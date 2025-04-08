@@ -89,6 +89,7 @@ def combine_compare(rung:Rung, line1, line2, line3, catchErrors):
     return line1, pop_count, catchErrors
 
 def combine_simple_logic(block_array:List[Block])->List[Block]:
+    # print("New combine")
     index = 0
     multiple_out_added = 0
     working_logic = []
@@ -125,7 +126,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
             # print("OUT type. Line: ", logic)
             if multiple_OUT: # If multiple outputs, we need brackets for branches
                 if logic[0][0] == "[" and logic[0][-1] == "]":
-                    logic[0] = logic[0][:-1]
+                    logic[0] = logic[0][1:-1]
                     # print("logic: ", logic)
                 if multiple_out_added == 0:
                     working_logic.append("]")
@@ -165,7 +166,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
             else: # If single output, no brackets needed
                 working_logic.append(logic[0])
 
-    # print(working_logic)
+        # print(working_logic)
     output_logic = "".join(reversed(working_logic))
 
     # print(output_logic)
@@ -185,6 +186,9 @@ def OR_block_list(block_array:List[Block], catchErrors)->List[Block]:
     # This function takes a list of blocks and combines them into a single OR block
     # This is done by adding brackets around each block and adding a comma between each block
     # The output is a single block with the logic of all blocks combined
+    # print("OR block list")
+    # for index, block in enumerate(block_array):
+    #     print(index, block)
 
     working_logic = []
     for index, block in enumerate(reversed(block_array)):
