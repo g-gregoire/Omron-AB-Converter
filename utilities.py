@@ -2,7 +2,7 @@ import re
 import pandas as pd
 import math
 
-DEBUG = True
+DEBUG = False
 TEST_TAG = "W20.01"
 
 def expandTag(tag):

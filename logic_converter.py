@@ -1,6 +1,7 @@
 import file_functions as ff
 import lookup as lk
 import utilities_logic as ul
+import utilities as util
 from structures import Routine, Rung, Block
 from typing import List
 
@@ -59,11 +60,11 @@ def loop_rungs_v2(output_file, simple_output, routine: Routine, tagfile: pd.Data
             rung.converted_logic = "NOP()"
         else:
             rung, catchErrors = block_breaker_v2(rung, catchErrors)
-            # rung.viewBlocks()
+            # rung.viewBlocks("After block breaker")
             rung, catchErrors = convert_blocks(rung, catchErrors, tagfile, system_name)
-            # rung.viewBlocks()
+            # rung.viewBlocks("After block conversion")
             rung, catchErrors = block_assembler_v2(rung, catchErrors)
-            # rung.viewBlocks()
+            # rung.viewBlocks("After block assembler")
 
         # Add the rung to the output file
         rung_num = ff.addRung(output_file, simple_output, rung_num, rung.converted_logic, rung.comment)
@@ -100,7 +101,8 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
     # Loop through each instruction in the rung_text
     for index, line in enumerate(rung_array):
         # print(line)
-        instr, params, details = ul.expand_instruction(line)
+        instr, params, details,ONS_instr,_ = ul.expand_instruction(line)
+        # print(ONS_instr, line, instr, params, details)
         if DEBUG_bbv2: print(index, details)
         block_type = details["block_type"]
         instr_type = details["type"]
@@ -223,7 +225,9 @@ def convert_blocks(rung: Rung, catchErrors: dict, tagfile: pd.DataFrame, system_
         # Loop through each instruction in the block
         for index, line in enumerate(block.converted_block):
             # print("Line:", line)
-            instr, params, details = ul.expand_instruction(line)
+            instr, params, details,ONS_instr,_ = ul.expand_instruction(line)
+            # print(ONS_instr, line, instr, params, details)
+
 
             # Convert the instruction
             converted_instruction, catchErrors = convert_instruction(line, catchErrors, tagfile, system_name)
@@ -268,15 +272,15 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
         next_block = rung.blocks[index + 1] if index + 1 < len(rung.blocks) else None
         prev_block = rung.blocks[index - 1] if index - 1 >= 0 else None
         prev2_block = rung.blocks[index - 2] if index - 2 >= 0 else None
-        print("Prev2 block:", prev2_block)
-        print("Prev block:", prev_block)
-        print("This:", index, block, block.block_type)
-        print("Next block:", next_block)
+        # print("Prev2 block:", prev2_block)
+        # print("Prev block:", prev_block)
+        # print("This:", index, block, block.block_type)
+        # print("Next block:", next_block)
         
         if block.block_type == "INTER":
             if prev2_block != None and prev2_block.block_type == "TR": # If we come across a TR block, add it to the following block and then perform the join
                 pop_index = index-1
-                print("TR block found:", prev_block)
+                # print("TR block found:", prev_block)
                 # print(rung.blocks[index + 1])
                 rung.join2Blocks(index-3, index-2, "AND") # Join the previous 2 blocks
             else:
@@ -316,8 +320,8 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
     while index >= 0: # Could be improved - multiple ORLD creates multiple nested branches
         block = rung.blocks[index]
         block_type = block.block_type
-        print("1-", index, block)
-        print("2-", block.details[0])
+        # print("1-", index, block)
+        # print("2-", block.details[0])
         if block_type == "OUT":
             if "type" in block.details[0] and (block.details[0]["type"].upper() == "COUNTER" or block.details[0]["type"].upper() == "KEEP" or block.details[0]["type"].upper() == "RET_TIMER"):
                 rung.join3Blocks(index-2, index-1, index, block.details[0]["type"])
@@ -341,10 +345,10 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
     TR_array = {}
     TR_exists = False
     for block in rung.blocks:
-        print("Block: ", block, block.block_type)
+        # print("Block: ", block, block.block_type)
         # Check if block is TR type, or if it contains a Start TR block
         if (block.block_type == "TR" and block.details[0]["type"] == "START") or ("START(TR" in block.converted_block[0]):
-            print("Found block", block)
+            # print("Found block", block)
             TR_number = re.search(r"TR([\d])", block.converted_block[0]).group(1)
             if int(TR_number) in TR_array:
                 TR_array[int(TR_number)] += 1
@@ -354,9 +358,9 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
 
             TR_exists = True
     
-    print("TR exists: ", TR_exists)
-    if TR_exists:
-        print("TR numbers: ", TR_array)
+    # print("TR exists: ", TR_exists)
+    # if TR_exists:
+        # print("TR numbers: ", TR_array)
 
     # 4. REVERSE PASS - handle normal output-type blocks and remaining joins. (Skip if TR blocks exist)
     if not TR_exists: # IF no TR blocks, then we can proceed with normal logic
@@ -376,7 +380,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 next_TR_num = "TR" + str(num - 1)
                 start_TR_num = "START(" + TR_num + ")"
                 out_TR_num = "OUT(" + TR_num + ")"
-                print("Now,", TR_num)
+                # print("Now,", TR_num)
                 # First create subblocks for TR blocks
                 initial = True
                 prev_index = 0
@@ -419,7 +423,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                         initial_subset = ul.createSubSet(rung.blocks, 0, index)
 
                         if ("START(TR" in block.converted_block[0]) and block.block_type != "TR": # Used to capture when Start(TR is embedded in a block
-                            print("Start block embedded in block", block.converted_block)
+                            # print("Start block embedded in block", block.converted_block)
                             block.converted_block[0] = block.converted_block[0].replace(start_TR_num, "")
                             initial_subset.append(block)
                         # for block in initial_subset: print(block)
@@ -442,25 +446,25 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 
                 
                 # Print all sections - for debugging
-                print("Initial Subset")
-                for block in initial_subset: print(block)
-                print("Inter Array")
+                # print("Initial Subset")
+                # for block in initial_subset: print(block)
+                # print("Inter Array")
                 conv_array = []
                 for inter in inter_array:
                     # print("start")
-                    for block in inter: print("Inter blocks:", block)
+                    # for block in inter: print("Inter blocks:", block)
                     converted_block = ul.combine_simple_logic(inter)
-                    print("Converted Block:", converted_block[0])
+                    # print("Converted Block:", converted_block[0])
                     conv_array.append(converted_block[0])
                 # print("Converted Array")
                 # for block in conv_array: print(block)
                 # OR blocks together
                 new_inter_block, catchErrors = ul.OR_block_list(conv_array, catchErrors)
                 # print("Double Converted Block:", new_inter_block[0])
-                if final_subset != None:
-                    print("Final Subset")
-                    for block in final_subset: print(block)
-                    print("End.")
+                # if final_subset != None:
+                    # print("Final Subset")
+                    # for block in final_subset: print(block)
+                    # print("End.")
 
                 # Combine the initial, converted-inter and final (if it exists)
                 rung.blocks = ul.concat_block_list(initial_subset, new_inter_block, final_subset)
@@ -491,14 +495,17 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
     global one_shot_index
 
     # Set default values
-    ONS_instr = False
+    # ONS_instr = False
     NEEDS_DN_BIT = False
 
     # instr, param, instr_type, conv_instr, param2, param3 = extractLine(line)
-    instr, params, details = ul.expand_instruction(line)
+    instr, params, details, ONS_instr, ONS_type = ul.expand_instruction(line)
+    # print(ONS_instr, line, instr, params, details)
     # print(instr, details)
+
     instr_type = details["type"]
     conv_instr = details["instr"]
+    block_type = details["block_type"]
 
     try: param = params[0]
     except: param = None
@@ -517,9 +524,10 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
             param = "CNT" + param[1:] # Required to match the actual instruction
 
     # Manage input parameters (e.g. Txxxx, Cxxxx or #xxxx)
-    if line[0] == "@" or line[0] == "#" or line[0] == "&":
-        ONS_instr = True
-        line = line[1:]
+    # if line[0] == "@" or line[0] == "#" or line[0] == "&":
+    #     print("ONS", line)
+    #     ONS_instr = True
+    #     line = line[1:]
     # If it's a timer or counter tag, add the .DN bit. Check either TIM/CNT, or Txxxx/Cxxxx using regex
     elif param != None and instr.upper() != "RESET" and (param.find("TIM") != -1 or param.find("TTIM") != -1 or param.find("CNT") != -1): 
         NEEDS_DN_BIT = True
@@ -535,15 +543,17 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
     elif instr_type.upper() == "SCALING":
         # Create additional required parameters (P1, P2, P3, P4) for scaling
         try: 
-            # print(param2)
-            p_base = int(param2.split("DM")[1])
-            p_prefix = param2.split("DM")[0] + "DM"
-            # print(p_base, p_prefix)
-            p1 = param2
-            p2 = p_prefix + str(p_base + 1)
-            p3 = p_prefix + str(p_base + 2)
-            p4 = p_prefix + str(p_base + 3)
+            # print("Scaling")
+            detailed_address = util.expandTag(param2)
+            prefix = detailed_address["prefix"]
+            number = int(detailed_address["number"])
+
+            p1 = convert_tagname(param2, tagfile, system_name)
+            p2 = convert_tagname(prefix + str(number + 1), tagfile, system_name)
+            p3 = convert_tagname(prefix + str(number + 2), tagfile, system_name)
+            p4 = convert_tagname(prefix + str(number + 3), tagfile, system_name)
         except:
+            print("Failed")
             p1 = p2 = p3 = p4 = param2
         # print("Scaling values: " + p1, p2, p3, p4)
 
@@ -719,7 +729,7 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
             preset = param2.replace("#", "").replace("&", "")
         else:
             preset = param2
-        converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" 
+        converted_instruction = "ONS(" + system_name + "_oneShots[" + str(one_shot_index) + "])" 
         # Make sure to increment global one shot index
         one_shot_index += 1
         converted_instruction += conv_instr + "(" + param + "," + preset + "," + "0" + ")"
@@ -731,7 +741,7 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
             start_addr = int(og_param.replace("CNT", "").replace("C", ""))
             end_addr = int(og_param2.replace("CNT", "").replace("C", ""))
             ctrl_length = end_addr - start_addr + 1
-            print(ctrl_length)
+            # print(ctrl_length)
         except:
             ctrl_length = 1
         # Now build out multiple branched Resets
@@ -783,7 +793,13 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
         converted_instruction += ")"
 
     if ONS_instr and param != None:
-        converted_instruction = "ONS" + "(OneShots[" + str(one_shot_index) + "])" + converted_instruction
+        # print("ONS instr")
+        if block_type == "IN":
+            converted_instruction = converted_instruction + "ONS(" + system_name + "_oneShots[" + str(one_shot_index) + "])"
+        elif block_type == "OUT":
+            converted_instruction = "ONS(" + system_name + "_oneShots[" + str(one_shot_index) + "])" + converted_instruction
+        else:
+            converted_instruction = "ONS(" + system_name + "_oneShots[" + str(one_shot_index) + "])" + converted_instruction
         # Make sure to increment global one shot index
         one_shot_index += 1
 
@@ -1474,7 +1490,7 @@ def logicCleanup(rung:str):
 
 def extractLine(line: str):
     # This function extracts the instruction, parameter, param type and converted instruction from an inputted line
-    line = line.replace("@" , "")
+    # line = line.replace("@" , "")
     args = line.split(" ")
     instr = args[0]
     try: param = args[1]

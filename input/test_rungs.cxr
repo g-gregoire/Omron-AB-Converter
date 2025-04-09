@@ -1,4 +1,20 @@
       ' TO CHECK STILL - having issues with these
+      LD H0.01
+      ANDNOT H0.02
+      LD H0.11
+      ANDNOT H0.12
+      ORLD
+      LD H1.05
+      ANDNOT H2.10
+      ORLD
+      LD H2.00
+      ANDNOT H2.01
+      ORLD
+      AND P_1s
+      @+BCL(407) D900 D960 D900
+      @+(400) D305 D960 D305
+      ^^^
+      BREAK
       ' Step 129 
       LD=(300) D32100 #129
       OUT TR0

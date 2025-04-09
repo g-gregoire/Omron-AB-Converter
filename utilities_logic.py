@@ -10,8 +10,16 @@ TEST_TAG = "D32253"
 def expand_instruction(line: str):
     # This function expands the instruction into its instruction, parameters and details
     # Returned values look like: "MOV(21)", ["A", "B"], {"instr": "MOV", "type": "copy", "args": 2, "block_type": "OUT", "blocks_in": 1}
-    line = line.replace("@" , "").replace("!","").replace("%","")
-    args = line.split(" ")
+    if line.find("@") != -1 or line.find("!") != -1 or line.find("%") != -1:
+        # print("ONS instruction found")
+        ONS_instr = True
+        ONS_type = line[0]
+        line_strip = line.replace("@" , "").replace("!","").replace("%","")
+    else:
+        ONS_instr = False
+        ONS_type = ""
+        line_strip = line
+    args = line_strip.split(" ")
     instr = args[0].replace("(0","(") # Remove leading 0 from instruction code if it exists (ie. MOV(021) -> MOV(21))
     params = args[1:]
 
@@ -22,14 +30,16 @@ def expand_instruction(line: str):
     except:
         details = None
 
-    return instr, params, details
+    instr_final = ONS_type + instr
+
+    return instr_final, params, details, ONS_instr, ONS_type
 
 def combine_compare(rung:Rung, line1, line2, line3, catchErrors):
     # print("Compare")
     pop_count = 0
-    if line1 != None: instr1, params1, details1 = expand_instruction(line1)
-    if line2 != None: instr2, params2, details2 = expand_instruction(line2)
-    if line3 != None: instr3, params3, details3 = expand_instruction(line3)
+    if line1 != None: instr1, params1, details1,_,_ = expand_instruction(line1)
+    if line2 != None: instr2, params2, details2,_,_ = expand_instruction(line2)
+    if line3 != None: instr3, params3, details3,_,_ = expand_instruction(line3)
     # print("Line 1: ", line1)
     # print("Line 2: ", line2)
     # print("Line 3: ", line3)

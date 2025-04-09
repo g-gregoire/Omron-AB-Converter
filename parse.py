@@ -9,7 +9,7 @@ import utilities as util
 dir = os.getcwd()
 
 # Debugging and specific tag testing
-DEBUG = True
+DEBUG = False
 TEST_TAG = "W20.01"
 
 def parseTagList(system_name, tag_info, VIEW_TAGS=False):
