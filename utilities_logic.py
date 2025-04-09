@@ -4,6 +4,7 @@ from structures import Block, Rung
 from typing import List, Dict
 import re
 import pandas as pd
+import copy
 
 TEST_TAG = "D32253"
 
@@ -103,6 +104,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
     index = 0
     multiple_out_added = 0
     working_logic = []
+    type_array = []
     OR_active = False
 
     multiple_count = 0
@@ -111,7 +113,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
             multiple_count += 1
     if multiple_count > 1:
         multiple_OUT = True
-        # print("Multiple OUT blocks:", multiple_count)
+        print("Multiple OUT blocks:", multiple_count)
     else:
         multiple_OUT = False
 
@@ -124,6 +126,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
         # Get working variables
         logic = block.converted_block
         block_type = block.block_type
+        type_array.append(block_type) # Append block type for type determination later
         # print(index, block, block_type)
 
         # Determine previous block in array (next one in reversed array)
@@ -136,6 +139,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
             # print("OUT type. Line: ", logic)
             if multiple_OUT: # If multiple outputs, we need brackets for branches
                 if logic[0][0] == "[" and logic[0][-1] == "]":
+                    print("Brackets. Before", logic[0], "After", logic[0][1:-1])
                     logic[0] = logic[0][1:-1]
                     # print("logic: ", logic)
                 if multiple_out_added == 0:
@@ -180,19 +184,21 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
     output_logic = "".join(reversed(working_logic))
 
     # print(output_logic)
+    combined_type = determine_block_type(type_array)
+    print("Combined type: ", combined_type)
     details = {
         "logic": output_logic,
-        "block_type": "IN",
+        "block_type": combined_type,
         "blocks_in": 1
     }
-    block_type = "IN"
+    block_type = combined_type
     blocks_in = 1
 
     output_block = [Block([details], block_type, blocks_in)]
 
     return output_block
 
-def OR_block_list(block_array:List[Block], catchErrors)->List[Block]:
+def combine_block_list(block_array:List[Block], catchErrors)->List[Block]:
     # This function takes a list of blocks and combines them into a single OR block
     # This is done by adding brackets around each block and adding a comma between each block
     # The output is a single block with the logic of all blocks combined
@@ -201,28 +207,43 @@ def OR_block_list(block_array:List[Block], catchErrors)->List[Block]:
     #     print(index, block)
 
     working_logic = []
+    type_array = []
     for index, block in enumerate(reversed(block_array)):
         logic = block.converted_block
+        block_type = block.block_type
+        type_array.append(block_type) # Append block type for type determination later
+
+        # Check next block in rev array (prev one in actual array)
+        prev_block = block_array[-index-2] if index < len(block_array) - 1 else None
+        prev_block_type = prev_block.block_type if prev_block else None
+        
         if len(logic) == 0:
             print("Logic is None")
             catchErrors["error"] = True
             continue
-        # print("Block", index, logic)
-        block_type = block.block_type
+        print("Block", index, logic, block_type)
+        print("Prev block", prev_block)
+
         if index == 0:
             working_logic.append("]")
+        
+        # Append actual logic
         working_logic.append(logic[0])
-        if index != len(block_array) - 1:
+
+        if prev_block_type != None and (prev_block_type == "START" or prev_block_type == "IN") or index == len(block_array) - 1:
+            pass
+        else:
             working_logic.append(",")
     working_logic.append("[")
         
     output_logic = "".join(reversed(working_logic))
+    combined_type = determine_block_type(type_array)
     details = {
         "logic": output_logic,
-        "block_type": "IN",
+        "block_type": combined_type,
         "blocks_in": 1
     }
-    block_type = "IN"
+    block_type = combined_type
     blocks_in = 1
     output_block = [Block([details], block_type, blocks_in)]
     
@@ -232,7 +253,9 @@ def createSubSet(block_list:List[Block], start_index:int, end_index:int) -> List
         # print("Creating subset. Indexes: ", start_index, end_index)
         # for block in block_list:
         #     print(block)
-        subset = block_list[start_index:end_index]
+        # Create new block list with copies of the blocks in the range
+        temp_subset = block_list[start_index:end_index]
+        subset = copy.deepcopy(temp_subset)
         # print("Subset. Indexes: ", start_index, end_index)
         # for block in subset:
         #     print(block)

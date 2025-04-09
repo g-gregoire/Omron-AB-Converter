@@ -7,7 +7,7 @@ tag_info_filename = "tag_info.xlsx"
 logic_input_filename = ["1-Extractor.cxr", "2-Rind_Pumping.cxr", "3-H_E_Scaling.cxr", "4-Revision_1.cxr", "5-Protocol_Macro.cxr", "6-Unnamed_0.cxr", "7-Centrifuge.cxr", "8-Pretreatment.cxr", "9-PRT_1.cxr", "10-PRT_2.cxr", "11-PRT_3.cxr", "12-PRT_4.cxr", "13-Acid.cxr", "14-PRT_Common.cxr", "15-PRT_IO.cxr"]
 # logic_input_filename = ["2-Rind_Pumping.cxr", "3-H_E_Scaling.cxr", "4-Revision_1.cxr", "5-Protocol_Macro.cxr", "6-Unnamed_0.cxr", "7-Centrifuge.cxr", "8-Pretreatment.cxr", "14-PRT_Common.cxr", "13-Acid.cxr", "15-PRT_IO.cxr"]
 # logic_input_filename = "6-Unnamed_0.cxr"
-# logic_input_filename = "test_rungs.cxr" # Used to overwrite for testing
+logic_input_filename = "test_rungs.cxr" # Used to overwrite for testing
 
 scada_tag_export_filename = "EXT_PLC_SCADA_TAGS.xlsx"
 tag_output_filename = "tag_import"
@@ -15,14 +15,14 @@ tag_lookup_filename = "EXT_lookup_table.csv"
 logic_output_filename = "output.L5X"
 
 # CONSTANTS FOR TAG BUILDER FUNCTIONALITY
-CREATE_TAGS = True
+CREATE_TAGS = False
 CREATE_LOOKUP = True
 CONVERT_SCADA_TAGS = False
 VIEW_TAGS = False
 
 # CONSTANTS FOR CONVERSION FUNCTIONALITY
 CONVERT = True # Perform conversion
-VIEW_RUNGS = False # View the rungs as they are converted
+VIEW_RUNGS = True # View the rungs as they are converted
 COUNT_INSTR = False # Count the number & type of instructions in the file
 PRINT_ERRORS = False # Print errors of failed conversions
 

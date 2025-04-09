@@ -62,7 +62,7 @@ def loop_rungs_v2(output_file, simple_output, routine: Routine, tagfile: pd.Data
             rung, catchErrors = block_breaker_v2(rung, catchErrors)
             # rung.viewBlocks("After block breaker")
             rung, catchErrors = convert_blocks(rung, catchErrors, tagfile, system_name)
-            # rung.viewBlocks("After block conversion")
+            rung.viewBlocks("After block conversion")
             rung, catchErrors = block_assembler_v2(rung, catchErrors)
             # rung.viewBlocks("After block assembler")
 
@@ -156,6 +156,10 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
             type_array.append(block_type)
 
         elif instr_type.upper() == "COMPARE_OLD":
+            # Add the current block to the rung before continuing. This is needed due to output style of old compare blocks
+            add_type = ul.determine_block_type(type_array)
+            current_details, type_array = rung.addBlock(Block(current_details, add_type, blocks_in))
+
             try: next_line = rung_array[index + 1]
             except: next_line = None
             try: after_next_line = rung_array[index + 2]
@@ -252,6 +256,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
     # 4. Handle normal output-type blocks and remaining joins (Reverse pass)
     # 5. Handle TR x blocks
     ###
+    local_debug = True
 
     # rung.viewBlocks("Initial view")
 
@@ -277,28 +282,49 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
         # print("This:", index, block, block.block_type)
         # print("Next block:", next_block)
         
-        if block.block_type == "INTER":
+        if block.block_type == "INTER": # For ANDLD and ORLD blocks
             if prev2_block != None and prev2_block.block_type == "TR": # If we come across a TR block, add it to the following block and then perform the join
                 pop_index = index-1
                 # print("TR block found:", prev_block)
-                # print(rung.blocks[index + 1])
-                rung.join2Blocks(index-3, index-2, "AND") # Join the previous 2 blocks
+                # print(rung.blocks[index-2])
+                # print(rung.blocks[index-3])
+                rung.join2Blocks(index-3, index-2, "AND") # Join the TR block to the one before it.
+                TR_offset = True
             else:
                 pop_index = index
+                TR_offset = False
 
             if block.details[0]["instr"] == "ANDLD":
                 rung.blocks.pop(pop_index) # Remove the ANDLD block
-                rung.join2Blocks(index-2, index-1, "AND") # Join the previous 2 blocks
+                if index == 1: # If it's the first block, then handle differently so we don't append index -1
+                    pass
+                else:
+                    # print("ANDLD")
+                    # print(rung.blocks[index-2])
+                    # print(rung.blocks[index-3])
+                    if TR_offset: # If we have a TR block, then join to the previous 2 blocks
+                        rung.join2Blocks(index-3, index-2, "AND") # Join the previous 2 blocks
+                        TR_offset = False
+                    else:
+                        rung.join2Blocks(index-2, index-1, "AND") # Join the previous 2 blocks
                 # index = 0 # Reset counter since we popped a block
                 # print("End: ", rung.blocks[index-1], NL)
                 
             elif block.details[0]["instr"] == "ORLD":
                 rung.blocks.pop(pop_index) # Remove the ORLD block
-                rung.join2Blocks(index-2, index-1, "OR") # Join the previous 2 blocks
-                # index = 0 # Reset counter since we popped a block
-                # print("End: ", rung.blocks[index-1], NL)
+                if index == 1: # If it's the first block, then handle differently so we don't append index -1
+                    pass
+                else:
+                    if TR_offset:
+                        rung.join2Blocks(index-3, index-2, "OR")
+                        TR_offset = False
+                    else:
+                        rung.join2Blocks(index-2, index-1, "OR") # Join the previous 2 blocks
+                    # index = 0 # Reset counter since we popped a block
+                    # print("End: ", rung.blocks[index-1], NL)
                 
-            if next_block != None and next_block.block_type == "IN" or next_block.block_type == "OR": # If next block is an IN block, then join to previous block
+            # If next block is an IN block, then join to previous block. This is to handle case where a basic IN block needs to be joined to the previous ANDLD'd block
+            if next_block != None and next_block.block_type == "IN" or next_block.block_type == "OR": 
                 # print("In block found:", next_block)
                 # print("Block1:", rung.blocks[index-2].block_type, rung.blocks[index-2])
                 # print("Block2:", rung.blocks[index-1].block_type, rung.blocks[index-1])
@@ -313,7 +339,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
 
         index += 1
 
-    # rung.viewBlocks("After ANDLD/ORLD block pass")
+    rung.viewBlocks("After ANDLD/ORLD block pass")
 
     # 3. REVERSE PASS - handle special output blocks: CNT, TTIM, KEEP
     index = len(rung.blocks) - 1
@@ -419,13 +445,29 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                             index += 1
                             continue
 
-                        # else:
-                        initial_subset = ul.createSubSet(rung.blocks, 0, index)
-
                         if ("START(TR" in block.converted_block[0]) and block.block_type != "TR": # Used to capture when Start(TR is embedded in a block
-                            # print("Start block embedded in block", block.converted_block)
-                            block.converted_block[0] = block.converted_block[0].replace(start_TR_num, "")
-                            initial_subset.append(block)
+                            print("Start block embedded in block", block.converted_block)
+                            # We need to split the block into 2 parts, and add the first part to the initial subset and the second to the inter array
+                            temp_blocks = block.converted_block[0].split(start_TR_num) 
+
+                            # First set initial block as everything before TR0
+                            initial_subset = ul.createSubSet(rung.blocks, 0, index+1)
+                            initial_subset[-1].converted_block[0] = temp_blocks[0]
+                            # for block in initial_subset: print(block)
+                            # print("Initial Subset-1")
+                            # for block in initial_subset: print(block)
+                            
+                            # Then set the inter block as everything after TR0
+                            inter_subset = ul.createSubSet(rung.blocks, 0, index+1)
+                            inter_subset[-1].converted_block[0] = temp_blocks[1]
+                            inter_array.append(inter_subset)
+                            # print("Initial Subset-end-2")
+                            # for block in initial_subset: print(block)
+
+                        else:
+                            initial_subset = ul.createSubSet(rung.blocks, 0, index)
+
+
                         # for block in initial_subset: print(block)
                         prev_index = index
                         initial = False
@@ -446,25 +488,28 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 
                 
                 # Print all sections - for debugging
-                # print("Initial Subset")
-                # for block in initial_subset: print(block)
-                # print("Inter Array")
+                if local_debug:
+                    print("Initial Subset-end")
+                    for block in initial_subset: print(block)
+                    print("Inter Array")
                 conv_array = []
                 for inter in inter_array:
-                    # print("start")
-                    # for block in inter: print("Inter blocks:", block)
+                    if local_debug: 
+                        print("start")
+                        for block in inter: print("Inter blocks:", block)
                     converted_block = ul.combine_simple_logic(inter)
                     # print("Converted Block:", converted_block[0])
                     conv_array.append(converted_block[0])
-                # print("Converted Array")
-                # for block in conv_array: print(block)
+                print("Converted Array")
+                for block in conv_array: print(block, block.block_type)
                 # OR blocks together
-                new_inter_block, catchErrors = ul.OR_block_list(conv_array, catchErrors)
+                new_inter_block, catchErrors = ul.combine_block_list(conv_array, catchErrors)
                 # print("Double Converted Block:", new_inter_block[0])
-                # if final_subset != None:
-                    # print("Final Subset")
-                    # for block in final_subset: print(block)
-                    # print("End.")
+                if local_debug:
+                    if final_subset != None:
+                        print("Final Subset")
+                        for block in final_subset: print(block)
+                        print("End.")
 
                 # Combine the initial, converted-inter and final (if it exists)
                 rung.blocks = ul.concat_block_list(initial_subset, new_inter_block, final_subset)
