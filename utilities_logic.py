@@ -43,10 +43,10 @@ def combine_compare(rung:Rung, rung_array:List[str], index:int, current_details,
     line2 = rung_array[index + 1] if index + 1 < len(rung_array) else None
     line3 = rung_array[index + 2] if index + 2 < len(rung_array) else None
     line4 = rung_array[index + 3] if index + 3 < len(rung_array) else None
-    print("Line 1: ", line1)
-    print("Line 2: ", line2)
-    print("Line 3: ", line3)
-    print("Line 4: ", line4)
+    # print("Line 1: ", line1)
+    # print("Line 2: ", line2)
+    # print("Line 3: ", line3)
+    # print("Line 4: ", line4)
     # Determine which comparison is being used
     EQU = GRT = LES = False
     if line2.find("LD TR") != -1 or line2.find("OUT TR") != -1:

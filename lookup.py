@@ -122,7 +122,7 @@ lookup = {
     "BIN(23)": {"instr": "MOV", "type": "move", "args": 2, "block_type": "OUT", "blocks_in": 1},
     "XFER(70)": {"instr": "COP", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1},
     "XFRB(62)": {"instr": "COP", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1},
-    "BSET(71)": {"instr": "FLL", "type": "copy", "args": 3, "block_type": "OUT", "blocks_in": 1}, # For fill length, Omron specifies start & end bits; AB specifies start bit & length
+    "BSET(71)": {"instr": "FLL", "type": "fill", "args": 3, "block_type": "OUT", "blocks_in": 1}, # For fill length, Omron specifies start & end bits; AB specifies start bit & length
     "ANDW(34)": {"instr": "AND", "type": "logic", "args": 1, "block_type": "IN", "blocks_in": 1},
     "MOVB(82)": {"instr": "BTD", "type": "BTD", "args": 5, "block_type": "OUT", "blocks_in": 1}, # Omron has 3 args (Source, Control Word, Dest), AB has 5 (Source, Source bit, Dest, Dest Bit, Length).
     "MOVD(83)": {"instr": "BTD", "type": "BTD", "args": 5, "block_type": "OUT", "blocks_in": 1}, # Omron has 3 args (Source, Control Word, Dest), AB has 5 (Source, Source bit, Dest, Dest Bit, Length).

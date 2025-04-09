@@ -1,48 +1,49 @@
-      ' TO CHECK STILL - having issues with these
       ' Long broken ones in Extractor
-      '  Ext #1\nCook 1 - 4
-      LD 321.11
-      AND 325.11
-      ANDNOT 10.07
-      ANDNOT 41.11
-      LD H0.09
-      ANDNOT H0.10
-      ANDNOT H1.00
-      ORLD
-      LD H1.03
-      ANDNOT H1.04
-      ANDNOT H1.09
-      ORLD
-      LD H1.12
-      ANDNOT H1.13
-      ANDNOT H2.05
-      ORLD
-      LD H2.08
-      ANDNOT H2.09
-      ORLD
+      '  EXTRACTOR #3
+      LD P_On
       OUT TR0
-      AND 40.12
-      CMP(020) 314 D80
+      AND H3.03
+      ANDNOT H3.04
+      AND 11.04
+      AND 11.05
+      AND P_1s
       LD TR0
-      LD P_EQ
-      OR P_LT
+      AND H3.04
+      CNT 0012 #7800
+      LD TR0
+      AND H3.03
+      ANDNOT H3.04
+      AND P_1s
+      LD TR0
+      AND H3.04
+      CNT 0302 #7800
+      LD TR0
+      AND H3.03
+      ANDNOT H3.04
+      AND P_1s
+      LD TR0
+      AND H3.04
+      CNT 0361 #600
+      LD TR0
+      AND H4.06
+      ANDNOT H4.07
+      AND P_1s
+      LD TR0
+      LD H4.07
+      OR H93.09
+      OR H29.02
       ANDLD
-      TIM 0042 #30
+      CNT 0375 H23
       LD TR0
-      AND T0042
-      OUT 505.15
-      ^^^
-      BREAK
-      ' Step 129 - bad (but ok) branching
-      LD=(300) D32100 #129
-      OUT TR0
-      LD H101.09
-      @OR H100.00
+      AND H5.02
+      ANDNOT H5.03
+      AND P_1s
+      LD TR0
+      LD H5.03
+      OR H93.10
+      OR H29.02
       ANDLD
-      MOV(021) #130 D32100
-      RSET H100.00
-      LD TR0
-      SET H101.08
+      CNT 0379 H24
       ^^^
       BREAK
       
