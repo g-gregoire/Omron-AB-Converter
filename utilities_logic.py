@@ -35,69 +35,103 @@ def expand_instruction(line: str):
 
     return instr_final, params, details, ONS_instr, ONS_type
 
-def combine_compare(rung:Rung, line1, line2, line3, catchErrors):
+def combine_compare(rung:Rung, rung_array:List[str], index:int, current_details, catchErrors):
     # print("Compare")
-    pop_count = 0
-    if line1 != None: instr1, params1, details1,_,_ = expand_instruction(line1)
-    if line2 != None: instr2, params2, details2,_,_ = expand_instruction(line2)
-    if line3 != None: instr3, params3, details3,_,_ = expand_instruction(line3)
-    # print("Line 1: ", line1)
-    # print("Line 2: ", line2)
-    # print("Line 3: ", line3)
+    pop_array = [index] # We already know we need to pop this index
+
+    line1 = rung_array[index]
+    line2 = rung_array[index + 1] if index + 1 < len(rung_array) else None
+    line3 = rung_array[index + 2] if index + 2 < len(rung_array) else None
+    line4 = rung_array[index + 3] if index + 3 < len(rung_array) else None
+    print("Line 1: ", line1)
+    print("Line 2: ", line2)
+    print("Line 3: ", line3)
+    print("Line 4: ", line4)
     # Determine which comparison is being used
     EQU = GRT = LES = False
-    if line2 == None or line2 == "": # Added for strange coding where CMP and comp_type are on different rungs
+    if line2.find("LD TR") != -1 or line2.find("OUT TR") != -1:
+        check1 = line3
+        check1_index = index + 2
+        check2 = line4
+        check2_index = index + 3
+    else:
+        check1 = line2
+        check1_index = index + 1
+        check2 = line3
+        check2_index = index + 2
+    if check1 == None or check1 == "": # Added for strange coding where CMP and comp_type are on different rungs
         print("Incorrect usage of CMP instruction")
         catchErrors["count"] += 1
         catchErrors["list"].append(line1)
         rung.comment += f" - ERROR with ({line1})- NO FOLLOW-UP COMPARISON ARGS (GRT, LEQ, etc.)."
     else:
-        if line2.find("EQUALS") != -1 or line2.find("P_EQ") != -1:
+        if check1.find("EQUALS") != -1 or check1.find("P_EQ") != -1:
             EQU = True
-        elif line2.find("GREATER_THAN") != -1 or line2.find("P_GT") != -1 or line2.find("GE") != -1:
+            pop_array.append(check1_index)
+        elif check1.find("GREATER_THAN") != -1 or check1.find("P_GT") != -1 or check1.find("GE") != -1:
             GRT = True
-        elif line2.find("LESS_THAN") != -1 or line2.find("P_LT") != -1 or line2.find("LE") != -1:
+            pop_array.append(check1_index)
+        elif check1.find("LESS_THAN") != -1 or check1.find("P_LT") != -1 or check1.find("LE") != -1:
             LES = True
-        if line3.find("EQUALS") != -1 or line3.find("P_EQ") != -1:
+            pop_array.append(check1_index)
+        if check2.find("EQUALS") != -1 or check2.find("P_EQ") != -1:
             EQU = True
-        elif line3.find("GREATER_THAN") != -1 or line3.find("P_GT") != -1 or line3.find("GE") != -1:
+            pop_array.append(check2_index)
+        elif check2.find("GREATER_THAN") != -1 or check2.find("P_GT") != -1 or check2.find("GE") != -1:
             GRT = True
-        elif line3.find("LESS_THAN") != -1 or line3.find("P_LT") != -1 or line3.find("LE") != -1:
+            pop_array.append(check2_index)
+        elif check2.find("LESS_THAN") != -1 or check2.find("P_LT") != -1 or check2.find("LE") != -1:
             LES = True
-
+            pop_array.append(check2_index)
         # print(EQU, GRT, LES)
     
         if EQU and GRT:
             # print("GEQ")
             line1 = line1.replace("CMP(20)", "GEQ").replace("CMP(020)", "GEQ").replace("CMPL(060)", "GEQ")
-            # Pop next 3 lines
-            pop_count = 3
         elif EQU and LES:
             # print("LEQ")
             line1 = line1.replace("CMP(20)", "LEQ").replace("CMP(020)", "LEQ").replace("CMPL(060)", "LEQ")
-            # Pop next 3 lines
-            pop_count = 3
         elif EQU:
             # print("EQU")
             line1 = line1.replace("CMP(20)", "EQU").replace("CMP(020)", "EQU").replace("CMPL(060)", "EQU")
-            # Pop next line1
-            pop_count = 1
         elif GRT:
             # print("GRT")
             line1 = line1.replace("CMP(20)", "GRT").replace("CMP(020)", "GRT").replace("CMPL(060)", "GRT")
-            # Pop next line1
-            pop_count = 1
         elif LES:
             # print("LES")
             line1 = line1.replace("CMP(20)", "LES").replace("CMP(020)", "LES").replace("CMPL(060)", "LES")
-            # Pop next line1
-            pop_count = 1
         else:
             line1 = line1.replace("CMP(20)", "LES").replace("CMP(020)", "LES").replace("CMPL(060)", "LES")
-            pop_count = 1
+
+        # Next, check if double compare, if the next line is an ANDLD
+        if len(pop_array) == 3:
+            # print("Double compare found")
+            ANDLD_index = pop_array[-1]
+            # print(rung_array[ANDLD_index+1])
+            if rung_array[ANDLD_index+1].find("ANDLD") != -1:
+                # print("Trailing ANDLD found", rung_array[ANDLD_index+1])
+                pop_array.append(ANDLD_index+1)
+
+        print("Pop array: ", pop_array)
+
+        # Lastly deal with TR block, if it exists
+        if line2.find("LD TR") != -1 or line2.find("OUT TR") != -1:
+            instr, params, details,ONS_instr,_ = expand_instruction(line2)
+            instr_type = details["type"]
+            details_add = details.copy() # Need to create copy due to dictionary reference
+
+            if instr == "OUT":
+                details_add["logic"] = f"START({params[0]})"
+                block_type = details_add["block_type"] = "TR"
+                details_add["type"] = "START"
+            else:
+                details_add["logic"] = f"OUT({params[0]})"
+                block_type = details_add["block_type"] = "TR"
+                details_add["type"] = "OUT"
+            current_details, type_array = rung.addBlock(Block([details_add], block_type, details_add["blocks_in"]))
     
         # print(line1, pop_count)
-    return line1, pop_count, catchErrors
+    return line1, pop_array, current_details, catchErrors
 
 def combine_simple_logic(block_array:List[Block])->List[Block]:
     # print("New combine")
@@ -113,7 +147,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
             multiple_count += 1
     if multiple_count > 1:
         multiple_OUT = True
-        print("Multiple OUT blocks:", multiple_count)
+        # print("Multiple OUT blocks:", multiple_count)
     else:
         multiple_OUT = False
 
@@ -139,7 +173,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
             # print("OUT type. Line: ", logic)
             if multiple_OUT: # If multiple outputs, we need brackets for branches
                 if logic[0][0] == "[" and logic[0][-1] == "]":
-                    print("Brackets. Before", logic[0], "After", logic[0][1:-1])
+                    # print("Brackets. Before", logic[0], "After", logic[0][1:-1])
                     logic[0] = logic[0][1:-1]
                     # print("logic: ", logic)
                 if multiple_out_added == 0:
@@ -185,7 +219,7 @@ def combine_simple_logic(block_array:List[Block])->List[Block]:
 
     # print(output_logic)
     combined_type = determine_block_type(type_array)
-    print("Combined type: ", combined_type)
+    # print("Combined type: ", combined_type)
     details = {
         "logic": output_logic,
         "block_type": combined_type,
@@ -221,8 +255,8 @@ def combine_block_list(block_array:List[Block], catchErrors)->List[Block]:
             print("Logic is None")
             catchErrors["error"] = True
             continue
-        print("Block", index, logic, block_type)
-        print("Prev block", prev_block)
+        # print("Block", index, logic, block_type)
+        # print("Prev block", prev_block)
 
         if index == 0:
             working_logic.append("]")

@@ -53,16 +53,21 @@ def loop_rungs_v2(output_file, simple_output, routine: Routine, tagfile: pd.Data
     }
     for index, rung in enumerate(routine.rungs):
         # print("\nRung", rung_num)
+        # print("Original", rung.original)
         rung.num = rung_num
 
         if rung.original == "": # Handle empty rung
             print("Empty rung")
             rung.converted_logic = "NOP()"
+        elif rung.original.find("END(001)") != -1: # Handle end of program
+            print("End of routine")
+            rung.converted_logic = "NOP()"
+            rung.comment = "End of Routine."
         else:
             rung, catchErrors = block_breaker_v2(rung, catchErrors)
-            # rung.viewBlocks("After block breaker")
+            rung.viewBlocks(f" Rung {rung.num}. After block breaker")
             rung, catchErrors = convert_blocks(rung, catchErrors, tagfile, system_name)
-            rung.viewBlocks("After block conversion")
+            # rung.viewBlocks("After block conversion")
             rung, catchErrors = block_assembler_v2(rung, catchErrors)
             # rung.viewBlocks("After block assembler")
 
@@ -157,14 +162,15 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
 
         elif instr_type.upper() == "COMPARE_OLD":
             # Add the current block to the rung before continuing. This is needed due to output style of old compare blocks
-            add_type = ul.determine_block_type(type_array)
-            current_details, type_array = rung.addBlock(Block(current_details, add_type, blocks_in))
+            if current_details != []:
+                add_type = ul.determine_block_type(type_array)
+                current_details, type_array = rung.addBlock(Block(current_details, add_type, blocks_in))
 
             try: next_line = rung_array[index + 1]
             except: next_line = None
             try: after_next_line = rung_array[index + 2]
             except: after_next_line = None
-            combined_instr, pop_count, catchErrors = ul.combine_compare(rung, line, next_line, after_next_line, catchErrors)
+            combined_instr, pop_array, current_details, catchErrors = ul.combine_compare(rung, rung_array, index, current_details, catchErrors)
             # print(catchErrors)
 
             if DEBUG_bbv2: print("Combined: ", combined_instr)
@@ -174,10 +180,10 @@ def block_breaker_v2(rung: Rung, catchErrors: dict):
             # Pop required lines
             # print(rung_array)
             # print(rung_array[index])
-            for i in range(pop_count):
-                # print("Popping: ", rung_array[index + i + 1])
-                rung_array.pop(index + 1)
-            # print(rung_array)
+            for i in reversed(pop_array):
+                print("Popping: ", rung_array[i])
+                rung_array.pop(i)
+            print(rung_array)
             
 
         elif block_type == "OUT" and current_details == []: # Output-type instruction and no current block
@@ -256,7 +262,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
     # 4. Handle normal output-type blocks and remaining joins (Reverse pass)
     # 5. Handle TR x blocks
     ###
-    local_debug = True
+    local_debug = False
 
     # rung.viewBlocks("Initial view")
 
@@ -339,7 +345,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
 
         index += 1
 
-    rung.viewBlocks("After ANDLD/ORLD block pass")
+    # rung.viewBlocks("After ANDLD/ORLD block pass")
 
     # 3. REVERSE PASS - handle special output blocks: CNT, TTIM, KEEP
     index = len(rung.blocks) - 1
@@ -446,7 +452,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                             continue
 
                         if ("START(TR" in block.converted_block[0]) and block.block_type != "TR": # Used to capture when Start(TR is embedded in a block
-                            print("Start block embedded in block", block.converted_block)
+                            # print("Start block embedded in block", block.converted_block)
                             # We need to split the block into 2 parts, and add the first part to the initial subset and the second to the inter array
                             temp_blocks = block.converted_block[0].split(start_TR_num) 
 
@@ -500,8 +506,8 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                     converted_block = ul.combine_simple_logic(inter)
                     # print("Converted Block:", converted_block[0])
                     conv_array.append(converted_block[0])
-                print("Converted Array")
-                for block in conv_array: print(block, block.block_type)
+                # print("Converted Array")
+                # for block in conv_array: print(block, block.block_type)
                 # OR blocks together
                 new_inter_block, catchErrors = ul.combine_block_list(conv_array, catchErrors)
                 # print("Double Converted Block:", new_inter_block[0])
@@ -598,7 +604,7 @@ def convert_instruction(line: str, catchErrors: dict, tagfile: pd.DataFrame, sys
             p3 = convert_tagname(prefix + str(number + 2), tagfile, system_name)
             p4 = convert_tagname(prefix + str(number + 3), tagfile, system_name)
         except:
-            print("Failed")
+            # print("Failed")
             p1 = p2 = p3 = p4 = param2
         # print("Scaling values: " + p1, p2, p3, p4)
 

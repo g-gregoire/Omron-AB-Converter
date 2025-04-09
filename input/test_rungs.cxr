@@ -1,13 +1,36 @@
       ' TO CHECK STILL - having issues with these
       ' Long broken ones in Extractor
-      ' Messed up rung output.
-      LD H0.11
-      CMPL(060) D900 D92
-      LD P_GE
-      OR 42.00
-      OR W9.06
+      '  Ext #1\nCook 1 - 4
+      LD 321.11
+      AND 325.11
+      ANDNOT 10.07
+      ANDNOT 41.11
+      LD H0.09
+      ANDNOT H0.10
+      ANDNOT H1.00
+      ORLD
+      LD H1.03
+      ANDNOT H1.04
+      ANDNOT H1.09
+      ORLD
+      LD H1.12
+      ANDNOT H1.13
+      ANDNOT H2.05
+      ORLD
+      LD H2.08
+      ANDNOT H2.09
+      ORLD
+      OUT TR0
+      AND 40.12
+      CMP(020) 314 D80
+      LD TR0
+      LD P_EQ
+      OR P_LT
       ANDLD
-      OUT 501.05
+      TIM 0042 #30
+      LD TR0
+      AND T0042
+      OUT 505.15
       ^^^
       BREAK
       ' Step 129 - bad (but ok) branching
