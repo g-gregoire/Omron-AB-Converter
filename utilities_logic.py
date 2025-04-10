@@ -326,7 +326,9 @@ def determine_block_type(type_array:List[str]) -> str:
     if len(type_array) == 1:
         block_type = type_array[0]
     else:
-        if "START" in type_array:
+        if "START" in type_array and "OUT" in type_array:
+            block_type = "OUT"
+        elif "START" in type_array:
             block_type = "START"
         elif "OUT" in type_array:
             block_type = "OUT"

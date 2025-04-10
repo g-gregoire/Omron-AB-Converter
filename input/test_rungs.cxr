@@ -1,4 +1,25 @@
       ' Long broken ones in Extractor
+      '   ****************Pretreatment Sequence Initiation****************
+      LD=(300) D32100 #0
+      OUT TR0
+      @AND H100.01
+      LD<=(315) D32104 D32110
+      OR P_On
+      ANDLD
+      MOV(021) #1 D32100
+      LD TR0
+      @MOV(021) #0 D32118
+      @MOV(021) #0 D32160
+      @MOV(021) #0 D32161
+      @MOV(021) #0 D32162
+      @RSET H108.04
+      @RSET H108.05
+      @SET H108.06
+      @SET H100.15
+      AND W22.09
+      @SET H100.06
+      ^^^
+      BREAK
       '  EXTRACTOR #3
       LD P_On
       OUT TR0

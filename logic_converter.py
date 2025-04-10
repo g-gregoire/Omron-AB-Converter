@@ -456,7 +456,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 TR_num_total = TR_array[num]
 
                 for index, block in enumerate(rung.blocks):
-                    print(index, block)
+                    # print(index, block)
                     if block.converted_block[0].find(out_TR_num+",") != -1:
                         # print("Found invalid TR branching:", block)
                         catchErrors["error"] = True
@@ -575,8 +575,8 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                     converted_block = ul.combine_simple_logic(inter)
                     # print("Converted Block:", converted_block[0])
                     conv_array.append(converted_block[0])
-                # print("Converted Array")
-                # for block in conv_array: print(block, block.block_type)
+                print("Converted Array")
+                for block in conv_array: print(block, block.block_type)
                 # OR blocks together
                 new_inter_block, catchErrors = ul.combine_block_list(conv_array, catchErrors)
                 # print("Combined inter Block:", new_inter_block[0])
