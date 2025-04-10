@@ -49,7 +49,7 @@ def combine_compare(rung:Rung, rung_array:List[str], index:int, current_details,
     # print("Line 4: ", line4)
     # Determine which comparison is being used
     EQU = GRT = LES = False
-    if line2.find("LD TR") != -1 or line2.find("OUT TR") != -1:
+    if line2 != None and (line2.find("LD TR") != -1 or line2.find("OUT TR") != -1):
         check1 = line3
         check1_index = index + 2
         check2 = line4

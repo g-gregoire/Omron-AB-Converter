@@ -91,7 +91,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0300_TMR)OSR(EXT_ADDR_510_00_storage,EXT_ADDR_510.00);]]>
+<![CDATA[XIC(EXT_T0300_TMR.DN)OSR(EXT_ADDR_510_00_storage,EXT_ADDR_510.00);]]>
 </Text>
 </Rung>
 <Rung Number="11" Type="N">
@@ -139,7 +139,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0301_TMR)OSR(EXT_ADDR_510_01_storage,EXT_ADDR_510.01);]]>
+<![CDATA[XIC(EXT_T0301_TMR.DN)OSR(EXT_ADDR_510_01_storage,EXT_ADDR_510.01);]]>
 </Text>
 </Rung>
 <Rung Number="17" Type="N">
@@ -195,7 +195,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0302_TMR)OSR(EXT_ADDR_510_02_storage,EXT_ADDR_510.02);]]>
+<![CDATA[XIC(EXT_T0302_TMR.DN)OSR(EXT_ADDR_510_02_storage,EXT_ADDR_510.02);]]>
 </Text>
 </Rung>
 <Rung Number="24" Type="N">
@@ -259,7 +259,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0303_TMR)OSR(EXT_ADDR_510_03_storage,EXT_ADDR_510.03);]]>
+<![CDATA[XIC(EXT_T0303_TMR.DN)OSR(EXT_ADDR_510_03_storage,EXT_ADDR_510.03);]]>
 </Text>
 </Rung>
 <Rung Number="32" Type="N">
@@ -307,7 +307,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0304_TMR)OSR(EXT_ADDR_510_04_storage,EXT_ADDR_510.04);]]>
+<![CDATA[XIC(EXT_T0304_TMR.DN)OSR(EXT_ADDR_510_04_storage,EXT_ADDR_510.04);]]>
 </Text>
 </Rung>
 <Rung Number="38" Type="N">
@@ -355,7 +355,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0305_TMR)OSR(EXT_ADDR_510_05_storage,EXT_ADDR_510.05);]]>
+<![CDATA[XIC(EXT_T0305_TMR.DN)OSR(EXT_ADDR_510_05_storage,EXT_ADDR_510.05);]]>
 </Text>
 </Rung>
 <Rung Number="44" Type="N">
@@ -411,7 +411,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0306_TMR)OSR(EXT_ADDR_510_06_storage,EXT_ADDR_510.06);]]>
+<![CDATA[XIC(EXT_T0306_TMR.DN)OSR(EXT_ADDR_510_06_storage,EXT_ADDR_510.06);]]>
 </Text>
 </Rung>
 <Rung Number="51" Type="N">
@@ -475,7 +475,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0307_TMR)OSR(EXT_ADDR_510_07_storage,EXT_ADDR_510.07);]]>
+<![CDATA[XIC(EXT_T0307_TMR.DN)OSR(EXT_ADDR_510_07_storage,EXT_ADDR_510.07);]]>
 </Text>
 </Rung>
 <Rung Number="59" Type="N">
@@ -523,7 +523,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0308_TMR)OSR(EXT_ADDR_510_08_storage,EXT_ADDR_510.08);]]>
+<![CDATA[XIC(EXT_T0308_TMR.DN)OSR(EXT_ADDR_510_08_storage,EXT_ADDR_510.08);]]>
 </Text>
 </Rung>
 <Rung Number="65" Type="N">
@@ -571,7 +571,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0309_TMR)OSR(EXT_ADDR_510_09_storage,EXT_ADDR_510.09);]]>
+<![CDATA[XIC(EXT_T0309_TMR.DN)OSR(EXT_ADDR_510_09_storage,EXT_ADDR_510.09);]]>
 </Text>
 </Rung>
 <Rung Number="71" Type="N">
@@ -627,7 +627,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0310_TMR)OSR(EXT_ADDR_510_10_storage,EXT_ADDR_510.10);]]>
+<![CDATA[XIC(EXT_T0310_TMR.DN)OSR(EXT_ADDR_510_10_storage,EXT_ADDR_510.10);]]>
 </Text>
 </Rung>
 <Rung Number="78" Type="N">
@@ -691,7 +691,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0311_TMR)OSR(EXT_ADDR_510_11_storage,EXT_ADDR_510.11);]]>
+<![CDATA[XIC(EXT_T0311_TMR.DN)OSR(EXT_ADDR_510_11_storage,EXT_ADDR_510.11);]]>
 </Text>
 </Rung>
 <Rung Number="86" Type="N">
@@ -739,7 +739,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0312_TMR)OSR(EXT_ADDR_510_12_storage,EXT_ADDR_510.12);]]>
+<![CDATA[XIC(EXT_T0312_TMR.DN)OSR(EXT_ADDR_510_12_storage,EXT_ADDR_510.12);]]>
 </Text>
 </Rung>
 <Rung Number="92" Type="N">
@@ -787,7 +787,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0313_TMR)OSR(EXT_ADDR_510_13_storage,EXT_ADDR_510.13);]]>
+<![CDATA[XIC(EXT_T0313_TMR.DN)OSR(EXT_ADDR_510_13_storage,EXT_ADDR_510.13);]]>
 </Text>
 </Rung>
 <Rung Number="98" Type="N">
@@ -843,7 +843,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0314_TMR)OSR(EXT_ADDR_510_14_storage,EXT_ADDR_510.14);]]>
+<![CDATA[XIC(EXT_T0314_TMR.DN)OSR(EXT_ADDR_510_14_storage,EXT_ADDR_510.14);]]>
 </Text>
 </Rung>
 <Rung Number="105" Type="N">
@@ -907,7 +907,7 @@
 <![CDATA[]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_T0315_TMR)OSR(EXT_ADDR_510_15_storage,EXT_ADDR_510.15);]]>
+<![CDATA[XIC(EXT_T0315_TMR.DN)OSR(EXT_ADDR_510_15_storage,EXT_ADDR_510.15);]]>
 </Text>
 </Rung>
 <Rung Number="113" Type="N">
@@ -1035,7 +1035,7 @@
 <![CDATA['  EXTRACTOR LOW WATER VOLUME ALARM RESET\nCOMMON RESET FOR ALL EXTRACTORS]]>
 </Comment>
 <Text>
-<![CDATA[XIC(EXT_VOLUME_ALM_RSET)[XIC(EXT_EXT1_CHECK_VOLUME)OTU(EXT_EXT1_CHECK_VOLUME),XIC(EXT_EXT2_CHECK_VOLUME)OTU(EXT_EXT2_CHECK_VOLUME),XIC(EXT_EXT3_CHECK_VOLUME)OTU(EXT_EXT3_CHECK_VOLUME),XIC(EXT_EXT4_CHECK_VOLUME)OTU(EXT_EXT4_CHECK_VOLUME),[TON(EXT_T0237_TMR,5000,0),XIC(EXT_T0237_TMR)OTU(EXT_VOLUME_ALM_RSET)]];]]>
+<![CDATA[XIC(EXT_VOLUME_ALM_RSET)[XIC(EXT_EXT1_CHECK_VOLUME)OTU(EXT_EXT1_CHECK_VOLUME),XIC(EXT_EXT2_CHECK_VOLUME)OTU(EXT_EXT2_CHECK_VOLUME),XIC(EXT_EXT3_CHECK_VOLUME)OTU(EXT_EXT3_CHECK_VOLUME),XIC(EXT_EXT4_CHECK_VOLUME)OTU(EXT_EXT4_CHECK_VOLUME),TON(EXT_T0237_TMR,5000,0)XIC(EXT_T0237_TMR.DN)];]]>
 </Text>
 </Rung>
 </RLLContent>
