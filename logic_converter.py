@@ -275,7 +275,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
     ###
     
 
-    # rung.viewBlocks("Initial view")
+    rung.viewBlocks("Initial view")
 
     # 1. FORWARD PASS - handle basic inner joins
     for index, block in enumerate(rung.blocks):
@@ -300,16 +300,17 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
         # print("Next block:", next_block)
         
         if block.block_type == "INTER": # For ANDLD and ORLD blocks
-            if prev2_block != None and prev2_block.block_type == "TR": # If we come across a TR block, add it to the following block and then perform the join
-                pop_index = index-1
-                # print("TR block found:", prev_block)
-                # print(rung.blocks[index-2])
-                # print(rung.blocks[index-3])
-                rung.join2Blocks(index-3, index-2, "AND") # Join the TR block to the one before it.
-                TR_offset = True
-            else:
-                pop_index = index
-                TR_offset = False
+            # if prev2_block != None and prev2_block.block_type == "TR": # If we come across a TR block, add it to the following block and then perform the join
+            #     pop_index = index-1
+            #     # print("TR block found:", prev_block)
+            #     # print(rung.blocks[index-2])
+            #     # print(rung.blocks[index-3])
+            #     rung.join2Blocks(index-3, index-2, "AND") # Join the TR block to the one before it.
+            #     TR_offset = True
+            # else:
+            #     pop_index = index
+            #     TR_offset = False
+            pop_index = index
 
             if block.details[0]["instr"] == "ANDLD":
                 rung.blocks.pop(pop_index) # Remove the ANDLD block
@@ -319,9 +320,12 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                     # print("ANDLD")
                     # print(rung.blocks[index-2])
                     # print(rung.blocks[index-3])
-                    if TR_offset: # If we have a TR block, then join to the previous 2 blocks
+                    # if TR_offset: # If we have a TR block, then join to the previous 2 blocks
+                    #     rung.join2Blocks(index-3, index-2, "AND") # Join the previous 2 blocks
+                    #     TR_offset = False
+                    # else:
+                    if prev2_block != None and prev2_block.block_type == "TR": # If we come across a TR block, add it to the following block
                         rung.join2Blocks(index-3, index-2, "AND") # Join the previous 2 blocks
-                        TR_offset = False
                     else:
                         rung.join2Blocks(index-2, index-1, "AND") # Join the previous 2 blocks
                 # index = 0 # Reset counter since we popped a block
@@ -332,11 +336,11 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 if index == 1: # If it's the first block, then handle differently so we don't append index -1
                     pass
                 else:
-                    if TR_offset:
-                        rung.join2Blocks(index-3, index-2, "OR")
-                        TR_offset = False
-                    else:
-                        rung.join2Blocks(index-2, index-1, "OR") # Join the previous 2 blocks
+                    # if TR_offset:
+                    #     rung.join2Blocks(index-3, index-2, "OR")
+                    #     TR_offset = False
+                    # else:
+                    rung.join2Blocks(index-2, index-1, "OR") # Join the previous 2 blocks
                     # index = 0 # Reset counter since we popped a block
                     # print("End: ", rung.blocks[index-1], NL)
                 
@@ -356,7 +360,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
 
         index += 1
 
-    # rung.viewBlocks("After ANDLD/ORLD block pass")
+    rung.viewBlocks("After ANDLD/ORLD block pass")
 
     # 3. REVERSE PASS - handle special output blocks: CNT, TTIM, KEEP
     index = len(rung.blocks) - 1
@@ -399,7 +403,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
         # rung.viewBlocks()
         index -= 1
 
-    # rung.viewBlocks("After special output pass")
+    rung.viewBlocks("After special output pass")
     
 
     # Check if TR blocks exist for next pass. Also find highest TR number
@@ -441,7 +445,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 next_TR_num = "TR" + str(num - 1)
                 start_TR_num = "START(" + TR_num + ")"
                 out_TR_num = "OUT(" + TR_num + ")"
-                # print("Now,", TR_num)
+                print("Now,", TR_num)
                 # First create subblocks for TR blocks
                 initial = True
                 prev_index = 0
@@ -452,7 +456,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 TR_num_total = TR_array[num]
 
                 for index, block in enumerate(rung.blocks):
-                    # print(index, block)
+                    print(index, block)
                     if block.converted_block[0].find(out_TR_num+",") != -1:
                         # print("Found invalid TR branching:", block)
                         catchErrors["error"] = True
@@ -461,7 +465,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 # for index, block in enumerate(rung.blocks):
                 while index < len(rung.blocks):
                     block = rung.blocks[index]
-                    # print("Index: ", index, block.converted_block[0])
+                    print("Index: ", index, block.converted_block[0])
                     
                     if initial == False and re.search(next_TR_num, block.converted_block[0]) is not None: # This is used to capture what is after the TR blocks, and will remain untouched (for now)
                         # print("Next block - add inter & final subset")
@@ -541,23 +545,23 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
 
                         if len(inter_subset) > 0:
                             inter_array.append(inter_subset)
-                            # print(index, "Inter append-3")
-                            # for block in inter_subset: print(block)
+                            print(index, "Inter append-3")
+                            for block in inter_subset: print(block)
                         prev_index = index
                 
-                    elif index == len(rung.blocks) - 1: # Used to add last block to the inter-set
-                        # print("Last block - add inter & final subset")
-                        # print("Subset idx:", prev_index+1, index)
-                        inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index, out_TR_num)
+                    elif index == len(rung.blocks) - 1: # Used to add last block to the rung
+                        print("Last block - add inter & final subset")
+                        print("Subset idx:", prev_index+1, index)
+                        inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index+1, out_TR_num) # Add 1 to index to include the last block
                         inter_array.append(inter_subset)
-                        # print(index, "Inter append-4")
-                        # for block in inter_subset: print(block)
+                        print(index, "Inter append-4")
+                        for block in inter_subset: print(block)
 
                     index += 1
                 
                 
                 # Print all sections - for debugging
-                local_debug = False
+                local_debug = True
 
                 if local_debug:
                     print("Initial Subset-end")
@@ -602,7 +606,8 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
         rung.comment += f" \n Attempted Logic: {rung.converted_logic}"
         rung.converted_logic = rung.blocks[0].converted_block[0] = "NOP()" # Set block and converted logic to NOP();
         catchErrors["error"] = False
-        # rung.viewBlocks()
+        
+    rung.viewBlocks("After conversion")
     
     return rung, catchErrors
 
