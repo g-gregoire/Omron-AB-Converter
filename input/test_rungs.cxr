@@ -33,6 +33,52 @@
       ^^^
       BREAK
       
+      '  EXTRACTOR #3
+      LD P_On
+      OUT TR0
+      AND H3.03
+      ANDNOT H3.04
+      AND 11.04
+      AND 11.05
+      AND P_1s
+      LD TR0
+      AND H3.04
+      CNT 0012 #7800
+      LD TR0
+      AND H3.03
+      ANDNOT H3.04
+      AND P_1s
+      LD TR0
+      AND H3.04
+      CNT 0302 #7800
+      LD TR0
+      AND H3.03
+      ANDNOT H3.04
+      AND P_1s
+      LD TR0
+      AND H3.04
+      CNT 0361 #600
+      LD TR0
+      AND H4.06
+      ANDNOT H4.07
+      AND P_1s
+      LD TR0
+      LD H4.07
+      OR H93.09
+      OR H29.02
+      CNT 0375 H23
+      LD TR0
+      AND H5.02
+      ANDNOT H5.03
+      AND P_1s
+      LD TR0
+      LD H5.03
+      OR H93.10
+      OR H29.02
+      CNT 0379 H24
+      ^^^
+      BREAK
+      
 
       'DONE CHECKING
       '  Step 113
