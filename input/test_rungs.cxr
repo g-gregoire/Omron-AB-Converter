@@ -32,7 +32,6 @@
       LD H4.07
       OR H93.09
       OR H29.02
-      ANDLD
       CNT 0375 H23
       LD TR0
       AND H5.02
@@ -42,7 +41,6 @@
       LD H5.03
       OR H93.10
       OR H29.02
-      ANDLD
       CNT 0379 H24
       ^^^
       BREAK

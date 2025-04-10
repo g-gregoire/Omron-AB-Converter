@@ -240,6 +240,9 @@ def combine_block_list(block_array:List[Block], catchErrors)->List[Block]:
     # for index, block in enumerate(block_array):
     #     print(index, block)
 
+    if len(block_array) == 1:
+        return block_array, catchErrors
+
     working_logic = []
     type_array = []
     for index, block in enumerate(reversed(block_array)):
@@ -288,7 +291,10 @@ def createSubSet(block_list:List[Block], start_index:int, end_index:int) -> List
         # for block in block_list:
         #     print(block)
         # Create new block list with copies of the blocks in the range
-        temp_subset = block_list[start_index:end_index]
+        if start_index == end_index:
+            temp_subset = [block_list[start_index]]
+        else:
+            temp_subset = block_list[start_index:end_index]
         subset = copy.deepcopy(temp_subset)
         # print("Subset. Indexes: ", start_index, end_index)
         # for block in subset:

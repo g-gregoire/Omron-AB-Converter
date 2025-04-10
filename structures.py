@@ -167,7 +167,10 @@ class Rung:
         # This function is for special cases like counters, KEEP, and TTIM that have two inputs going into it
         block1 = self.blocks[index1]
         block2 = self.blocks[index2]
-        block3 = self.blocks[index3]
+        try:
+            block3 = self.blocks[index3]
+        except:
+            block3 = None
         # print("Joining 3 blocks")
         # print("Line 1:", block1.converted_block[0])
         # print("Line 2:", block2.converted_block[0])
