@@ -112,7 +112,7 @@ def combine_compare(rung:Rung, rung_array:List[str], index:int, current_details,
                 # print("Trailing ANDLD found", rung_array[ANDLD_index+1])
                 pop_array.append(ANDLD_index+1)
 
-        print("Pop array: ", pop_array)
+        # print("Pop array: ", pop_array)
 
         # Lastly deal with TR block, if it exists
         if line2.find("LD TR") != -1 or line2.find("OUT TR") != -1:
