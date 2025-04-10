@@ -286,17 +286,22 @@ def combine_block_list(block_array:List[Block], catchErrors)->List[Block]:
     
     return output_block, catchErrors
 
-def createSubSet(block_list:List[Block], start_index:int, end_index:int) -> List[Block]:
+def createSubSet(block_list:List[Block], start_index:int, end_index:int, out_TR_num:int) -> List[Block]:
         # print("Creating subset. Indexes: ", start_index, end_index)
-        # for block in block_list:
-        #     print(block)
+        # for idx, block in enumerate(block_list):
+        #     print(idx, block)
         # Create new block list with copies of the blocks in the range
         if start_index == end_index:
             temp_subset = [block_list[start_index]]
         else:
             temp_subset = block_list[start_index:end_index]
         subset = copy.deepcopy(temp_subset)
-        # print("Subset. Indexes: ", start_index, end_index)
+        
+        # Remove blocks that are only TR blocks (ie. OUT(TR0))
+        for block in subset:
+            if block.converted_block[0] == out_TR_num:
+                subset.remove(block)
+        # print("Create Subset. Indexes: ", start_index, end_index)
         # for block in subset:
         #     print(block)
         return subset

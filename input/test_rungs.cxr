@@ -1,4 +1,24 @@
       ' Long broken ones in Extractor
+      ' Disallowed branching - Ext 1 - Cook 1
+      LDNOT 3353.00
+      OUT TR0
+      AND 475.12
+      AND C0160
+      OUT TR1
+      AND>=(325) D31384 #6500
+      ANDNOT H0.02
+      ANDNOT 41.14
+      OUT W20.04
+      LD TR1
+      ANDNOT W8.00
+      ANDNOT 42.00
+      LD TR0
+      AND 465.00
+      ORLD
+      SET H0.01
+      ^^^
+      BREAK
+
       '  Ext #1\nCook 1 - 4
       LD 321.11
       AND 325.11

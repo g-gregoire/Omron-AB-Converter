@@ -441,7 +441,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 next_TR_num = "TR" + str(num - 1)
                 start_TR_num = "START(" + TR_num + ")"
                 out_TR_num = "OUT(" + TR_num + ")"
-                # print("Now,", TR_num)
+                print("Now,", TR_num)
                 # First create subblocks for TR blocks
                 initial = True
                 prev_index = 0
@@ -451,27 +451,29 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 TR_num_converted = 1
                 TR_num_total = TR_array[num]
 
+                for index, block in enumerate(rung.blocks):
+                    print(index, block)
 
                 index = 0
                 # for index, block in enumerate(rung.blocks):
                 while index < len(rung.blocks):
                     block = rung.blocks[index]
-                    # print("Index: ", index, block.converted_block[0])
+                    print("Index: ", index, block.converted_block[0])
                     
                     if initial == False and re.search(next_TR_num, block.converted_block[0]) is not None: # This is used to capture what is after the TR blocks, and will remain untouched (for now)
                         # print("Next block - add inter & final subset")
                         # print("inter", prev_index+1, index)
-                        inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index)
+                        inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index, out_TR_num)
                         inter_array.append(inter_subset)
                         print(index, "Inter append-1")
                         for block in inter_subset: print(block)
                         # print("final", index, len(rung.blocks))
                         if prev_index+1 == index:
-                            final_subset = ul.createSubSet(rung.blocks, index+1, len(rung.blocks))
+                            final_subset = ul.createSubSet(rung.blocks, index+1, len(rung.blocks), out_TR_num)
                         else:
-                            final_subset = ul.createSubSet(rung.blocks, index, len(rung.blocks))
+                            final_subset = ul.createSubSet(rung.blocks, index, len(rung.blocks), out_TR_num)
                         # for block in final_subset: print(block)
-                        # break
+                        break # Break out since we've found the first of the next TR group
 
                     elif block.converted_block[0].find(start_TR_num) != -1: # Used to capture if it's the first TR block
                         # print("Start block - add initial subset")
@@ -488,21 +490,21 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                             temp_blocks = block.converted_block[0].split(start_TR_num) 
 
                             # First set initial block as everything before TR0
-                            initial_subset = ul.createSubSet(rung.blocks, 0, index+1)
+                            initial_subset = ul.createSubSet(rung.blocks, 0, index+1, out_TR_num)
                             initial_subset[-1].converted_block[0] = temp_blocks[0]
                             # for block in initial_subset: print(block)
                             # print("Initial Subset-1")
                             # for block in initial_subset: print(block)
                             
                             # Then set the inter block as everything after TR0
-                            inter_subset = ul.createSubSet(rung.blocks, 0, index+1)
+                            inter_subset = ul.createSubSet(rung.blocks, 0, index+1, out_TR_num)
                             inter_subset[-1].converted_block[0] = temp_blocks[1]
                             inter_array.append(inter_subset)
                             print(index, "Inter append-2")
                             for block in inter_subset: print(block)
 
                         else:
-                            initial_subset = ul.createSubSet(rung.blocks, 0, index)
+                            initial_subset = ul.createSubSet(rung.blocks, 0, index, out_TR_num)
 
 
                         # for block in initial_subset: print(block)
@@ -518,7 +520,7 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                         if block.block_type != "TR": # To capture if the TR block is embedded in a block
                             print("--OUT block embedded in block", block.converted_block)
                             block.converted_block[0] = block.converted_block[0].replace(out_TR_num, "")
-                            # print("replaced", block.converted_block)
+                            print("replaced -",out_TR_num, block.converted_block)
 
                         # print(prev_index+1, index)
                         # if block.converted_block[0] == out_TR_num:
@@ -531,8 +533,8 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                             inter_subset = []
                             pass
                         else:
-                            # print(index, prev_index+1)
-                            inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index)
+                            print("Subset idx:", prev_index+1, index+1)
+                            inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index+1, out_TR_num)
 
                         if len(inter_subset) > 0:
                             inter_array.append(inter_subset)
@@ -541,8 +543,9 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                         prev_index = index
                 
                     elif index == len(rung.blocks) - 1: # Used to add last block to the inter-set
-                        # print("Last block - add inter & final subset")
-                        inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index+1)
+                        print("Last block - add inter & final subset")
+                        print("Subset idx:", prev_index+1, index)
+                        inter_subset = ul.createSubSet(rung.blocks, prev_index+1, index, out_TR_num)
                         inter_array.append(inter_subset)
                         print(index, "Inter append-4")
                         for block in inter_subset: print(block)
@@ -551,16 +554,16 @@ def block_assembler_v2(rung: Rung, catchErrors: dict):
                 
                 
                 # Print all sections - for debugging
-                local_debug = False
+                local_debug = True
 
                 if local_debug:
                     print("Initial Subset-end")
                     for block in initial_subset: print(block)
                     print("Inter Array")
                 conv_array = []
-                for inter in inter_array:
+                for idx, inter in enumerate(inter_array):
                     if local_debug: 
-                        print("start")
+                        print("Subset", idx)
                         for block in inter: print("Inter blocks:", block)
                     converted_block = ul.combine_simple_logic(inter)
                     # print("Converted Block:", converted_block[0])
